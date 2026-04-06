@@ -1,315 +1,279 @@
 @extends('layouts.admin')
 
 @php
+    $hideSidebar = true;
     /** @var \App\Models\Quiz $quiz */
 @endphp
 
 @section('content')
-<!-- Security Overlay Mode -->
-<div id="securityHUDEnded" class="position-fixed top-0 start-0 w-100 h-100 bg-white d-none flex-column align-items-center justify-content-center z-3" style="z-index: 10000; opacity: 0.98;">
-    <div class="text-center p-5 rounded-5 shadow-lg border">
-        <div class="display-1 text-danger mb-4"><i class="fas fa-user-shield"></i></div>
-        <h2 class="fw-bold mb-3">Security Violation Detected</h2>
-        <p class="text-muted fs-5 mb-4">The proctoring system has detected multiple attempts to switch windows or exit the quiz. <br>Your attempt has been automatically submitted for review.</p>
-        <button class="btn btn-primary btn-lg rounded-pill px-5" onclick="location.href='/quizzes'">Return to Dashboard</button>
-    </div>
-</div>
-
-<div class="container-fluid py-4 user-select-none" oncontextmenu="return false;">
-    <div class="row justify-content-center">
-        <div class="col-lg-9">
-            
-            <!-- Security & Progress Alert Row -->
-            <div class="row g-3 mb-4">
-                <div class="col-md-8">
-                    <div class="card border-0 shadow-sm rounded-4 h-100 bg-white">
-                        <div class="p-3 d-flex align-items-center justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-4 me-3">
-                                    <i class="fas fa-paper-plane fs-4"></i>
-                                </div>
-                                <div>
-                                    <h5 class="fw-bold mb-0">{{ $quiz->title }}</h5>
-                                    <div class="small text-muted text-uppercase fw-bold ls-1" style="font-size: 0.6rem;">{{ $quiz->subject?->subject_name ?? 'General' }} • {{ $quiz->questions->count() }} Questions</div>
-                                </div>
-                            </div>
-                            <div id="securityHUD" class="d-flex align-items-center gap-3">
-                                <div class="badge bg-light text-dark rounded-pill px-3 py-2 border shadow-sm">
-                                    <span class="small text-muted me-2">Warnings:</span> 
-                                    <span id="warningCounter" class="fw-bold text-danger">0</span>/3
-                                </div>
-                                <div class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2 border border-success border-opacity-25 shadow-sm">
-                                    <i class="fas fa-shield-alt me-1"></i> Proctoring Active
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card border-0 shadow-sm rounded-4 h-100 bg-white overflow-hidden border-start border-4 border-danger">
-                        <div class="p-3 d-flex align-items-center justify-content-between">
-                            <div class="ms-2">
-                                <div class="small text-muted text-uppercase fw-bold ls-1" style="font-size: 0.6rem;">Countdown</div>
-                                <div id="quizTimer" class="h3 fw-bold mb-0 text-danger font-monospace">30:00</div>
-                            </div>
-                            <div class="p-3 bg-danger bg-opacity-10 text-danger rounded-4 me-2">
-                                <i class="fas fa-clock fs-4"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quiz Main Section -->
-            <div class="quiz-board position-relative">
-                <form id="quizForm" action="{{ auth()->user()->role_id == 3 ? route('students.quizzes.submit', $quiz->id) : route('quizzes.submit', $quiz->id) }}" method="POST">
-                    @csrf
-                    @foreach($quiz->questions as $index => $question)
-                        <div class="question-pane card border-0 shadow-lg rounded-5 p-4 pe-md-5 mb-4 animate-fade-in {{ $index === 0 ? 'active' : 'd-none' }}" data-index="{{ $index }}">
-                            <div class="progress mb-4 bg-light rounded-pill" style="height: 6px;">
-                                <div class="progress-bar bg-primary rounded-pill progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ (($index+1)/count($quiz->questions))*100 }}%"></div>
-                            </div>
-                            
-                            <div class="d-flex align-items-start mb-4 gap-3">
-                                <div class="h3 fw-bold text-primary mb-0 bg-primary bg-opacity-10 px-3 py-2 rounded-4">#{{ $index + 1 }}</div>
-                                <div class="flex-grow-1">
-                                    <div class="h4 fw-bold text-dark mt-1 lh-base">{!! $question->content !!}</div>
-                                </div>
-                            </div>
-
-                            <div class="options-wrapper ms-lg-5">
-                                @if($question->type === 'short_answer')
-                                    <textarea name="responses[{{ $question->id }}]" class="form-control form-control-lg border-2 shadow-sm rounded-4 short-answer-input p-4 text-dark fs-5 bg-white" rows="5" placeholder="Type your answer here..." required></textarea>
-                                @else
-                                    <div class="row g-3">
-                                        @foreach($question->answers as $ansIndex => $answer)
-                                            <div class="col-12">
-                                                <input type="radio" name="responses[{{ $question->id }}]" id="ans{{ $answer->id }}" value="{{ $answer->id }}" class="btn-check" required>
-                                                <label class="option-card d-flex align-items-center p-4 rounded-4 border-2 shadow-sm cursor-pointer transition-all w-100" for="ans{{ $answer->id }}">
-                                                    <div class="radio-mark me-4"></div>
-                                                    <div class="fs-5 fw-medium text-dark">{{ $answer->answer_text }}</div>
-                                                    <i class="fas fa-check-circle ms-auto fs-4 check-indicator opacity-0"></i>
-                                                </label>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    @endforeach
-
-                    <!-- Professional Footer Navigation -->
-                    <div class="sticky-bottom py-3 mt-4" style="background: linear-gradient(0deg, rgba(248, 249, 250, 1) 50%, rgba(248, 249, 250, 0) 100%);">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <button type="button" id="prevBtn" class="btn btn-outline-dark btn-lg rounded-pill px-4 shadow-sm border-2 fw-bold opacity-0 transition-all" disabled>
-                                <i class="fas fa-arrow-left me-2"></i> Previous
-                            </button>
-                            
-                            <div class="question-pagination d-flex gap-2">
-                                @foreach($quiz->questions as $index => $question)
-                                    <button type="button" class="btn p-0 pagination-dot {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}" style="width: 12px; height: 12px; border-radius: 50%; background: #dee2e6; border: none;"></button>
-                                @endforeach
-                            </div>
-
-                            <button type="button" id="nextBtn" class="btn btn-primary btn-lg rounded-pill px-5 shadow-lg fw-bold transition-all">
-                                Next Step <i class="fas fa-arrow-right ms-2"></i>
-                            </button>
-
-                            <button type="submit" id="submitBtn" class="btn btn-success btn-lg rounded-pill px-5 shadow-lg fw-bold d-none zoom-in">
-                                Complete Exam <i class="fas fa-check-circle ms-2"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
+<!-- Security Disqualification Overlay -->
+<div id="securityHUDEnded" class="fixed inset-0 bg-indigo-950/98 backdrop-blur-xl z-[9999] hidden flex-col items-center justify-center text-center p-8">
+    <div class="max-w-md w-full bg-white border border-slate-100 p-12 rounded-[40px] shadow-2xl">
+        <div class="w-24 h-24 bg-rose-50 text-rose-500 rounded-3xl flex items-center justify-center mx-auto mb-8 text-4xl animate-pulse shadow-sm">
+            <i class="fas fa-shield-slash"></i>
         </div>
+        <h2 class="text-3xl font-bold text-slate-900 tracking-tight mb-4 uppercase">Lockdown Breach</h2>
+        <p class="text-slate-500 font-bold leading-relaxed mb-10 text-xs uppercase tracking-wide">We detected multiple unauthorized window transitions. Deployment has been frozen and flagged for administrative verification.</p>
+        <button onclick="window.location.href='{{ route('students.dashboard') }}'" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-bold uppercase tracking-widest shadow-xl shadow-indigo-600/20 hover:bg-indigo-700 transition-all">Back to Dashboard</button>
     </div>
 </div>
 
-<style>
-    body { background-color: #f8f9fa; }
-    .question-pane { border: 1px solid rgba(0,0,0,0.05) !important; min-height: 480px; }
-    .option-card { background: #fff; border: 2px solid #f1f3f5; }
-    .option-card:hover { border-color: #5b6cf9; background: #f8f9ff; transform: translateY(-3px); }
-    .btn-check:checked + .option-card { border-color: #5b6cf9; background: #eef2ff; box-shadow: 0 10px 15px -3px rgba(91, 108, 249, 0.1); }
-    .btn-check:checked + .option-card .radio-mark { background: #5b6cf9; border-color: #5b6cf9; box-shadow: inset 0 0 0 4px white; }
-    .btn-check:checked + .option-card .check-indicator { opacity: 1; color: #5b6cf9; }
-    .radio-mark { width: 24px; height: 24px; border: 2px solid #dee2e6; border-radius: 50%; transition: all 0.2s; }
-    .pagination-dot.active { background-color: #5b6cf9 !important; width: 30px !important; border-radius: 6px !important; }
-    .pagination-dot.completed { background-color: #10b981 !important; }
-    .transition-all { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-    .animate-fade-in { animation: slideUpFade 0.6s ease-out; }
-    .zoom-in { animation: zoomIn 0.3s ease-in-out; }
-    @keyframes slideUpFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes zoomIn { from { transform: scale(0.9); } to { transform: scale(1); } }
-    .cursor-pointer { cursor: pointer; }
-    .user-select-none { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
-</style>
+<div class="min-h-screen bg-slate-50 select-none font-inter" oncontextmenu="return false;">
+    
+    <!-- Premium Exam Header: High-Density Flow -->
+    <header class="sticky top-0 bg-white border-b border-slate-100 z-50 shadow-sm">
+        <div class="max-w-screen-xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-600/20">
+                    <i class="fas fa-microchip text-sm"></i>
+                </div>
+                <div class="hidden sm:block">
+                    <h1 class="text-slate-900 font-bold text-sm tracking-tight leading-none uppercase">{{ $quiz->title }}</h1>
+                    <p class="text-indigo-600 text-[10px] font-bold uppercase tracking-widest mt-1.5">{{ $quiz->subject?->subject_name ?? 'SYSTEM UNIT' }}</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <!-- Proctoring HUD: Compact -->
+                <div id="proctoringHUD" class="hidden md:flex items-center gap-3 bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
+                    <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Protocol Active</span>
+                    <div class="w-px h-3 bg-slate-200"></div>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Failures: <span id="warningCounter" class="text-rose-500 ml-1">0</span>/3</span>
+                </div>
+
+                <!-- Timer Section: High-Contrast -->
+                <div class="flex items-center gap-3 bg-rose-50 border border-rose-100 px-5 py-2 rounded-2xl shadow-sm">
+                    <i class="fas fa-clock text-rose-500 text-xs"></i>
+                    <div id="quizTimer" class="text-xl font-bold text-rose-600 tabular-nums leading-none font-mono">00:00</div>
+                </div>
+
+                <!-- Safe Exit -->
+                <button onclick="if(confirm('Institutional Warning: Suspend current session? Progress remains cached.')) window.location.href='{{ route('students.dashboard') }}'" class="w-10 h-10 rounded-xl bg-white border border-slate-100 text-slate-400 hover:text-rose-600 hover:border-rose-100 hover:bg-rose-50 transition-all flex items-center justify-center shadow-sm">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Global Progress Bar -->
+        <div class="h-1 w-full bg-slate-100">
+            <div id="globalProgressBar" class="h-full bg-indigo-600 transition-all duration-700 ease-out shadow-[0_0_12px_rgba(79,70,229,0.4)]" style="width: 0%"></div>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-6 py-12 md:py-20 lg:py-24">
+        <form id="quizForm" action="{{ auth()->user()->role_id == 3 ? route('students.quizzes.submit', $quiz->id) : route('quizzes.submit', $quiz->id) }}" method="POST">
+            @csrf
+            
+            @foreach($quiz->questions as $index => $question)
+            <div class="question-pane hidden opacity-0 transition-all duration-500 translate-y-4" data-index="{{ $index }}" id="q-{{ $index }}">
+                <div class="mb-10 text-center md:text-left">
+                    <div class="inline-flex items-center gap-2 bg-indigo-50 text-indigo-600 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6 border border-indigo-100/50">
+                        <i class="fas fa-database text-[8px]"></i> Vector {{ $index + 1 }} of {{ $quiz->questions->count() }}
+                    </div>
+                    <div class="text-xl md:text-2xl font-bold text-slate-900 leading-snug tracking-tight antialiased uppercase">
+                        {!! $question->content !!}
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    @if($question->type === 'short_answer')
+                        <textarea 
+                            name="responses[{{ $question->id }}]" 
+                            class="w-full bg-white border border-slate-200 rounded-3xl p-8 text-sm font-bold text-slate-900 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all min-h-[250px] outline-none placeholder:text-slate-300 uppercase leading-relaxed shadow-sm" 
+                            placeholder="Initialize decentralized intelligence response..."
+                            required
+                        ></textarea>
+                    @else
+                        <div class="grid grid-cols-1 gap-4">
+                            @foreach($question->answers as $ansIndex => $answer)
+                            <label class="group relative flex items-center cursor-pointer">
+                                <input type="radio" name="responses[{{ $question->id }}]" value="{{ $answer->id }}" class="peer hidden" required>
+                                <div class="w-full p-5 bg-white border border-slate-200 rounded-2xl flex items-center gap-5 transition-all duration-300 peer-checked:bg-indigo-600 peer-checked:border-indigo-600 peer-checked:shadow-xl peer-checked:shadow-indigo-600/20 group-hover:bg-slate-50 shadow-sm">
+                                    <div class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-xs font-bold text-slate-400 transition-all peer-checked:bg-white/20 peer-checked:border-white/10 peer-checked:text-white uppercase tabular-nums">
+                                        {{ chr(65 + $ansIndex) }}
+                                    </div>
+                                    <div class="flex-grow text-sm font-bold text-slate-600 transition-all peer-checked:text-white uppercase tracking-tight">
+                                        {{ $answer->answer_text }}
+                                    </div>
+                                    <div class="w-2 h-2 rounded-full bg-slate-100 peer-checked:bg-white shadow-[0_0_10px_rgba(255,255,255,1)] transition-all"></div>
+                                </div>
+                            </label>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+            </div>
+            @endforeach
+
+            <!-- Action Bar: Minimalist Hub -->
+            <div class="fixed bottom-0 left-0 right-0 py-8 bg-gradient-to-t from-slate-50 via-slate-50 to-transparent pointer-events-none z-40">
+                <div class="max-w-2xl mx-auto px-6 pointer-events-auto">
+                    <div class="bg-white p-2.5 rounded-3xl shadow-2xl flex items-center justify-between gap-3 border border-slate-100">
+                        <button type="button" id="prevBtn" class="h-12 px-8 rounded-2xl font-bold text-[10px] uppercase tracking-widest text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all disabled:opacity-20 flex items-center gap-2">
+                             <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        
+                        <div class="hidden sm:flex gap-1.5 px-4 h-12 items-center bg-slate-50 rounded-2xl border border-slate-100/50">
+                            @foreach($quiz->questions as $index => $question)
+                                <div class="pagination-dot w-2 h-2 rounded-full bg-slate-200 transition-all duration-500" data-index="{{ $index }}"></div>
+                            @endforeach
+                        </div>
+
+                        <div class="flex-grow flex justify-end">
+                            <button type="button" id="nextBtn" class="h-12 px-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest shadow-lg shadow-indigo-600/20 transition-all flex items-center gap-3">
+                                Continue <i class="fas fa-arrow-right text-[8px]"></i>
+                            </button>
+                            <button type="submit" id="submitBtn" class="hidden h-12 px-10 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest shadow-lg shadow-emerald-600/20 transition-all flex items-center gap-3">
+                                Submit Deployment <i class="fas fa-check-double text-[8px]"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
+</div>
 
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('QuizMaster System: Advanced Proctoring Unit Active.');
-    
     let currentIdx = 0;
     const questions = document.querySelectorAll('.question-pane');
     const dots = document.querySelectorAll('.pagination-dot');
     const nextBtn = document.getElementById('nextBtn');
     const prevBtn = document.getElementById('prevBtn');
     const submitBtn = document.getElementById('submitBtn');
-    const totalCount = {{ $quiz->questions->count() }};
+    const globalProgress = document.getElementById('globalProgressBar');
+    const totalCount = parseInt("{{ $quiz->questions->count() }}");
     const quizForm = document.getElementById('quizForm');
 
-    // UI Updates
     function updateUI() {
         questions.forEach((q, idx) => {
-            q.classList.toggle('d-none', idx !== currentIdx);
+            if (idx === currentIdx) {
+                q.classList.remove('hidden');
+                setTimeout(() => {
+                    q.classList.remove('opacity-0', 'translate-y-4');
+                    q.classList.add('opacity-100', 'translate-y-0');
+                }, 50);
+            } else {
+                q.classList.add('hidden', 'opacity-0', 'translate-y-4');
+                q.classList.remove('opacity-100', 'translate-y-0');
+            }
         });
+
         dots.forEach((dot, idx) => {
-            dot.classList.toggle('active', idx === currentIdx);
+            if (idx < currentIdx) {
+                dot.classList.remove('bg-slate-200', 'w-2');
+                dot.classList.add('bg-indigo-500', 'w-4');
+            } else if (idx === currentIdx) {
+                dot.classList.remove('bg-slate-200', 'w-2');
+                dot.classList.add('bg-indigo-600', 'w-6');
+            } else {
+                dot.classList.remove('bg-indigo-600', 'bg-indigo-500', 'w-6', 'w-4');
+                dot.classList.add('bg-slate-200', 'w-2');
+            }
         });
+
+        globalProgress.style.width = `${((currentIdx + 1) / totalCount) * 100}%`;
         prevBtn.disabled = currentIdx === 0;
-        prevBtn.classList.toggle('opacity-0', currentIdx === 0);
+        
         if (currentIdx === totalCount - 1) {
-            nextBtn.classList.add('d-none');
-            submitBtn.classList.remove('d-none');
+            nextBtn.classList.add('hidden');
+            submitBtn.classList.remove('hidden');
         } else {
-            nextBtn.classList.remove('d-none');
-            submitBtn.classList.add('d-none');
+            nextBtn.classList.remove('hidden');
+            submitBtn.classList.add('hidden');
         }
+
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Navigation
-    nextBtn.addEventListener('click', () => { if(currentIdx < totalCount-1) { currentIdx++; updateUI(); } });
-    prevBtn.addEventListener('click', () => { if(currentIdx > 0) { currentIdx--; updateUI(); } });
-    dots.forEach(dot => {
-        dot.addEventListener('click', () => { currentIdx = parseInt(dot.dataset.index); updateUI(); });
+    nextBtn.addEventListener('click', () => { 
+        if(currentIdx < totalCount-1) { 
+            currentIdx++; 
+            updateUI(); 
+        } 
     });
 
-    // Mark completion
-    document.querySelectorAll('.btn-check').forEach(radio => {
-        radio.addEventListener('change', function() {
-            const index = parseInt(this.closest('.question-pane').dataset.index);
-            dots[index].classList.add('completed');
-        });
+    prevBtn.addEventListener('click', () => { 
+        if(currentIdx > 0) { 
+            currentIdx--; 
+            updateUI(); 
+        } 
     });
 
-    document.querySelectorAll('.short-answer-input').forEach(input => {
-        input.addEventListener('input', function() {
-            const index = parseInt(this.closest('.question-pane').dataset.index);
-            if(this.value.trim().length > 0) {
-                dots[index].classList.add('completed');
-            } else {
-                dots[index].classList.remove('completed');
-            }
-        });
-    });
-
-    // Timer Implementation
-    let timeLeft = {{ ($quiz->time_limit ?? 30) * 60 }};
+    // Timer logic
+    let timeLeft = parseInt("{{ ($quiz->time_limit ?? 30) * 60 }}");
     const timerDisplay = document.getElementById('quizTimer');
     const countdown = setInterval(() => {
         let mins = Math.floor(timeLeft / 60);
         let secs = timeLeft % 60;
         timerDisplay.textContent = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+        
+        if (timeLeft <= 60) {
+            timerDisplay.closest('div').classList.add('animate-pulse', 'bg-rose-100', 'border-rose-200');
+            timerDisplay.classList.add('text-rose-700');
+        }
+
         if (timeLeft <= 0) {
             clearInterval(countdown);
-            alert('SYSTEM: Time is up. Auto-submitting.');
             quizForm.submit();
         }
         timeLeft--;
     }, 1000);
 
-    // ==========================================
-    // STEP 1: PROCTORING & SECURITY UNIT
-    // ==========================================
-    let warnings = {{ $attempt->violations ?? 0 }};
+    // Proctoring System
+    let warnings = parseInt("{{ $attempt->violations ?? 0 }}");
     const maxWarnings = 3;
     const warningDisplay = document.getElementById('warningCounter');
-    const HUDEnded = document.getElementById('securityHUDEnded');
+    const securityOverlay = document.getElementById('securityHUDEnded');
     
-    warningDisplay.textContent = warnings;
-
     function triggerWarning() {
         warnings++;
-        warningDisplay.textContent = warnings;
+        if(warningDisplay) warningDisplay.textContent = warnings;
 
         fetch("{{ auth()->user()->role_id == 3 ? route('students.quizzes.violation', $attempt->id) : route('quizzes.violation', $attempt->id) }}", {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Content-Type': 'application/json'
             }
         }).then(res => res.json()).then(data => {
             if (data.disqualified || warnings >= maxWarnings) {
-                clearInterval(countdown);
-                HUDEnded.classList.remove('d-none');
-                HUDEnded.classList.add('d-flex');
+                if(securityOverlay) {
+                    securityOverlay.classList.remove('hidden');
+                    securityOverlay.classList.add('flex');
+                }
                 setTimeout(() => { quizForm.submit(); }, 3000);
             } else {
-                const alertMsg = `SECURITY ALERT: Switching windows/tabs is strictly prohibited (#${data.violations ?? warnings}/${maxWarnings}). If you reach 3 warnings, your quiz will be disqualified and submitted automatically.`;
-                alert(alertMsg);
-            }
-        }).catch(err => {
-            console.error('Proctoring Sync Error', err);
-            // Fallback if offline
-            if (warnings >= maxWarnings) {
-                clearInterval(countdown);
-                HUDEnded.classList.remove('d-none');
-                HUDEnded.classList.add('d-flex');
-                setTimeout(() => { quizForm.submit(); }, 3000);
-            } else {
-                alert(`SECURITY ALERT: Switching windows/tabs is prohibited (#${warnings}/${maxWarnings}).`);
+                alert(`INSTITUTIONAL ALERT: Unauthorized window switching detected (#${warnings}/${maxWarnings}). Exceeding ${maxWarnings} violations results in immediate disqualification.`);
             }
         });
     }
 
-    // A: Tab Visibility Detection
     document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'hidden') { triggerWarning(); }
+        if (document.visibilityState === 'hidden') triggerWarning();
     });
 
-    // B: Window Blur Detection (Detects clicking away from the window even if staying on tab)
-    window.addEventListener('blur', () => {
-        // Delay slightly to prevent false positives from system modals
-        setTimeout(() => {
-            if (document.visibilityState === 'hidden' || !document.hasFocus()) {
-                // We won't trigger blur warning twice if visibility already caught it
-                // but this ensures picking up "Alt+Tab" or side-bar clicks
-            }
-        }, 500);
-    });
-
-    // C: Disable Interaction
+    // Disable keys
     document.addEventListener('keydown', (e) => {
-        // Disable F12, Ctrl+Shift+I, Ctrl+U, Ctrl+C, Ctrl+V
-        if (e.keyCode == 123 || 
-           (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || 
-           (e.ctrlKey && e.keyCode == 85) ||
-           (e.ctrlKey && (e.keyCode == 67 || e.keyCode == 86))) {
+        if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && (e.keyCode == 85 || e.keyCode == 67 || e.keyCode == 86))) {
             e.preventDefault();
             return false;
         }
     });
 
-    // D: Prevent Text Selection
-    document.onselectstart = new Function ("return false");
-
-    // E: Fullscreen Request (Prompt on first click)
-    document.body.addEventListener('click', function requestFS() {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen().catch(err => {
-                console.warn(`Fullscreen error: ${err.message}`);
-            });
-        }
-        document.body.removeEventListener('click', requestFS);
-    }, {once: true});
-
     updateUI();
 });
 </script>
 @endpush
+
+<style>
+    .question-pane { backface-visibility: hidden; transform-style: preserve-3d; }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #f8fafc; }
+    ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+</style>
 @endsection

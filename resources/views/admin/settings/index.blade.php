@@ -2,14 +2,13 @@
 
 @section('content')
 <div class="max-w-6xl mx-auto p-6 md:p-8 space-y-8 font-inter">
-    <!-- Header -->
-    <div class="flex items-center gap-6">
-        <div class="flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-600 shadow-sm border border-indigo-500/20 backdrop-blur-sm">
-            <i class="fas fa-cogs text-xl"></i>
+    <div class="flex items-center gap-6 mb-2">
+        <div class="flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-600 text-white shadow-xl shadow-indigo-600/20">
+            <i class="fas fa-microchip text-xl"></i>
         </div>
         <div>
-            <h1 class="text-2xl font-semibold tracking-tight text-slate-900">System Settings</h1>
-            <p class="text-slate-500 leading-relaxed text-sm mt-1">Configure your QuizMaster platform preferences</p>
+            <h1 class="text-2xl font-bold tracking-tight text-slate-900 uppercase">System Blueprint</h1>
+            <p class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mt-1">Configure global synchronization parameters</p>
         </div>
     </div>
 
@@ -67,15 +66,15 @@
         
         <div class="relative z-10">
             <!-- Tabs Nav -->
-            <div class="border-b border-slate-100 px-6 md:px-8 pt-6 flex gap-8">
-                <button @click="tab = 'general'" :class="tab === 'general' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'" class="pb-4 px-2 border-b-2 font-medium text-sm transition-all duration-300 ease-in-out flex items-center gap-2">
-                    <i class="fas fa-globe"></i> General
+            <div class="border-b border-slate-50 px-6 md:px-8 pt-6 flex gap-10">
+                <button @click="tab = 'general'" :class="tab === 'general' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-400 hover:text-slate-900 hover:border-slate-200'" class="pb-4 px-2 border-b-2 font-bold text-[11px] uppercase tracking-widest transition-all">
+                    <i class="fas fa-globe mr-1.5"></i> Platform
                 </button>
-                <button @click="tab = 'quiz'" :class="tab === 'quiz' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'" class="pb-4 px-2 border-b-2 font-medium text-sm transition-all duration-300 ease-in-out flex items-center gap-2">
-                    <i class="fas fa-clipboard-list"></i> Quiz Rules
+                <button @click="tab = 'quiz'" :class="tab === 'quiz' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-400 hover:text-slate-900 hover:border-slate-200'" class="pb-4 px-2 border-b-2 font-bold text-[11px] uppercase tracking-widest transition-all">
+                    <i class="fas fa-clipboard-list mr-1.5"></i> Assessment
                 </button>
-                <button @click="tab = 'security'" :class="tab === 'security' ? 'border-primary text-primary' : 'border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300'" class="pb-4 px-2 border-b-2 font-medium text-sm transition-all duration-300 ease-in-out flex items-center gap-2">
-                    <i class="fas fa-shield-alt"></i> Security
+                <button @click="tab = 'security'" :class="tab === 'security' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-400 hover:text-slate-900 hover:border-slate-200'" class="pb-4 px-2 border-b-2 font-bold text-[11px] uppercase tracking-widest transition-all">
+                    <i class="fas fa-shield-alt mr-1.5"></i> Integrity
                 </button>
             </div>
 
@@ -90,48 +89,40 @@
 
                         <!-- Site Identity (Bento Box) -->
                         <div class="bg-slate-50/50 border border-slate-100 rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-md hover:border-slate-200/60">
-                            <div class="flex items-center gap-4 mb-6">
-                                <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 flex items-center justify-center shrink-0 border border-blue-500/20">
-                                    <i class="fas fa-id-card"></i>
+                            <div class="flex items-center gap-4 mb-8">
+                                <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-lg">
+                                    <i class="fas fa-id-card text-xs"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-base font-semibold tracking-tight text-slate-900">Site Identity</h3>
-                                    <p class="text-xs text-slate-500 mt-0.5">Platform branding and localization</p>
+                                    <h3 class="text-xs font-bold tracking-widest text-slate-900 uppercase">Site Identity</h3>
+                                    <p class="text-[10px] font-bold text-indigo-600 mt-1 uppercase tracking-tight">Branding and Localization</p>
                                 </div>
                             </div>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="space-y-2">
-                                    <label class="block text-xs font-semibold tracking-wide text-slate-600 uppercase">Site Name</label>
-                                    <input type="text" name="site_name" value="{{ old('site_name', $settings['site_name'] ?? 'QuizMaster v2.0') }}" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 outline-none text-sm text-slate-800 placeholder-slate-400 font-medium" placeholder="e.g. QuizMaster v2.0">
-                                    <p class="text-[11px] text-slate-500">Appears in the sidebar and emails.</p>
+                                <div class="space-y-3">
+                                    <label class="block text-[10px] font-bold tracking-widest text-indigo-600 uppercase">Site Alias</label>
+                                    <input type="text" name="site_name" value="{{ old('site_name', $settings['site_name'] ?? 'QuizMaster v2.0') }}" class="w-full px-5 py-4 rounded-xl border border-slate-200 bg-white focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500 transition-all text-sm font-bold text-slate-900 uppercase tracking-tight shadow-sm" placeholder="e.g. QuizMaster v2.0">
                                 </div>
-                                <div class="space-y-2">
-                                    <label class="block text-xs font-semibold tracking-wide text-slate-600 uppercase">Institution Name</label>
-                                    <input type="text" name="institution_name" value="{{ old('institution_name', $settings['institution_name'] ?? '') }}" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 outline-none text-sm text-slate-800 placeholder-slate-400 font-medium" placeholder="e.g. My University">
-                                    <p class="text-[11px] text-slate-500">Your school or organization.</p>
+                                <div class="space-y-3">
+                                    <label class="block text-[10px] font-bold tracking-widest text-indigo-600 uppercase">Institution Name</label>
+                                    <input type="text" name="institution_name" value="{{ old('institution_name', $settings['institution_name'] ?? '') }}" class="w-full px-5 py-4 rounded-xl border border-slate-200 bg-white focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500 transition-all text-sm font-bold text-slate-900 uppercase tracking-tight shadow-sm" placeholder="e.g. My University">
+                                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-tight">Active institutional domain name.</p>
                                 </div>
-                                <div class="space-y-2">
-                                    <label class="block text-xs font-semibold tracking-wide text-slate-600 uppercase">Contact Email</label>
+                                <div class="space-y-3">
+                                    <label class="block text-[10px] font-bold tracking-widest text-indigo-600 uppercase">Contact Email</label>
                                     <div class="relative">
-                                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
-                                            <i class="fas fa-envelope"></i>
-                                        </div>
-                                        <input type="email" name="contact_email" value="{{ old('contact_email', $settings['contact_email'] ?? '') }}" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 outline-none text-sm text-slate-800 placeholder-slate-400 font-medium" placeholder="admin@example.com">
+                                        <input type="email" name="contact_email" value="{{ old('contact_email', $settings['contact_email'] ?? '') }}" class="w-full px-5 py-4 rounded-xl border border-slate-200 bg-white focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500 transition-all text-sm font-bold text-slate-900 uppercase tracking-tight shadow-sm" placeholder="admin@example.com">
                                     </div>
                                 </div>
-                                <div class="space-y-2">
-                                    <label class="block text-xs font-semibold tracking-wide text-slate-600 uppercase">Timezone</label>
-                                    <select name="timezone" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 outline-none text-sm text-slate-800 font-medium appearance-none">
+                                <div class="space-y-3">
+                                    <label class="block text-[10px] font-bold tracking-widest text-indigo-600 uppercase">Timezone Index</label>
+                                    <select name="timezone" class="w-full px-5 py-4 rounded-xl border border-slate-200 bg-white focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500 transition-all text-sm font-bold text-slate-900 uppercase tracking-tight shadow-sm appearance-none">
                                         @php
                                             $currentTz = $settings['timezone'] ?? 'Asia/Phnom_Penh';
                                             $timezones = [
-                                                'Asia/Phnom_Penh' => 'Asia/Phnom_Penh (GMT+7)',
-                                                'Asia/Bangkok' => 'Asia/Bangkok (GMT+7)',
-                                                'Asia/Jakarta' => 'Asia/Jakarta (GMT+7)',
-                                                'Asia/Singapore' => 'Asia/Singapore (GMT+8)',
-                                                'Asia/Manila' => 'Asia/Manila (GMT+8)',
-                                                'Asia/Tokyo' => 'Asia/Tokyo (GMT+9)',
+                                                'Asia/Phnom_Penh' => 'Phnom Penh (GMT+7)',
+                                                'Asia/Bangkok' => 'Bangkok (GMT+7)',
                                                 'UTC' => 'UTC (GMT+0)',
                                             ];
                                         @endphp
@@ -139,42 +130,6 @@
                                             <option value="{{ $tz }}" {{ old('timezone', $currentTz) === $tz ? 'selected' : '' }}>{{ $label }}</option>
                                         @endforeach
                                     </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Site Logo (Bento Box) -->
-                        <div class="bg-slate-50/50 border border-slate-100 rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-md hover:border-slate-200/60">
-                            <div class="flex items-center gap-4 mb-6">
-                                <div class="w-10 h-10 rounded-xl bg-orange-500/10 text-orange-600 flex items-center justify-center shrink-0 border border-orange-500/20">
-                                    <i class="fas fa-image"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-base font-semibold tracking-tight text-slate-900">Site Logo</h3>
-                                    <p class="text-xs text-slate-500 mt-0.5">Brand icon (PNG, JPG, SVG — max 2MB)</p>
-                                </div>
-                            </div>
-                            
-                            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-                                <div class="w-[180px] h-[90px] rounded-xl border-2 border-dashed border-slate-200 bg-white flex items-center justify-center p-2 shrink-0 overflow-hidden relative group">
-                                    @if(!empty($settings['site_logo']))
-                                        <img src="{{ asset('storage/' . $settings['site_logo']) }}" alt="Site Logo" class="max-w-full max-h-full object-contain z-10">
-                                        <div class="absolute inset-0 bg-slate-900/5 opacity-0 group-hover:opacity-100 transition-opacity z-20"></div>
-                                    @else
-                                        <div class="text-center">
-                                            <i class="fas fa-cloud-upload-alt text-2xl text-slate-300"></i>
-                                            <p class="text-[10px] text-slate-400 mt-1 font-medium">No Logo</p>
-                                        </div>
-                                    @endif
-                                </div>
-                                <div class="w-full space-y-3">
-                                    <input type="file" name="site_logo" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-5 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 transition-all cursor-pointer @error('site_logo') border-red-500 @enderror" accept="image/*,.svg">
-                                    <p class="text-xs text-slate-500 leading-relaxed max-w-sm">Recommended format: 200×60px transparent PNG or SVG for best resolution across retina screens.</p>
-                                    @error('site_logo')
-                                        <div class="text-xs font-semibold text-red-500 flex items-center gap-1.5 mt-2">
-                                            <i class="fas fa-info-circle"></i> {{ $message }}
-                                        </div>
-                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -191,22 +146,69 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-center justify-between bg-white border border-slate-200 p-5 rounded-xl">
-                                <div>
-                                    <h4 class="text-sm font-semibold text-slate-900">Enable Maintenance Mode</h4>
-                                    <p class="text-xs text-slate-500 mt-1">When active, students will see a maintenance page. Admins bypass this.</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" name="maintenance_mode" value="1" class="sr-only peer" {{ old('maintenance_mode', (string) ($settings['maintenance_mode'] ?? '0')) === '1' ? 'checked' : '' }}>
-                                    <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                                </label>
-                            </div>
+                                     <div x-data="{ 
+                                         enabled: {{ (string)($settings['maintenance_mode'] ?? '0') === '1' ? 'true' : 'false' }},
+                                         loading: false,
+                                         async toggle() {
+                                             this.loading = true;
+                                             try {
+                                                 const res = await fetch('{{ route('admin.settings.update') }}', {
+                                                     method: 'POST',
+                                                     headers: {
+                                                         'Content-Type': 'application/json',
+                                                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                                         'Accept': 'application/json'
+                                                     },
+                                                     body: JSON.stringify({
+                                                         'maintenance_mode': this.enabled ? '1' : '0',
+                                                         '_tab': 'general'
+                                                     })
+                                                 });
+                                                 if (!res.ok) throw new Error();
+                                             } catch (e) {
+                                                 this.enabled = !this.enabled;
+                                                 alert('Failed to save maintenance mode.');
+                                             } finally {
+                                                 this.loading = false;
+                                             }
+                                         }
+                                     }" class="flex items-center justify-between bg-white border border-slate-200 p-5 rounded-2xl hover:border-slate-300 transition-all duration-300 hover:shadow-sm">
+                                         <div class="flex items-center gap-4">
+                                             <div :class="enabled ? 'bg-red-500/10 text-red-600' : 'bg-slate-100 text-slate-400'" class="w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-300">
+                                                 <i class="fas fa-tools"></i>
+                                             </div>
+                                             <div>
+                                                 <h4 class="text-sm font-semibold text-slate-900">Enable Maintenance Mode</h4>
+                                                 <p class="text-xs text-slate-500 mt-1">When active, students will see a maintenance page. Admins bypass this.</p>
+                                             </div>
+                                         </div>
+                                         <div class="flex items-center gap-3">
+                                             <div x-show="loading" class="animate-spin text-red-500 text-[10px]">
+                                                 <i class="fas fa-circle-notch"></i>
+                                             </div>
+                                             <button 
+                                             type="button"
+                                             @click="enabled = !enabled; toggle()"
+                                             :class="enabled ? 'bg-red-500' : 'bg-slate-200'"
+                                             class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:ring-offset-2"
+                                             role="switch"
+                                             aria-label="Maintenance Mode"
+                                             :aria-checked="enabled.toString()"
+                                         >
+                                             <span 
+                                                 aria-hidden="true"
+                                                 :class="enabled ? 'translate-x-5' : 'translate-x-0'"
+                                                 class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-300 ease-in-out"
+                                             ></span>
+                                         </button>
+                                         </div>
+                                     </div>
                         </div>
 
-                        <!-- Footer Actions -->
-                        <div class="flex justify-end pt-4 border-t border-slate-100">
-                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 ease-in-out shadow-sm shadow-indigo-500/20 flex items-center gap-2">
-                                <i class="fas fa-save"></i> Save General Settings
+                        <!-- Sticky Footer Actions -->
+                        <div class="sticky bottom-0 -mx-6 md:-mx-8 px-6 md:px-8 py-6 bg-white/80 backdrop-blur-md border-t border-slate-50 flex justify-end z-20 mt-8">
+                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-10 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all shadow-xl shadow-indigo-600/20 flex items-center gap-3 hover:scale-[1.02] active:scale-[0.98]">
+                                <i class="fas fa-check-circle text-white/50"></i> Save Configuration
                             </button>
                         </div>
                     </form>
@@ -269,31 +271,79 @@
                             <div class="space-y-4">
                                 @php
                                     $toggles = [
-                                        ['name' => 'shuffle_questions', 'title' => 'Shuffle Questions', 'desc' => 'Randomize the order of questions for every attempt.', 'value' => old('shuffle_questions', $settings['shuffle_questions'] ?? '1')],
-                                        ['name' => 'shuffle_answers', 'title' => 'Shuffle Answers', 'desc' => 'Randomize the order of answer choices for each question.', 'value' => old('shuffle_answers', $settings['shuffle_answers'] ?? '1')],
-                                        ['name' => 'show_result_immediately', 'title' => 'Instant Results', 'desc' => 'Students see their score right after submitting.', 'value' => old('show_result_immediately', $settings['show_result_immediately'] ?? '1')],
-                                        ['name' => 'allow_review', 'title' => 'Post-Quiz Review', 'desc' => 'Let students review correct answers after the quiz ends.', 'value' => old('allow_review', $settings['allow_review'] ?? '1')]
+                                        ['name' => 'shuffle_questions', 'title' => 'Shuffle Questions', 'desc' => 'Randomize the order of questions for every attempt.', 'value' => (string)($settings['shuffle_questions'] ?? '1')],
+                                        ['name' => 'shuffle_answers', 'title' => 'Shuffle Answers', 'desc' => 'Randomize the order of answer choices for each question.', 'value' => (string)($settings['shuffle_answers'] ?? '1')],
+                                        ['name' => 'show_result_immediately', 'title' => 'Instant Results', 'desc' => 'Students see their score right after submitting.', 'value' => (string)($settings['show_result_immediately'] ?? '1')],
+                                        ['name' => 'allow_review', 'title' => 'Post-Quiz Review', 'desc' => 'Let students review correct answers after the quiz ends.', 'value' => (string)($settings['allow_review'] ?? '1')]
                                     ];
                                 @endphp
                                 @foreach($toggles as $toggle)
-                                <div class="flex items-center justify-between bg-white border border-slate-200 p-5 rounded-xl hover:border-slate-300 transition-colors">
-                                    <div>
-                                        <h4 class="text-sm font-semibold text-slate-900">{{ $toggle['title'] }}</h4>
-                                        <p class="text-xs text-slate-500 mt-1">{{ $toggle['desc'] }}</p>
+                                <div x-data="{ 
+                                    name: '{{ $toggle['name'] }}',
+                                    enabled: {{ $toggle['value'] === '1' ? 'true' : 'false' }},
+                                    loading: false,
+                                    async toggle() {
+                                        this.loading = true;
+                                        try {
+                                            const res = await fetch('{{ route('admin.settings.update') }}', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                                    'Accept': 'application/json'
+                                                },
+                                                body: JSON.stringify({
+                                                    [this.name]: this.enabled ? '1' : '0',
+                                                    '_tab': 'quiz'
+                                                })
+                                            });
+                                            if (!res.ok) throw new Error();
+                                        } catch (e) {
+                                            this.enabled = !this.enabled;
+                                            alert('Failed to save setting.');
+                                        } finally {
+                                            this.loading = false;
+                                        }
+                                    }
+                                }" class="flex items-center justify-between bg-white border border-slate-200 p-5 rounded-2xl hover:border-slate-300 transition-all duration-300 hover:shadow-sm">
+                                    <div class="flex items-center gap-4">
+                                        <div :class="enabled ? 'bg-emerald-500/10 text-emerald-600' : 'bg-slate-100 text-slate-400'" class="w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-300">
+                                            <i class="fas {{ $toggle['name'] === 'shuffle_questions' ? 'fa-stream' : ($toggle['name'] === 'shuffle_answers' ? 'fa-random' : 'fa-check-circle') }}"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-sm font-semibold text-slate-900">{{ $toggle['title'] }}</h4>
+                                            <p class="text-xs text-slate-500 mt-1">{{ $toggle['desc'] }}</p>
+                                        </div>
                                     </div>
-                                    <label class="relative inline-flex items-center cursor-pointer shrink-0 ml-4">
-                                        <input type="checkbox" name="{{ $toggle['name'] }}" value="1" class="sr-only peer" {{ (string)$toggle['value'] === '1' ? 'checked' : '' }}>
-                                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
-                                    </label>
+                                    <div class="flex items-center gap-3">
+                                        <div x-show="loading" class="animate-spin text-emerald-500 text-[10px]">
+                                            <i class="fas fa-circle-notch"></i>
+                                        </div>
+                                        <button 
+                                             type="button"
+                                             @click="enabled = !enabled; toggle()"
+                                             :class="enabled ? 'bg-emerald-500' : 'bg-slate-200'"
+                                             class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:ring-offset-2"
+                                             role="switch"
+                                             aria-label="{{ $toggle['title'] }}"
+                                             :aria-checked="enabled.toString()"
+                                         >
+                                             <span 
+                                                 aria-hidden="true"
+                                                 :class="enabled ? 'translate-x-5' : 'translate-x-0'"
+                                                 class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-300 ease-in-out"
+                                             ></span>
+                                         </button>
+                                    </div>
                                 </div>
                                 @endforeach
                             </div>
                         </div>
 
-                        <!-- Footer Actions -->
-                        <div class="flex justify-end pt-4 border-t border-slate-100">
-                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 ease-in-out shadow-sm shadow-indigo-500/20 flex items-center gap-2">
-                                <i class="fas fa-save"></i> Save Assessment Rules
+                        <!-- Sticky Footer Actions -->
+                        <div class="sticky bottom-0 -mx-6 md:-mx-8 px-6 md:px-8 py-4 bg-white/80 backdrop-blur-md border-t border-slate-100 flex justify-end z-20 mt-8">
+                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ease-in-out shadow-lg shadow-indigo-500/25 flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98]">
+                                <i class="fas fa-check-circle"></i> Update Assessment Rules
                             </button>
                         </div>
                     </form>
@@ -319,22 +369,70 @@
                             <div class="space-y-4">
                                 @php
                                     $secToggles = [
-                                        ['name' => 'disable_right_click', 'title' => 'Disable Context Menus', 'desc' => 'Prevents students from right-clicking or copying questions.', 'value' => old('disable_right_click', $settings['disable_right_click'] ?? '1')],
-                                        ['name' => 'tab_switch_detection', 'title' => 'Browser Focus Detection', 'desc' => 'Records a violation when a student leaves the quiz tab.', 'value' => old('tab_switch_detection', $settings['tab_switch_detection'] ?? '1')],
-                                        ['name' => 'enforce_fullscreen', 'title' => 'Enforce Fullscreen', 'desc' => 'Forces the browser into fullscreen mode. Exiting creates a violation.', 'value' => old('enforce_fullscreen', $settings['enforce_fullscreen'] ?? '0')],
-                                        ['name' => 'auto_submit_on_violation', 'title' => 'Auto-Submit on Breach', 'desc' => 'Automatically end the quiz when violation threshold is reached.', 'value' => old('auto_submit_on_violation', $settings['auto_submit_on_violation'] ?? '0')]
+                                        ['name' => 'disable_right_click', 'icon' => 'fa-mouse-pointer', 'title' => 'Disable Context Menus', 'desc' => 'Prevents students from right-clicking or copying questions.', 'value' => (string)($settings['disable_right_click'] ?? '1')],
+                                        ['name' => 'tab_switch_detection', 'icon' => 'fa-external-link-alt', 'title' => 'Browser Focus Detection', 'desc' => 'Records a violation when a student leaves the quiz tab.', 'value' => (string)($settings['tab_switch_detection'] ?? '1')],
+                                        ['name' => 'enforce_fullscreen', 'icon' => 'fa-expand', 'title' => 'Enforce Fullscreen', 'desc' => 'Forces the browser into fullscreen mode. Exiting creates a violation.', 'value' => (string)($settings['enforce_fullscreen'] ?? '0')],
+                                        ['name' => 'auto_submit_on_violation', 'icon' => 'fa-clock', 'title' => 'Auto-Submit on Breach', 'desc' => 'Automatically end the quiz when violation threshold is reached.', 'value' => (string)($settings['auto_submit_on_violation'] ?? '0')]
                                     ];
                                 @endphp
                                 @foreach($secToggles as $toggle)
-                                <div class="flex items-center justify-between bg-white border border-slate-200 p-5 rounded-xl hover:border-slate-300 transition-colors">
-                                    <div>
-                                        <h4 class="text-sm font-semibold text-slate-900">{{ $toggle['title'] }}</h4>
-                                        <p class="text-xs text-slate-500 mt-1">{{ $toggle['desc'] }}</p>
+                                <div x-data="{ 
+                                    name: '{{ $toggle['name'] }}',
+                                    enabled: {{ $toggle['value'] === '1' ? 'true' : 'false' }},
+                                    loading: false,
+                                    async toggle() {
+                                        this.loading = true;
+                                        try {
+                                            const res = await fetch('{{ route('admin.settings.update') }}', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                                    'Accept': 'application/json'
+                                                },
+                                                body: JSON.stringify({
+                                                    [this.name]: this.enabled ? '1' : '0',
+                                                    '_tab': 'security'
+                                                })
+                                            });
+                                            if (!res.ok) throw new Error();
+                                        } catch (e) {
+                                            this.enabled = !this.enabled;
+                                            alert('Failed to save setting.');
+                                        } finally {
+                                            this.loading = false;
+                                        }
+                                    }
+                                }" class="flex items-center justify-between bg-white border border-slate-200 p-5 rounded-2xl hover:border-slate-300 transition-all duration-300 hover:shadow-sm">
+                                    <div class="flex items-center gap-4">
+                                        <div :class="enabled ? 'bg-red-500/10 text-red-600' : 'bg-slate-100 text-slate-400'" class="w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-300">
+                                            <i class="fas {{ $toggle['icon'] }}"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-sm font-semibold text-slate-900">{{ $toggle['title'] }}</h4>
+                                            <p class="text-xs text-slate-500 mt-1">{{ $toggle['desc'] }}</p>
+                                        </div>
                                     </div>
-                                    <label class="relative inline-flex items-center cursor-pointer shrink-0 ml-4">
-                                        <input type="checkbox" name="{{ $toggle['name'] }}" value="1" class="sr-only peer" {{ (string)$toggle['value'] === '1' ? 'checked' : '' }}>
-                                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
-                                    </label>
+                                    <div class="flex items-center gap-3">
+                                        <div x-show="loading" class="animate-spin text-red-500 text-[10px]">
+                                            <i class="fas fa-circle-notch"></i>
+                                        </div>
+                                         <button 
+                                             type="button"
+                                             @click="enabled = !enabled; toggle()"
+                                             :class="enabled ? 'bg-red-500' : 'bg-slate-200'"
+                                             class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:ring-offset-2"
+                                             role="switch"
+                                             aria-label="{{ $toggle['title'] }}"
+                                             :aria-checked="enabled.toString()"
+                                         >
+                                             <span 
+                                                 aria-hidden="true"
+                                                 :class="enabled ? 'translate-x-5' : 'translate-x-0'"
+                                                 class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-300 ease-in-out"
+                                             ></span>
+                                         </button>
+                                    </div>
                                 </div>
                                 @endforeach
                             </div>
@@ -349,10 +447,10 @@
                             </div>
                         </div>
 
-                        <!-- Footer Actions -->
-                        <div class="flex justify-end pt-4 border-t border-slate-100">
-                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 ease-in-out shadow-sm shadow-indigo-500/20 flex items-center gap-2">
-                                <i class="fas fa-save"></i> Save Security Policy
+                        <!-- Sticky Footer Actions -->
+                        <div class="sticky bottom-0 -mx-6 md:-mx-8 px-6 md:px-8 py-4 bg-white/80 backdrop-blur-md border-t border-slate-100 flex justify-end z-20 mt-8">
+                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ease-in-out shadow-lg shadow-indigo-500/25 flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98]">
+                                <i class="fas fa-check-circle"></i> Update Security Policy
                             </button>
                         </div>
                     </form>

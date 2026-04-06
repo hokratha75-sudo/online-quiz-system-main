@@ -45,6 +45,10 @@ class Setting extends Model
      */
     public static function setMany(array $settings, ?string $group = null): void
     {
+        if (!\Illuminate\Support\Facades\Schema::hasTable('settings')) {
+            return;
+        }
+
         foreach ($settings as $key => $value) {
             $data = ['value' => $value];
             if ($group) {

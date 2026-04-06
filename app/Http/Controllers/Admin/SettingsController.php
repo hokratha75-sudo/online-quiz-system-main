@@ -28,7 +28,6 @@ class SettingsController extends Controller
             'contact_email'   => 'nullable|email|max:255',
             'timezone'        => 'nullable|string|max:50',
             'institution_name'=> 'nullable|string|max:200',
-            'site_logo'       => 'nullable|file|mimes:png,jpg,jpeg,svg,webp|max:2048',
 
             // Quiz Rules
             'default_time_limit'      => 'nullable|integer|min:1|max:300',
@@ -43,54 +42,68 @@ class SettingsController extends Controller
 
         // --- General Settings ---
         if ($tab === 'general') {
-            $general = [
-                'site_name'        => $request->input('site_name', 'QuizMaster v2.0'),
-                'contact_email'    => $request->input('contact_email', ''),
-                'timezone'         => $request->input('timezone', 'UTC'),
-                'institution_name' => $request->input('institution_name', ''),
-                'maintenance_mode' => $request->has('maintenance_mode') ? '1' : '0',
-            ];
-
-            // Handle logo upload
-            if ($request->hasFile('site_logo')) {
-                $oldLogo = Setting::get('site_logo');
-                if ($oldLogo && Storage::disk('public')->exists($oldLogo)) {
-                    Storage::disk('public')->delete($oldLogo);
-                }
-
-                $path = $request->file('site_logo')->store('logos', 'public');
-                $general['site_logo'] = $path;
+            $general = [];
+            if ($request->has('site_name')) $general['site_name'] = $request->input('site_name');
+            if ($request->has('contact_email')) $general['contact_email'] = $request->input('contact_email');
+            if ($request->has('timezone')) $general['timezone'] = $request->input('timezone');
+            if ($request->has('institution_name')) $general['institution_name'] = $request->input('institution_name');
+            
+            // Maintenance mode toggle
+            if ($request->ajax()) {
+                if ($request->has('maintenance_mode')) $general['maintenance_mode'] = $request->input('maintenance_mode') == '1' || $request->input('maintenance_mode') === true ? '1' : '0';
+            } else {
+                $general['maintenance_mode'] = $request->has('maintenance_mode') ? '1' : '0';
             }
 
-            Setting::setMany($general, 'general');
+            if (!empty($general)) {
+                Setting::setMany($general, 'general');
+            }
         }
 
         // --- Quiz Rules ---
         if ($tab === 'quiz') {
-            $quiz = [
-                'default_time_limit'      => $request->input('default_time_limit', '30'),
-                'default_pass_percentage' => $request->input('default_pass_percentage', '60'),
-                'max_attempts'            => $request->input('max_attempts', '1'),
-                'shuffle_questions'       => $request->has('shuffle_questions') ? '1' : '0',
-                'shuffle_answers'         => $request->has('shuffle_answers') ? '1' : '0',
-                'show_result_immediately' => $request->has('show_result_immediately') ? '1' : '0',
-                'allow_review'            => $request->has('allow_review') ? '1' : '0',
-            ];
+            $quiz = [];
+            foreach (['default_time_limit', 'default_pass_percentage', 'max_attempts'] as $field) {
+                if ($request->has($field)) $quiz[$field] = $request->input($field);
+            }
+            
+            foreach (['shuffle_questions', 'shuffle_answers', 'show_result_immediately', 'allow_review'] as $toggle) {
+                if ($request->ajax()) {
+                    if ($request->has($toggle)) $quiz[$toggle] = $request->input($toggle) == '1' || $request->input($toggle) === true ? '1' : '0';
+                } else {
+                    $quiz[$toggle] = $request->has($toggle) ? '1' : '0';
+                }
+            }
 
-            Setting::setMany($quiz, 'quiz');
+            if (!empty($quiz)) {
+                Setting::setMany($quiz, 'quiz');
+            }
         }
 
         // --- Security ---
         if ($tab === 'security') {
-            $security = [
-                'disable_right_click'      => $request->has('disable_right_click') ? '1' : '0',
-                'tab_switch_detection'     => $request->has('tab_switch_detection') ? '1' : '0',
-                'enforce_fullscreen'       => $request->has('enforce_fullscreen') ? '1' : '0',
-                'max_violations'           => $request->input('max_violations', '3'),
-                'auto_submit_on_violation' => $request->has('auto_submit_on_violation') ? '1' : '0',
-            ];
+            $security = [];
+            if ($request->has('max_violations')) $security['max_violations'] = $request->input('max_violations');
+            
+            foreach (['disable_right_click', 'tab_switch_detection', 'enforce_fullscreen', 'auto_submit_on_violation'] as $toggle) {
+                if ($request->ajax()) {
+                    if ($request->has($toggle)) $security[$toggle] = $request->input($toggle) == '1' || $request->input($toggle) === true ? '1' : '0';
+                } else {
+                    $security[$toggle] = $request->has($toggle) ? '1' : '0';
+                }
+            }
 
-            Setting::setMany($security, 'security');
+            if (!empty($security)) {
+                Setting::setMany($security, 'security');
+            }
+        }
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Settings updated successfully!',
+                'settings' => Setting::getAllCached()
+            ]);
         }
 
         return redirect()->back()->with('success', 'Settings updated successfully!')->withInput(['_tab' => $tab]);

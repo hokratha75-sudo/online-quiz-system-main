@@ -1,473 +1,246 @@
 @extends('layouts.admin')
 
-@section('styles')
-<style>
-    .page-wrapper {
-        padding: 20px;
-        background-color: #f4f6f9;
-        min-height: calc(100vh - 50px);
-    }
-    .page-title-box {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-    .page-title {
-        font-size: 32px;
-        font-weight: 600;
-        margin: 0;
-        color: #343a40;
-        display: inline-block;
-    }
-    .page-subtitle {
-        color: #6c757d;
-        font-size: 14px;
-        margin-left: 8px;
-        display: inline-block;
-    }
-    .breadcrumb-right {
-        color: #6c757d;
-        font-size: 14px;
-    }
-    .breadcrumb-right a {
-        color: #007bff;
-        text-decoration: none;
-    }
-    
-    .card-custom {
-        background: #fff;
-        border-radius: 4px;
-        border: 1px solid #dee2e6;
-        box-shadow: none;
-    }
-    .card-header-inner {
-        padding: 15px 20px;
-        border-bottom: 1px solid #dee2e6;
-    }
-    .card-title-custom {
-        margin: 0 0 15px 0;
-        font-size: 16px;
-        font-weight: 600;
-        color: #343a40;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .btn-minus {
-        color: #6c757d;
-        background: none;
-        border: none;
-        font-size: 16px;
-        cursor: pointer;
-    }
-    
-    .btn-action-group {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 15px;
-        margin-bottom: 20px;
-    }
-    .btn-blue {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        padding: 6px 14px;
-        border-radius: 4px;
-        font-size: 14px;
-    }
-    .btn-pink {
-        background-color: #e83e8c;
-        color: #fff;
-        border: none;
-        padding: 6px 14px;
-        border-radius: 4px;
-        font-size: 14px;
-    }
-    .btn-yellow {
-        background-color: #ffc107;
-        color: #000;
-        border: none;
-        padding: 6px 14px;
-        border-radius: 4px;
-        font-size: 14px;
-    }
-    .btn-red {
-        background-color: #dc3545;
-        color: #fff;
-        border: none;
-        padding: 6px 14px;
-        border-radius: 4px;
-        font-size: 14px;
-    }
-    
-    .toolbar-group {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-    }
-    .show-entries {
-        color: #6c757d;
-        font-size: 14px;
-    }
-    .show-entries select {
-        border: 1px solid #ced4da;
-        padding: 4px;
-        margin: 0 5px;
-        border-radius: 4px;
-    }
-    .middle-buttons .btn {
-        background: #f8f9fa;
-        border: 1px solid #ced4da;
-        color: #6c757d;
-        padding: 4px 12px;
-        font-size: 14px;
-        margin: 0 2px;
-    }
-    .search-box {
-        display: flex;
-        align-items: center;
-        font-size: 14px;
-        color: #6c757d;
-    }
-    .search-box input {
-        border: 1px solid #ced4da;
-        padding: 4px 10px;
-        margin-left: 8px;
-        border-radius: 4px;
-        outline: none;
-    }
-    
-    .table-custom {
-        width: 100%;
-        margin-bottom: 0;
-    }
-    .table-custom th {
-        border-top: none;
-        border-bottom: 2px solid #dee2e6;
-        padding: 12px 20px;
-        color: #212529;
-        font-weight: 600;
-        font-size: 14px;
-        white-space: nowrap;
-    }
-    .table-custom td {
-        padding: 12px 20px;
-        vertical-align: middle;
-        border-bottom: 1px solid #dee2e6;
-        color: #212529;
-        font-size: 14px;
-    }
-    .item-name {
-        color: #007bff;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-    
-    .count-badge {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        color: #fff;
-        font-size: 12px;
-        font-weight: 600;
-    }
-    .badge-blue { background-color: #0d6efd; }
-    .badge-green { background-color: #198754; }
-    .badge-cyan { background-color: #0dcaf0; }
-    .badge-yellow { background-color: #ffc107; color: #000; }
-    .badge-black { background-color: #212529; color: #fff; }
-    
-    .card-footer-custom {
-        padding: 15px 20px;
-        background: #fff;
-        border-top: none;
-        color: #6c757d;
-        font-size: 14px;
-    }
-    
-    .form-check-input {
-        cursor: pointer;
-    }
-</style>
-@endsection
-
 @section('content')
-<div class="page-wrapper">
-    <div class="page-title-box">
+<div class="max-w-[1400px] mx-auto p-8 md:p-10 font-inter text-slate-900">
+
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-            <h2 class="page-title">{{ ucfirst($tab) }}</h2>
-            <span class="page-subtitle">Data {{ ucfirst($tab) }}</span>
+            <h1 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight uppercase">{{ ucfirst($tab) }} Index</h1>
+            <p class="text-[10px] font-bold text-indigo-600 mt-1 uppercase tracking-widest leading-none">Manage institutional {{ $tab }} and academic structures</p>
         </div>
-        <div class="breadcrumb-right">
-            <i class="fas fa-tachometer-alt text-primary"></i> <a href="{{ route('admin.dashboard') }}">Dashboard</a> / {{ ucfirst($tab) }} / Data {{ ucfirst($tab) }}
+        <div class="flex items-center gap-3">
+            <button onclick="window.location.reload()" class="bg-white hover:bg-slate-50 text-slate-900 border border-slate-100 px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm">
+                <i class="fas fa-sync-alt text-[10px] text-indigo-500"></i> Refresh
+            </button>
+            <a href="{{ route('admin.majors.export', ['tab' => $tab]) }}" class="bg-white hover:bg-slate-50 text-slate-900 border border-slate-100 px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm">
+                <i class="fas fa-file-excel text-[10px] text-emerald-500"></i> Export
+            </a>
+            @if($tab == 'majors')
+                <button data-bs-toggle="modal" data-bs-target="#addMajorModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg">
+                    <i class="fas fa-plus text-[10px]"></i> New Major
+                </button>
+            @elseif($tab == 'classes')
+                <button data-bs-toggle="modal" data-bs-target="#addClassModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg">
+                    <i class="fas fa-plus text-[10px]"></i> New Class
+                </button>
+            @endif
         </div>
     </div>
 
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-    @if($errors->any())
-        <div class="alert alert-danger">{{ $errors->first() }}</div>
+    <div class="mb-6 bg-emerald-50 border border-emerald-100 text-emerald-700 px-4 py-3 rounded-xl text-xs font-bold flex items-center gap-3 shadow-sm uppercase tracking-tight">
+        <i class="fas fa-check-circle text-emerald-500"></i>
+        {{ session('success') }}
+    </div>
     @endif
 
-    <div class="card-custom">
-        <div class="card-header-inner">
-            <h3 class="card-title-custom">
-                Master Data {{ ucfirst($tab) }}
-                <button class="btn-minus"><i class="fas fa-minus"></i></button>
-            </h3>
-            
-            <div class="btn-action-group">
-                <div>
-                    @if($tab == 'majors')
-                        <button class="btn-blue me-1" data-bs-toggle="modal" data-bs-target="#addMajorModal"><i class="fas fa-plus"></i> Add Data</button>
-                    @elseif($tab == 'classes')
-                        <button class="btn-blue me-1" data-bs-toggle="modal" data-bs-target="#addClassModal"><i class="fas fa-plus"></i> Add Data</button>
-                    @elseif($tab == 'subjects')
-                        <button class="btn-blue me-1" data-bs-toggle="modal" data-bs-target="#addSubjectModal"><i class="fas fa-plus"></i> Add Data</button>
-                    @elseif($tab == 'departments')
-                        <button class="btn-blue me-1" data-bs-toggle="modal" data-bs-target="#addDeptModal"><i class="fas fa-plus"></i> Add Data</button>
-                    @endif
-                    <button class="btn-pink" onclick="window.location.reload()">
-                        <i class="fas fa-sync-alt"></i> Reload
-                    </button>
-                </div>
-                <div>
-                    <button class="btn-yellow me-1" onclick="editSelected()">
-                        <i class="fas fa-edit"></i> Edit
-                    </button>
-                    <button class="btn-red" onclick="deleteSelected()">
-                        <i class="fas fa-trash"></i> Delete
-                    </button>
-                </div>
+    <!-- Data Table Card -->
+    <div class="bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden mb-8">
+        
+        <!-- Toolbar -->
+        <div class="p-6 border-b border-slate-50 flex flex-col md:flex-row items-center justify-between gap-6 bg-slate-50/10">
+            <div class="flex items-center gap-4">
+                <h3 class="text-xs font-bold text-slate-900 tracking-widest uppercase">Active {{ ucfirst($tab) }}</h3>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-slate-100 text-indigo-600 text-[10px] font-bold tracking-widest uppercase shadow-sm tabular-nums whitespace-nowrap">{{ $items->total() }} Nodes Recorded</span>
             </div>
             
-            <div class="toolbar-group">
-                <div class="show-entries">
-                    Show 
-                    <select>
-                        <option>10</option>
-                        <option>25</option>
-                        <option>50</option>
-                    </select> 
-                    entries
-                </div>
-                <div class="middle-buttons">
-                    <button class="btn">Copy</button>
-                    <a href="{{ route('admin.majors.export', ['tab' => $tab]) }}" class="btn">Excel</a>
-                </div>
-                <div class="search-box">
-                    Search: <input type="text" id="tableSearch" placeholder="Search...">
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+                <button class="bg-white hover:bg-rose-50 text-rose-600 border border-slate-100 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm whitespace-nowrap" onclick="deleteSelected()">
+                    <i class="fas fa-trash-alt text-[10px]"></i> Delete Selected
+                </button>
+                <div class="relative w-full sm:w-64">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-indigo-600 text-[10px]"></i>
+                    <input type="text" id="tableSearch" placeholder="Search indices..." 
+                           class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-100 rounded-xl text-xs font-bold text-slate-900 uppercase tracking-widest focus:outline-none focus:border-indigo-500 transition-all shadow-sm">
                 </div>
             </div>
         </div>
 
-        <div class="table-responsive">
-            <table class="table-custom" id="dataTable">
+        <div class="overflow-x-auto min-h-[300px]">
+            <table class="w-full text-left border-collapse whitespace-nowrap" id="dataTable">
                 <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Code</th>
+                    <tr class="bg-white border-b border-slate-50">
+                        <th class="ps-8 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest w-12 text-center">#</th>
+                        <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest w-24">Code ID</th>
                         @if($tab == 'majors')
-                            <th>Major</th>
-                            <th>Department</th>
-                            <th class="text-center">Total Classes</th>
-                            <th class="text-center">Total Courses</th>
+                            <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Major Designation</th>
+                            <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Department Alignment</th>
+                            <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Classes</th>
+                            <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Subjects</th>
                         @elseif($tab == 'classes')
-                            <th>Class</th>
-                            <th>Major</th>
-                            <th>Year</th>
-                            <th class="text-center">Total Students</th>
-                            <th class="text-center">Total Courses</th>
-                        @elseif($tab == 'subjects')
-                            <th>Course</th>
-                            <th>Major</th>
-                            <th>Credits</th>
-                            <th class="text-center">Total Classes</th>
-                            <th class="text-center">Total Quizzes</th>
-                        @elseif($tab == 'departments')
-                            <th>Department</th>
-                            <th class="text-center">Total Majors</th>
-                            <th class="text-center">Total Classes</th>
-                            <th class="text-center">Total Courses</th>
+                            <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Class Designation</th>
+                            <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Major Correlation</th>
+                            <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Users</th>
+                            <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Units</th>
                         @endif
-                        <th class="text-end"><input type="checkbox" id="selectAll" class="form-check-input"></th>
+                        <th class="pe-8 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-right">
+                            <input type="checkbox" id="selectAll" class="w-4 h-4 text-indigo-600 bg-white border-slate-200 rounded focus:ring-indigo-500 cursor-pointer">
+                        </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-slate-50">
                     @forelse($items as $item)
-                    <tr class="table-row">
-                        <td>{{ $loop->iteration + ($items->currentPage() - 1) * $items->perPage() }}</td>
-                        <td>{{ $item->code }}</td>
+                    <tr class="table-row hover:bg-slate-50/50 transition-all group">
+                        <td class="ps-8 py-4 text-[10px] font-bold text-slate-400 tabular-nums text-center">{{ $loop->iteration + ($items->currentPage() - 1) * $items->perPage() }}</td>
+                        <td class="px-6 py-4">
+                            <span class="px-3 py-1 bg-slate-50 border border-slate-100 rounded-lg text-[9px] font-bold text-slate-900 tabular-nums uppercase">{{ $item->code }}</span>
+                        </td>
                         
                         @if($tab == 'majors')
-                            <td>
-                                <a href="{{ route('admin.majors.show', $item->id) }}" class="item-name">
-                                    <i class="fas fa-bookmark me-1"></i> {{ $item->name }}
+                            <td class="px-6 py-4">
+                                <a href="{{ route('admin.majors.show', $item->id) }}" class="flex items-center gap-3 transition-all group-hover:translate-x-1">
+                                    <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-indigo-600/20">
+                                        <i class="fas fa-bookmark text-[10px]"></i>
+                                    </div>
+                                    <h4 class="text-[11px] font-bold text-slate-900 uppercase tracking-tight">{{ $item->name }}</h4>
                                 </a>
                             </td>
-                            <td>{{ $item->department->department_name ?? 'N/A' }}</td>
-                            <td class="text-center">
-                                <span class="count-badge badge-green">{{ $item->classes_count ?? 0 }}</span>
+                            <td class="px-6 py-4">
+                                <div class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest opacity-70">{{ $item->department->department_name ?? 'SYSTEM UNIT' }}</div>
                             </td>
-                            <td class="text-center">
-                                <span class="count-badge badge-cyan">{{ $item->subjects_count ?? 0 }}</span>
+                            <td class="px-6 py-4 text-center">
+                                <div class="text-[11px] font-bold text-slate-900 tabular-nums">{{ $item->classes_count ?? 0 }}</div>
+                                <div class="text-[8px] font-bold text-indigo-400 uppercase tracking-widest mt-0.5">Classes</div>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <div class="text-[11px] font-bold text-slate-900 tabular-nums">{{ $item->subjects_count ?? 0 }}</div>
+                                <div class="text-[8px] font-bold text-indigo-400 uppercase tracking-widest mt-0.5">Units</div>
                             </td>
                         @elseif($tab == 'classes')
-                            <td>
-                                <a href="{{ route('admin.classes.show', $item->id) }}" class="item-name">
-                                    <i class="fas fa-bookmark me-1"></i> {{ $item->name }}
-                                </a>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3 transition-all group-hover:translate-x-1">
+                                    <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-indigo-600/20">
+                                        <i class="fas fa-layer-group text-[10px]"></i>
+                                    </div>
+                                    <h4 class="text-[11px] font-bold text-slate-900 uppercase tracking-tight">{{ $item->name }}</h4>
+                                </div>
                             </td>
-                            <td>{{ $item->major->name ?? 'N/A' }}</td>
-                            <td>{{ $item->academic_year ?? 'N/A' }}</td>
-                            <td class="text-center">
-                                <span class="count-badge badge-yellow">{{ $item->students_count ?? 0 }}</span>
+                            <td class="px-6 py-4">
+                                <div class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest opacity-70">{{ $item->major->name ?? 'N/A' }}</div>
                             </td>
-                            <td class="text-center">
-                                <span class="count-badge badge-cyan">{{ $item->subjects_count ?? 0 }}</span>
+                            <td class="px-6 py-4 text-center">
+                                <div class="text-[11px] font-bold text-slate-900 tabular-nums">{{ $item->students_count ?? 0 }}</div>
+                                <div class="text-[8px] font-bold text-emerald-500 uppercase tracking-widest mt-0.5">Users</div>
                             </td>
-                        @elseif($tab == 'subjects')
-                            <td>
-                                <a href="{{ route('admin.subjects.show', $item->id) }}" class="item-name">
-                                    {{ $item->subject_name }}
-                                </a>
-                            </td>
-                            <td>{{ $item->major->name ?? 'N/A' }}</td>
-                            <td>{{ $item->credits ?? 3 }}</td>
-                            <td class="text-center">
-                                <span class="count-badge badge-green">{{ $item->classes_count ?? 0 }}</span>
-                            </td>
-                            <td class="text-center">
-                                <span class="count-badge badge-black">{{ $item->quizzes_count ?? 0 }}</span>
-                            </td>
-                        @elseif($tab == 'departments')
-                            <td>
-                                <a href="{{ route('admin.departments.show', $item->id) }}" class="item-name">
-                                    <i class="fas fa-bookmark me-1"></i> {{ $item->department_name }}
-                                </a>
-                            </td>
-                            <td class="text-center">
-                                <span class="count-badge badge-blue">{{ $item->majors_count ?? 0 }}</span>
-                            </td>
-                            <td class="text-center">
-                                <span class="count-badge badge-green">{{ $item->classes_count ?? 0 }}</span>
-                            </td>
-                            <td class="text-center">
-                                <span class="count-badge badge-cyan">{{ $item->subjects_count ?? 0 }}</span>
+                            <td class="px-6 py-4 text-center">
+                                <div class="text-[11px] font-bold text-slate-900 tabular-nums">{{ $item->subjects_count ?? 0 }}</div>
+                                <div class="text-[8px] font-bold text-indigo-400 uppercase tracking-widest mt-0.5">Units</div>
                             </td>
                         @endif
                         
-                        <td class="text-end">
-                            <input type="checkbox" class="form-check-input row-checkbox" 
-                                   value="{{ $item->id }}" 
-                                   data-name="{{ $item->name ?? $item->department_name ?? $item->subject_name }}"
-                                   data-dept="{{ $item->department_id ?? '' }}"
-                                   data-major="{{ $item->major_id ?? '' }}">
+                        <td class="pe-8 py-4 text-right">
+                            <div class="flex items-center justify-end gap-2">
+                                <button type="button" 
+                                        onclick="editRecord({{ $item->id }}, '{{ addslashes($item->name) }}', '{{ $item->code ?? '' }}', '{{ $item->department_id ?? '' }}', '{{ $item->major_id ?? '' }}')" 
+                                        class="w-8 h-8 rounded-lg border border-slate-100 text-slate-400 hover:text-indigo-600 hover:border-indigo-100 hover:bg-indigo-50 transition-all flex items-center justify-center shadow-sm">
+                                    <i class="fas fa-pen text-[10px]"></i>
+                                </button>
+                                <input type="checkbox" class="row-checkbox w-4 h-4 text-indigo-600 bg-white border-slate-200 rounded focus:ring-indigo-500 cursor-pointer ms-2" value="{{ $item->id }}" data-name="{{ $item->name }}">
+                            </div>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="text-center py-4">No data found</td>
+                        <td colspan="7" class="py-24 text-center uppercase text-[10px] font-bold text-slate-300 tracking-widest">Zero nodes detected</td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
 
-        <div class="card-footer-custom">
-            Showing {{ $items->firstItem() ?? 0 }} to {{ $items->lastItem() ?? 0 }} of {{ $items->total() ?? 0 }} entries
+        <!-- Pagination -->
+        <div class="px-8 py-5 border-t border-slate-50 bg-slate-50/20 flex flex-col md:flex-row items-center justify-between gap-4">
+            <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
+                Cluster Range: {{ $items->firstItem() ?? 0 }} - {{ $items->lastItem() ?? 0 }} of {{ $items->total() }} Nodes
+            </span>
+            <div class="flex justify-center md:justify-end">
+                {{ $items->onEachSide(1)->links() }}
+            </div>
         </div>
     </div>
+
 </div>
 
-<!-- Add/Edit Major Modal -->
+<!-- Structural Modals -->
 <div class="modal fade" id="addMajorModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="majorModalTitle">Add Major</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-[32px] border-none shadow-2xl shadow-indigo-900/20 overflow-hidden">
+            <div class="bg-indigo-600 p-8 text-white relative">
+                <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 blur-3xl rounded-full"></div>
+                <h3 class="text-xl font-bold uppercase tracking-tight" id="majorModalTitle">New Specialization</h3>
+                <p class="text-[10px] font-bold text-indigo-100 uppercase tracking-widest mt-1 opacity-70">Define institutional knowledge sector</p>
             </div>
-            <form action="{{ route('admin.majors.store') }}" method="POST" id="majorForm">
+            <form action="{{ route('admin.majors.store') }}" method="POST" id="majorForm" class="p-8 md:p-10 space-y-8">
                 @csrf
                 <input type="hidden" name="_method" value="POST" id="majorFormMethod">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Code</label>
-                        <input type="text" name="code" class="form-control" id="majorCode" required>
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="space-y-3">
+                        <label class="block text-[10px] font-bold uppercase tracking-widest text-indigo-600 mb-1">Index Code</label>
+                        <input type="text" name="code" id="majorCode" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100 transition-all uppercase tabular-nums">
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Major Name</label>
-                        <input type="text" name="name" class="form-control" id="majorName" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Department</label>
-                        <select name="department_id" class="form-select" id="majorDept" required>
-                            <option value="">Select Department</option>
-                            @foreach($departments as $d)
-                                <option value="{{ $d->id }}">{{ $d->department_name }}</option>
-                            @endforeach
-                        </select>
+                    <div class="space-y-3">
+                        <label class="block text-[10px] font-bold uppercase tracking-widest text-indigo-600 mb-1">Descriptor</label>
+                        <input type="text" name="name" id="majorName" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100 transition-all uppercase tracking-tight">
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="majorBtnSubmit">Save</button>
+                <div class="space-y-3">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest text-indigo-600 mb-1">Department Alignment</label>
+                    <select name="department_id" id="majorDept" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100 transition-all appearance-none uppercase">
+                        <option value="">-- AUTHORIZE SECTOR --</option>
+                        @foreach($departments as $d)
+                            <option value="{{ $d->id }}">{{ $d->department_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="flex items-center gap-4 pt-8 border-t border-slate-50">
+                    <button type="button" data-bs-dismiss="modal" class="flex-grow h-14 rounded-2xl font-bold uppercase tracking-widest text-[10px] text-slate-400 hover:text-slate-900 hover:bg-slate-50 transition-all">Discard</button>
+                    <button type="submit" id="majorBtnSubmit" class="flex-grow h-14 bg-slate-950 hover:bg-indigo-600 text-white rounded-2xl font-bold uppercase tracking-[.2em] text-[10px] transition-all shadow-xl shadow-slate-950/10">Authorize Node</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<!-- Add/Edit Class Modal -->
 <div class="modal fade" id="addClassModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="classModalTitle">Add Class</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-[32px] border-none shadow-2xl shadow-indigo-900/20 overflow-hidden">
+            <div class="bg-indigo-600 p-8 text-white relative">
+                <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 blur-3xl rounded-full"></div>
+                <h3 class="text-xl font-bold uppercase tracking-tight" id="classModalTitle">New Learning Unit</h3>
+                <p class="text-[10px] font-bold text-indigo-100 uppercase tracking-widest mt-1 opacity-70">Initialize student grouping protocol</p>
             </div>
-            <form action="{{ route('admin.classes.store') }}" method="POST" id="classForm">
+            <form action="{{ route('admin.classes.store') }}" method="POST" id="classForm" class="p-8 md:p-10 space-y-8">
                 @csrf
                 <input type="hidden" name="_method" value="POST" id="classFormMethod">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Code</label>
-                        <input type="text" name="code" class="form-control" id="classCode" required>
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="space-y-3">
+                        <label class="block text-[10px] font-bold uppercase tracking-widest text-indigo-600 mb-1">Index Code</label>
+                        <input type="text" name="code" id="classCode" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100 transition-all uppercase tabular-nums">
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Class Name</label>
-                        <input type="text" name="name" class="form-control" id="className" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Major</label>
-                        <select name="major_id" class="form-select" id="classMajor" required>
-                            <option value="">Select Major</option>
-                            @foreach($majors_all as $m)
-                                <option value="{{ $m->id }}">{{ $m->name }}</option>
-                            @endforeach
-                        </select>
+                    <div class="space-y-3">
+                        <label class="block text-[10px] font-bold uppercase tracking-widest text-indigo-600 mb-1">Descriptor</label>
+                        <input type="text" name="name" id="className" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100 transition-all uppercase tracking-tight">
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="classBtnSubmit">Save</button>
+                <div class="space-y-3">
+                    <label class="block text-[10px] font-bold uppercase tracking-widest text-indigo-600 mb-1">Specialization Core</label>
+                    <select name="major_id" id="classMajor" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100 transition-all appearance-none uppercase">
+                        <option value="">-- AUTHORIZE SPECIALIZATION --</option>
+                        @foreach($majors_all as $m)
+                            <option value="{{ $m->id }}">{{ $m->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="flex items-center gap-4 pt-8 border-t border-slate-50">
+                    <button type="button" data-bs-dismiss="modal" class="flex-grow h-14 rounded-2xl font-bold uppercase tracking-widest text-[10px] text-slate-400 hover:text-slate-900 hover:bg-slate-50 transition-all">Discard</button>
+                    <button type="submit" id="classBtnSubmit" class="flex-grow h-14 bg-slate-950 hover:bg-indigo-600 text-white rounded-2xl font-bold uppercase tracking-[.2em] text-[10px] transition-all shadow-xl shadow-slate-950/10">Authorize Node</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<!-- Hidden Delete Form -->
 <form id="deleteForm" method="POST" style="display: none;">
     @csrf
     @method('DELETE')
@@ -477,68 +250,35 @@
 
 @section('scripts')
 <script>
-    let currentTab = '{{ $tab }}';
+    const currentTab = '{{ $tab }}';
 
-    // Reset modals
-    var majorModal = document.getElementById('addMajorModal');
-    if(majorModal) {
-        majorModal.addEventListener('show.bs.modal', function (event) {
-            if(event.relatedTarget) { // Clicked from Add Data button
-                document.getElementById('majorForm').reset();
-                document.getElementById('majorForm').action = '/admin/majors';
-                document.getElementById('majorFormMethod').value = 'POST';
-                document.getElementById('majorModalTitle').innerText = 'Add Major';
-                document.getElementById('majorBtnSubmit').innerText = 'Save';
-            }
-        });
-    }
-
-    var classModal = document.getElementById('addClassModal');
-    if(classModal) {
-        classModal.addEventListener('show.bs.modal', function (event) {
-            if(event.relatedTarget) {
-                document.getElementById('classForm').reset();
-                document.getElementById('classForm').action = '/admin/classes';
-                document.getElementById('classFormMethod').value = 'POST';
-                document.getElementById('classModalTitle').innerText = 'Add Class';
-                document.getElementById('classBtnSubmit').innerText = 'Save';
-            }
-        });
-    }
-
-    // Search functionality
+    // Search Vector
     document.getElementById('tableSearch').addEventListener('keyup', function() {
-        let query = this.value.toLowerCase();
-        let rows = document.querySelectorAll('#dataTable tbody .table-row');
-        rows.forEach(row => {
-            let text = row.innerText.toLowerCase();
-            row.style.display = text.includes(query) ? '' : 'none';
+        const query = this.value.toLowerCase();
+        document.querySelectorAll('#dataTable tbody .table-row').forEach(row => {
+            row.style.display = row.innerText.toLowerCase().includes(query) ? '' : 'none';
         });
     });
 
-    // Select all functionality
+    // Selection Core
     document.getElementById('selectAll').addEventListener('change', function() {
-        let checked = this.checked;
-        document.querySelectorAll('.row-checkbox').forEach(cb => {
-            cb.checked = checked;
-        });
+        const state = this.checked;
+        document.querySelectorAll('.row-checkbox').forEach(cb => { cb.checked = state; });
     });
 
-    // Bulk Delete
+    // Data Purge Protocol
     function deleteSelected() {
-        let selected = document.querySelectorAll('.row-checkbox:checked');
-        if (selected.length === 0) {
-            alert('Please select a row to delete.');
-            return;
-        }
+        const selected = document.querySelectorAll('.row-checkbox:checked');
+        if (!selected.length) return alert('INSTITUTIONAL ERROR: Zero nodes selected for purge.');
 
-        if (confirm('Are you sure you want to delete the ' + selected.length + ' selected item(s)?')) {
-            let form = document.getElementById('deleteForm');
+        if (confirm(`CRITICAL PROTOCOL: Authorize terminal purge of ${selected.length} academic nodes?`)) {
+            const form = document.getElementById('deleteForm');
             if (currentTab === 'majors') form.action = '{{ route("admin.majors.bulkDelete") }}';
             if (currentTab === 'classes') form.action = '{{ route("admin.classes.bulkDelete") }}';
+            
             form.innerHTML = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
-            selected.forEach(function(item) {
-                let input = document.createElement('input');
+            selected.forEach(item => {
+                const input = document.createElement('input');
                 input.type = 'hidden';
                 input.name = 'ids[]';
                 input.value = item.value;
@@ -548,55 +288,41 @@
         }
     }
 
-    // Edit
-    function editSelected() {
-        let selected = document.querySelectorAll('.row-checkbox:checked');
-        if (selected.length === 0) {
-            alert('Please select a row to edit.');
-            return;
-        }
-        
-        if (selected.length > 1) {
-            alert('Please select only one row to edit.');
-            return;
-        }
-
-        let cb = selected[0];
-        let id = cb.value;
-        let name = cb.getAttribute('data-name');
-        
+    // Modal Synchronization Logic
+    function editRecord(id, name, code, dept, major) {
         if (currentTab === 'majors') {
-            let row = cb.closest('tr');
-            let code = row.cells[1].innerText;
-            let dept = cb.getAttribute('data-dept');
-            
-            document.getElementById('majorModalTitle').innerText = 'Edit Major';
+            document.getElementById('majorModalTitle').innerText = 'Mutate Node';
             document.getElementById('majorForm').action = '/admin/majors/' + id;
             document.getElementById('majorFormMethod').value = 'PUT';
             document.getElementById('majorCode').value = code;
             document.getElementById('majorName').value = name;
             document.getElementById('majorDept').value = dept;
-            document.getElementById('majorBtnSubmit').innerText = 'Update Update';
-            
-            var modal = new bootstrap.Modal(document.getElementById('addMajorModal'));
-            modal.show();
+            document.getElementById('majorBtnSubmit').innerText = 'Authorize Mutation';
+            new bootstrap.Modal(document.getElementById('addMajorModal')).show();
         } 
         else if (currentTab === 'classes') {
-            let row = cb.closest('tr');
-            let code = row.cells[1].innerText;
-            let major = cb.getAttribute('data-major');
-            
-            document.getElementById('classModalTitle').innerText = 'Edit Class';
+            document.getElementById('classModalTitle').innerText = 'Mutate Node';
             document.getElementById('classForm').action = '/admin/classes/' + id;
             document.getElementById('classFormMethod').value = 'PUT';
             document.getElementById('classCode').value = code;
             document.getElementById('className').value = name;
             document.getElementById('classMajor').value = major;
-            document.getElementById('classBtnSubmit').innerText = 'Update Update';
-            
-            var modal = new bootstrap.Modal(document.getElementById('addClassModal'));
-            modal.show();
+            document.getElementById('classBtnSubmit').innerText = 'Authorize Mutation';
+            new bootstrap.Modal(document.getElementById('addClassModal')).show();
         }
     }
+
+    // Modal Lifecycle Hooks
+    ['addMajorModal', 'addClassModal'].forEach(id => {
+        document.getElementById(id).addEventListener('hidden.bs.modal', function() {
+            const prefix = id.includes('Major') ? 'major' : 'class';
+            const form = document.getElementById(prefix + 'Form');
+            form.reset();
+            form.action = '/admin/' + (prefix === 'major' ? 'majors' : 'classes');
+            document.getElementById(prefix + 'FormMethod').value = 'POST';
+            document.getElementById(prefix + 'ModalTitle').innerText = 'New ' + (prefix === 'major' ? 'Specialization' : 'Learning Unit');
+            document.getElementById(prefix + 'BtnSubmit').innerText = 'Authorize Node';
+        });
+    });
 </script>
 @endsection

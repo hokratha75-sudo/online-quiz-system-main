@@ -26,6 +26,7 @@ class StoreQuestionRequest extends FormRequest
             'options.*' => 'required_unless:type,short_answer|string|max:1000',
             'correct' => 'required_unless:type,short_answer|array|min:1',
             'correct.*' => 'integer|min:0|max:10',
+            'is_reusable' => 'boolean',
         ];
     }
 

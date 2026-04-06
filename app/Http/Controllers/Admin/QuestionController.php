@@ -35,6 +35,7 @@ class QuestionController extends Controller
                 'content' => $content,
                 'type' => $validated['type'],
                 'points' => $validated['points'],
+                'is_reusable' => $validated['is_reusable'] ?? false,
             ]);
 
             if ($validated['type'] !== 'short_answer') {

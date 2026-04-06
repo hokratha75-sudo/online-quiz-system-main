@@ -8,12 +8,12 @@
     <!-- Header Section -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-            <h1 class="text-2xl md:text-3xl font-semibold text-slate-900 tracking-tight">System Users</h1>
-            <p class="text-sm font-medium text-slate-500 mt-1">Manage platform administrators, teachers, and enrolled students.</p>
+            <h1 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight uppercase">System Users</h1>
+            <p class="text-xs font-bold text-indigo-600 mt-1 uppercase tracking-widest">Manage platform administrators, teachers, and enrolled students</p>
         </div>
         <div class="flex items-center gap-3">
-            <a href="{{ route('admin.users.create') }}" class="bg-indigo-500 hover:bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-colors flex items-center gap-2 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
-                <i class="fas fa-plus text-xs"></i> Add User
+            <a href="{{ route('admin.users.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg">
+                <i class="fas fa-plus text-[10px]"></i> Register Entity
             </a>
         </div>
     </div>
@@ -29,15 +29,15 @@
     <div class="bg-white rounded-[20px] border border-slate-200/70 shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex flex-col overflow-hidden">
         
         <!-- Toolbar -->
-        <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
-            <div class="flex items-center gap-2">
-                <h3 class="text-base font-semibold text-slate-900 tracking-tight">User Directory</h3>
-                <span class="px-2 py-0.5 rounded-full bg-slate-200/60 text-slate-600 text-xs font-semibold">{{ $users->total() }} total</span>
+        <div class="p-6 border-b border-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
+            <div class="flex items-center gap-3">
+                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-widest">User Directory</h3>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-slate-100 text-indigo-600 text-[10px] font-bold uppercase tracking-widest shadow-sm tabular-nums">{{ $users->total() }} Records</span>
             </div>
             <form action="{{ route('admin.users.index') }}" method="GET" class="relative w-full sm:w-80">
-                <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Search by name, email..." 
-                       class="w-full pl-9 pr-4 py-2 bg-white border border-slate-200/70 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 shadow-sm">
+                <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-600 text-xs"></i>
+                <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Search by identity..." 
+                       class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-100 rounded-xl text-xs font-bold uppercase tracking-widest text-slate-900 focus:outline-none focus:border-indigo-500 transition-all placeholder:text-slate-300 shadow-sm">
             </form>
         </div>
 
@@ -45,40 +45,39 @@
         <div class="overflow-x-auto min-h-[400px]">
             <table class="w-full text-left border-collapse whitespace-nowrap">
                 <thead>
-                    <tr class="bg-white border-b border-slate-100/80">
-                        <th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-16">#</th>
-                        <th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest">User Profile</th>
-                        <th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Contact</th>
-                        <th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Role</th>
-                        <th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Joined Date</th>
-                        <th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest text-right">Actions</th>
+                    <tr class="bg-white border-b border-slate-50">
+                        <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest w-16">#</th>
+                        <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest">User Profile</th>
+                        <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Contact</th>
+                        <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Role</th>
+                        <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Joined Date</th>
+                        <th class="px-6 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100/80 bg-white">
                     @forelse($users as $user)
                     <tr class="hover:bg-slate-50/50 transition-colors group">
-                        <td class="px-6 py-4">
-                            <span class="text-sm font-medium text-slate-400">{{ $users->firstItem() + $loop->index }}</span>
+                        <td class="px-6 py-5">
+                            <span class="text-xs font-bold text-slate-400 tabular-nums">{{ $users->firstItem() + $loop->index }}</span>
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-full bg-emerald-50 text-indigo-500 flex items-center justify-center text-[13px] font-bold shrink-0 border border-indigo-100/50 overflow-hidden shadow-sm uppercase">
+                                <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shrink-0 shadow-lg shadow-indigo-600/20 border border-indigo-500/30 uppercase tabular-nums">
                                     @if($user->profile_photo)
-                                        <img src="{{ asset('storage/' . $user->profile_photo) }}" alt="Avatar" class="w-full h-full object-cover">
+                                        <img src="{{ asset('storage/' . $user->profile_photo) }}" alt="Avatar" class="w-full h-full object-cover rounded-xl">
                                     @else
                                         {{ substr($user->username ?? 'U', 0, 1) }}
                                     @endif
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-semibold text-slate-800">{{ $user->username }}</h4>
-                                    <!-- Optional: ID or sub-identifier could go here -->
+                                    <h4 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors tabular-nums tracking-tight">{{ $user->username }}</h4>
                                 </div>
                             </div>
                         </td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-2 text-sm text-slate-500">
-                                <i class="far fa-envelope text-slate-400 text-xs"></i>
-                                {{ $user->email ?? '-' }}
+                        <td class="px-6 py-5">
+                            <div class="flex items-center gap-2 text-xs font-bold text-slate-500">
+                                <i class="far fa-envelope text-indigo-500"></i>
+                                {{ $user->email ?? '--' }}
                             </div>
                         </td>
                         <td class="px-6 py-4">
@@ -98,8 +97,8 @@
                                 {{ ucfirst($roleName) }}
                             </span>
                         </td>
-                        <td class="px-6 py-4">
-                            <span class="text-sm text-slate-500 font-medium">{{ optional($user->created_at)->format('M d, Y') }}</span>
+                        <td class="px-6 py-5">
+                            <span class="text-[11px] text-indigo-600 font-bold uppercase tracking-widest tabular-nums">{{ optional($user->created_at)->format('d M, Y') }}</span>
                         </td>
                         <td class="px-6 py-4 text-right">
                             <div class="flex items-center justify-end gap-2 transition-opacity">
@@ -144,18 +143,18 @@
 
         <!-- Pagination -->
         @if($users->hasPages())
-        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/30 flex items-center justify-between">
-            <span class="text-sm text-slate-500">
-                Showing <span class="font-medium text-slate-700">{{ $users->firstItem() ?? 0 }}</span> to <span class="font-medium text-slate-700">{{ $users->lastItem() ?? 0 }}</span> of <span class="font-medium text-slate-700">{{ $users->total() }}</span> entries
+        <div class="px-8 py-5 border-t border-slate-50 bg-slate-50/50 flex flex-col md:flex-row items-center justify-between gap-4">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest tabular-nums">
+                Displaying {{ $users->firstItem() ?? 0 }} - {{ $users->lastItem() ?? 0 }} of {{ $users->total() }} User Entries
             </span>
             <div class="flex justify-end custom-pagination">
                 {{ $users->withQueryString()->links() }}
             </div>
         </div>
         @else
-        <div class="px-6 py-3 border-t border-slate-100 bg-slate-50/30 flex justify-start">
-            <span class="text-sm text-slate-500">
-                Total <span class="font-medium text-slate-700">{{ $users->total() }}</span> records
+        <div class="px-8 py-4 border-t border-slate-50 bg-slate-50/50 flex justify-start">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest tabular-nums">
+                Total Authorized: {{ $users->total() }} Records
             </span>
         </div>
         @endif

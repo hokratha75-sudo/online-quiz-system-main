@@ -2,7 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\Admin\DepartmentController;
@@ -18,6 +21,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/fix-routes', function () {
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    Artisan::call('cache:clear');
+    return 'All Laravel caches cleared! <a href="/login">Go to Login</a>';
+});
+
 Route::get('migrate', function () {
     Artisan::call('migrate --force');
     return 'Database migrated successfully. <a href="/seed">Click here to seed (may take time)</a>';
@@ -26,6 +36,65 @@ Route::get('migrate', function () {
 Route::get('seed', function () {
     Artisan::call('db:seed --class=AcademicStructureSeeder --force');
     return Artisan::output() ?: 'Seeding completed successfully!';
+});
+
+Route::get('cleanup-duplicates', function () {
+    $results = [];
+    $tables = [
+        'departments' => ['department_name'],
+        'majors' => ['name', 'department_id'],
+        'class_models' => ['name', 'major_id'],
+        'subjects' => ['subject_name', 'department_id', 'major_id'],
+        'quizzes' => ['title', 'subject_id'],
+        'questions' => ['question_text', 'quiz_id'],
+        'answers' => ['answer_text', 'question_id'],
+        'users' => ['username']
+    ];
+
+    DB::beginTransaction();
+    try {
+        foreach ($tables as $table => $uniqueColumns) {
+            if (!Illuminate\Support\Facades\Schema::hasTable($table)) continue;
+
+            $duplicates = Illuminate\Support\Facades\DB::table($table)
+                ->select($uniqueColumns)
+                ->groupBy($uniqueColumns)
+                ->havingRaw('COUNT(*) > 1')
+                ->get();
+
+            $deletedCount = 0;
+            foreach ($duplicates as $duplicate) {
+                $query = Illuminate\Support\Facades\DB::table($table);
+                foreach ($uniqueColumns as $col) {
+                    $query->where($col, $duplicate->$col);
+                }
+                
+                $ids = $query->orderBy('id')->pluck('id')->toArray();
+                $keepId = array_shift($ids);
+                
+                if (!empty($ids)) {
+                    $deletedCount += Illuminate\Support\Facades\DB::table($table)->whereIn('id', $ids)->delete();
+                }
+            }
+            $results[] = "Table <b>$table</b>: Deleted $deletedCount duplicates.";
+        }
+        
+        // Handle User Email duplicates separately (as it can be null)
+        $dupEmails = Illuminate\Support\Facades\DB::table('users')->whereNotNull('email')->select('email')->groupBy('email')->havingRaw('COUNT(*) > 1')->get();
+        $emailDeleted = 0;
+        foreach ($dupEmails as $dup) {
+            $ids = Illuminate\Support\Facades\DB::table('users')->where('email', $dup->email)->orderBy('id')->pluck('id')->toArray();
+            array_shift($ids);
+            $emailDeleted += Illuminate\Support\Facades\DB::table('users')->whereIn('id', $ids)->delete();
+        }
+        $results[] = "Table <b>users (email)</b>: Deleted $emailDeleted duplicates.";
+
+        DB::commit();
+        return "Cleanup completed!<br>" . implode('<br>', $results) . '<br><a href="/admin/dashboard">Go to Dashboard</a>';
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return "Error: " . $e->getMessage();
+    }
 });
 
 Route::get('link-storage', function () {
@@ -38,6 +107,8 @@ Route::get('link-storage', function () {
 });
 
 // Auth Routes
+Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('register', [RegisterController::class, 'register']);
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
@@ -114,7 +185,7 @@ Route::middleware(['auth'])->group(function () {
     // Notifications Mark as Read
     Route::post('/notifications/mark-as-read/{id}', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
     Route::post('/notifications/mark-all-read', function() {
-        auth()->user()->unreadNotifications->markAsRead();
+        Auth::user()->unreadNotifications->markAsRead();
         return back();
     })->name('notifications.markAllRead');
 

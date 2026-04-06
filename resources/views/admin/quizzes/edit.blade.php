@@ -12,17 +12,17 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div class="flex items-center gap-4">
-            <a href="{{ route('quizzes.index') }}" class="w-10 h-10 rounded-full border border-slate-200/70 bg-white flex items-center justify-center text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-sm">
-                <i class="fas fa-arrow-left text-sm"></i>
+            <a href="{{ route('quizzes.index') }}" class="w-10 h-10 rounded-2xl border border-slate-100 bg-white flex items-center justify-center text-slate-400 hover:bg-indigo-600 hover:text-white transition-all shadow-sm">
+                <i class="fas fa-arrow-left text-xs"></i>
             </a>
             <div>
-                <h1 class="text-2xl font-semibold text-slate-900 tracking-tight">{{ $quiz->title }}</h1>
-                <p class="text-sm font-medium text-slate-500 mt-1">Configure settings and manage quiz questions.</p>
+                <h1 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight uppercase">{{ $quiz->title }}</h1>
+                <p class="text-xs font-bold text-indigo-600 mt-1 uppercase tracking-widest">Configure settings and manage quiz questions</p>
             </div>
         </div>
         <div class="flex items-center gap-3">
-            <button type="button" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-colors shadow-sm flex items-center gap-2" data-bs-toggle="modal" data-bs-target="#newQuestionModal">
-                <i class="fas fa-plus text-xs"></i> Add Question
+            <button type="button" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all shadow-lg flex items-center gap-2" data-bs-toggle="modal" data-bs-target="#newQuestionModal">
+                <i class="fas fa-plus text-[10px]"></i> Add Question
             </button>
         </div>
     </div>
@@ -41,24 +41,24 @@
                 @csrf
                 @method('PUT')
                 
-                <div class="p-5 border-b border-slate-100 bg-slate-50/50 flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-500 flex justify-center items-center">
-                        <i class="fas fa-cog text-sm"></i>
+                <div class="p-6 border-b border-slate-50 bg-slate-50/50 flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex justify-center items-center shadow-sm">
+                        <i class="fas fa-cog text-[10px]"></i>
                     </div>
-                    <h3 class="text-base font-semibold text-slate-900 tracking-tight">Quiz Settings</h3>
+                    <h3 class="text-xs font-bold text-slate-900 tracking-widest uppercase">Configuration</h3>
                 </div>
 
-                <div class="p-6 space-y-5 flex-grow">
+                <div class="p-6 space-y-6 flex-grow">
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Quiz Title <span class="text-rose-500">*</span></label>
+                        <label class="block text-xs font-bold tracking-widest text-indigo-600 uppercase mb-3">Quiz Title</label>
                         <input type="text" name="title" value="{{ $quiz->title }}" required 
-                               class="w-full px-3.5 py-2.5 bg-slate-50/50 border border-slate-200/70 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400">
+                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all shadow-sm">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Description</label>
+                        <label class="block text-xs font-bold tracking-widest text-indigo-600 uppercase mb-3">Description</label>
                         <textarea name="description" rows="3" 
-                                  class="w-full px-3.5 py-2.5 bg-slate-50/50 border border-slate-200/70 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 resize-none">{{ $quiz->description }}</textarea>
+                                  class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all shadow-sm resize-none">{{ $quiz->description }}</textarea>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
@@ -95,17 +95,16 @@
                         </div>
                     </div>
 
-                    <!-- Custom Toggle -->
-                    <label class="p-4 border border-slate-200/70 rounded-xl bg-slate-50/30 flex items-start gap-4 hover:border-indigo-200 transition-colors cursor-pointer group mt-2">
+                    <label class="p-6 border border-slate-100 rounded-2xl bg-white flex items-center gap-5 hover:border-indigo-500 transition-all cursor-pointer group mt-2 shadow-sm">
                         <div class="pt-0.5">
                             <div class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" name="shuffle_questions" id="shuffleCheck" value="1" class="sr-only peer" {{ $quiz->shuffle_questions ? 'checked' : '' }}>
-                                <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+                                <div class="w-10 h-6 bg-slate-100 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                             </div>
                         </div>
                         <div>
-                            <h4 class="text-sm font-semibold text-slate-900 group-hover:text-indigo-700 transition-colors">Shuffle Questions</h4>
-                            <p class="text-[12px] text-slate-500 mt-0.5 leading-relaxed">Display questions in random order for each attempt.</p>
+                            <h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest group-hover:text-indigo-600 transition-all">Shuffle Questions</h4>
+                            <p class="text-[10px] font-bold text-slate-500 uppercase mt-0.5 leading-relaxed tracking-tight">Randomize the order of inquiries</p>
                         </div>
                     </label>
                 </div>
@@ -124,12 +123,12 @@
         <!-- Questions Builder -->
         <div class="lg:col-span-2">
             <div class="bg-white rounded-[20px] border border-slate-200/70 shadow-[0_2px_10px_rgba(0,0,0,0.02)] overflow-hidden h-full flex flex-col">
-                <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-500 flex justify-center items-center">
-                            <i class="fas fa-list-ul text-sm"></i>
+                <div class="p-6 border-b border-slate-50 flex items-center justify-between bg-slate-50/50">
+                    <div class="flex items-center gap-4">
+                        <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex justify-center items-center shadow-sm">
+                            <i class="fas fa-list-ul text-[10px]"></i>
                         </div>
-                        <h3 class="text-base font-semibold text-slate-900 tracking-tight">Question Items (<span id="questionCount">{{ $quiz->questions->count() }}</span>)</h3>
+                        <h3 class="text-xs font-bold text-slate-900 tracking-widest uppercase">Assessment Matrix (<span id="questionCount" class="text-indigo-600 tabular-nums">{{ $quiz->questions->count() }}</span> Questions)</h3>
                     </div>
                 </div>
 

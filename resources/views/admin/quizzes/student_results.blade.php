@@ -1,177 +1,111 @@
 @extends('layouts.admin')
 
-@section('styles')
-<style>
-    .perf-card {
-        background: #fff;
-        border-radius: 20px;
-        border: none;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-        padding: 1.5rem;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-    .perf-card:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(0,0,0,0.06); }
-    .perf-card .icon-wrap {
-        width: 52px; height: 52px; border-radius: 16px;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 1.25rem;
-    }
-    .perf-card .stat-value { font-size: 1.75rem; font-weight: 800; line-height: 1; }
-    .perf-card .stat-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; }
-
-    .streak-badge {
-        background: linear-gradient(135deg, #f59e0b, #ef4444);
-        color: #fff; font-weight: 800; border-radius: 50rem;
-        padding: 0.4rem 1rem; font-size: 0.8rem;
-        display: inline-flex; align-items: center; gap: 6px;
-        box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
-    }
-
-    .grade-bar {
-        height: 8px; border-radius: 4px; background: #f1f5f9;
-        overflow: hidden; position: relative;
-    }
-    .grade-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
-
-    .subject-row { padding: 1rem 0; border-bottom: 1px solid #f8fafc; }
-    .subject-row:last-child { border-bottom: none; }
-
-    .result-table thead th {
-        font-weight: 700; text-transform: uppercase; font-size: 0.65rem;
-        letter-spacing: 0.06em; color: #94a3b8; padding: 1rem 0.75rem; border: none;
-    }
-    .result-table tbody td {
-        padding: 1.1rem 0.75rem; border-color: #f8fafc; vertical-align: middle;
-    }
-    .result-table tbody tr { transition: background 0.2s; }
-    .result-table tbody tr:hover { background: #fafbfd; }
-
-    .animate-in { animation: fadeSlideUp 0.5s ease-out both; }
-    @keyframes fadeSlideUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .chart-card {
-        background: #fff; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-        padding: 1.5rem; border: none;
-    }
-</style>
-@endsection
-
 @section('content')
-<div class="container-fluid px-0">
+<div class="max-w-[1400px] mx-auto p-6 md:p-8 lg:p-10 font-inter">
 
-    <!-- Page Header -->
-    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-3">
-        <div>
-            <h3 class="fw-bold mb-1 text-dark">My Performance Hub</h3>
-            <p class="text-muted small mb-0">Track your academic progress, scores, and growth across all quizzes.</p>
-        </div>
-        <div class="d-flex gap-2 align-items-center">
-            @if($streak > 0)
-                <span class="streak-badge"><i class="fas fa-fire"></i> {{ $streak }} Quiz Win Streak!</span>
-            @endif
-            <a href="{{ route('students.dashboard') }}" class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm">
-                <i class="fas fa-play me-1"></i> Take a Quiz
-            </a>
-        </div>
-    </div>
-
-    <!-- KPI Stats Row -->
-    <div class="row g-3 mb-4">
-        <div class="col-lg-2 col-md-4 col-6 animate-in" style="animation-delay: 0.05s">
-            <div class="perf-card">
-                <div class="icon-wrap bg-primary bg-opacity-10 text-primary mb-3"><i class="fas fa-clipboard-check"></i></div>
-                <div class="stat-value text-dark">{{ $totalQuizzesTaken }}</div>
-                <div class="stat-label mt-1">Total Taken</div>
-            </div>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6 animate-in" style="animation-delay: 0.1s">
-            <div class="perf-card">
-                <div class="icon-wrap bg-success bg-opacity-10 text-success mb-3"><i class="fas fa-check-double"></i></div>
-                <div class="stat-value text-success">{{ $totalPassed }}</div>
-                <div class="stat-label mt-1">Passed</div>
-            </div>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6 animate-in" style="animation-delay: 0.15s">
-            <div class="perf-card">
-                <div class="icon-wrap bg-danger bg-opacity-10 text-danger mb-3"><i class="fas fa-times-circle"></i></div>
-                <div class="stat-value text-danger">{{ $totalFailed }}</div>
-                <div class="stat-label mt-1">Failed</div>
-            </div>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6 animate-in" style="animation-delay: 0.2s">
-            <div class="perf-card">
-                <div class="icon-wrap bg-warning bg-opacity-10 text-warning mb-3"><i class="fas fa-star"></i></div>
-                <div class="stat-value text-dark">{{ $avgScore }}%</div>
-                <div class="stat-label mt-1">Avg Score</div>
-            </div>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6 animate-in" style="animation-delay: 0.25s">
-            <div class="perf-card">
-                <div class="icon-wrap bg-info bg-opacity-10 text-info mb-3"><i class="fas fa-trophy"></i></div>
-                <div class="stat-value text-dark">{{ $highestScore }}%</div>
-                <div class="stat-label mt-1">Best Score</div>
-            </div>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6 animate-in" style="animation-delay: 0.3s">
-            <div class="perf-card">
-                <div class="icon-wrap mb-3" style="background: #fef3c7; color: #d97706;"><i class="fas fa-percentage"></i></div>
-                <div class="stat-value text-dark">{{ $passRate }}%</div>
-                <div class="stat-label mt-1">Pass Rate</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Charts & Analytics Row -->
-    <div class="row g-4 mb-4">
-        <!-- Score Trend Chart -->
-        <div class="col-lg-8 animate-in" style="animation-delay: 0.35s">
-            <div class="chart-card h-100">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h6 class="fw-bold text-dark mb-0"><i class="fas fa-chart-line text-primary me-2"></i>Score Progression</h6>
-                    <span class="badge bg-light text-muted border rounded-pill px-3 py-1 small">Last {{ count($scoreTrend) }} quizzes</span>
+    <!-- Dashboard Header & KPI Row -->
+    <div class="flex flex-col lg:flex-row gap-6 mb-10">
+        <!-- Profile Node -->
+        <div class="lg:w-1/3">
+            <div class="bg-indigo-600 rounded-[32px] p-8 text-white shadow-xl shadow-indigo-600/20 relative overflow-hidden h-full group">
+                <div class="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-1000"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center gap-3 mb-6">
+                        @if($streak > 0)
+                            <div class="px-3 py-1 bg-white/20 border border-white/20 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5">
+                                <i class="fas fa-fire text-amber-400"></i> {{ $streak }} DAY STREAK
+                            </div>
+                        @endif
+                        <div class="px-3 py-1 bg-emerald-400/20 border border-emerald-400/20 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 text-emerald-100">
+                            <i class="fas fa-shield-check"></i> {{ round($passRate) }}% RATE
+                        </div>
+                    </div>
+                    <h2 class="text-2xl font-bold tracking-tight uppercase leading-none">Hi, {{ explode(' ', Auth::user()->name ?: Auth::user()->username)[0] }}!</h2>
+                    <p class="mt-2 text-indigo-100/60 text-[11px] font-bold uppercase tracking-widest leading-relaxed">
+                        You have successfully audited <span class="text-white">{{ $totalQuizzesTaken }} sessions</span> in this academic cycle.
+                    </p>
                 </div>
-                <div style="height: 260px;">
+            </div>
+        </div>
+
+        <!-- KPI Framework -->
+        <div class="lg:w-2/3 grid grid-cols-2 md:grid-cols-4 gap-4">
+            @php
+                $kpis = [
+                    ['label' => 'Deployments', 'value' => $totalQuizzesTaken, 'icon' => 'fas fa-layer-group', 'color' => 'indigo'],
+                    ['label' => 'Certified', 'value' => $totalPassed, 'icon' => 'fas fa-check-double', 'color' => 'emerald'],
+                    ['label' => 'Yield Avg', 'value' => round($avgScore).'%', 'icon' => 'fas fa-chart-line', 'color' => 'amber'],
+                    ['label' => 'Peak Result', 'value' => $highestScore.'%', 'icon' => 'fas fa-crown', 'color' => 'violet'],
+                ];
+            @endphp
+            @foreach($kpis as $kpi)
+            <div class="bg-white rounded-[24px] border border-slate-100 p-6 shadow-sm hover:shadow-md transition-all group flex flex-col justify-between">
+                <div class="w-10 h-10 rounded-xl bg-{{ $kpi['color'] }}-50 text-{{ $kpi['color'] }}-600 flex items-center justify-center border border-{{ $kpi['color'] }}-100 group-hover:bg-{{ $kpi['color'] }}-600 group-hover:text-white transition-colors">
+                    <i class="{{ $kpi['icon'] }} text-sm"></i>
+                </div>
+                <div class="mt-6">
+                    <div class="text-2xl font-bold text-slate-900 leading-none tabular-nums">{{ $kpi['value'] }}</div>
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">{{ $kpi['label'] }}</div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+        <!-- Analytics Visualizer -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-[32px] border border-slate-100 p-8 shadow-sm h-full">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-900 uppercase tracking-widest">Performance Protocol</h3>
+                        <p class="text-[10px] font-bold text-indigo-600 mt-1 uppercase tracking-tight">Sync distribution trend over time</p>
+                    </div>
+                </div>
+                <div class="h-[280px]">
                     <canvas id="scoreTrendChart"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- Grade Distribution -->
-        <div class="col-lg-4 animate-in" style="animation-delay: 0.4s">
-            <div class="chart-card h-100">
-                <h6 class="fw-bold text-dark mb-3"><i class="fas fa-chart-pie text-primary me-2"></i>Grade Distribution</h6>
-                @php
-                    $gradeColors = [
-                        'A+' => '#10b981', 'A' => '#34d399', 'B+' => '#60a5fa', 'B' => '#93c5fd',
-                        'C+' => '#fbbf24', 'C' => '#fcd34d', 'D' => '#f97316', 'F' => '#ef4444',
-                    ];
-                    $maxGrade = max(1, max($gradeDistribution));
-                @endphp
-                @foreach($gradeDistribution as $grade => $count)
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <span class="fw-bold text-dark" style="width: 28px; font-size: 0.8rem;">{{ $grade }}</span>
-                        <div class="grade-bar flex-grow-1">
-                            <div class="grade-bar-fill" style="width: {{ ($count / $maxGrade) * 100 }}%; background: {{ $gradeColors[$grade] }};"></div>
+        <!-- Logic Distribution -->
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-[32px] border border-slate-100 p-8 shadow-sm h-full">
+                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-8">Yield Classification</h3>
+                
+                <div class="space-y-5">
+                    @php
+                        $gradeColors = [
+                            'A+' => '#4f46e5', 'A' => '#6366f1', 'B+' => '#818cf8', 'B' => '#a5b4fc',
+                            'C+' => '#fbbf24', 'C' => '#f59e0b', 'D' => '#ea580c', 'F' => '#ef4444',
+                        ];
+                    @endphp
+                    @foreach($gradeDistribution as $grade => $count)
+                        <div class="group">
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold text-white shadow-sm" style="background: {{ $gradeColors[$grade] ?? '#cbd5e1' }}">
+                                        {{ $grade }}
+                                    </div>
+                                    <span class="text-[11px] font-bold text-slate-600 uppercase tracking-tight">{{ $count }} NODES</span>
+                                </div>
+                                <span class="text-[10px] font-bold text-slate-400 tabular-nums uppercase">{{ round(($count / max(1, $totalQuizzesTaken)) * 100) }}%</span>
+                            </div>
+                            <div class="h-1.5 w-full bg-slate-50 rounded-full overflow-hidden border border-slate-100/50">
+                                <div class="h-full rounded-full group-hover:opacity-80 transition-opacity" style="width: {{ ($count / max(1, array_sum($gradeDistribution))) * 100 }}%; background: {{ $gradeColors[$grade] ?? '#cbd5e1' }}"></div>
+                            </div>
                         </div>
-                        <span class="text-muted small fw-bold" style="width: 22px; text-align: right;">{{ $count }}</span>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
 
                 @if($totalViolations > 0)
-                <div class="mt-4 pt-3 border-top">
-                    <div class="d-flex align-items-center gap-2">
-                        <div class="rounded-circle bg-danger bg-opacity-10 text-danger d-flex align-items-center justify-content-center" style="width:36px;height:36px;">
-                            <i class="fas fa-shield-alt small"></i>
-                        </div>
-                        <div>
-                            <div class="small fw-bold text-dark">Security Violations</div>
-                            <div class="text-muted" style="font-size: 0.7rem;">{{ $totalViolations }} total across all exams</div>
-                        </div>
+                <div class="mt-8 p-5 rounded-2xl bg-rose-50 border border-rose-100 flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-rose-500 shadow-sm border border-rose-100">
+                        <i class="fas fa-exclamation-triangle text-sm"></i>
+                    </div>
+                    <div>
+                        <div class="text-[10px] font-bold text-rose-600 uppercase tracking-widest">Security Disruptions</div>
+                        <div class="text-xs font-bold text-rose-800 uppercase tabular-nums mt-1">{{ $totalViolations }} INCIDENTS LOGGED</div>
                     </div>
                 </div>
                 @endif
@@ -179,142 +113,104 @@
         </div>
     </div>
 
-    <!-- Per-Subject Performance -->
-    @if(count($subjectPerformance) > 0)
-    <div class="row g-4 mb-4">
-        <div class="col-12 animate-in" style="animation-delay: 0.45s">
-            <div class="chart-card">
-                <h6 class="fw-bold text-dark mb-3"><i class="fas fa-book-open text-primary me-2"></i>Performance by Subject</h6>
-                <div class="row g-3">
-                    @foreach($subjectPerformance as $idx => $subj)
-                    @php
-                        $cardColors = ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
-                        $color = $cardColors[$idx % count($cardColors)];
-                    @endphp
-                    <div class="col-md-4 col-sm-6">
-                        <div class="p-3 rounded-4 border bg-white shadow-sm">
-                            <div class="d-flex align-items-center gap-3 mb-2">
-                                <div class="rounded-3 d-flex align-items-center justify-content-center text-white" style="width:42px;height:42px;background:{{ $color }};">
-                                    <i class="fas fa-book small"></i>
-                                </div>
-                                <div class="overflow-hidden">
-                                    <div class="fw-bold text-dark text-truncate small">{{ $subj['name'] }}</div>
-                                    <div class="text-muted" style="font-size: 0.7rem;">{{ $subj['count'] }} quiz{{ $subj['count'] > 1 ? 'zes' : '' }}</div>
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-end mt-2 pt-2 border-top">
-                                <div>
-                                    <div class="text-muted" style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase;">Avg Score</div>
-                                    <div class="fw-bold text-dark">{{ $subj['avg'] }}%</div>
-                                </div>
-                                <div class="text-end">
-                                    <div class="text-muted" style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase;">Best</div>
-                                    <div class="fw-bold text-success">{{ $subj['best'] }}%</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
+    <!-- History Core -->
+    <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden">
+        <div class="px-8 py-6 border-b border-slate-50 bg-slate-50/30 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-widest">Deployment Logs</h3>
+                <p class="text-[10px] font-bold text-indigo-600 mt-1 uppercase tracking-tight">Archive of verified assessment vectors</p>
             </div>
+            <a href="{{ route('students.dashboard') }}" class="h-11 px-6 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 transition-all shadow-lg shadow-indigo-600/20">
+                <i class="fas fa-plus text-[8px]"></i> New Sync Session
+            </a>
         </div>
-    </div>
-    @endif
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-slate-50">
+                        <th class="ps-8 py-4 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Protocol / Subject</th>
+                        <th class="px-6 py-4 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Status</th>
+                        <th class="px-6 py-4 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Yield Index</th>
+                        <th class="px-6 py-4 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Grade</th>
+                        <th class="px-6 py-4 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Timestamp</th>
+                        <th class="pe-8 py-4 text-[10px] font-bold text-indigo-600 uppercase tracking-widest text-right">Audit</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50">
+                    @forelse($results as $result)
+                    <tr class="hover:bg-slate-50/50 transition-all group">
+                        <td class="ps-8 py-5">
+                            <div class="text-sm font-bold text-slate-900 uppercase tracking-tight group-hover:text-indigo-600 transition-colors">{{ $result->quiz?->title ?? 'Untitled Sync' }}</div>
+                            <div class="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-widest flex items-center gap-1.5">
+                                <i class="fas fa-tag text-[8px]"></i> {{ $result->quiz?->subject?->subject_name ?? 'SYSTEM UNIT' }}
+                            </div>
+                        </td>
+                        <td class="px-6 py-5">
+                            @if($result->is_published === false)
+                                <span class="px-3 py-1 bg-amber-50 text-amber-600 border border-amber-100 rounded-md text-[9px] font-bold uppercase tracking-widest">PENDING AUDIT</span>
+                            @elseif($result->passed)
+                                <span class="px-3 py-1 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-md text-[9px] font-bold uppercase tracking-widest">SUCCESS CERTIFIED</span>
+                            @else
+                                <span class="px-3 py-1 bg-rose-50 text-rose-600 border border-rose-100 rounded-md text-[9px] font-bold uppercase tracking-widest">SYNC FAILED</span>
+                            @endif
+                        </td>
+                        <td class="px-6 py-5">
+                            <div class="text-lg font-bold tabular-nums {{ $result->passed ? 'text-emerald-500' : 'text-rose-500' }}">
+                                {{ round($result->score) }}%
+                            </div>
+                        </td>
+                        <td class="px-6 py-5">
+                            @php
+                                $g = 'F';
+                                if($result->score >= 95) $g = 'A+';
+                                elseif($result->score >= 90) $g = 'A';
+                                elseif($result->score >= 85) $g = 'B+';
+                                elseif($result->score >= 80) $g = 'B';
+                                elseif($result->score >= 75) $g = 'C+';
+                                elseif($result->score >= 70) $g = 'C';
+                                elseif($result->score >= 60) $g = 'D';
 
-    <!-- Results Table -->
-    <div class="animate-in" style="animation-delay: 0.5s">
-        <div class="chart-card">
-            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
-                <h6 class="fw-bold text-dark mb-0"><i class="fas fa-list-ul text-primary me-2"></i>All Quiz Results</h6>
-                <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-1 small fw-bold">{{ $totalQuizzesTaken }} Total</span>
-            </div>
-            <div class="table-responsive">
-                <table class="table result-table mb-0">
-                    <thead>
-                        <tr>
-                            <th class="ps-3">Quiz</th>
-                            <th>Subject</th>
-                            <th>Score</th>
-                            <th>Status</th>
-                            <th>Violations</th>
-                            <th>Date</th>
-                            <th class="text-end pe-3">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($results as $result)
-                            <tr>
-                                <td class="ps-3">
-                                    <div class="fw-bold text-dark">{{ $result->quiz?->title ?? 'N/A' }}</div>
-                                </td>
-                                <td>
-                                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10 rounded-pill px-2 py-1" style="font-size: 0.7rem;">
-                                        {{ $result->quiz?->subject?->subject_name ?? 'General' }}
-                                    </span>
-                                </td>
-                                <td>
-                                    @if($result->is_published === false)
-                                        <span class="text-warning fw-bold"><i class="fas fa-hourglass-half me-1"></i>Pending</span>
-                                    @else
-                                        <span class="fw-bold fs-5 {{ $result->passed ? 'text-success' : 'text-danger' }}">
-                                            {{ round($result->score) }}%
-                                        </span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($result->is_published === false)
-                                        <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-3">Review</span>
-                                    @elseif($result->passed)
-                                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3">Passed</span>
-                                    @else
-                                        <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-3">Failed</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @php $v = $result->attempt?->violations ?? 0; @endphp
-                                    @if($v > 0)
-                                        <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-2" style="font-size: 0.7rem;">
-                                            <i class="fas fa-exclamation-triangle me-1"></i>{{ $v }}
-                                        </span>
-                                    @else
-                                        <span class="text-success small"><i class="fas fa-check-circle"></i></span>
-                                    @endif
-                                </td>
-                                <td class="text-muted small">
-                                    {{ $result->completed_at ? $result->completed_at->format('M d, Y') : 'N/A' }}
-                                    <div class="text-muted" style="font-size: 0.7rem;">{{ $result->completed_at ? $result->completed_at->format('h:i A') : '' }}</div>
-                                </td>
-                                <td class="text-end pe-3">
-                                    <a href="{{ route('students.quizzes.result', $result->attempt_id) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3" style="font-size: 0.75rem;">
-                                        <i class="fas fa-eye me-1"></i> Review
-                                    </a>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="7" class="text-center py-5">
-                                    <div class="mb-3"><i class="fas fa-clipboard-list fa-3x text-muted opacity-25"></i></div>
-                                    <h6 class="text-muted fw-bold">No quizzes completed yet</h6>
-                                    <p class="text-muted small mb-3">Start taking quizzes to see your performance data here.</p>
-                                    <a href="{{ route('students.dashboard') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">Browse Quizzes</a>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-            @if($results->hasPages())
-                <div class="pt-3 border-top mt-3 d-flex justify-content-center">
-                    {{ $results->links() }}
-                </div>
-            @endif
+                                $currGradeColor = $gradeColors[$g] ?? '#cbd5e1';
+                            @endphp
+                            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold text-white shadow-sm uppercase" style="background: {{ $currGradeColor }}">
+                                {{ $g }}
+                            </div>
+                        </td>
+                        <td class="px-6 py-5">
+                            <div class="text-xs font-bold text-slate-900 tabular-nums uppercase">{{ $result->completed_at ? $result->completed_at->format('M d, Y') : 'N/A' }}</div>
+                            <div class="text-[10px] font-bold text-slate-400 mt-1 tabular-nums">{{ $result->completed_at ? $result->completed_at->format('h:i A') : '' }}</div>
+                        </td>
+                        <td class="pe-8 py-5 text-right">
+                            <a href="{{ route('students.quizzes.result', $result->attempt_id) }}" class="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-slate-100 text-slate-400 hover:text-indigo-600 hover:border-indigo-100 hover:bg-indigo-50 transition-all shadow-sm">
+                                <i class="fas fa-arrow-right text-[10px]"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="py-24 text-center">
+                            <div class="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100">
+                                <i class="fas fa-clipboard-list text-2xl"></i>
+                            </div>
+                            <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Zero Deployment Records Found</h5>
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
+        @if($results->hasPages())
+        <div class="px-8 py-6 border-t border-slate-50 bg-slate-50/30">
+            {{ $results->links() }}
+        </div>
+        @endif
     </div>
+
 </div>
 
-<!-- Chart Data -->
-<div id="score-trend-data"
-     data-labels='@json(array_column($scoreTrend, "label"))'
+<!-- Data for Chart -->
+<div id="chart-data" 
+     data-labels='@json(array_column($scoreTrend, "label"))' 
      data-scores='@json(array_column($scoreTrend, "score"))'
      data-dates='@json(array_column($scoreTrend, "date"))'>
 </div>
@@ -324,34 +220,32 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const ctx = document.getElementById('scoreTrendChart');
-    if (!ctx) return;
+    const ctx = document.getElementById('scoreTrendChart').getContext('2d');
+    const dataEl = document.getElementById('chart-data');
+    const labels = JSON.parse(dataEl.dataset.labels);
+    const scores = JSON.parse(dataEl.dataset.scores);
 
-    const dataEl = document.getElementById('score-trend-data');
-    const labels = JSON.parse(dataEl.dataset.labels || '[]');
-    const scores = JSON.parse(dataEl.dataset.scores || '[]');
-
-    const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 280);
-    gradient.addColorStop(0, 'rgba(79, 70, 229, 0.25)');
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(79, 70, 229, 0.15)');
     gradient.addColorStop(1, 'rgba(79, 70, 229, 0)');
 
-    new Chart(ctx.getContext('2d'), {
+    new Chart(ctx, {
         type: 'line',
         data: {
             labels: labels,
             datasets: [{
-                label: 'Score %',
+                label: 'Protocol Performance',
                 data: scores,
                 borderColor: '#4f46e5',
-                backgroundColor: gradient,
                 borderWidth: 3,
-                pointBackgroundColor: '#ffffff',
+                backgroundColor: gradient,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#fff',
                 pointBorderColor: '#4f46e5',
                 pointBorderWidth: 3,
                 pointRadius: 5,
-                pointHoverRadius: 7,
-                fill: true,
-                tension: 0.4
+                pointHoverRadius: 7
             }]
         },
         options: {
@@ -360,23 +254,26 @@ document.addEventListener('DOMContentLoaded', function() {
             plugins: {
                 legend: { display: false },
                 tooltip: {
-                    backgroundColor: '#fff', titleColor: '#111', bodyColor: '#666',
-                    borderColor: '#e5e7eb', borderWidth: 1, padding: 12,
+                    backgroundColor: '#1e293b',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    bodyFont: { weight: 'bold', size: 10 },
+                    padding: 12,
                     displayColors: false,
                     callbacks: {
-                        label: function(context) { return 'Score: ' + context.raw + '%'; }
+                        label: (ctx) => `YIELD: ${ctx.raw}%`
                     }
                 }
             },
             scales: {
                 y: {
                     min: 0, max: 100,
-                    grid: { color: '#f3f4f6', drawBorder: false },
-                    ticks: { color: '#9ca3af', font: { size: 11, weight: '600' }, stepSize: 20 }
+                    ticks: { color: '#94a3b8', font: { weight: 'bold', size: 10 } },
+                    grid: { color: '#f1f5f9', drawBorder: false }
                 },
                 x: {
-                    grid: { display: false },
-                    ticks: { color: '#9ca3af', font: { size: 10, weight: '600' }, maxRotation: 30 }
+                    ticks: { color: '#94a3b8', font: { weight: 'bold', size: 10 } },
+                    grid: { display: false }
                 }
             }
         }

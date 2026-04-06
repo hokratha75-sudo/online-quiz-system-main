@@ -1,83 +1,117 @@
 <!-- New Question Modal -->
 <div class="modal fade" id="newQuestionModal" tabindex="-1" aria-labelledby="newQuestionModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg rounded-4">
+        <div class="modal-content rounded-[32px] border-none shadow-2xl shadow-indigo-900/20 overflow-hidden">
             
-            <div class="modal-header border-bottom px-4 py-3 bg-light rounded-top-4">
-                <h5 class="modal-title fw-bold text-dark" id="newQuestionModalLabel"><i class="fas fa-plus-circle text-primary me-2"></i>New Question</h5>
-                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="bg-indigo-600 px-5 py-2.5 text-white relative">
+                <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 blur-3xl rounded-full"></div>
+                <div class="flex items-center justify-between relative z-10">
+                    <div>
+                        <h3 class="text-lg font-bold uppercase tracking-tight leading-tight" id="newQuestionModalLabel">Add New Question</h3>
+                        <p class="text-[9px] font-medium text-indigo-100 uppercase tracking-widest opacity-80">Knowledge entity creation protocol</p>
+                    </div>
+                    <button type="button" class="w-7 h-7 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all flex items-center justify-center outline-none" data-bs-dismiss="modal">
+                        <i class="fas fa-times text-xs"></i>
+                    </button>
+                </div>
             </div>
 
-            <div class="modal-body px-4 py-4">
+            <div class="px-5 py-3 space-y-2.5">
                 
                 <!-- Settings Row -->
-                <div class="row g-3 mb-4">
-                    <div class="col-md-8">
-                        <label class="form-label fw-bold text-dark small text-uppercase">Question Type</label>
-                        <!-- Functional Type Dropdown -->
-                        <select id="questionTypeDropdown" class="form-select bg-light border-0 shadow-none">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="md:col-span-2">
+                        <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1 ml-1">Question Type</label>
+                        <select id="questionTypeDropdown" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all">
                             <option value="single_choice">Single Choice (Radio)</option>
                             <option value="multiple_choice">Multiple Choice (Checkbox)</option>
                             <option value="true_false">True / False</option>
                             <option value="short_answer">Short Answer (Manual Grading)</option>
                         </select>
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label fw-bold text-dark small text-uppercase">Points</label>
-                        <input type="number" id="questionPoints" class="form-control bg-light border-0 shadow-none" value="1" min="1">
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1 ml-1">Points</label>
+                        <input type="number" id="questionPoints" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all tabular-nums text-center" value="1" min="1">
                     </div>
                 </div>
 
                 <!-- Question Text -->
-                <div class="mb-4">
-                    <label class="form-label fw-bold text-dark small text-uppercase">Question Prompt</label>
-                    <textarea id="questionEditor" class="form-control bg-light border-0 shadow-none p-3" rows="4" placeholder="Enter your question here..." required></textarea>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1 ml-1">Question Prompt</label>
+                    <textarea id="questionEditor" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all placeholder:text-slate-300 min-h-[70px]" placeholder="Enter your question text here..." required></textarea>
+                </div>
+
+                <div class="px-4 py-2.5 border border-slate-100 rounded-xl bg-slate-50/50">
+                    <div class="flex items-center justify-between group cursor-pointer" onclick="document.getElementById('isReusableCheck').click()">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-white border border-slate-200 shadow-sm flex items-center justify-center text-indigo-600 group-hover:text-indigo-500 transition-colors">
+                                <i class="fas fa-database text-xs"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-900 uppercase tracking-tight">Save to Global Bank</h4>
+                                <p class="text-[10px] font-bold text-slate-500 uppercase mt-0.5 tracking-tight">Make this question available for other quizzes.</p>
+                            </div>
+                        </div>
+                        <div class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="isReusableCheck" class="sr-only peer">
+                            <div class="w-10 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Options -->
-                <div id="optionsSection">
-                    <label class="form-label fw-bold text-dark small text-uppercase mb-3">Answer Options</label>
+                <div id="optionsSection" class="pt-2">
+                    <div class="flex items-center justify-between mb-4">
+                        <label class="block text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">Answer Options</label>
+                        <button type="button" id="addOptionBtn" class="text-xs font-bold uppercase tracking-widest text-indigo-600 hover:text-indigo-800 transition-colors">
+                            <i class="fas fa-plus mr-1"></i> Add Option
+                        </button>
+                    </div>
                     
-                    <div id="optionsContainer">
-                        <!-- Initial Option 1 -->
-                        <div class="input-group mb-3 option-row shadow-sm rounded-3 overflow-hidden border">
-                            <span class="input-group-text bg-white border-0 text-muted"><i class="far fa-circle"></i></span>
-                            <input type="text" class="form-control option-text border-0 shadow-none" placeholder="Enter option text...">
-                            <div class="input-group-text bg-white border-0 border-start px-3">
-                                <div class="form-check mb-0 d-flex align-items-center gap-2 cursor-pointer">
-                                    <input class="form-check-input correct-checkbox mt-0" type="checkbox" style="cursor:pointer; width:18px;height:18px;">
-                                    <label class="form-check-label small fw-bold text-dark mb-0" style="cursor:pointer; padding-top:2px;">Correct</label>
+                    <div id="optionsContainer" class="space-y-3">
+                        <!-- Options will be dynamic -->
+                        <div class="flex items-center gap-3 option-row group">
+                            <div class="flex-grow flex items-center bg-slate-50 border border-slate-200 rounded-xl overflow-hidden focus-within:border-indigo-500 focus-within:bg-white transition-all shadow-sm">
+                                <div class="px-4 text-slate-300"><i class="far fa-circle text-[10px]"></i></div>
+                                <input type="text" class="w-full py-2.5 bg-transparent text-sm font-bold text-slate-900 outline-none placeholder:text-slate-300" placeholder="Option choice #1...">
+                                <div class="px-4 border-l border-slate-200 bg-slate-50/50">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input class="correct-checkbox w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500" type="checkbox" style="cursor:pointer;">
+                                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest group-hover:text-indigo-600 transition-all">Correct</span>
+                                    </label>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-light bg-white border-0 border-start text-danger remove-option px-3"><i class="fas fa-times"></i></button>
+                            <button type="button" class="w-10 h-10 rounded-xl border border-slate-200 text-slate-300 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 transition-all flex items-center justify-center remove-option flex-shrink-0">
+                                <i class="fas fa-times text-xs"></i>
+                            </button>
                         </div>
-                        
-                        <!-- Initial Option 2 -->
-                        <div class="input-group mb-3 option-row shadow-sm rounded-3 overflow-hidden border">
-                            <span class="input-group-text bg-white border-0 text-muted"><i class="far fa-circle"></i></span>
-                            <input type="text" class="form-control option-text border-0 shadow-none" placeholder="Enter option text...">
-                            <div class="input-group-text bg-white border-0 border-start px-3">
-                                <div class="form-check mb-0 d-flex align-items-center gap-2 cursor-pointer">
-                                    <input class="form-check-input correct-checkbox mt-0" type="checkbox" style="cursor:pointer; width:18px;height:18px;">
-                                    <label class="form-check-label small fw-bold text-dark mb-0" style="cursor:pointer; padding-top:2px;">Correct</label>
+
+                        <div class="flex items-center gap-3 option-row group">
+                            <div class="flex-grow flex items-center bg-slate-50 border border-slate-200 rounded-xl overflow-hidden focus-within:border-indigo-500 focus-within:bg-white transition-all shadow-sm">
+                                <div class="px-4 text-slate-300"><i class="far fa-circle text-[10px]"></i></div>
+                                <input type="text" class="w-full py-2.5 bg-transparent text-sm font-bold text-slate-900 outline-none placeholder:text-slate-300" placeholder="Option choice #2...">
+                                <div class="px-4 border-l border-slate-200 bg-slate-50/50">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input class="correct-checkbox w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500" type="checkbox" style="cursor:pointer;">
+                                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest group-hover:text-indigo-600 transition-all">Correct</span>
+                                    </label>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-light bg-white border-0 border-start text-danger remove-option px-3"><i class="fas fa-times"></i></button>
+                            <button type="button" class="w-10 h-10 rounded-xl border border-slate-200 text-slate-300 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 transition-all flex items-center justify-center remove-option flex-shrink-0">
+                                <i class="fas fa-times text-xs"></i>
+                            </button>
                         </div>
                     </div>
-
-                    <button type="button" id="addOptionBtn" class="btn btn-outline-primary btn-sm rounded-pill px-4 mt-2">
-                        <i class="fas fa-plus me-1"></i> Add Another Option
-                    </button>
                 </div>
 
             </div>
             
-            <div class="modal-footer border-top bg-light px-4 py-3 rounded-bottom-4">
+            <div class="px-5 py-4 border-t border-slate-100 bg-slate-50/50 flex flex-col md:flex-row items-center gap-3">
                 <input type="hidden" id="quizId" value="{{ $quiz->id }}">
-                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="saveAndAddBtn" class="btn btn-outline-primary rounded-pill px-4">Save & Add Another</button>
-                <button type="button" id="saveQuestionBtn" class="btn btn-primary rounded-pill px-5 shadow-sm">Save Question</button>
+                <button type="button" class="w-full md:w-auto px-5 h-9 rounded-xl font-bold uppercase tracking-widest text-[10px] text-slate-500 hover:text-slate-900 hover:bg-white transition-all" data-bs-dismiss="modal">Cancel</button>
+                <div class="flex-grow"></div>
+                <button type="button" id="saveAndAddBtn" class="w-full md:w-auto px-5 h-9 bg-white border border-slate-200 hover:border-indigo-300 hover:text-indigo-600 rounded-xl font-bold uppercase tracking-widest text-[10px] transition-all shadow-sm">Save & Add Another</button>
+                <button type="button" id="saveQuestionBtn" class="w-full md:w-auto px-6 h-9 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold uppercase tracking-widest text-[10px] transition-all shadow-md shadow-indigo-600/20">Save</button>
             </div>
 
         </div>
@@ -96,17 +130,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function createOptionHtml() {
         const div = document.createElement('div');
-        div.className = 'input-group mb-3 option-row shadow-sm rounded-3 overflow-hidden border';
+        div.className = 'flex items-center gap-3 option-row group transition-all duration-300';
         div.innerHTML = `
-            <span class="input-group-text bg-white border-0 text-muted"><i class="far fa-circle"></i></span>
-            <input type="text" class="form-control option-text border-0 shadow-none" placeholder="Enter option text...">
-            <div class="input-group-text bg-white border-0 border-start px-3">
-                <div class="form-check mb-0 d-flex align-items-center gap-2 cursor-pointer">
-                    <input class="form-check-input correct-checkbox mt-0" type="checkbox" style="cursor:pointer; width:18px;height:18px;">
-                    <label class="form-check-label small fw-bold text-dark mb-0" style="cursor:pointer; padding-top:2px;">Correct</label>
+            <div class="flex-grow flex items-center bg-slate-50 border border-slate-200 rounded-xl overflow-hidden focus-within:border-indigo-500 focus-within:bg-white transition-all shadow-sm">
+                <div class="px-4 text-slate-300"><i class="far fa-circle text-[10px]"></i></div>
+                <input type="text" class="w-full py-2.5 bg-transparent text-sm font-bold text-slate-900 outline-none placeholder:text-slate-300" placeholder="New option choice...">
+                <div class="px-4 border-l border-slate-200 bg-slate-50/50">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input class="correct-checkbox w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500" type="checkbox" style="cursor:pointer;">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest group-hover:text-indigo-600 transition-all">Correct</span>
+                    </label>
                 </div>
             </div>
-            <button type="button" class="btn btn-light bg-white border-0 border-start text-danger remove-option px-3"><i class="fas fa-times"></i></button>
+            <button type="button" class="w-10 h-10 rounded-xl border border-slate-200 text-slate-300 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 transition-all flex items-center justify-center remove-option flex-shrink-0">
+                <i class="fas fa-times text-xs"></i>
+            </button>
         `;
         return div;
     }
@@ -128,6 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function resetModal() {
         questionEditor.value = '';
         document.getElementById('questionPoints').value = 1;
+        document.getElementById('isReusableCheck').checked = false;
         optionsContainer.innerHTML = '';
         optionsContainer.appendChild(createOptionHtml());
         optionsContainer.appendChild(createOptionHtml());
@@ -142,13 +181,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const questionText = questionEditor.value.trim();
         const points = document.getElementById('questionPoints').value;
         const type = typeDropdown.value;
+        const isReusable = document.getElementById('isReusableCheck').checked;
 
         const options = [];
         const correct = [];
 
         optionsContainer.querySelectorAll('.option-row').forEach((row) => {
-            const text = row.querySelector('.option-text').value.trim();
-            const isCorrect = row.querySelector('.correct-checkbox').checked;
+            const textInput = row.querySelector('input[type="text"]');
+            const text = textInput ? textInput.value.trim() : '';
+            const checkbox = row.querySelector('.correct-checkbox');
+            const isCorrect = checkbox ? checkbox.checked : false;
             
             if (text) {
                 options.push(text);
@@ -170,13 +212,17 @@ document.addEventListener('DOMContentLoaded', function() {
             content: questionText,
             points: points,
             type: type,
+            is_reusable: isReusable,
             options: options,
             correct: correct,
             _token: '{{ csrf_token() }}'
         };
 
-        saveQuestionBtn.disabled = true;
-        saveAndAddBtn.disabled = true;
+        const btnSave = document.getElementById('saveQuestionBtn');
+        const btnSaveAdd = document.getElementById('saveAndAddBtn');
+        
+        btnSave.disabled = true;
+        btnSaveAdd.disabled = true;
 
         fetch('{{ route("questions.store") }}', {
             method: 'POST',
@@ -205,8 +251,8 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('An error occurred while saving the question.');
         })
         .finally(() => {
-            saveQuestionBtn.disabled = false;
-            saveAndAddBtn.disabled = false;
+            btnSave.disabled = false;
+            btnSaveAdd.disabled = false;
         });
     }
 

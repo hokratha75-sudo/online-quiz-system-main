@@ -59,12 +59,26 @@
         </div>
     </div>
     @empty
-    <div class="col-12 text-center py-5">
-        <div class="mb-3">
-            <i class="fas fa-book-open fa-3x text-muted opacity-25"></i>
+    <div class="col-12 py-5">
+        <div class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white">
+            <div class="mb-4">
+                <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-light mb-3" style="width: 100px; height: 100px;">
+                    <i class="fas fa-book-reader fa-3x text-muted opacity-50"></i>
+                </div>
+            </div>
+            <h4 class="fw-bold text-dark mb-2">No Courses Assigned Yet</h4>
+            <p class="text-muted mx-auto mb-4" style="max-width: 450px;">
+                You don't have any subjects or courses assigned to your profile at the moment. 
+                If you are a teacher or student, please contact your department administrator to enroll you in the correct academic structure.
+            </p>
+            @if(Auth::user()->role_id == 1)
+            <div class="d-flex justify-content-center">
+                <a href="{{ route('admin.subjects.index') }}" class="btn btn-primary px-5 py-2 rounded-pill fw-bold">
+                    <i class="fas fa-plus-circle me-2"></i> Manage Subjects
+                </a>
+            </div>
+            @endif
         </div>
-        <h5 class="text-muted">No courses assigned to you yet.</h5>
-        <p class="text-muted small">If you believe this is an error, please contact the administrator.</p>
     </div>
     @endforelse
 </div>

@@ -8,18 +8,18 @@
     <!-- Header Section -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-            <h1 class="text-2xl md:text-3xl font-semibold text-slate-900 tracking-tight">Departments Directory</h1>
-            <p class="text-sm font-medium text-slate-500 mt-1">Manage institutional departments and faculties.</p>
+            <h1 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight uppercase">Departments Directory</h1>
+            <p class="text-xs font-bold text-indigo-600 mt-1 uppercase tracking-widest">Manage institutional departments and faculties</p>
         </div>
         <div class="flex items-center gap-3">
-            <button onclick="window.location.reload()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors flex items-center gap-2 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-                <i class="fas fa-sync-alt text-xs text-slate-400"></i> Refresh
+            <button onclick="window.location.reload()" class="bg-white hover:bg-slate-50 text-slate-900 border border-slate-100 px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm italic">
+                <i class="fas fa-sync-alt text-[10px] text-indigo-500"></i> Refresh
             </button>
-            <a href="{{ route('admin.departments.export') }}" class="bg-white hover:bg-blue-50 text-blue-600 border border-slate-200/80 hover:border-blue-200 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors flex items-center gap-2 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-                <i class="fas fa-file-excel text-xs"></i> Export
+            <a href="{{ route('admin.departments.export') }}" class="bg-white hover:bg-slate-50 text-slate-900 border border-slate-100 px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm italic">
+                <i class="fas fa-file-excel text-[10px] text-emerald-500"></i> Export
             </a>
-            <button data-bs-toggle="modal" data-bs-target="#addDeptModal" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 shadow-sm">
-                <i class="fas fa-plus text-xs"></i> New Department
+            <button data-bs-toggle="modal" data-bs-target="#addDeptModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg">
+                <i class="fas fa-plus text-[10px]"></i> New Department
             </button>
         </div>
     </div>
@@ -41,20 +41,20 @@
     <div class="bg-white rounded-[20px] border border-slate-200/70 shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex flex-col overflow-hidden">
         
         <!-- Toolbar -->
-        <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
-            <div class="flex items-center gap-2">
-                <h3 class="text-base font-semibold text-slate-900 tracking-tight">Active Departments</h3>
-                <span class="px-2 py-0.5 rounded-full bg-slate-200/60 text-slate-600 text-[11px] font-bold tracking-wide">{{ $departments->total() }} items</span>
+        <div class="p-6 border-b border-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
+            <div class="flex items-center gap-3">
+                <h3 class="text-xs font-bold text-slate-900 tracking-widest uppercase">Active Departments</h3>
+                <span class="px-2.5 py-1 rounded-md bg-white border border-slate-100 text-indigo-600 text-[10px] font-bold tracking-widest uppercase shadow-sm tabular-nums">{{ $departments->total() }} Records</span>
             </div>
             
             <div class="flex items-center gap-3 w-full sm:w-auto">
-                <button class="bg-white hover:bg-slate-50 text-rose-600 border border-slate-200 px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 shadow-[0_1px_2px_rgba(0,0,0,0.02)]" onclick="deleteSelected()">
-                    <i class="fas fa-trash-alt text-xs"></i> Bulk Delete
+                <button class="bg-white hover:bg-rose-50 text-rose-600 border border-slate-100 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm" onclick="deleteSelected()">
+                    <i class="fas fa-trash-alt text-[10px]"></i> Delete Selected
                 </button>
                 <div class="relative w-full sm:w-64">
-                    <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                    <input type="text" id="tableSearch" placeholder="Search by name..." 
-                           class="w-full pl-9 pr-4 py-2 bg-white border border-slate-200/70 rounded-lg text-sm text-slate-700 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-indigo-600 text-[10px]"></i>
+                    <input type="text" id="tableSearch" placeholder="Search indices..." 
+                           class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold text-slate-900 uppercase tracking-widest focus:outline-none focus:border-indigo-500 transition-all shadow-sm">
                 </div>
             </div>
         </div>
@@ -63,16 +63,16 @@
         <div class="overflow-x-auto min-h-[400px]">
             <table class="w-full text-left border-collapse whitespace-nowrap" id="deptTable">
                 <thead>
-                    <tr class="bg-white border-b border-slate-100/80">
+                    <tr class="bg-white border-b border-slate-50">
                         <th class="px-5 py-4 w-12 text-center">
-                            <input type="checkbox" id="selectAll" class="w-4 h-4 text-blue-600 bg-white border-slate-300 rounded focus:ring-blue-500 cursor-pointer">
+                            <input type="checkbox" id="selectAll" class="w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500 cursor-pointer">
                         </th>
-                        <th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest w-20">Code</th>
-                        <th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Department</th>
-                        <th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest text-center">Majors</th>
-                        <th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest text-center">Classes</th>
-                        <th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest text-center">Courses</th>
-                        <th class="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest text-right">Actions</th>
+                        <th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest w-20">Code ID</th>
+                        <th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Department Module</th>
+                        <th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Majors</th>
+                        <th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Classes</th>
+                        <th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Subjects</th>
+                        <th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-right">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100/80 bg-white">
@@ -82,14 +82,14 @@
                             <input type="checkbox" class="row-checkbox w-4 h-4 text-blue-600 bg-white border-slate-300 rounded focus:ring-blue-500 cursor-pointer" value="{{ $dept->id }}" data-name="{{ $dept->department_name }}" data-code="{{ $dept->code }}" data-description="{{ $dept->description }}">
                         </td>
                         <td class="px-6 py-4">
-                            <span class="text-[13px] font-mono text-slate-500 font-medium">{{ $dept->code ?? 'DPT' . str_pad($dept->id, 3, '0', STR_PAD_LEFT) }}</span>
+                            <span class="text-[10px] font-black text-slate-900 tabular-nums italic">{{ $dept->code ?? 'DPT-' . str_pad($dept->id, 3, '0', STR_PAD_LEFT) }}</span>
                         </td>
                         <td class="px-6 py-4">
-                            <a href="{{ route('admin.departments.show', $dept->id) }}" class="flex items-center gap-3 group-hover:text-blue-600 transition-colors">
-                                <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100/50">
-                                    <i class="fas fa-building text-xs"></i>
+                            <a href="{{ route('admin.departments.show', $dept->id) }}" class="flex items-center gap-3 transition-all group-hover:translate-x-1">
+                                <div class="w-8 h-8 rounded-lg bg-slate-950 text-white flex items-center justify-center shrink-0 shadow-sm">
+                                    <i class="fas fa-building text-[10px]"></i>
                                 </div>
-                                <h4 class="text-sm font-semibold text-slate-800 group-hover:text-blue-600">{{ $dept->department_name }}</h4>
+                                <h4 class="text-[11px] font-black text-slate-900 uppercase italic tracking-tight italic">{{ $dept->department_name }}</h4>
                             </a>
                         </td>
                         <td class="px-6 py-4 text-center">
@@ -140,9 +140,9 @@
 
         <!-- Footer -->
         @if($departments->hasPages())
-        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/30 flex items-center justify-between">
-            <span class="text-sm text-slate-500">
-                Showing <span class="font-medium text-slate-700">{{ $departments->firstItem() ?? 0 }}</span> to <span class="font-medium text-slate-700">{{ $departments->lastItem() ?? 0 }}</span> of <span class="font-medium text-slate-700">{{ $departments->total() }}</span> entries
+        <div class="px-8 py-5 border-t border-slate-50 bg-slate-50/30 flex items-center justify-between">
+            <span class="text-[9px] font-black text-indigo-600 uppercase tracking-widest tabular-nums italic italic">
+                Mapping Node: {{ $departments->firstItem() ?? 0 }} - {{ $departments->lastItem() ?? 0 }} of {{ $departments->total() }} Authorized Units
             </span>
             <div class="flex justify-end custom-pagination">
                 {{ $departments->withQueryString()->links() }}
@@ -170,12 +170,12 @@
 <!-- Add/Edit Department Modal -->
 <div class="modal fade" id="addDeptModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg rounded-xl overflow-hidden">
-            <div class="bg-blue-600 px-6 py-4 flex items-center justify-between">
-                <h5 class="text-lg font-semibold text-white tracking-tight flex items-center gap-2" id="modalTitle">
-                    <i class="fas fa-building text-blue-200"></i> Add Department
+        <div class="modal-content rounded-[32px] border-0 shadow-2xl overflow-hidden">
+            <div class="bg-indigo-600 px-8 py-6 flex items-center justify-between">
+                <h5 class="text-xl font-bold text-white tracking-tight flex items-center gap-3" id="modalTitle">
+                    <i class="fas fa-building text-indigo-200"></i> Add Department
                 </h5>
-                <button type="button" class="text-blue-200 hover:text-white transition-colors" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="text-indigo-200 hover:text-white transition-colors" data-bs-dismiss="modal" aria-label="Close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>

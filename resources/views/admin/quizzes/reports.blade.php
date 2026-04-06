@@ -1,184 +1,200 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="row g-3 mb-4">
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm bg-primary text-white p-3 rounded-4 h-100">
-            <small class="opacity-75 text-uppercase fw-bold">Total Students</small>
-            <h3 class="fw-bold mb-1">{{ number_format($totalStudents) }}</h3>
-            <div class="small opacity-50"><i class="fas fa-users me-1"></i> Active Enrolled</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm group hover:bg-indigo-50/50 transition-all duration-300">
+        <div class="flex justify-between items-start mb-4">
+            <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Total Students</span>
+            <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100/50 shadow-sm">
+                <i class="fas fa-user-graduate text-sm"></i>
+            </div>
         </div>
+        <h3 class="text-3xl font-bold text-slate-900 tabular-nums tracking-tight">{{ number_format($totalStudents) }}</h3>
+        <div class="mt-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Enrolled</div>
     </div>
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm bg-success text-white p-3 rounded-4 h-100">
-            <small class="opacity-75 text-uppercase fw-bold">Avg. Score</small>
-            <h3 class="fw-bold mb-1">{{ round($avgScore, 1) }}%</h3>
-            <div class="small opacity-50"><i class="fas fa-chart-line me-1"></i> Overall Perf.</div>
+    
+    <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm group hover:bg-emerald-50/50 transition-all duration-300">
+        <div class="flex justify-between items-start mb-4">
+            <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest">Avg. Score</span>
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100/50 shadow-sm">
+                <i class="fas fa-chart-line text-sm"></i>
+            </div>
         </div>
+        <h3 class="text-3xl font-bold text-slate-900 tabular-nums tracking-tight">{{ round($avgScore, 1) }}%</h3>
+        <div class="mt-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Overall Perf.</div>
     </div>
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm bg-info text-white p-3 rounded-4 h-100">
-            <small class="opacity-75 text-uppercase fw-bold">Pass Rate</small>
-            <h3 class="fw-bold mb-1">{{ $passRate }}%</h3>
-            <div class="small opacity-50"><i class="fas fa-check-double me-1"></i> Success Ratio</div>
+
+    <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm group hover:bg-rose-50/50 transition-all duration-300">
+        <div class="flex justify-between items-start mb-4">
+            <span class="text-xs font-bold text-rose-600 uppercase tracking-widest">Pass Rate</span>
+            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100/50 shadow-sm">
+                <i class="fas fa-check-double text-sm"></i>
+            </div>
         </div>
+        <h3 class="text-3xl font-bold text-slate-900 tabular-nums tracking-tight">{{ $passRate }}%</h3>
+        <div class="mt-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Success Ratio</div>
     </div>
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm bg-warning text-white p-3 rounded-4 h-100">
-            <small class="opacity-75 text-uppercase fw-bold">Top Performer</small>
-            <h3 class="fw-bold mb-1 text-truncate" style="max-width: 100%;">{{ $topPerformer->user?->username ?? 'N/A' }}</h3>
-            <div class="small opacity-50"><i class="fas fa-crown me-1"></i> Highest Score: {{ $topPerformer?->score ?? 0 }}%</div>
+
+    <div class="bg-indigo-600 rounded-2xl p-6 shadow-xl shadow-indigo-600/20 group relative overflow-hidden transition-all duration-300 hover:scale-[1.02]">
+        <div class="absolute top-0 right-0 p-3 opacity-10">
+            <i class="fas fa-crown text-6xl text-white rotate-12"></i>
         </div>
+        <div class="flex justify-between items-start mb-4 relative z-10">
+            <span class="text-xs font-bold text-indigo-100 uppercase tracking-widest">Top Performer</span>
+            <div class="w-10 h-10 rounded-xl bg-white/20 text-white flex items-center justify-center border border-white/20 backdrop-blur-sm">
+                <i class="fas fa-crown text-sm"></i>
+            </div>
+        </div>
+        <h3 class="text-xl font-bold text-white truncate relative z-10 tracking-tight uppercase">{{ $topPerformer->user?->username ?? 'N/A' }}</h3>
+        <div class="mt-2 text-[10px] font-bold text-indigo-100/60 uppercase tracking-widest relative z-10">Yield Target: {{ $topPerformer?->score ?? 0 }}%</div>
     </div>
 </div>
 
-<div class="row g-4 mb-4">
-    <!-- Score Distribution -->
-    <div class="col-lg-4">
-        <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
-            <h6 class="fw-bold mb-4 text-secondary small text-uppercase ls-1"><i class="fas fa-chart-bar me-2 text-primary"></i> Grade Distribution</h6>
-            <div style="height: 300px;">
-                <canvas id="scoreChart"></canvas>
-            </div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+    <!-- Grade Distribution -->
+    <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
+        <h6 class="text-[11px] font-black text-slate-900 uppercase tracking-widest mb-6 italic"><i class="fas fa-chart-bar me-2 text-indigo-500"></i> Grade Distribution</h6>
+        <div class="relative h-[250px]">
+            <canvas id="scoreChart"></canvas>
         </div>
     </div>
     
     <!-- Subject Performance -->
-    <div class="col-lg-4">
-        <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
-            <h6 class="fw-bold mb-4 text-secondary small text-uppercase ls-1"><i class="fas fa-graduation-cap me-2 text-warning"></i> Subject Performance</h6>
-            <div style="height: 300px;">
-                <canvas id="subjectChart"></canvas>
-            </div>
+    <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
+        <h6 class="text-[11px] font-black text-slate-900 uppercase tracking-widest mb-6 italic"><i class="fas fa-graduation-cap me-2 text-indigo-500"></i> Subject Performance</h6>
+        <div class="relative h-[250px]">
+            <canvas id="subjectChart"></canvas>
         </div>
     </div>
 
     <!-- Pass/Fail Ratio -->
-    <div class="col-lg-4">
-        <div class="card border-0 shadow-sm rounded-4 p-4 h-100 text-center">
-            <h6 class="fw-bold mb-4 text-secondary small text-uppercase ls-1"><i class="fas fa-chart-pie me-2 text-success"></i> Pass vs Fail Ratio</h6>
-            <div style="height: 250px;">
-                <canvas id="passFailChart"></canvas>
-            </div>
-            <div class="mt-4 pt-2 border-top">
-                <div class="d-flex justify-content-around small fw-bold">
-                    <div class="text-success"><i class="fas fa-circle me-1"></i> Passed ({{ $passRate }}%)</div>
-                    <div class="text-danger"><i class="fas fa-circle me-1"></i> Failed ({{ 100 - $passRate }}%)</div>
-                </div>
+    <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm text-center">
+        <h6 class="text-[11px] font-black text-slate-900 uppercase tracking-widest mb-6 italic"><i class="fas fa-chart-pie me-2 text-indigo-500"></i> Pass vs Fail Ratio</h6>
+        <div class="relative h-[200px]">
+            <canvas id="passFailChart"></canvas>
+        </div>
+        <div class="mt-6 pt-4 border-t border-slate-50 italic">
+            <div class="flex justify-around text-[10px] font-black uppercase tracking-widest">
+                <div class="text-emerald-600"><i class="fas fa-circle me-1 text-[8px]"></i> Passed ({{ $passRate }}%)</div>
+                <div class="text-rose-600"><i class="fas fa-circle me-1 text-[8px]"></i> Failed ({{ 100 - $passRate }}%)</div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Advanced Filters -->
-<div class="card border-0 shadow-sm rounded-4 mb-4 bg-white p-3">
-    <form action="{{ route('quizzes.reports') }}" method="GET" class="row g-2 align-items-center">
-        <div class="col-md-3">
-            <input type="text" name="search" class="form-control rounded-3" placeholder="Search student or quiz..." value="{{ request('search') }}">
+<!-- Advanced Filters: Modern Compact -->
+<div class="bg-white rounded-2xl border border-slate-100 p-4 mb-8 shadow-sm flex items-center italic">
+    <form action="{{ route('quizzes.reports') }}" method="GET" class="grid grid-cols-1 md:grid-cols-12 gap-3 w-full items-center">
+        <div class="md:col-span-3 relative">
+            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-indigo-500 text-xs"></i>
+            <input type="text" name="search" class="w-full bg-slate-50 border border-slate-100 rounded-xl pl-9 pr-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-slate-900 focus:outline-none focus:border-indigo-500 transition-all placeholder:text-slate-300" placeholder="IDENTIFY SECTOR/SUBJECT..." value="{{ request('search') }}">
         </div>
         @if($userRole === 'admin')
-        <div class="col-md-2">
-            <select name="department_id" class="form-select rounded-3">
-                <option value="">All Departments</option>
+        <div class="md:col-span-2">
+            <select name="department_id" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-3 py-2.5 text-[10px] font-black uppercase tracking-widest text-slate-900 focus:outline-none focus:border-indigo-500 transition-all">
+                <option value="">ALL DEPTS</option>
                 @foreach($departments as $dept)
-                    <option value="{{ $dept->id }}" {{ request('department_id') == $dept->id ? 'selected' : '' }}>{{ $dept->department_name }}</option>
+                    <option value="{{ $dept->id }}" {{ request('department_id') == $dept->id ? 'selected' : '' }}>{{ strtoupper($dept->department_name) }}</option>
                 @endforeach
             </select>
         </div>
-        <div class="col-md-2">
-            <select name="teacher_id" class="form-select rounded-3">
-                <option value="">All Teachers</option>
+        <div class="md:col-span-2">
+            <select name="teacher_id" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-3 py-2.5 text-[10px] font-black uppercase tracking-widest text-slate-900 focus:outline-none focus:border-indigo-500 transition-all">
+                <option value="">ALL STAFF</option>
                 @foreach($teachers as $teacher)
-                    <option value="{{ $teacher->id }}" {{ request('teacher_id') == $teacher->id ? 'selected' : '' }}>{{ $teacher->username }}</option>
+                    <option value="{{ $teacher->id }}" {{ request('teacher_id') == $teacher->id ? 'selected' : '' }}>{{ strtoupper($teacher->username) }}</option>
                 @endforeach
             </select>
         </div>
         @endif
-        <div class="col-md-3">
-            <select name="subject_id" class="form-select rounded-3">
-                <option value="">All Subjects</option>
+        <div class="md:col-span-3">
+            <select name="subject_id" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-3 py-2.5 text-[10px] font-black uppercase tracking-widest text-slate-900 focus:outline-none focus:border-indigo-500 transition-all">
+                <option value="">ALL SUBJECTS</option>
                 @foreach($subjects as $subject)
-                    <option value="{{ $subject->id }}" {{ request('subject_id') == $subject->id ? 'selected' : '' }}>{{ $subject->subject_name }}</option>
+                    <option value="{{ $subject->id }}" {{ request('subject_id') == $subject->id ? 'selected' : '' }}>{{ strtoupper($subject->subject_name) }}</option>
                 @endforeach
             </select>
         </div>
-        <div class="col-md-2 d-flex gap-2">
-            <button type="submit" class="btn btn-primary rounded-3 flex-grow-1 fw-bold"><i class="fas fa-filter me-1"></i> Filter</button>
-            <a href="{{ route('quizzes.reports') }}" class="btn btn-light rounded-3 text-secondary border shadow-sm"><i class="fas fa-undo"></i></a>
+        <div class="md:col-span-2 flex gap-2">
+            <button type="submit" class="flex-grow h-11 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold uppercase tracking-widest flex items-center justify-center transition-all shadow-lg shadow-indigo-600/20">
+                <i class="fas fa-sync-alt me-1.5"></i> Sync
+            </button>
+            <a href="{{ route('quizzes.reports') }}" class="w-10 h-10 bg-white border border-slate-100 text-slate-400 hover:text-indigo-600 rounded-xl flex items-center justify-center transition-all italic shadow-sm">
+                <i class="fas fa-rotate-left"></i>
+            </a>
         </div>
     </form>
 </div>
 
-<div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
-    <div class="card-header bg-white border-0 py-4 px-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+<div class="bg-white rounded-[28px] border border-slate-100 shadow-sm overflow-hidden mb-8">
+    <div class="px-8 py-6 border-b border-slate-50 flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-50/30 italic">
         <div>
-            <h5 class="fw-bold text-dark mb-1">Assessment Records</h5>
-            <p class="text-muted small mb-0">Detailed list of student quiz attempts and results</p>
+            <h3 class="text-[11px] font-black text-slate-900 uppercase tracking-widest italic tracking-tighter italic">Assessment records</h3>
+            <p class="text-[9px] font-black text-indigo-600 mt-1 uppercase tracking-widest italic tracking-tighter">Detailed analytics of candidate deployments</p>
         </div>
-        <div class="d-flex gap-2">
-            <button onclick="window.print()" class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm"><i class="fas fa-print me-2"></i> Print Report</button>
-            <a href="{{ request()->fullUrlWithQuery(['export' => 'csv']) }}" class="btn btn-outline-dark rounded-pill px-4 fw-bold shadow-sm"><i class="fas fa-file-excel me-2"></i> Download CSV</a>
+        <div class="flex gap-3">
+            <button onclick="window.print()" class="h-11 px-6 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold uppercase tracking-widest flex items-center transition-all shadow-lg shadow-indigo-600/20"><i class="fas fa-print me-2 text-indigo-200"></i> Print Log</button>
+            <a href="{{ request()->fullUrlWithQuery(['export' => 'csv']) }}" class="h-10 px-6 bg-white border border-slate-100 text-slate-900 hover:bg-slate-50 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center transition-all italic shadow-sm"><i class="fas fa-file-excel me-2"></i> Download Export</a>
         </div>
     </div>
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0" id="reportsTable">
-                <thead class="bg-light bg-opacity-50 text-muted small text-uppercase ls-1">
-                    <tr>
-                        <th class="ps-4 py-3"># Attempt</th>
-                        <th>Student Details</th>
-                        <th>Quiz Reference</th>
-                        <th>Performance</th>
-                        <th>Assessment</th>
-                        <th>Timestamp</th>
-                        <th class="pe-4 text-end">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse whitespace-nowrap">
+            <thead>
+                <tr class="bg-white border-b border-slate-50">
+                    <th class="ps-8 py-4 text-[9px] font-black text-indigo-600 uppercase tracking-widest italic">Sync ID</th>
+                    <th class="px-6 py-4 text-[9px] font-black text-indigo-600 uppercase tracking-widest italic">Candidate</th>
+                    <th class="px-6 py-4 text-[9px] font-black text-indigo-600 uppercase tracking-widest italic">Vector</th>
+                    <th class="px-6 py-4 text-[9px] font-black text-indigo-600 uppercase tracking-widest italic">Yield</th>
+                    <th class="px-6 py-4 text-[9px] font-black text-indigo-600 uppercase tracking-widest italic">Status</th>
+                    <th class="px-6 py-4 text-[9px] font-black text-indigo-600 uppercase tracking-widest italic">Timestamp</th>
+                    <th class="pe-8 py-4 text-[9px] font-black text-indigo-600 uppercase tracking-widest text-right italic">Link</th>
+                </tr>
+            </thead>
+                <tbody class="divide-y divide-slate-50 italic">
                     @forelse($results as $result)
-                        <tr class="transition-all hover-bg-light">
-                            <td class="ps-4">
-                                <span class="fw-bold text-muted">A-{{ str_pad($result->id, 5, '0', STR_PAD_LEFT) }}</span>
+                        <tr class="hover:bg-slate-50/50 transition-all group">
+                            <td class="ps-8 py-4">
+                                <span class="text-[10px] font-black text-slate-900 tabular-nums italic">L-{{ str_pad($result->id, 5, '0', STR_PAD_LEFT) }}</span>
                             </td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar-sm bg-primary bg-opacity-10 text-primary rounded-circle me-2 d-flex align-items-center justify-content-center fw-bold" style="width:32px; height:32px; font-size: 12px;">
+                            <td class="px-6 py-5">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow-lg shadow-indigo-600/20 border border-indigo-500/20 group-hover:scale-110 transition-transform tabular-nums uppercase">
                                         {{ strtoupper(substr($result->user?->username ?? 'U', 0, 1)) }}
                                     </div>
-                                    <div class="fw-bold text-dark">{{ $result->user?->username ?? 'Unknown' }}</div>
+                                    <div class="text-sm font-bold text-slate-900 uppercase tracking-tight">{{ $result->user?->username ?? 'Unknown' }}</div>
                                 </div>
                             </td>
-                            <td>
-                                <div class="fw-bold small text-dark">{{ $result->quiz?->title ?? 'N/A' }}</div>
-                                <div class="extra-small text-muted">{{ $result->quiz?->subject?->subject_name ?? 'General' }}</div>
+                            <td class="px-6 py-4">
+                                <div class="text-[11px] font-black text-slate-900 uppercase italic leading-tight italic">{{ $result->quiz?->title ?? '--' }}</div>
+                                <div class="text-[8px] font-black text-indigo-500 uppercase italic tracking-widest mt-0.5 italic">{{ $result->quiz?->subject?->subject_name ?? 'SYSTEM UNIT' }}</div>
                             </td>
-                            <td>
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="flex-grow-1 progress" style="height: 6px; width: 60px;">
-                                        <div class="progress-bar {{ $result->score >= ($result->quiz?->pass_percentage ?? 60) ? 'bg-success' : 'bg-danger' }}" style="width: {{ $result->score }}%"></div>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-1 rounded-full bg-slate-100 overflow-hidden shrink-0">
+                                        <div class="h-full {{ $result->score >= ($result->quiz?->pass_percentage ?? 60) ? 'bg-emerald-500' : 'bg-rose-500' }}" style="width: {{ $result->score }}%"></div>
                                     </div>
-                                    <span class="fw-bold {{ $result->score >= ($result->quiz?->pass_percentage ?? 60) ? 'text-success' : 'text-danger' }}">{{ round($result->score) }}%</span>
+                                    <span class="text-xs font-black italic tabular-nums italic {{ $result->score >= ($result->quiz?->pass_percentage ?? 60) ? 'text-emerald-500' : 'text-rose-500' }}">{{ round($result->score) }}%</span>
                                 </div>
                             </td>
-                            <td>
+                            <td class="px-6 py-4">
                                 @if($result->score >= ($result->quiz?->pass_percentage ?? 60))
-                                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 border border-success border-opacity-25 shadow-none"><i class="fas fa-check-circle me-1"></i> Passed</span>
+                                    <span class="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-600 text-[8px] font-black uppercase tracking-widest border border-emerald-100 italic transition-all group-hover:bg-emerald-100 shadow-sm"><i class="fas fa-check-circle me-1 text-[7px]"></i> Pass</span>
                                 @else
-                                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 border border-danger border-opacity-25 shadow-none"><i class="fas fa-times-circle me-1"></i> Failed</span>
+                                    <span class="px-2.5 py-1 rounded-md bg-rose-50 text-rose-600 text-[8px] font-black uppercase tracking-widest border border-rose-100 italic transition-all group-hover:bg-rose-100 shadow-sm"><i class="fas fa-times-circle me-1 text-[7px]"></i> Fail</span>
                                 @endif
                             </td>
-                            <td class="text-muted small">
-                                <div>{{ $result->completed_at ? $result->completed_at->format('d M, Y') : 'N/A' }}</div>
-                                <div class="extra-small opacity-75">{{ $result->completed_at ? $result->completed_at->format('H:i A') : '' }}</div>
+                            <td class="px-6 py-4">
+                                <div class="text-[10px] font-black text-slate-900 italic tabular-nums italic uppercase">{{ $result->completed_at ? $result->completed_at->format('d M, Y') : 'N/A' }}</div>
+                                <div class="text-[8px] font-black text-indigo-500 uppercase mt-0.5 italic tabular-nums italic">{{ $result->completed_at ? $result->completed_at->format('H:i') : '' }}</div>
                             </td>
-                            <td class="pe-4 text-end">
-                                <a href="{{ route('quizzes.result', $result->attempt_id) }}" class="btn btn-icon btn-light rounded-circle shadow-sm">
-                                    <i class="fas fa-arrow-right text-primary"></i>
+                            <td class="pe-8 py-4 text-right">
+                                <a href="{{ route('quizzes.result', $result->attempt_id) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-100 text-slate-300 hover:text-indigo-600 hover:border-indigo-100 hover:bg-indigo-50 transition-all shadow-sm">
+                                    <i class="fas fa-arrow-right text-[10px]"></i>
                                 </a>
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="7" class="text-center py-5">No records found.</td></tr>
+                        <tr><td colspan="7" class="py-20 text-center uppercase text-[10px] font-black text-slate-400 italic tracking-widest">Zero Analysis Found</td></tr>
                     @endforelse
                 </tbody>
             </table>

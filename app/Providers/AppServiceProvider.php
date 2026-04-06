@@ -24,6 +24,10 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
         \Illuminate\Support\Facades\Event::listen(function (\Illuminate\Auth\Events\Failed $event) {
+            if (!Schema::hasTable('users')) {
+                return;
+            }
+            
             // Find all admins
             $admins = \App\Models\User::where('role_id', 1)->get();
             if ($admins->isNotEmpty()) {
@@ -40,6 +44,10 @@ class AppServiceProvider extends ServiceProvider
 
         // Track Login History
         \Illuminate\Support\Facades\Event::listen(function (\Illuminate\Auth\Events\Login $event) {
+            if (!Schema::hasTable('login_histories')) {
+                return;
+            }
+            
             \App\Models\LoginHistory::create([
                 'user_id' => $event->user->id,
                 'ip_address' => request()->ip(),
