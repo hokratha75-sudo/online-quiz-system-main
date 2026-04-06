@@ -43,8 +43,9 @@ class UserController extends Controller
 
         $dashboardTitle = 'User Management';
         $userRole = 'admin';
+        $roles = Role::all();
 
-        return view('admin.users.index', compact('users', 'search', 'roleName', 'counts', 'dashboardTitle', 'userRole'));
+        return view('admin.users.index', compact('users', 'search', 'roleName', 'counts', 'dashboardTitle', 'userRole', 'roles'));
     }
 
     public function create(Request $request)

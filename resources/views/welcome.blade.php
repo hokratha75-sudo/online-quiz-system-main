@@ -2,134 +2,122 @@
 <html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>QuizMaster - Evolutionary Learning Hub</title>
+    <title>Online Quiz System - Smart Assessment</title>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Next-gen synchronized assessment platform for educational institutions. Built for scale, ease of use, and performance.">
+    <meta name="keywords" content="quiz platform, learning management, assessments, education">
+    
+    <!-- Preload Assets -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+    
     <script>
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
-              sans: ['Plus Jakarta Sans', 'Kantumruy Pro', 'sans-serif'],
+              sans: ['Inter', 'Kantumruy Pro', 'sans-serif'],
             }
           }
         }
       }
     </script>
     
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+    
     <style>
-        .mesh-gradient {
-            background-color: #0f172a;
-            background-image: 
-                radial-gradient(at 0% 0%, hsla(253,80%,15%,1) 0, transparent 50%), 
-                radial-gradient(at 50% 0%, hsla(225,80%,20%,1) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(339,80%,20%,1) 0, transparent 50%);
-        }
         .hero-mesh {
-            background-color: #4f46e5;
             background-image: 
-                radial-gradient(at 0% 0%, hsla(253,60%,20%,1) 0, transparent 50%), 
-                radial-gradient(at 50% 0%, hsla(225,60%,25%,1) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(339,60%,25%,1) 0, transparent 50%);
+                linear-gradient(to bottom, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.95)),
+                url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: #0f172a;
         }
+        [x-cloak] { display: none !important; }
+        .glass-header { background: rgba(255,255,255,0.02); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05); }
     </style>
 </head>
-<body class="font-sans bg-slate-50 selection:bg-indigo-500 selection:text-white">
+<body class="font-sans bg-slate-950 text-white selection:bg-indigo-500 selection:text-white overflow-x-hidden" 
+      x-data="{ scrolled: false }" @scroll.window="scrolled = window.pageYOffset > 50">
 
-    <!-- Navigation Header: Minimal & High-Contrast -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-white/5 backdrop-blur-md border-b border-white/5">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur-sm shadow-xl">
-                    <i class="fas fa-microchip text-white text-sm"></i>
-                </div>
-                <span class="text-white font-extrabold text-lg tracking-tighter uppercase">QuizMaster</span>
+    <!-- Navigation Header: Institutional Variant -->
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" 
+            :class="scrolled ? 'glass-header h-16' : 'h-24 bg-transparent'">
+        <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+            <div class="flex items-center gap-3 group cursor-pointer">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-10 h-10 rounded-xl shadow-lg border border-white/20 group-hover:scale-105 transition-transform object-cover">
+                <span class="text-white font-bold text-xl tracking-tight">{{ \App\Models\Setting::get('site_name', 'Online Quiz System') }}</span>
             </div>
             
             <nav class="hidden md:flex items-center gap-10">
-                <a href="#" class="text-[10px] font-bold text-white/60 hover:text-white uppercase tracking-[0.2em] transition-colors">Courses</a>
-                <a href="#" class="text-[10px] font-bold text-white/60 hover:text-white uppercase tracking-[0.2em] transition-colors">Exams</a>
-                <a href="#" class="text-[10px] font-bold text-white/60 hover:text-white uppercase tracking-[0.2em] transition-colors">Analytics</a>
+                <!-- Navigation links removed -->
             </nav>
 
             <div class="flex items-center gap-4">
                 @if (Auth::check())
-                    <a href="{{ url('/dashboard') }}" class="h-10 px-8 bg-white text-slate-900 rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center shadow-2xl shadow-white/5 hover:scale-105 transition-all">Go to Dashboard</a>
+                    <a href="{{ url('/dashboard') }}" class="h-10 px-6 bg-indigo-600 text-white rounded-xl text-sm font-semibold flex items-center shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 transition-all active:scale-95">Dashboard</a>
                 @else
-                    <a href="{{ route('login') }}" class="h-10 px-8 bg-white/10 hover:bg-white text-white hover:text-slate-900 rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center border border-white/10 transition-all">Sign In</a>
-                    <a href="{{ url('/register') }}" class="h-10 px-8 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center shadow-2xl shadow-indigo-600/20 transition-all">Join Now</a>
+                    <a href="{{ route('login') }}" class="h-10 px-6 bg-white text-slate-900 rounded-xl text-sm font-bold flex items-center shadow-lg shadow-white/10 hover:scale-105 active:scale-95 transition-all">Log In</a>
                 @endif
             </div>
         </div>
     </header>
 
-    <!-- Main Hero: Immersive High-Density Node -->
+    <!-- Main Hero Matrix: High-Density Premium -->
     <main class="relative hero-mesh min-h-screen flex items-center justify-center pt-20 px-6 overflow-hidden">
-        <div class="absolute inset-0 bg-indigo-600/10 pointer-events-none"></div>
-        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px] -mr-64 -mt-64"></div>
-        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px] -ml-64 -mb-64"></div>
+        <div class="absolute inset-0 opacity-30 pointer-events-none">
+            <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-white/5 rounded-full blur-[120px] -mr-64 -mt-64"></div>
+            <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-500/10 rounded-full blur-[100px] -ml-64 -mb-64"></div>
+        </div>
 
-        <div class="max-w-5xl mx-auto relative z-10 text-center">
-            <div class="inline-flex items-center gap-3 px-4 py-1.5 bg-white/10 border border-white/10 rounded-full text-[10px] font-bold text-indigo-200 uppercase tracking-[0.2em] mb-10 shadow-lg">
-                <i class="fas fa-bolt text-emerald-400"></i> v2.5.0 Production Ready
+        <div class="max-w-6xl mx-auto relative z-10 text-center">
+            
+            <div class="inline-flex items-center gap-3 px-5 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-semibold text-indigo-100 mb-10 shadow-lg border-indigo-500/20 backdrop-blur-sm">
+                <span class="flex h-2 w-2 rounded-full bg-emerald-400"></span> New Update v2.5.0 Available
             </div>
             
-            <h1 class="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter uppercase mb-8 leading-none">
-                Next-Gen Learning <br/> <span class="bg-gradient-to-r from-indigo-300 to-indigo-100 bg-clip-text text-transparent">Experiences</span>
+            <h1 class="text-5xl md:text-7xl lg:text-[80px] font-extrabold text-white tracking-tight mb-8 leading-tight">
+                Smart & Fast <br/> <span class="bg-gradient-to-r from-indigo-400 via-indigo-200 to-white bg-clip-text text-transparent">Assessment.</span>
             </h1>
             
-            <p class="text-indigo-100/70 text-xs md:text-sm font-bold uppercase tracking-[0.2em] leading-relaxed max-w-2xl mx-auto mb-16 italic">
-                Empowering educators with real-time insights and secure automated testing. Built for the next generation of digital excellence.
+            <p class="text-indigo-100/80 text-base md:text-lg font-medium leading-relaxed max-w-2xl mx-auto mb-16">
+                Empower your institution with a high-performance system for creating, testing, and tracking academic progress seamlessly.
             </p>
 
             <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-                <a href="{{ url('/register') }}" class="w-full sm:w-64 h-16 bg-white text-slate-900 rounded-[24px] font-bold uppercase tracking-[0.2em] text-xs flex items-center justify-center gap-3 shadow-2xl shadow-white/5 hover:scale-105 active:scale-95 transition-all">
-                    Register Now <i class="fas fa-chevron-right text-[10px]"></i>
+                <a href="{{ url('/register') }}" class="w-full sm:w-64 h-16 bg-white text-slate-900 rounded-[20px] font-bold text-sm flex items-center justify-center gap-3 shadow-xl shadow-white/10 hover:scale-105 active:scale-95 transition-all">
+                    Register Now <i class="fas fa-arrow-right text-xs"></i>
                 </a>
-                <a href="{{ route('login') }}" class="w-full sm:w-64 h-16 bg-white/5 border border-white/10 text-white rounded-[24px] font-bold uppercase tracking-[0.2em] text-xs flex items-center justify-center gap-3 backdrop-blur-sm hover:bg-white/10 transition-all">
-                    Member Login <i class="fas fa-sign-in-alt text-[10px]"></i>
+                <a href="{{ route('login') }}" class="w-full sm:w-64 h-16 bg-white/5 border border-white/10 text-white rounded-[20px] font-bold text-sm flex items-center justify-center gap-3 backdrop-blur-md hover:bg-white/10 transition-all active:scale-95">
+                    Log In <i class="far fa-user text-xs"></i>
                 </a>
             </div>
 
             <!-- Dashboard Preview Node -->
-            <div class="mt-24 p-4 rounded-[40px] bg-white/5 border border-white/10 backdrop-blur-md shadow-3xl max-w-4xl mx-auto group hover:scale-[1.02] transition-transform duration-700">
-                <div class="bg-slate-950 rounded-[30px] overflow-hidden border border-white/5 aspect-video relative">
-                    <div class="absolute inset-0 flex items-center justify-center bg-indigo-600/10">
-                        <div class="text-center">
-                            <div class="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-3xl animate-pulse cursor-pointer">
-                                <i class="fas fa-play ml-1"></i>
-                            </div>
-                            <span class="text-[10px] font-bold text-white uppercase tracking-widest opacity-50">Operational Walkthrough</span>
-                        </div>
+            <div class="mt-32 max-w-4xl mx-auto rounded-t-[40px] border-t border-x border-white/10 bg-white/5 backdrop-blur-xl p-4 md:p-8 transition-transform duration-1000 delay-500 translate-y-20 opacity-50 hover:translate-y-10 hover:opacity-100">
+                <div class="flex justify-between items-center mb-8 px-4">
+                    <div class="flex gap-2">
+                        <div class="w-3 h-3 rounded-full bg-rose-500/50"></div>
+                        <div class="w-3 h-3 rounded-full bg-amber-500/50"></div>
+                        <div class="w-3 h-3 rounded-full bg-emerald-500/50"></div>
                     </div>
+                    <div class="h-6 px-4 bg-white/5 rounded-full text-xs font-semibold text-indigo-200 flex items-center">Dashboard Preview</div>
+                </div>
+                <div class="grid grid-cols-3 gap-4 mb-20">
+                    <div class="h-24 bg-white/5 rounded-2xl animate-pulse"></div>
+                    <div class="h-24 bg-white/5 rounded-2xl animate-pulse"></div>
+                    <div class="h-24 bg-white/5 rounded-2xl animate-pulse"></div>
                 </div>
             </div>
         </div>
     </main>
-
-    <!-- Institutional Partners / Credits: Minimalist Footer -->
-    <footer class="bg-slate-950 py-20 px-6 border-t border-white/5">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
-            <div class="flex items-center gap-3 opacity-40">
-                <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
-                    <i class="fas fa-microchip text-white text-xs"></i>
-                </div>
-                <span class="text-white font-extrabold text-sm tracking-tighter uppercase">QuizMaster</span>
-            </div>
-            
-            <div class="text-[10px] font-bold text-slate-600 uppercase tracking-widest text-center md:text-right leading-loose italic">
-                &copy; {{ date('Y') }} QuizMaster Global. Engineered for academic excellence. <br/>
-                <span class="text-indigo-400 opacity-40">System Status: Optimal Performance</span>
-            </div>
-        </div>
-    </footer>
 
 </body>
 </html>

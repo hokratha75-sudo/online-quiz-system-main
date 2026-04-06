@@ -1,173 +1,113 @@
 @extends('layouts.admin')
 
+@section('topbar-title', 'Create Assessment')
+
 @section('content')
-<div class="min-h-screen bg-slate-50/50 pb-20 pt-12">
-    <div class="max-w-4xl mx-auto px-6">
-        
-        <!-- Progress Header -->
-        <div class="flex items-center justify-between mb-12">
-            <div class="flex items-center gap-6">
-                <a href="{{ route('quizzes.index') }}" class="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-100 hover:bg-indigo-50 transition-all shadow-sm group">
-                    <i class="fas fa-chevron-left text-sm group-hover:-translate-x-0.5 transition-transform"></i>
-                </a>
-                <div>
-                    <h1 class="text-3xl font-black text-slate-900 tracking-tight uppercase italic leading-none">Create Module</h1>
-                    <div class="flex items-center gap-2 mt-2">
-                        <span class="text-[10px] font-black text-indigo-500 uppercase tracking-widest">Step 01</span>
-                        <div class="w-1 h-1 rounded-full bg-slate-300"></div>
-                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Architecting Assessment</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Step Indicators -->
-            <div class="hidden md:flex items-center gap-3">
-                <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-500/20">
-                    <span class="w-5 h-5 rounded-lg bg-white/20 flex items-center justify-center text-[10px] font-black italic">01</span>
-                    <span class="text-[10px] font-black uppercase tracking-widest">Config</span>
-                </div>
-                <div class="w-8 h-px bg-slate-200"></div>
-                <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-400">
-                    <span class="w-5 h-5 rounded-lg bg-slate-100 flex items-center justify-center text-[10px] font-black italic">02</span>
-                    <span class="text-[10px] font-black uppercase tracking-widest">Questions</span>
-                </div>
-            </div>
-        </div>
-
-        @if($errors->any())
-        <div class="mb-8 p-5 bg-rose-50 border border-rose-100 rounded-3xl flex items-start gap-4 animate-shake">
-            <div class="w-10 h-10 rounded-2xl bg-rose-500 text-white flex items-center justify-center shrink-0 shadow-lg shadow-rose-500/20">
-                <i class="fas fa-triangle-exclamation"></i>
-            </div>
+<div class="max-w-[1400px] mx-auto p-8 md:p-10 font-inter">
+    
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div class="flex items-center gap-4">
+            <a href="{{ route('quizzes.index') }}" class="w-10 h-10 rounded-2xl border border-slate-100 bg-white flex items-center justify-center text-slate-400 hover:bg-indigo-600 hover:text-white transition-all shadow-sm">
+                <i class="fas fa-arrow-left text-xs"></i>
+            </a>
             <div>
-                <h4 class="text-xs font-black text-rose-900 uppercase tracking-widest mb-1">Configuration Error</h4>
-                <p class="text-sm font-semibold text-rose-700/80 leading-relaxed italic">{{ $errors->first() }}</p>
+                <h1 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight uppercase">Create Quiz</h1>
+                <p class="text-xs font-bold text-indigo-600 mt-1 uppercase tracking-widest">Define the foundational configuration settings</p>
             </div>
         </div>
-        @endif
+    </div>
 
-        <!-- Form Interface -->
-        <form action="{{ route('quizzes.store') }}" method="POST" class="space-y-8">
+    @if($errors->any())
+    <div class="mb-6 bg-rose-50 border border-rose-200 text-rose-700 px-4 py-3 rounded-xl text-sm font-semibold flex items-center gap-3 shadow-sm">
+        <i class="fas fa-exclamation-circle text-rose-500 text-base"></i>
+        {{ $errors->first() }}
+    </div>
+    @endif
+
+    <div class="max-w-3xl">
+        <form action="{{ route('quizzes.store') }}" method="POST" class="bg-white rounded-[20px] border border-slate-200/70 shadow-[0_2px_10px_rgba(0,0,0,0.02)] overflow-hidden">
             @csrf
             
-            <div class="bg-white rounded-[40px] border border-slate-200/60 shadow-xl shadow-slate-200/40 overflow-hidden">
-                <div class="p-8 md:p-14 space-y-10">
-                    
-                    <!-- Section Header -->
-                    <div class="flex items-center gap-4 border-b border-slate-100 pb-8">
-                        <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center text-xl border border-indigo-100/50">
-                            <i class="far fa-compass"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-black text-slate-900 uppercase tracking-tight leading-none mb-1">Primary Metadata</h3>
-                            <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest">Define the unique identity of this assessment.</p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-10">
-                        <!-- Left Column: Text Data -->
-                        <div class="space-y-10 lg:pr-6">
-                            <div class="group">
-                                <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3 group-hover:text-indigo-500 transition-colors">Assessment Title <span class="text-rose-500">*</span></label>
-                                <input type="text" name="title" required placeholder="e.g. Advanced Quantum Mechanics" 
-                                       class="w-full bg-slate-50/50 border-2 border-slate-100 rounded-[20px] p-4 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all placeholder:text-slate-300">
-                            </div>
-
-                            <div class="group">
-                                <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3 group-hover:text-indigo-500 transition-colors">Context Description</label>
-                                <textarea name="description" rows="5" placeholder="Operational instructions or brief summary..." 
-                                          class="w-full bg-slate-50/50 border-2 border-slate-100 rounded-[20px] p-4 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all placeholder:text-slate-300 resize-none"></textarea>
-                            </div>
-                        </div>
-
-                        <!-- Right Column: Settings -->
-                        <div class="space-y-10">
-                            <div class="relative group">
-                                <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3 group-hover:text-indigo-500 transition-colors">Unit Subject <span class="text-rose-500">*</span></label>
-                                <div class="relative">
-                                    <select name="subject_id" required class="w-full bg-slate-50/50 border-2 border-slate-100 rounded-[20px] p-4 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all appearance-none cursor-pointer">
-                                        <option value="">-- Select Deployment Subject --</option>
-                                        @foreach($subjects as $subject)
-                                            <option value="{{ $subject->id }}">{{ $subject->subject_name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <i class="fas fa-chevron-down absolute right-6 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none group-hover:text-indigo-400 transition-colors"></i>
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-8">
-                                <div class="group">
-                                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3 group-hover:text-indigo-500 transition-colors">Time Limit (Min) <span class="text-rose-500">*</span></label>
-                                    <div class="relative">
-                                        <input type="number" name="time_limit" value="30" required min="1" 
-                                               class="w-full bg-slate-50/50 border-2 border-slate-100 rounded-[20px] p-4 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all tabular-nums">
-                                        <i class="far fa-clock absolute right-6 top-1/2 -translate-y-1/2 text-slate-300 group-hover:text-indigo-400"></i>
-                                    </div>
-                                </div>
-                                <div class="group">
-                                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3 group-hover:text-indigo-500 transition-colors">Pass Rate (%) <span class="text-rose-500">*</span></label>
-                                    <div class="relative">
-                                        <input type="number" name="pass_percentage" value="60" min="0" max="100" 
-                                               class="w-full bg-slate-50/50 border-2 border-slate-100 rounded-[20px] p-4 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all tabular-nums">
-                                        <i class="far fa-star absolute right-6 top-1/2 -translate-y-1/2 text-slate-300 group-hover:text-indigo-400"></i>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="relative group">
-                                <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3 group-hover:text-indigo-500 transition-colors">Operational Status</label>
-                                <div class="relative">
-                                    <select name="status" class="w-full bg-slate-50/50 border-2 border-slate-100 rounded-[20px] p-4 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all appearance-none cursor-pointer">
-                                        <option value="draft">STAGING (Save as Draft)</option>
-                                        <option value="published" selected>PRODUCTION (Publish Live)</option>
-                                    </select>
-                                    <i class="fas fa-shuttle-space absolute right-6 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none group-hover:text-indigo-400 transition-colors"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Security Options -->
-                    <div class="pt-10 border-t border-slate-100">
-                        <label class="relative flex flex-col md:flex-row items-center gap-8 p-10 bg-slate-50/50 hover:bg-indigo-50/30 border border-slate-100 hover:border-indigo-200/50 rounded-[32px] transition-all cursor-pointer group overflow-hidden">
-                            <div class="absolute -top-10 -right-10 w-32 h-32 bg-indigo-500/5 blur-3xl group-hover:scale-150 transition-transform duration-1000"></div>
-                            
-                            <div class="shrink-0">
-                                <div class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" name="shuffle_questions" id="shuffleCheck" value="1" class="sr-only peer" checked>
-                                    <div class="w-16 h-9 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-7 after:w-7 after:transition-all peer-checked:bg-indigo-600 shadow-inner"></div>
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <h4 class="text-lg font-black text-slate-900 uppercase tracking-tight group-hover:text-indigo-700 transition-colors">Entropic Randomization Engine</h4>
-                                <p class="text-sm font-semibold text-slate-500 mt-1 leading-relaxed antialiased">Activate full-spectrum randomization of questions and choice vectors to neutralize integrity vulnerabilities.</p>
-                            </div>
-                        </label>
-                    </div>
-
+            <div class="p-6 border-b border-slate-50 bg-slate-50/50 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex justify-center items-center shadow-sm">
+                    <i class="fas fa-plus text-[10px]"></i>
                 </div>
+                <h3 class="text-xs font-bold text-slate-900 tracking-widest uppercase">Initial Configuration</h3>
             </div>
 
-            <!-- Global Footer Actions -->
-            <div class="flex items-center justify-between">
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest hidden md:block">
-                    <i class="fas fa-lock text-indigo-300 mr-2"></i> All configurations are encrypted during transit.
+            <div class="p-8 space-y-6">
+                <div>
+                    <label class="block text-xs font-bold tracking-widest text-indigo-600 uppercase mb-3">Quiz Title <span class="text-rose-500">*</span></label>
+                    <input type="text" name="title" required placeholder="e.g. Midterm Examination"
+                           class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all shadow-sm placeholder:text-slate-400">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold tracking-widest text-indigo-600 uppercase mb-3">Description</label>
+                    <textarea name="description" rows="4" placeholder="Brief instructions for students..."
+                              class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all shadow-sm resize-none placeholder:text-slate-400"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="relative">
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Subject <span class="text-rose-500">*</span></label>
+                        <select name="subject_id" required 
+                                class="w-full px-3.5 py-2.5 bg-slate-50/50 border border-slate-200/70 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all appearance-none cursor-pointer">
+                            <option value="">-- Select Subject --</option>
+                            @foreach($subjects as $subject)
+                                <option value="{{ $subject->id }}">{{ $subject->subject_name }}</option>
+                            @endforeach
+                        </select>
+                        <i class="fas fa-chevron-down absolute right-3.5 top-[35px] text-[10px] text-slate-400 pointer-events-none"></i>
+                    </div>
+
+                    <div class="relative">
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Status <span class="text-rose-500">*</span></label>
+                        <select name="status" required 
+                                class="w-full px-3.5 py-2.5 bg-slate-50/50 border border-slate-200/70 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all appearance-none cursor-pointer">
+                            <option value="draft">Draft (Hidden)</option>
+                            <option value="published" selected>Published (Active)</option>
+                        </select>
+                        <i class="fas fa-chevron-down absolute right-3.5 top-[35px] text-[10px] text-slate-400 pointer-events-none"></i>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Time Limit <span class="text-slate-400 font-normal">(Min)</span> <span class="text-rose-500">*</span></label>
+                        <input type="number" name="time_limit" value="30" required min="1" 
+                               class="w-full px-3.5 py-2.5 bg-slate-50/50 border border-slate-200/70 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Pass Mark (%) <span class="text-rose-500">*</span></label>
+                        <input type="number" name="pass_percentage" value="60" required min="0" max="100" 
+                               class="w-full px-3.5 py-2.5 bg-slate-50/50 border border-slate-200/70 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                    </div>
+                </div>
+
+                <label class="p-6 border border-slate-100 rounded-2xl bg-slate-50/30 flex items-center gap-5 hover:border-indigo-500 hover:bg-slate-50 transition-all cursor-pointer group mt-4 shadow-sm">
+                    <div class="pt-0.5">
+                        <div class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="shuffle_questions" id="shuffleCheck" value="1" class="sr-only peer" checked>
+                            <div class="w-10 h-6 bg-slate-100 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest group-hover:text-indigo-600 transition-all">Shuffle Questions</h4>
+                        <p class="text-[10px] font-bold text-slate-500 uppercase mt-0.5 leading-relaxed tracking-tight">Randomize the order of inquiries</p>
+                    </div>
+                </label>
+            </div>
+
+            <div class="px-8 py-5 border-t border-slate-100 bg-slate-50 flex items-center justify-between">
+                <p class="text-xs font-medium text-slate-500">
+                    <i class="fas fa-info-circle text-indigo-400 mr-1"></i> You can add questions in the next step.
                 </p>
-                <button type="submit" class="h-20 px-12 bg-indigo-600 hover:bg-slate-900 text-white rounded-[24px] font-black uppercase tracking-[0.2em] shadow-2xl shadow-indigo-500/20 transition-all flex items-center gap-6 group active:scale-95 {{ $subjects->isEmpty() ? 'opacity-50 cursor-not-allowed' : '' }}" {{ $subjects->isEmpty() ? 'disabled' : '' }}>
-                    Proceed to Question Architect <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                <button type="submit" class="bg-indigo-600 hover:bg-slate-900 text-white px-8 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all shadow-lg flex items-center gap-2 {{ $subjects->isEmpty() ? 'opacity-50 cursor-not-allowed' : '' }}" {{ $subjects->isEmpty() ? 'disabled' : '' }}>
+                    <i class="fas fa-arrow-right"></i> Continue
                 </button>
             </div>
         </form>
     </div>
 </div>
-
-<style>
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-5px); }
-        75% { transform: translateX(5px); }
-    }
-    .animate-shake { animation: shake 0.4s ease-in-out 0s 2; }
-</style>
 @endsection

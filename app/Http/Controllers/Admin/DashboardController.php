@@ -26,7 +26,7 @@ class DashboardController extends Controller
         $totalUsers = 0; $totalQuizzes = 0; $pendingReviews = 0; $totalDepartments = 0; 
         $newUsers = 0; $recentQuizzes = []; $departmentStats = []; $notifications = [];
         $myQuizzes = 0; $totalAttempts = 0; $avgScore = 0; $draftQuizzes = 0;
-        $weeklyActivity = ['new_quizzes'=>0,'new_attempts'=>0]; $recentAttempts = []; $topQuizzes = [];
+        $weeklyActivity = ['new_quizzes'=>0,'new_attempts'=>0]; $recentAttempts = []; $topQuizzes = []; $topPerformer = null;
 
         // For Student ONLY show relevant quizzes
         $studentQuizzes = [];
@@ -127,6 +127,11 @@ class DashboardController extends Controller
             }
             $weeklyActivity = ['labels' => $days->keys(), 'attempts' => $days->pluck('attempts')];
 
+            $topPerformer = \App\Models\Result::with('user')
+                ->join('attempts', 'results.attempt_id', '=', 'attempts.id')
+                ->whereIn('attempts.quiz_id', $myQuizIds)
+                ->orderBy('results.score', 'desc')->first();
+
         } elseif ($userRole === 'student') {
             $studentQuizQuery = \App\Models\Quiz::query()
                 ->where('status', 'published')
@@ -176,7 +181,7 @@ class DashboardController extends Controller
             'totalUsers', 'totalTeachers', 'totalQuizzes', 'totalQuestions', 'totalBank', 'pendingReviews', 'totalDepartments', 'newUsers',
             'recentQuizzes', 'departmentStats', 'notifications',
             'myQuizzes', 'totalAttempts', 'avgScore', 'draftQuizzes', 'weeklyActivity', 'recentAttempts', 'topQuizzes',
-            'studentQuizzes'
+            'studentQuizzes', 'topPerformer'
         ));
     }
 }

@@ -60,63 +60,66 @@
         </div>
 
         <!-- Table Content -->
-        <div class="overflow-x-auto min-h-[400px]">
-            <table class="w-full text-left border-collapse whitespace-nowrap" id="deptTable">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse" id="deptTable">
                 <thead>
-                    <tr class="bg-white border-b border-slate-50">
+                    <tr class="bg-slate-50/50 border-b border-slate-200/70">
                         <th class="px-5 py-4 w-12 text-center">
-                            <input type="checkbox" id="selectAll" class="w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500 cursor-pointer">
+                            <input type="checkbox" id="selectAll" class="w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500 cursor-pointer transition-colors shadow-sm">
                         </th>
-                        <th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest w-20">Code ID</th>
-                        <th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Department Module</th>
-                        <th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Majors</th>
-                        <th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Classes</th>
-                        <th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Subjects</th>
-                        <th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-right">Action</th>
+                        <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-left w-24">Code</th>
+                        <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-left">Department Details</th>
+                        <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Majors</th>
+                        <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Classes</th>
+                        <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Subjects</th>
+                        <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100/80 bg-white">
+                <tbody class="divide-y divide-slate-100 bg-white">
                     @forelse($departments as $dept)
                     <tr class="table-row hover:bg-slate-50/50 transition-colors group">
                         <td class="px-5 py-4 text-center">
-                            <input type="checkbox" class="row-checkbox w-4 h-4 text-blue-600 bg-white border-slate-300 rounded focus:ring-blue-500 cursor-pointer" value="{{ $dept->id }}" data-name="{{ $dept->department_name }}" data-code="{{ $dept->code }}" data-description="{{ $dept->description }}">
+                            <input type="checkbox" class="row-checkbox w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500 cursor-pointer shadow-sm transition-colors" value="{{ $dept->id }}" data-name="{{ $dept->department_name }}" data-code="{{ $dept->code }}" data-description="{{ $dept->description }}">
                         </td>
-                        <td class="px-6 py-4">
-                            <span class="text-[10px] font-black text-slate-900 tabular-nums italic">{{ $dept->code ?? 'DPT-' . str_pad($dept->id, 3, '0', STR_PAD_LEFT) }}</span>
+                        <td class="px-5 py-4">
+                            <span class="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700 tracking-wide">{{ $dept->code ?? 'DPT-' . str_pad($dept->id, 3, '0', STR_PAD_LEFT) }}</span>
                         </td>
-                        <td class="px-6 py-4">
-                            <a href="{{ route('admin.departments.show', $dept->id) }}" class="flex items-center gap-3 transition-all group-hover:translate-x-1">
-                                <div class="w-8 h-8 rounded-lg bg-slate-950 text-white flex items-center justify-center shrink-0 shadow-sm">
-                                    <i class="fas fa-building text-[10px]"></i>
+                        <td class="px-5 py-4">
+                            <a href="{{ route('admin.departments.show', $dept->id) }}" class="flex items-center gap-3.5 transition-all group-hover:translate-x-1">
+                                <div class="w-10 h-10 rounded-xl bg-indigo-50/80 text-indigo-600 flex items-center justify-center shrink-0 border border-indigo-100/50 shadow-sm">
+                                    <i class="fas fa-building text-sm"></i>
                                 </div>
-                                <h4 class="text-[11px] font-black text-slate-900 uppercase italic tracking-tight italic">{{ $dept->department_name }}</h4>
+                                <div class="flex flex-col">
+                                    <h4 class="text-sm font-semibold text-slate-900 tracking-tight">{{ $dept->department_name }}</h4>
+                                    <span class="text-xs text-slate-500 font-medium mt-0.5 truncate max-w-[250px]">{{ $dept->description ?: 'No description provided' }}</span>
+                                </div>
                             </a>
                         </td>
-                        <td class="px-6 py-4 text-center">
+                        <td class="px-5 py-4 text-center">
                             <span class="inline-flex items-center justify-center min-w-[32px] px-2 py-1 rounded-md text-xs font-bold {{ ($dept->majors_count ?? 0) > 0 ? 'bg-indigo-50 text-indigo-700 border border-indigo-200 shadow-sm' : 'bg-slate-50 text-slate-500 border border-slate-200' }}">
                                 {{ $dept->majors_count ?? 0 }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-center">
-                            <span class="inline-flex items-center justify-center min-w-[32px] px-2 py-1 rounded-md text-xs font-bold {{ ($dept->classes_count ?? 0) > 0 ? 'bg-blue-50 text-blue-700 border border-blue-200 shadow-sm' : 'bg-slate-50 text-slate-500 border border-slate-200' }}">
+                        <td class="px-5 py-4 text-center">
+                            <span class="inline-flex items-center justify-center min-w-[32px] px-2 py-1 rounded-md text-xs font-bold {{ ($dept->classes_count ?? 0) > 0 ? 'bg-sky-50 text-sky-700 border border-sky-200 shadow-sm' : 'bg-slate-50 text-slate-500 border border-slate-200' }}">
                                 {{ $dept->classes_count ?? 0 }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-center">
+                        <td class="px-5 py-4 text-center">
                             <span class="inline-flex items-center justify-center min-w-[32px] px-2 py-1 rounded-md text-xs font-bold {{ ($dept->subjects_count ?? 0) > 0 ? 'bg-amber-50 text-amber-700 border border-amber-200 shadow-sm' : 'bg-slate-50 text-slate-500 border border-slate-200' }}">
                                 {{ $dept->subjects_count ?? 0 }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-right">
-                            <div class="flex items-center justify-end gap-2 transition-opacity opacity-70 group-hover:opacity-100">
-                                <button onclick="editSingleRow(this)" data-id="{{ $dept->id }}" data-name="{{ $dept->department_name }}" data-code="{{ $dept->code }}" data-description="{{ $dept->description }}" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors tooltip-trigger" title="Edit">
-                                    <i class="far fa-edit text-sm"></i>
+                        <td class="px-5 py-4 text-right">
+                            <div class="flex items-center justify-end gap-1.5 transition-opacity opacity-70 group-hover:opacity-100">
+                                <button onclick="editSingleRow(this)" data-id="{{ $dept->id }}" data-name="{{ $dept->department_name }}" data-code="{{ $dept->code }}" data-description="{{ $dept->description }}" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors tooltip-trigger" title="Edit">
+                                    <i class="far fa-edit text-[13px]"></i>
                                 </button>
                                 <button type="button" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors btn-delete" 
                                     title="Delete" 
                                     data-id="{{ $dept->id }}" 
                                     data-title="{{ $dept->department_name }}">
-                                    <i class="far fa-trash-alt text-sm"></i>
+                                    <i class="far fa-trash-alt text-[13px]"></i>
                                 </button>
                             </div>
                         </td>

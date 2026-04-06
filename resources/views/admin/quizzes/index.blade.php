@@ -65,7 +65,7 @@
 
                 <!-- Content -->
                 <div class="mb-8 min-h-[90px]">
-                    <div class="text-[11px] font-bold text-indigo-600 uppercase tracking-widest mb-1.5">{{ $item->subject?->subject_name ?? 'Module' }}</div>
+                    <div class="text-xs font-semibold text-indigo-600 tracking-wide mb-1.5">{{ $item->subject?->subject_name ?? 'General Quiz' }}</div>
                     <h3 class="text-lg font-bold text-slate-900 leading-tight group-hover:text-indigo-600 transition-colors">{{ $item->title }}</h3>
                     <p class="text-sm font-medium text-slate-500 mt-2 line-clamp-2 leading-relaxed">{{ $item->description ?: 'No briefing provided for this module.' }}</p>
                 </div>
@@ -75,12 +75,12 @@
                     <div class="flex items-center gap-4">
                         <div class="flex flex-col">
                             <span class="text-lg font-bold text-slate-900 tabular-nums leading-none">{{ $item->questions_count ?? 0 }}</span>
-                            <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mt-1">Items</span>
+                            <span class="text-[11px] font-medium text-slate-500 mt-1">Questions</span>
                         </div>
                         <div class="w-px h-6 bg-slate-200"></div>
                         <div class="flex flex-col">
                             <span class="text-lg font-bold text-slate-900 tabular-nums leading-none">{{ $item->attempts_count ?? 0 }}</span>
-                            <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mt-1">Logs</span>
+                            <span class="text-[11px] font-medium text-slate-500 mt-1">Attempts</span>
                         </div>
                     </div>
 
@@ -105,10 +105,10 @@
             <div class="w-24 h-24 bg-white rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-sm">
                 <i class="fas fa-inbox text-slate-300 text-4xl"></i>
             </div>
-            <h3 class="text-2xl font-black text-slate-900 uppercase tracking-tight mb-2">Workspace Empty</h3>
-            <p class="text-slate-500 font-bold max-w-sm mx-auto mb-10 text-sm">You haven't initiated any assessments yet. Start by creating a new quiz module.</p>
-            <a href="{{ route('quizzes.create') }}" class="inline-flex items-center gap-3 bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-indigo-500/20 transition-all scale-110">
-                <i class="fas fa-plus"></i> Create First Quiz
+            <h3 class="text-2xl font-bold text-slate-900 tracking-tight mb-2">No Quizzes Found</h3>
+            <p class="text-slate-500 font-medium max-w-sm mx-auto mb-10 text-sm">You haven't added any quizzes yet. Start by creating your first quiz.</p>
+            <a href="{{ route('quizzes.create') }}" class="inline-flex items-center gap-3 bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-3.5 rounded-xl font-semibold shadow-md transition-all">
+                <i class="fas fa-plus"></i> Create Quiz
             </a>
         </div>
         @endforelse

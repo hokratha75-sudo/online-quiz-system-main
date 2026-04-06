@@ -1,195 +1,159 @@
 @extends('layouts.admin')
 
 @section('content')
-<!-- Breadcrumbs -->
-<div class="breadcrumb-container d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-    <div>
-        <h1 class="d-inline-block fw-bold text-dark mb-0">Academic Enrollments</h1>
-        <p class="text-muted small mb-0">System-wide Relationships & Departmental Matrix</p>
-    </div>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}" class="text-decoration-none"><i class="fas fa-home me-1"></i> Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Assignments</li>
-        </ol>
-    </nav>
-</div>
-
-<div class="container-fluid px-4 pt-4">
-    <!-- Success Alert -->
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show rounded-3 border-0 mb-4 shadow-sm" role="alert" style="border-left: 5px solid #28a745 !important;">
-            <div class="d-flex align-items-center">
-                <i class="fas fa-check-circle fs-4 me-3 text-success"></i>
-                <div>{{ session('success') }}</div>
+<div class="max-w-[1400px] mx-auto p-6 md:p-10 font-inter text-slate-900">
+    
+    <!-- Header Section -->
+    <header class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
+        <div>
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-2.5 h-2.5 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(79,70,229,0.4)]"></div>
+                <span class="text-xs font-semibold text-indigo-600 tracking-wide uppercase">Manage Enrollments</span>
             </div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight leading-none">Academic Enrollments</h1>
+            <p class="text-sm font-medium text-slate-500 mt-3">Assign which teachers and students have access to which departments.</p>
         </div>
+        
+        <div class="flex items-center gap-4">
+            <div class="h-10 w-px bg-slate-200 mx-2"></div>
+            <div class="px-5 py-2.5 bg-indigo-50 border border-indigo-100 rounded-xl text-xs font-semibold text-indigo-600 flex items-center gap-2">
+                <i class="fas fa-lock text-xs"></i> Admin Area
+            </div>
+        </div>
+    </header>
+
+    @if(session('success'))
+    <div class="mb-10 p-5 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center gap-4 animate-fade-in shadow-sm">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/20">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <span class="text-[11px] font-bold text-emerald-800 uppercase tracking-widest">{{ session('success') }}</span>
+    </div>
     @endif
 
-    <!-- Global Stats -->
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm rounded-3 overflow-hidden h-100">
-                <div class="card-body d-flex align-items-center p-4">
-                    <div class="icon-box bg-primary bg-opacity-10 text-primary rounded-3 p-3 me-3">
-                        <i class="fas fa-building fs-3"></i>
-                    </div>
-                    <div>
-                        <div class="text-muted small fw-bold text-uppercase ls-1">Core Departments</div>
-                        <div class="h3 fw-bold mb-0 text-dark">{{ $departments->count() }}</div>
-                    </div>
+    <!-- Global Metrics Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div class="bg-white rounded-[24px] p-8 border border-slate-100 shadow-sm group hover:shadow-md transition-all">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Total Departments</span>
+                <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm">
+                    <i class="fas fa-building text-sm"></i>
                 </div>
             </div>
+            <h3 class="text-3xl font-bold tracking-tight text-slate-900 tabular-nums leading-none">{{ $departments->count() }}</h3>
+            <div class="mt-2 text-xs font-medium text-slate-400">Available Departments</div>
         </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm rounded-3 overflow-hidden h-100">
-                <div class="card-body d-flex align-items-center p-4">
-                    <div class="icon-box bg-info bg-opacity-10 text-info rounded-3 p-3 me-3">
-                        <i class="fas fa-user-graduate fs-3"></i>
-                    </div>
-                    <div>
-                        <div class="text-muted small fw-bold text-uppercase ls-1">Enrolled Scholars</div>
-                        <div class="h3 fw-bold mb-0 text-dark">{{ $departments->sum(fn($d) => $d->users->where('role_id', 3)->count()) }}</div>
-                    </div>
+
+        <div class="bg-white rounded-[24px] p-8 border border-slate-100 shadow-sm group hover:shadow-md transition-all">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Total Students</span>
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm">
+                    <i class="fas fa-user-graduate text-sm"></i>
                 </div>
             </div>
+            <h3 class="text-3xl font-bold tracking-tight text-slate-900 tabular-nums leading-none">{{ $departments->sum(fn($d) => $d->users->where('role_id', 3)->count()) }}</h3>
+            <div class="mt-2 text-xs font-medium text-slate-400">Currently Enrolled</div>
         </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm rounded-3 overflow-hidden h-100">
-                <div class="card-body d-flex align-items-center p-4">
-                    <div class="icon-box bg-warning bg-opacity-10 text-warning rounded-3 p-3 me-3">
-                        <i class="fas fa-chalkboard-teacher fs-3"></i>
-                    </div>
-                    <div>
-                        <div class="text-muted small fw-bold text-uppercase ls-1">Teaching Faculty</div>
-                        <div class="h3 fw-bold mb-0 text-dark">{{ $departments->sum(fn($d) => $d->users->where('role_id', 2)->count()) }}</div>
-                    </div>
+
+        <div class="bg-white rounded-[24px] p-8 border border-slate-100 shadow-sm group hover:shadow-md transition-all">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Total Teachers</span>
+                <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center group-hover:bg-rose-600 group-hover:text-white transition-all shadow-sm">
+                    <i class="fas fa-chalkboard-teacher text-sm"></i>
                 </div>
             </div>
+            <h3 class="text-3xl font-bold tracking-tight text-slate-900 tabular-nums leading-none">{{ $departments->sum(fn($d) => $d->users->where('role_id', 2)->count()) }}</h3>
+            <div class="mt-2 text-xs font-medium text-slate-400">Assigned Teachers</div>
         </div>
     </div>
 
-    <!-- Department List -->
-    <div class="card border-0 shadow-sm rounded-3 bg-white">
-        <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 fw-bold"><i class="fas fa-list me-2 text-primary"></i> Department Management Matrix</h5>
-            <div class="search-box position-relative w-25">
-                <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" style="z-index: 5;"></i>
-                <input type="text" class="form-control rounded-pill ps-5 border-0 bg-light" placeholder="Search by name..." style="padding-left: 45px !important;">
+    <!-- Relationship Matrix Interface -->
+    <div class="bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden mb-12">
+        <div class="p-8 border-b border-slate-50 flex flex-col md:flex-row items-center justify-between gap-6 bg-slate-50/50">
+            <div>
+                <h3 class="text-sm font-bold text-slate-900 leading-none">Department Access Control</h3>
+                <p class="text-xs font-medium text-slate-500 mt-2">View and assign faculty and students for each department</p>
+            </div>
+            <div class="relative group">
+                <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input type="text" id="deptSearch" placeholder="Search Departments..." 
+                       class="h-11 pl-12 pr-6 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all w-64 placeholder:text-slate-400 shadow-sm">
             </div>
         </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0 custom-table">
-                    <thead class="bg-light text-muted small text-uppercase fw-bold">
-                        <tr>
-                            <th class="ps-4 py-3">Department</th>
-                            <th class="text-center">Staffing</th>
-                            <th class="text-center">Student Body</th>
-                            <th class="text-center">Assigned Courses</th>
-                            <th class="text-end pe-4">Configuration</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($departments as $department)
-                        <tr>
-                            <td class="ps-4">
-                                <div class="fw-bold text-dark fs-6">{{ $department->department_name }}</div>
-                                <div class="text-muted extra-small">ID: {{ $department->id }}</div>
-                            </td>
-                            <td class="text-center">
-                                <div class="d-flex justify-content-center align-items-center">
-                                    <div class="avatar-group me-2">
-                                        @php $teachersCount = $department->users->where('role_id', 2)->count(); @endphp
-                                        <span class="badge rounded-pill bg-warning bg-opacity-10 text-warning px-3 py-2 fw-bold">
-                                            <i class="fas fa-user-tie me-1"></i> {{ $teachersCount }}
-                                        </span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center">
-                                <span class="badge rounded-pill bg-info bg-opacity-10 text-info px-3 py-2 fw-bold">
-                                    <i class="fas fa-users me-1"></i> {{ $department->users->where('role_id', 3)->count() }}
-                                </span>
-                            </td>
-                            <td class="text-center">
-                                <span class="badge rounded-pill bg-success bg-opacity-10 text-success px-3 py-2 fw-bold">
-                                    <i class="fas fa-book-reader me-1"></i> {{ $department->subjects->count() }} Courses
-                                </span>
-                            </td>
-                            <td class="text-end pe-4">
-                                <a href="{{ route('admin.enrollments.manage', $department->id) }}" class="btn btn-primary rounded-pill btn-sm px-4 shadow-sm hover-elevate">
-                                    <i class="fas fa-cog me-1"></i> Configure
-                                </a>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="5" class="text-center py-5 text-muted bg-light bg-opacity-50">
-                                <i class="fas fa-folder-open fs-1 d-block mb-3 opacity-25"></i>
-                                <h5>No Departments Recorded</h5>
-                                <p class="small mb-0">Please start by adding a new department.</p>
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="card-footer bg-white py-3 border-top border-light text-muted small">
-            Displaying {{ $departments->count() }} departments
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse whitespace-nowrap" id="deptTable">
+                <thead>
+                    <tr class="bg-white border-b border-slate-100">
+                        <th class="ps-8 py-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Department Details</th>
+                        <th class="px-6 py-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wider text-center">Faculty Assigned</th>
+                        <th class="px-6 py-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wider text-center">Enrolled Students</th>
+                        <th class="px-6 py-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wider text-center">Total Subjects</th>
+                        <th class="pe-8 py-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50">
+                    @forelse($departments as $department)
+                    <tr class="hover:bg-slate-50/50 transition-all group">
+                        <td class="ps-8 py-5">
+                            <div class="flex flex-col">
+                                <span class="text-sm font-bold text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors leading-none">{{ $department->department_name }}</span>
+                                <span class="text-xs font-medium text-slate-500 mt-1">ID: {{ str_pad($department->id, 3, '0', STR_PAD_LEFT) }}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-5 text-center">
+                            @php $teachersCount = $department->users->where('role_id', 2)->count(); @endphp
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-teal-50 border border-teal-100 text-teal-700 shadow-sm text-xs font-semibold">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                                <span>{{ $teachersCount }}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-5 text-center">
+                            @php $studentsCount = $department->users->where('role_id', 3)->count(); @endphp
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-cyan-50 border border-cyan-100 text-cyan-700 shadow-sm text-xs font-semibold">
+                                <i class="fas fa-users"></i>
+                                <span>{{ $studentsCount }}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-5 text-center">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-700 shadow-sm text-xs font-semibold">
+                                <i class="fas fa-layer-group"></i>
+                                <span>{{ $department->subjects->count() }}</span>
+                            </div>
+                        </td>
+                        <td class="pe-8 py-5 text-right">
+                            <a href="{{ route('admin.enrollments.manage', $department->id) }}" class="inline-flex items-center h-10 px-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold transition-all shadow-md active:scale-95 gap-2">
+                                <i class="fas fa-sliders-h text-indigo-200"></i> Manage Access
+                            </a>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="py-24 text-center">
+                            <div class="flex flex-col items-center">
+                                <i class="fas fa-building text-3xl text-slate-200 mb-4"></i>
+                                <p class="text-xs font-medium text-slate-500">No departments found in the system</p>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
-@endsection
 
-@section('styles')
-<style>
-    .extra-small { font-size: 0.75rem; }
-    .custom-table thead th { border: 0; }
-    .custom-table tbody tr { transition: all 0.2s; }
-    .custom-table tbody tr:hover { background-color: #f8fbff !important; }
-    
-    .hover-elevate { transition: all 0.2s; }
-    .hover-elevate:hover { transform: translateY(-2px); }
-    
-    .icon-box {
-        width: 60px;
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .ls-1 { letter-spacing: 1px; }
-    .breadcrumb-item a { text-decoration: none; color: #0d6efd; font-weight: 500; }
-    .breadcrumb-item.active { color: #6c757d; font-weight: 500; }
-    .breadcrumb-item i { font-size: 0.9rem; }
-    
-    .bg-light { background-color: #f8f9fa !important; }
-</style>
 @endsection
 
 @section('scripts')
 <script>
-    document.querySelector('input[placeholder="Search departments..."]').addEventListener('input', function() {
-        const query = this.value.toLowerCase();
-        const rows = document.querySelectorAll('.custom-table tbody tr');
-        let matchCount = 0;
-
-        rows.forEach(row => {
-            const text = row.querySelector('td:first-child').textContent.toLowerCase();
-            if (text.includes(query)) {
-                row.style.display = '';
-                matchCount++;
-            } else {
-                row.style.display = 'none';
-            }
+    // Modern Search Logic for Sectors
+    document.getElementById('deptSearch').addEventListener('keyup', function() {
+        const query = this.value.toUpperCase();
+        document.querySelectorAll('#deptTable tbody tr').forEach(row => {
+            const text = row.querySelector('td:first-child').textContent.toUpperCase();
+            row.style.display = text.includes(query) ? '' : 'none';
         });
-
-        const footer = document.querySelector('.card-footer');
-        if (footer) footer.textContent = 'Displaying ' + matchCount + ' departments';
     });
 </script>
 @endsection

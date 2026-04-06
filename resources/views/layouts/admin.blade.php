@@ -6,6 +6,16 @@
     <title>{{ $dashboardTitle ?? 'Admin' }} - QuizMaster</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <meta name="description" content="Institutional-grade synchronized assessment and certification platform. Evolutionary learning infrastructure.">
+    <meta name="keywords" content="quiz master, institutional assessment, evolutionary learning, certification protocol">
+    <meta name="author" content="QuizMaster Framework v2.4.0">
+    <meta property="og:title" content="QuizMaster Terminal">
+    <meta property="og:description" content="Evolutionary assessment and performance protocol.">
+    
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Figtree:wght@300;400;500;600;700;800;900&family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -14,20 +24,18 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Alpine.js for modern transitions and interactivity -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 
-    <!-- Tailwind CSS (via CDN for immediate rendering without Vite build) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         corePlugins: {
-          preflight: false, // Prevents Tailwind from breaking Bootstrap styles
+          preflight: false,
         },
         theme: {
           extend: {
             colors: {
-              primary: '#4f46e5', // Brand Indigo
+              primary: '#4f46e5',
             },
             fontFamily: {
               sans: ['Inter', 'Kantumruy Pro', 'sans-serif'],
@@ -38,8 +46,7 @@
       }
     </script>
 
-    <!-- Tailwind CSS & Vite (Fallback) -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
 
     @yield('styles')
 
@@ -54,6 +61,18 @@
         .table-custom { width: 100% !important; margin-bottom: 0 !important; border-collapse: separate !important; border-spacing: 0 !important; }
         .table-custom th { border: none !important; border-bottom: 1px solid #f3f4f6 !important; padding: 14px 20px !important; color: #6b7280 !important; font-weight: 600 !important; font-size: 12px !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; background: white !important; }
         .table-custom td { padding: 16px 20px !important; vertical-align: middle !important; border: none !important; border-bottom: 1px solid #f3f4f6 !important; color: #111827 !important; font-size: 14px !important; font-weight: 500 !important; }
+        
+        /* Fix ugly default button styling caused by missing Tailwind Preflight */
+        button {
+            background-color: transparent;
+            background-image: none;
+            cursor: pointer;
+            border: none;
+            padding: 0;
+            line-height: inherit;
+            color: inherit;
+        }
+        button:focus { outline: none; }
         
         /* Simplified Sidebar Styles */
         .sidebar-item {
@@ -90,15 +109,16 @@
   - antialiased: ធ្វើឱ្យអក្សរមើលទៅម៉ត់ច្បាស់ល្អ
   - flex & min-h-screen: រៀបចំទំព័រឱ្យពេញកម្ពស់អេក្រង់និងបែងចែក (Sidebar + Main Content)
 -->
-<body class="bg-slate-50 text-slate-900 font-sans antialiased flex min-h-screen overflow-x-hidden">
+<body x-data="{ sidebarOpen: false }" class="bg-slate-50 text-slate-900 font-sans antialiased flex flex-col md:flex-row min-h-screen overflow-x-hidden">
 @php
     $authUser = auth()->user();
     $dashboardRoute = auth()->check() && (int) auth()->user()->role_id === 1 ? route('admin.dashboard') : route('dashboard');
     $departmentDataActive = request()->routeIs('admin.departments.*') || (request()->routeIs('admin.majors.index') && request('tab') === 'departments');
     $majorActive = request()->routeIs('admin.majors.show') || (request()->routeIs('admin.majors.index') && request('tab', 'majors') === 'majors');
     $classActive = request()->routeIs('admin.classes.*') || (request()->routeIs('admin.majors.index') && request('tab') === 'classes');
-    $courseActive = request()->routeIs('admin.subjects.show') || (request()->routeIs('admin.majors.index') && request('tab') === 'subjects');
-    $departmentMenuOpen = $departmentDataActive || $majorActive || $classActive || $courseActive;
+    $courseActive = request()->routeIs('admin.subjects.*') || (request()->routeIs('admin.majors.index') && request('tab') === 'subjects');
+    $enrollmentActive = request()->routeIs('admin.enrollments.*');
+    $departmentMenuOpen = $departmentDataActive || $majorActive || $classActive || $courseActive || $enrollmentActive;
 @endphp
 
 <!-- === ផ្នែក Sidebar (របារបញ្ឈរខាងឆ្វេង) === -->
@@ -109,28 +129,47 @@
   - h-screen & sticky top-0: ធ្វើឱ្យវាអណ្តែតជាប់ជានិច្ចពេលយើង Scroll ចុះក្រោម
 -->
 @unless($hideSidebar ?? false)
-<aside class="w-[260px] shrink-0 bg-slate-900 border-r border-slate-800 flex flex-col h-screen sticky top-0 custom-scrollbar z-50">
+<!-- Mobile Header Nav -->
+<div class="md:hidden bg-slate-900 border-b border-slate-800 px-5 py-4 flex items-center justify-between sticky top-0 z-40 shadow-2xl">
+    <div class="flex items-center gap-3">
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-8 h-8 rounded-lg shadow-sm shrink-0 object-cover border border-slate-700">
+        <div>
+            <h1 class="text-white font-bold tracking-tight text-base leading-none truncate max-w-[150px]">{{ \App\Models\Setting::get('site_name', 'Online Quiz System') }}</h1>
+        </div>
+    </div>
+    <button @click="sidebarOpen = true" class="w-10 h-10 rounded-xl bg-slate-800 text-slate-300 flex items-center justify-center hover:bg-slate-700 hover:text-white transition-colors focus:outline-none">
+        <i class="fas fa-bars-staggered"></i>
+    </button>
+</div>
+
+<!-- Mobile Drawer Overlay -->
+<div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 md:hidden" style="display: none;"></div>
+
+<!-- Sidebar Layout -->
+<aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="w-[280px] md:w-[260px] shrink-0 bg-slate-900 border-r border-slate-800 flex flex-col h-screen fixed inset-y-0 left-0 transform transition-transform duration-300 ease-in-out md:translate-x-0 md:sticky md:top-0 custom-scrollbar z-50">
+    <!-- Close button for mobile inside sidebar -->
+    <button @click="sidebarOpen = false" class="md:hidden absolute top-6 right-5 w-8 h-8 rounded-lg bg-slate-800 text-slate-400 flex items-center justify-center hover:text-white transition-colors">
+        <i class="fas fa-times"></i>
+    </button>
 @endunless
     
     <!-- ផ្នែក Logo និងបរិយាយឈ្មោះប្រព័ន្ធ (Brand) -->
     <div class="px-6 pt-7 pb-6 flex items-center gap-3">
-        <!-- រូបតំណាង (Icon) ដែលមានផ្ទៃពណ៌ពព្រុស (bg-indigo-500) -->
-        <div class="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center text-white shadow-sm shrink-0">
-            <i class="fas fa-layer-group text-sm"></i>
-        </div>
+        <!-- រូបតំណាង (Image) -->
+        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-8 h-8 rounded-lg shadow-sm shrink-0 object-cover border border-slate-700">
         <div>
-            <h1 class="text-white font-bold tracking-tight text-lg leading-none uppercase">QuizMaster</h1>
-            <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mt-1 block tracking-tight">Core Enterprise</span>
+            <h1 class="text-white font-bold tracking-tight text-lg leading-none truncate max-w-[150px]">{{ \App\Models\Setting::get('site_name', 'Online Quiz System') }}</h1>
+            <span class="text-xs font-semibold text-indigo-400 mt-1 block">Admin Panel</span>
         </div>
     </div>
 
     @php $role = (int)($authUser->role_id ?? 0); @endphp
 
-    <div class="flex-1 overflow-y-auto px-4 space-y-8 custom-scrollbar pb-6">
+    <div class="flex-1 overflow-y-auto px-3 space-y-1.5 custom-scrollbar pb-6">
         <!-- Dashboard menu -->
         <div class="space-y-1 mt-4">
             <a href="{{ $role === 3 ? route('students.dashboard') : route('dashboard') }}" 
-               class="sidebar-item group flex items-center gap-4 px-4 py-3 rounded-xl {{ request()->routeIs('dashboard') || request()->routeIs('students.dashboard') ? 'sidebar-item-active' : 'text-slate-400' }}">
+               class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('dashboard') || request()->routeIs('students.dashboard') ? 'sidebar-item-active' : 'text-slate-400' }}">
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('dashboard') || request()->routeIs('students.dashboard') ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                     <i class="fas fa-home text-[12px]"></i>
                 </div>
@@ -141,13 +180,13 @@
         @if($role === 1)
         <!-- System Administration -->
         <div class="pt-2">
-            <div class="px-4 mb-4 flex items-center justify-between">
+            <div class="px-4 mb-2 flex items-center justify-between">
                 <h2 class="text-[11px] font-bold text-indigo-500 uppercase tracking-widest">Administration</h2>
                 <div class="h-px bg-slate-800 flex-grow ml-4"></div>
             </div>
             <div class="space-y-1">
                 <a href="{{ route('admin.users.index') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-3 rounded-xl {{ request()->routeIs('admin.users.*') ? 'sidebar-item-active' : 'text-slate-400' }}">
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('admin.users.*') ? 'sidebar-item-active' : 'text-slate-400' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.users.*') ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                         <i class="fas fa-users text-[12px]"></i>
                     </div>
@@ -156,7 +195,7 @@
                 
                 <div x-data="{ expanded: {{ $departmentMenuOpen ? 'true' : 'false' }} }">
                     <button @click="expanded = !expanded" 
-                            class="sidebar-item w-full group flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 {{ $departmentMenuOpen ? 'text-white' : 'text-slate-400 font-bold' }}">
+                            class="sidebar-item w-full group flex items-center gap-4 px-4 py-2 rounded-xl transition-all duration-300 {{ $departmentMenuOpen ? 'text-white' : 'text-slate-400 font-bold' }}">
                         <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ $departmentMenuOpen ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                             <i class="fas fa-building text-[12px]"></i>
                         </div>
@@ -164,18 +203,18 @@
                         <i class="fas fa-chevron-down text-[10px] opacity-40 transition-transform duration-300" :class="expanded ? 'rotate-180' : ''"></i>
                     </button>
                     <div x-show="expanded" x-collapse>
-                        <div class="pl-12 pr-3 py-2 space-y-1 mt-1 border-l border-slate-800 ml-8">
-                            <a href="{{ route('admin.departments.index') }}" class="block px-3 py-2 text-[11px] transition-colors rounded-xl uppercase tracking-widest no-underline {{ request()->routeIs('admin.departments.*') ? 'text-indigo-400 font-bold bg-indigo-500/10 shadow-sm' : 'text-slate-500 font-bold hover:text-white hover:bg-white/5' }}">Departments</a>
-                            <a href="{{ route('admin.majors.index') }}" class="block px-3 py-2 text-[11px] transition-colors rounded-xl uppercase tracking-widest no-underline {{ request()->routeIs('admin.majors.*') ? 'text-indigo-400 font-bold bg-indigo-500/10 shadow-sm' : 'text-slate-500 font-bold hover:text-white hover:bg-white/5' }}">Majors</a>
-                            <a href="{{ route('admin.classes.index') }}" class="block px-3 py-2 text-[11px] transition-colors rounded-xl uppercase tracking-widest no-underline {{ request()->routeIs('admin.classes.*') ? 'text-indigo-400 font-bold bg-indigo-500/10 shadow-sm' : 'text-slate-500 font-bold hover:text-white hover:bg-white/5' }}">Classes</a>
-                            <a href="{{ route('admin.subjects.index') }}" class="block px-3 py-2 text-[11px] transition-colors rounded-xl uppercase tracking-widest no-underline {{ request()->routeIs('admin.subjects.*') ? 'text-indigo-400 font-bold bg-indigo-500/10 shadow-sm' : 'text-slate-500 font-bold hover:text-white hover:bg-white/5' }}">Subjects</a>
-                            <a href="{{ route('admin.enrollments.index') }}" class="block px-3 py-2 text-[11px] transition-colors rounded-xl uppercase tracking-widest no-underline {{ request()->routeIs('admin.enrollments.*') ? 'text-indigo-400 font-bold bg-indigo-500/10 shadow-sm' : 'text-slate-500 font-bold hover:text-white hover:bg-white/5' }}">Enrollments</a>
+                        <div class="pl-4 pr-3 py-1 space-y-0.5 mt-1 border-l border-slate-700 ml-[36px]">
+                            <a href="{{ route('admin.departments.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.departments.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Departments</a>
+                            <a href="{{ route('admin.majors.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.majors.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Majors</a>
+                            <a href="{{ route('admin.classes.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.classes.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Classes</a>
+                            <a href="{{ route('admin.subjects.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.subjects.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Subjects</a>
+                            <a href="{{ route('admin.enrollments.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.enrollments.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Enrollments</a>
                         </div>
                     </div>
                 </div>
 
                 <a href="{{ route('admin.settings.index') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-3 rounded-xl {{ request()->routeIs('admin.settings.*') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('admin.settings.*') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.settings.*') ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                         <i class="fas fa-sliders-h text-[12px]"></i>
                     </div>
@@ -188,34 +227,34 @@
         @if($role === 1 || $role === 2)
         <!-- Assessment Management -->
         <div class="pt-2">
-            <div class="px-4 mb-4 flex items-center justify-between">
+            <div class="px-4 mb-2 flex items-center justify-between">
                 <h2 class="text-[11px] font-bold text-emerald-500 uppercase tracking-widest">Assessment Hub</h2>
                 <div class="h-px bg-slate-800 flex-grow ml-4"></div>
             </div>
             <div class="space-y-1">
                 <a href="{{ route('quizzes.index') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-3 rounded-xl {{ request()->routeIs('quizzes.*') && !request()->routeIs('quizzes.reports') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('quizzes.*') && !request()->routeIs('quizzes.reports') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('quizzes.*') && !request()->routeIs('quizzes.reports') ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                         <i class="fas fa-book-open text-[12px]"></i>
                     </div>
                     <span class="text-sm tracking-tight text-inherit">Quizzes</span>
                 </a>
                 <a href="{{ route('courses.index') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-3 rounded-xl {{ request()->routeIs('courses.index') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('courses.index') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('courses.index') ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                         <i class="fas fa-chalkboard text-[12px]"></i>
                     </div>
                     <span class="text-sm tracking-tight text-inherit">Courses</span>
                 </a>
                 <a href="{{ route('questions.bank') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-3 rounded-xl {{ request()->routeIs('questions.bank') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('questions.bank') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('questions.bank') ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                         <i class="fas fa-database text-[12px]"></i>
                     </div>
                     <span class="text-sm tracking-tight text-inherit">Question Bank</span>
                 </a>
                 <a href="{{ route('quizzes.reports') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-3 rounded-xl {{ request()->routeIs('quizzes.reports') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('quizzes.reports') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('quizzes.reports') ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                         <i class="fas fa-chart-pie text-[12px]"></i>
                     </div>
@@ -228,20 +267,20 @@
         @if($role === 3)
         <!-- Student Area -->
         <div class="pt-2">
-            <div class="px-4 mb-4 flex items-center justify-between opacity-40">
+            <div class="px-4 mb-2 flex items-center justify-between opacity-40">
                 <h2 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Learning Node</h2>
                 <div class="h-px bg-slate-800 flex-grow ml-4"></div>
             </div>
             <div class="space-y-1">
                 <a href="{{ route('students.results') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-3 rounded-xl {{ request()->routeIs('students.results') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('students.results') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('students.results') ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                         <i class="fas fa-star text-[12px]"></i>
                     </div>
-                    <span class="text-sm tracking-tight">Performance</span>
+                    <span class="text-sm tracking-tight">Results</span>
                 </a>
                 <a href="{{ route('courses.index') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-3 rounded-xl {{ request()->routeIs('courses.index') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('courses.index') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('courses.index') ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                         <i class="fas fa-book text-[12px]"></i>
                     </div>
@@ -253,31 +292,33 @@
     </div>
 
     <!-- User Profile Footer -->
-    <div class="p-4 mt-auto border-t border-slate-800">
-        <div class="group p-3 hover:bg-white/5 rounded-xl flex items-center gap-3 mb-2 transition-all cursor-pointer" onclick="window.location='{{ route('profile.edit') }}'">
-            <div class="w-9 h-9 rounded-lg overflow-hidden bg-slate-800 shrink-0 text-white flex items-center justify-center font-bold text-xs uppercase">
-                @if($authUser && $authUser->profile_photo)
-                    <img src="{{ asset('storage/' . $authUser->profile_photo) }}" alt="Avatar" class="w-full h-full object-cover">
-                @else
-                    {{ substr($authUser?->username ?? 'A', 0, 1) }}
-                @endif
-            </div>
-            <div class="overflow-hidden">
-                <p class="text-xs font-bold text-white truncate tracking-tight">{{ $authUser->username ?? 'User' }}</p>
-                <div class="flex items-center gap-1.5">
-                    <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                    <p class="text-[10px] font-medium text-slate-500 truncate mt-0.5">Online</p>
+    <div class="p-3 mt-auto border-t border-slate-800 bg-slate-900/50">
+        <div class="flex items-center justify-between border border-slate-700/60 rounded-xl bg-slate-800/30 p-1.5 shadow-lg w-full">
+            <div class="group flex items-center gap-2 flex-1 min-w-0 cursor-pointer hover:opacity-80 transition-opacity pl-1" onclick="window.location='{{ route('profile.edit') }}'">
+                <div class="w-8 h-8 rounded-lg overflow-hidden bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs uppercase shadow-inner border border-indigo-500/30 shrink-0">
+                    @if($authUser && $authUser->profile_photo)
+                        <img src="{{ asset('storage/' . $authUser->profile_photo) }}" alt="Avatar" class="w-full h-full object-cover">
+                    @else
+                        {{ substr($authUser?->username ?? 'A', 0, 1) }}
+                    @endif
+                </div>
+                <div class="flex items-center gap-1.5 overflow-hidden flex-1">
+                    <p class="text-[11px] font-bold text-slate-100 truncate tracking-wide max-w-[65px]">{{ $authUser->username ?? 'User' }}</p>
+                    <div class="flex items-center gap-1 shrink-0">
+                        <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_4px_rgba(16,185,129,0.5)]"></div>
+                        <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Online</p>
+                    </div>
                 </div>
             </div>
+            
+            <form action="{{ route('logout') }}" method="POST" class="m-0 shrink-0 border-l border-slate-700/60 pl-1 ml-1">
+                @csrf
+                <button type="submit" class="px-2 py-1.5 rounded-lg flex items-center justify-center gap-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all font-bold">
+                    <i class="fas fa-sign-out-alt text-[10px]"></i> 
+                    <span class="text-[9px] uppercase tracking-wider">Logout</span>
+                </button>
+            </form>
         </div>
-        
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="sidebar-item w-full py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 text-xs font-bold text-slate-500 hover:text-rose-400 hover:bg-rose-500/5 transition-all duration-300">
-                <i class="fas fa-arrow-right-from-bracket text-[11px]"></i> 
-                <span>Sign Out</span>
-            </button>
-        </form>
     </div>
 @unless($hideSidebar ?? false)
 </aside>
@@ -289,8 +330,7 @@
     
 @unless($hideSidebar ?? false)
     <!-- របារផ្នែកខាងលើ (Topbar) ប្រើ Glassmorphism Style -->
-    <!-- backdrop-blur-md: ធ្វើឱ្យផ្ទៃរបារមើលទៅព្រិលៗ (Glass effect), sticky top-0: ធ្វើឱ្យវាអណ្តែតខាងលើជានិច្ច -->
-    <header class="h-16 px-6 md:px-10 flex items-center justify-between bg-white/70 backdrop-blur-md sticky top-0 z-40">
+    <header class="h-16 px-6 md:px-10 flex items-center justify-between bg-white border-b border-slate-200 shadow-sm sticky top-0 z-40">
 @endunless
         <div class="flex items-center gap-4">
             <h2 class="text-lg font-semibold text-slate-800 tracking-tight flex items-center gap-2">
@@ -300,18 +340,28 @@
         
         <div class="flex items-center gap-6">
             <!-- Notification Dropdown (Alpine + Tailwind) -->
-            <div x-data="{ open: false }" class="relative">
+            <div x-data="{ 
+                open: false, 
+                unreadCount: {{ $authUser ? $authUser->unreadNotifications()->count() : 0 }},
+                addNotification(notif) {
+                    this.unreadCount++;
+                    const toast = document.createElement('div');
+                    toast.className = 'fixed bottom-6 right-6 bg-slate-900 border border-slate-800 text-white px-5 py-4 rounded-xl shadow-2xl flex items-center gap-4 z-[9999] transform transition-all duration-300 translate-y-10 opacity-0';
+                    toast.innerHTML = `<div class='w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 shrink-0'><i class='${notif.icon || 'fas fa-bell'}'></i></div> <div><p class='text-sm font-bold tracking-tight'>${notif.title}</p><p class='text-xs text-slate-400 mt-0.5 leading-snug'>${notif.message}</p></div>`;
+                    document.body.appendChild(toast);
+                    setTimeout(() => { toast.classList.remove('translate-y-10', 'opacity-0'); }, 10);
+                    setTimeout(() => { toast.classList.add('translate-y-10', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 6000);
+                }
+            }" @new-notification.window="addNotification($event.detail)" class="relative">
                 <button @click="open = !open" @click.away="open = false" class="relative w-10 h-10 rounded-xl bg-slate-100/50 hover:bg-slate-200/50 text-slate-500 hover:text-slate-800 transition-colors flex items-center justify-center">
                     <i class="fas fa-bell"></i>
-                    @if($authUser && $authUser->unreadNotifications->count() > 0)
-                    <span class="absolute top-2 right-2.5 w-2 h-2 rounded-full bg-red-500 ring-2 ring-white"></span>
-                    @endif
+                    <span x-show="unreadCount > 0" x-cloak style="display: none;" class="absolute top-2 right-2.5 w-2 h-2 rounded-full bg-red-500 ring-2 ring-white"></span>
                 </button>
 
                 <div x-show="open" x-transition.opacity.scale.95 style="display: none;" class="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden z-50">
                     <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
                         <h3 class="text-sm font-semibold tracking-tight text-slate-800">Notifications</h3>
-                        <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-600">{{ $authUser ? $authUser->unreadNotifications->count() : 0 }} new</span>
+                        <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-600"><span x-text="unreadCount"></span> new</span>
                     </div>
                     
                     <div class="max-h-[300px] overflow-y-auto custom-scrollbar">
@@ -362,11 +412,19 @@
 @endunless
 
     <div class="flex-1 w-full max-w-full">
-        <!-- Legacy container class compatible wrapper, but refactored children will not use .page-wrap -->
         <div class="h-full">
             @yield('content')
         </div>
     </div>
+
+    <!-- Main Content Footer Copyright -->
+    <footer class="w-full bg-white border-t border-slate-200 h-10 mt-auto flex items-center shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] sticky bottom-0 z-40">
+        <div class="max-w-[1400px] mx-auto w-full px-3 md:px-10 flex items-center">
+            <p class="text-[10px] font-medium text-slate-500 translate-y-[8px]">
+                <strong>Copyright</strong> &copy; {{ date('Y') }} <strong><a href="#" class="text-indigo-600 hover:text-indigo-800 transition-colors">{{ \App\Models\Setting::get('site_name', 'Online Quiz System') }}</a></strong>. All rights reserved.
+            </p>
+        </div>
+    </footer>
 </main>
 
 <style>
@@ -380,6 +438,34 @@
 
 <!-- Legacy scripts for Bootstrap widgets -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Real-time Notifications Setup via Laravel Reverb -->
+<script src="https://js.pusher.com/8.3.0/pusher.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/laravel-echo@2.2.0/dist/echo.iife.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof window.Echo === 'undefined' && typeof Echo !== 'undefined') {
+            window.Pusher = Pusher;
+            window.Echo = new Echo({
+                broadcaster: 'reverb',
+                key: '{{ env("REVERB_APP_KEY") }}',
+                wsHost: '{{ env("REVERB_HOST", "localhost") }}',
+                wsPort: {{ env("REVERB_PORT", 8080) }},
+                wssPort: {{ env("REVERB_PORT", 8080) }},
+                forceTLS: {{ env("REVERB_SCHEME", "http") === "https" ? 'true' : 'false' }},
+                enabledTransports: ['ws', 'wss'],
+            });
+
+            @auth
+            window.Echo.private('App.Models.User.{{ auth()->id() }}')
+                .notification((notification) => {
+                    console.log('Real-time notification received', notification);
+                    window.dispatchEvent(new CustomEvent('new-notification', { detail: notification }));
+                });
+            @endauth
+        }
+    });
+</script>
+
 @yield('scripts')
 @stack('scripts')
 </body>
