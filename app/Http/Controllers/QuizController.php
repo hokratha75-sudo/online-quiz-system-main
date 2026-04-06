@@ -149,9 +149,11 @@ class QuizController extends Controller
         $userRole = $user->isAdmin() ? 'admin' : ($user->isTeacher() ? 'teacher' : 'student');
         $dashboardTitle = $quiz->title;
 
+        // Load attempts for admins/teachers, always load questions and answers for all roles
         if ($userRole !== 'student') {
             $quiz->load(['attempts.user', 'attempts.result']);
         }
+        $quiz->load('questions.answers');
 
         // Load previous attempt data for students
         $previousAttempts = collect();

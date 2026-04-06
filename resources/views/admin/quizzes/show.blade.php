@@ -199,6 +199,30 @@
                     </div>
                 </div>
                 @endif
+
+                @if($userRole === 'student')
+                <!-- Student Question List -->
+                <div class="mt-8">
+                    <h3 class="text-lg font-semibold text-slate-900 mb-4">Questions</h3>
+                    @foreach($quiz->questions as $index => $question)
+                    <div class="mb-6 p-4 bg-white rounded-xl shadow-sm">
+                        <div class="flex items-center mb-2">
+                            <span class="font-bold text-indigo-600 mr-2">{{ $index + 1 }}.</span>
+                            <span class="text-lg font-medium">{!! $question->content !!}</span>
+                        </div>
+                        @if($question->type !== 'short_answer')
+                        <ul class="list-disc list-inside ml-6">
+                            @foreach($question->answers as $ans)
+                            <li class="{{ $ans->is_correct ? 'text-emerald-600 font-semibold' : '' }}">{{ $ans->answer_text }}</li>
+                            @endforeach
+                        </ul>
+                        @else
+                        <p class="text-sm text-slate-500 italic">Short answer question – answer will be graded manually.</p>
+                        @endif
+                    </div>
+                    @endforeach
+                </div>
+                @endif
             </div>
         </div>
     </div>
