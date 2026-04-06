@@ -30,6 +30,12 @@
         {{ session('success') }}
     </div>
     @endif
+    @if(session('error'))
+    <div class="mb-6 bg-rose-50 border border-rose-200 text-rose-700 px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-3 shadow-sm">
+        <i class="fas fa-exclamation-triangle text-rose-500"></i>
+        {{ session('error') }}
+    </div>
+    @endif
     @if($errors->any())
     <div class="mb-6 bg-rose-50 border border-rose-200 text-rose-700 px-4 py-3 rounded-xl text-sm font-semibold flex items-center gap-3 shadow-sm">
         <i class="fas fa-exclamation-circle text-rose-500 text-base"></i>
@@ -115,8 +121,8 @@
     </div>
 </div>
 
-<!-- Hidden Delete Form -->
-<form id="deleteForm" method="POST" style="display: none;">
+{{-- Single-delete hidden form: action is set by JS, @csrf and @method are permanent --}}
+<form id="singleDeleteForm" method="POST" style="display:none;" action="">
     @csrf
     @method('DELETE')
 </form>
@@ -125,73 +131,82 @@
 
 @section('scripts')
 <script>
-    // Live Search functionality
-    document.getElementById('tableSearch').addEventListener('keyup', function() {
-        let query = this.value.toLowerCase();
-        let rows = document.querySelectorAll('#dataTable tbody .table-row');
-        rows.forEach(row => {
-            let text = row.innerText.toLowerCase();
-            row.style.display = text.includes(query) ? '' : 'none';
-        });
-    });
+    // Helper: get fresh CSRF token from the meta tag (always valid)
+    function getCsrfToken() {
+        return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    }
 
-    // Select all functionality
-    document.getElementById('selectAll').addEventListener('change', function() {
-        let checked = this.checked;
-        document.querySelectorAll('.row-checkbox').forEach(cb => {
-            cb.checked = checked;
+    // ─── Live Search ───────────────────────────────────────────────
+    const searchEl = document.getElementById('tableSearch');
+    if (searchEl) {
+        searchEl.addEventListener('keyup', function () {
+            const query = this.value.toLowerCase();
+            document.querySelectorAll('#dataTable tbody .table-row').forEach(row => {
+                row.style.display = row.innerText.toLowerCase().includes(query) ? '' : 'none';
+            });
         });
-    });
+    }
 
-    // Bulk Delete
+    // ─── Select All ────────────────────────────────────────────────
+    const selectAllEl = document.getElementById('selectAll');
+    if (selectAllEl) {
+        selectAllEl.addEventListener('change', function () {
+            document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = this.checked);
+        });
+    }
+
+    // ─── Bulk Delete ───────────────────────────────────────────────
+    // Uses a fresh temporary form every time so it never conflicts
+    // with the single-delete form.
     function deleteSelected() {
-        let selected = document.querySelectorAll('.row-checkbox:checked');
+        const selected = document.querySelectorAll('.row-checkbox:checked');
         if (selected.length === 0) {
             alert('Please select at least one quiz to delete.');
             return;
         }
 
-        if (confirm('Are you absolutely sure you want to delete the ' + selected.length + ' selected quiz(zes)? All data will be irrecoverable.')) {
-            let form = document.getElementById('deleteForm');
-            form.action = '{{ route("quizzes.bulkDelete") }}';
-            form.innerHTML = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
-            selected.forEach(function(item) {
-                let input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'ids[]';
-                input.value = item.value;
-                form.appendChild(input);
-            });
-            form.submit();
+        if (!confirm('Are you absolutely sure you want to delete ' + selected.length + ' quiz(zes)? This is irreversible.')) {
+            return;
         }
+
+        // Build a fresh temporary form using the meta CSRF token
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '{{ route("quizzes.bulkDelete") }}';
+        form.style.display = 'none';
+
+        const tokenInput = document.createElement('input');
+        tokenInput.type = 'hidden';
+        tokenInput.name = '_token';
+        tokenInput.value = getCsrfToken();
+        form.appendChild(tokenInput);
+
+        selected.forEach(function (cb) {
+            const idInput = document.createElement('input');
+            idInput.type = 'hidden';
+            idInput.name = 'ids[]';
+            idInput.value = cb.value;
+            form.appendChild(idInput);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
     }
 
-    // Single Delete Custom Event Listener
-    document.addEventListener('click', function(e) {
-        if (e.target.closest('.btn-delete-quiz')) {
-            const btn = e.target.closest('.btn-delete-quiz');
-            const id = btn.dataset.id;
-            const title = btn.dataset.title;
+    // ─── Single Delete ─────────────────────────────────────────────
+    // Only mutates the `action` attribute — the @csrf / @method('DELETE')
+    // inputs inside #singleDeleteForm are NEVER touched.
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.btn-delete-quiz');
+        if (!btn) return;
 
-            if (confirm('Are you certain you want to delete "' + title + '"? This will permanently remove all questions and student results.')) {
-                const form = document.getElementById('deleteForm');
-                form.action = '/quizzes/' + id;
-                form.innerHTML = '';
-                
-                const csrf = document.createElement('input');
-                csrf.type = 'hidden';
-                csrf.name = '_token';
-                csrf.value = '{{ csrf_token() }}';
-                form.appendChild(csrf);
+        const id    = btn.dataset.id;
+        const title = btn.dataset.title;
 
-                const method = document.createElement('input');
-                method.type = 'hidden';
-                method.name = '_method';
-                method.value = 'DELETE';
-                form.appendChild(method);
-
-                form.submit();
-            }
+        if (confirm('Delete "' + title + '"? All questions and student results will be permanently removed.')) {
+            const form = document.getElementById('singleDeleteForm');
+            form.action = '{{ url("quizzes") }}/' + id;
+            form.submit();
         }
     });
 </script>

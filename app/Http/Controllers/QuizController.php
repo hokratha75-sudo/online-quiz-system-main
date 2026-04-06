@@ -523,8 +523,34 @@ class QuizController extends Controller
         if (!auth()->user()->isAdmin() && (int)$quiz->created_by !== (int)auth()->id()) {
             abort(403);
         }
-        $quiz->delete();
-        return redirect()->route('quizzes.index')->with('success', 'Quiz deleted successfully.');
+
+        DB::beginTransaction();
+        try {
+            // Delete results linked to this quiz
+            \App\Models\Result::where('quiz_id', $quiz->id)->delete();
+
+            // Delete attempt_answers and attempts linked to this quiz
+            $attemptIds = \App\Models\Attempt::where('quiz_id', $quiz->id)->pluck('id');
+            if ($attemptIds->isNotEmpty()) {
+                \App\Models\AttemptAnswer::whereIn('attempt_id', $attemptIds)->delete();
+                \App\Models\Attempt::whereIn('id', $attemptIds)->delete();
+            }
+
+            // Delete answers linked to quiz questions, then questions
+            $questionIds = $quiz->questions()->pluck('id');
+            if ($questionIds->isNotEmpty()) {
+                \App\Models\Answer::whereIn('question_id', $questionIds)->delete();
+                $quiz->questions()->delete();
+            }
+
+            $quiz->delete();
+            DB::commit();
+
+            return redirect()->route('quizzes.index')->with('success', 'Quiz deleted successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('quizzes.index')->with('error', 'Failed to delete quiz: ' . $e->getMessage());
+        }
     }
 
     public function studentResults()

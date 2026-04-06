@@ -5,10 +5,7 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Notifications\Messages\BroadcastMessage;
-
-class QuizActivityNotification extends Notification implements ShouldBroadcast
+class QuizActivityNotification extends Notification
 {
     use Queueable;
 
@@ -29,23 +26,12 @@ class QuizActivityNotification extends Notification implements ShouldBroadcast
      */
     public function via(object $notifiable): array
     {
-        return ['database', 'broadcast'];
+        // 'broadcast' requires Reverb/Pusher server — use 'database' only.
+        // Notifications are still shown via the topbar bell icon (DB polling).
+        return ['database'];
     }
 
-    /**
-     * Get the broadcast representation of the notification.
-     */
-    public function toBroadcast(object $notifiable): BroadcastMessage
-    {
-        return new BroadcastMessage([
-            'type' => $this->data['type'] ?? 'info',
-            'title' => $this->data['title'],
-            'message' => $this->data['message'],
-            'icon' => $this->data['icon'] ?? 'fas fa-bell',
-            'url' => $this->data['url'] ?? '#',
-            'created_at' => now()->toISOString(),
-        ]);
-    }
+    // toBroadcast() removed — broadcast channel disabled (Reverb not running).
 
     /**
      * Get the array representation of the notification.
