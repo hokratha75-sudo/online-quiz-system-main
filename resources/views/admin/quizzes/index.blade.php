@@ -206,6 +206,11 @@
         if (confirm('Delete "' + title + '"? All questions and student results will be permanently removed.')) {
             const form = document.getElementById('singleDeleteForm');
             form.action = '{{ url("quizzes") }}/' + id;
+            // Update CSRF token to fresh value
+            const tokenInput = form.querySelector('input[name="_token"]');
+            if (tokenInput) {
+                tokenInput.value = getCsrfToken();
+            }
             form.submit();
         }
     });
