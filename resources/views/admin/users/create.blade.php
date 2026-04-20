@@ -74,6 +74,7 @@
                         <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Security Pass <span class="text-rose-500">*</span></label>
                         <input type="password" name="password" placeholder="••••••••" required 
                                class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all shadow-sm">
+                        <p class="mt-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Min 8 characters</p>
                     </div>
                     <div class="lg:col-span-1">
                         <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Confirm Protocol <span class="text-rose-500">*</span></label>
@@ -144,6 +145,7 @@
                             <div class="flex-grow text-center sm:text-left">
                                 <h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest">Visual Identity</h4>
                                 <p class="text-[10px] font-bold text-slate-400 uppercase mt-1 tracking-tight">Upload profile visualization node</p>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase mt-2 tracking-tight">JPG, PNG or GIF • Max 2MB</p>
                                 <input type="file" name="profile_photo" id="photoInput" class="hidden" accept="image/*">
                                 <button type="button" onclick="document.getElementById('photoInput').click()" class="mt-3 text-[10px] font-bold text-indigo-600 hover:text-indigo-800 uppercase tracking-widest transition-colors flex items-center gap-2 mx-auto sm:mx-0">
                                    <i class="fas fa-upload"></i> Initialize File Upload
@@ -165,6 +167,12 @@
 <script>
     document.getElementById('photoInput').addEventListener('change', function(e) {
         if (e.target.files && e.target.files[0]) {
+            const maxBytes = 2 * 1024 * 1024; // 2MB
+            if (e.target.files[0].size > maxBytes) {
+                alert('Profile photo must be 2MB or less.');
+                e.target.value = '';
+                return;
+            }
             const reader = new FileReader();
             reader.onload = function(event) {
                 const preview = document.getElementById('avatarPreview');

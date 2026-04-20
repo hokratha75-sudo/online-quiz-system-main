@@ -113,6 +113,10 @@
                                         class="w-8 h-8 rounded-lg border border-slate-100 text-slate-400 hover:text-indigo-600 hover:border-indigo-100 hover:bg-indigo-50 transition-all flex items-center justify-center shadow-sm" title="Edit Unit">
                                     <i class="fas fa-edit text-[13px]"></i>
                                 </button>
+                                <button onclick="deleteRecord({{ $item->id }}, '{{ addslashes($item->subject_name) }}')"
+                                        class="w-8 h-8 rounded-lg border border-slate-100 text-slate-400 hover:text-rose-600 hover:border-rose-100 hover:bg-rose-50 transition-all flex items-center justify-center shadow-sm" title="Delete Unit">
+                                    <i class="fas fa-trash-alt text-[13px]"></i>
+                                </button>
                                 <a href="{{ route('admin.subjects.show', $item->id) }}" 
                                    class="w-8 h-8 rounded-lg border border-slate-100 text-slate-400 hover:text-emerald-600 hover:border-emerald-100 hover:bg-emerald-50 transition-all flex items-center justify-center shadow-sm" title="View Details">
                                     <i class="fas fa-arrow-right text-[13px]"></i>
@@ -132,6 +136,12 @@
         </div>
     </div>
 </div>
+
+{{-- Single-delete hidden form: action is set by JS, @csrf and @method are permanent --}}
+<form id="singleDeleteForm" method="POST" style="display:none;" action="">
+    @csrf
+    @method('DELETE')
+</form>
 
 <!-- Evolution Modals: High Fidelity -->
 @include('admin.subjects.modals')
@@ -179,6 +189,67 @@
         
         const bsModal = new bootstrap.Modal(modal);
         bsModal.show();
+    }
+
+    // Helper: get fresh CSRF token from the meta tag
+    function getCsrfToken() {
+        return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    }
+
+    function deleteRecord(id, name) {
+        if (confirm('Permanently decommission Unit: "' + name + '"? This action will sever all academic links.')) {
+            const form = document.getElementById('singleDeleteForm');
+            form.action = '/admin/subjects/' + id;
+            // Update CSRF token to fresh value
+            const tokenInput = form.querySelector('input[name="_token"]');
+            if (tokenInput) {
+                tokenInput.value = getCsrfToken();
+            }
+            form.submit();
+        }
+    }
+
+    function deleteSelected() {
+        const selected = document.querySelectorAll('.row-checkbox:checked');
+        if (selected.length === 0) {
+            alert('Select units for decommissioning.');
+            return;
+        }
+
+        if (confirm('Execute bulk decommissioning of ' + selected.length + ' unit(s)?')) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{{ route("admin.subjects.bulkDelete") }}';
+            form.style.display = 'none';
+
+            const tokenInput = document.createElement('input');
+            tokenInput.type = 'hidden';
+            tokenInput.name = '_token';
+            tokenInput.value = getCsrfToken();
+            form.appendChild(tokenInput);
+
+            selected.forEach(cb => {
+                const idInput = document.createElement('input');
+                idInput.type = 'hidden';
+                idInput.name = 'ids[]';
+                idInput.value = cb.value;
+                form.appendChild(idInput);
+            });
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+
+    function editSelected() {
+        const selected = document.querySelectorAll('.row-checkbox:checked');
+        if (selected.length !== 1) {
+            alert('Identify exactly one unit for mutation.');
+            return;
+        }
+        const cb = selected[0];
+        const data = cb.dataset;
+        editRecord(cb.value, data.name, data.department, data.major, JSON.parse(data.classes));
     }
 </script>
 @endsection

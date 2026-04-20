@@ -151,7 +151,6 @@
     <button @click="sidebarOpen = false" class="md:hidden absolute top-6 right-5 w-8 h-8 rounded-lg bg-slate-800 text-slate-400 flex items-center justify-center hover:text-white transition-colors">
         <i class="fas fa-times"></i>
     </button>
-@endunless
     
     <!-- ផ្នែក Logo និងបរិយាយឈ្មោះប្រព័ន្ធ (Brand) -->
     <div class="px-6 pt-7 pb-6 flex items-center gap-3">
@@ -320,7 +319,6 @@
             </form>
         </div>
     </div>
-@unless($hideSidebar ?? false)
 </aside>
 @endunless
 

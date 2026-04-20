@@ -44,7 +44,7 @@
                     {{ $passed ? 'EXCELLENCE CONFIRMED' : 'RETRY RECOMMENDED' }}
                 </h1>
                 <p class="text-white/60 text-[10px] font-bold uppercase tracking-[0.2em]">
-                    {{ $passed ? 'AUTORIZED DEPLOYMENT • VECTOR MATCH' : 'FAILSAFE TRIGGERED • BELOW THRESHOLD' }}
+                    {{ $passed ? 'AUTHORIZED DEPLOYMENT • VECTOR MATCH' : 'FAILSAFE TRIGGERED • BELOW THRESHOLD' }}
                 </p>
             </div>
         </div>
@@ -81,7 +81,11 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
                     <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col items-center hover:bg-white hover:border-indigo-500/20 transition-all shadow-sm">
                         <i class="far fa-clock text-indigo-600 text-sm mb-3"></i>
-                        <span class="text-lg font-bold text-slate-900 tabular-nums">{{ \Carbon\Carbon::parse($attempt->started_at)->diffInMinutes($attempt->completed_at) }}m</span>
+                        @php
+                            $diff = \Carbon\Carbon::parse($attempt->started_at)->diff($attempt->completed_at);
+                            $timeStr = ($diff->i > 0 ? $diff->i . 'm ' : '') . $diff->s . 's';
+                        @endphp
+                        <span class="text-lg font-bold text-slate-900 tabular-nums">{{ $timeStr }}</span>
                         <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Period</span>
                     </div>
                     <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col items-center hover:bg-white hover:border-indigo-500/20 transition-all shadow-sm">

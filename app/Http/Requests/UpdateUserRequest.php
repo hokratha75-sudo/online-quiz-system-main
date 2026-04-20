@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -33,11 +34,13 @@ class UpdateUserRequest extends FormRequest
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            'password' => ['nullable', 'string', \Illuminate\Validation\Rules\Password::min(8)->letters()->mixedCase()->numbers()->symbols()],
+            // Optional on update (leave blank to keep current). Match UI guidance: minimum 8 characters.
+            'password' => ['nullable', 'string', Password::min(8)->mixedCase()->symbols()],
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string',
             'birthday' => 'nullable|date',
             'sex' => 'nullable|in:Male,Female',
+            // Allow larger uploads (KB). Server-side still enforces an upper bound.
             'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
 

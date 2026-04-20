@@ -248,6 +248,12 @@
     // Preview Management
     document.getElementById('photoInput').addEventListener('change', function(e) {
         if (e.target.files && e.target.files[0]) {
+            const maxBytes = 2 * 1024 * 1024; // 2MB
+            if (e.target.files[0].size > maxBytes) {
+                alert('Profile photo must be 2MB or less.');
+                e.target.value = '';
+                return;
+            }
             const fileName = e.target.files[0].name;
             document.getElementById('uploadText').textContent = fileName;
             

@@ -61,44 +61,59 @@
         </div>
     </header>
 
-    <main class="max-w-3xl mx-auto px-6 py-12 md:py-20 lg:py-24">
+    <main class="max-w-3xl mx-auto px-6 py-12 md:py-20 lg:py-24 pb-48">
         <form id="quizForm" action="{{ auth()->user()->role_id == 3 ? route('students.quizzes.submit', $quiz->id) : route('quizzes.submit', $quiz->id) }}" method="POST">
             @csrf
             
             @foreach($quiz->questions as $index => $question)
-            <div class="question-pane hidden opacity-0 transition-all duration-500 translate-y-4" data-index="{{ $index }}" id="q-{{ $index }}">
-                <div class="mb-10 text-center md:text-left">
+            <div class="question-pane hidden opacity-0 transition-all duration-500 translate-y-4 bg-white/40 p-8 rounded-[40px] border border-white shadow-xl backdrop-blur-sm" data-index="{{ $index }}" id="q-{{ $index }}">
+                <div class="mb-10 text-center">
                     <div class="inline-flex items-center gap-2 bg-indigo-50 text-indigo-600 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6 border border-indigo-100/50">
                         <i class="fas fa-database text-[8px]"></i> Vector {{ $index + 1 }} of {{ $quiz->questions->count() }}
                     </div>
-                    <div class="text-xl md:text-2xl font-bold text-slate-900 leading-snug tracking-tight antialiased uppercase">
+                    <div class="text-2xl md:text-3xl font-black text-slate-900 leading-tight tracking-tighter antialiased uppercase">
                         {!! $question->content !!}
                     </div>
                 </div>
 
-                <div class="space-y-4">
+                <div class="space-y-5">
                     @if($question->type === 'short_answer')
                         <textarea 
                             name="responses[{{ $question->id }}]" 
-                            class="w-full bg-white border border-slate-200 rounded-3xl p-8 text-sm font-bold text-slate-900 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all min-h-[250px] outline-none placeholder:text-slate-300 uppercase leading-relaxed shadow-sm" 
-                            placeholder="Initialize decentralized intelligence response..."
+                            class="w-full bg-white border-2 border-slate-100 rounded-[32px] p-8 text-sm font-bold text-slate-900 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all min-h-[300px] outline-none shadow-sm uppercase pointer-events-auto" 
+                            placeholder="Type your response here..."
                             required
                         ></textarea>
                     @else
-                        <div class="grid grid-cols-1 gap-4">
+                        <div class="grid grid-cols-1 gap-5 choice-group" data-question-id="{{ $question->id }}">
                             @foreach($question->answers as $ansIndex => $answer)
-                            <label class="group relative flex items-center cursor-pointer">
-                                <input type="radio" name="responses[{{ $question->id }}]" value="{{ $answer->id }}" class="peer hidden" required>
-                                <div class="w-full p-5 bg-white border border-slate-200 rounded-2xl flex items-center gap-5 transition-all duration-300 peer-checked:bg-indigo-600 peer-checked:border-indigo-600 peer-checked:shadow-xl peer-checked:shadow-indigo-600/20 group-hover:bg-slate-50 shadow-sm">
-                                    <div class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-xs font-bold text-slate-400 transition-all peer-checked:bg-white/20 peer-checked:border-white/10 peer-checked:text-white uppercase tabular-nums">
+                            <div class="option-card group relative flex items-center cursor-pointer min-h-[90px] w-full" 
+                                 onclick="selectOption(this, '{{ $answer->id }}')">
+                                
+                                <input type="radio" 
+                                       name="responses[{{ $question->id }}]" 
+                                       value="{{ $answer->id }}" 
+                                       class="sr-only choice-input" 
+                                       required>
+                                
+                                <div class="option-visual w-full p-6 bg-white border-2 border-slate-100 rounded-[28px] flex items-center gap-6 transition-all duration-300 relative overflow-hidden group-hover:border-indigo-200">
+                                    
+                                    <div class="selection-glow absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 transition-opacity"></div>
+                                    
+                                    <div class="option-letter w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-sm font-black text-slate-400 transition-all uppercase tabular-nums">
                                         {{ chr(65 + $ansIndex) }}
                                     </div>
-                                    <div class="flex-grow text-sm font-bold text-slate-600 transition-all peer-checked:text-white uppercase tracking-tight">
+                                    
+                                    <div class="option-text flex-grow text-base font-bold text-slate-700 transition-all uppercase tracking-tight">
                                         {{ $answer->answer_text }}
                                     </div>
-                                    <div class="w-2 h-2 rounded-full bg-slate-100 peer-checked:bg-white shadow-[0_0_10px_rgba(255,255,255,1)] transition-all"></div>
+                                    
+                                    <div class="option-indicator w-6 h-6 rounded-full border-2 border-slate-300 bg-white transition-all flex items-center justify-center shrink-0">
+                                        <div class="indicator-dot w-3 h-3 rounded-full bg-indigo-600 opacity-0 scale-50 transition-all"></div>
+                                    </div>
+                                    
                                 </div>
-                            </label>
+                            </div>
                             @endforeach
                         </div>
                     @endif
@@ -106,26 +121,26 @@
             </div>
             @endforeach
 
-            <!-- Action Bar: Minimalist Hub -->
-            <div class="fixed bottom-0 left-0 right-0 py-8 bg-gradient-to-t from-slate-50 via-slate-50 to-transparent pointer-events-none z-40">
-                <div class="max-w-2xl mx-auto px-6 pointer-events-auto">
-                    <div class="bg-white p-2.5 rounded-3xl shadow-2xl flex items-center justify-between gap-3 border border-slate-100">
-                        <button type="button" id="prevBtn" class="h-12 px-8 rounded-2xl font-bold text-[10px] uppercase tracking-widest text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all disabled:opacity-20 flex items-center gap-2">
-                             <i class="fas fa-arrow-left"></i> Previous
+            <!-- Action Bar Hub -->
+            <div class="fixed bottom-12 left-0 right-0 z-[100] flex justify-center">
+                <div class="max-w-2xl w-full px-6">
+                    <div class="bg-white/90 backdrop-blur-xl p-3 rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.15)] flex items-center justify-between gap-4 border border-white">
+                        <button type="button" id="prevBtn" class="h-14 px-8 rounded-2xl font-black text-xs uppercase tracking-[0.15em] text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all disabled:opacity-0 flex items-center gap-3">
+                             <i class="fas fa-chevron-left text-[10px]"></i> Previous
                         </button>
                         
-                        <div class="hidden sm:flex gap-1.5 px-4 h-12 items-center bg-slate-50 rounded-2xl border border-slate-100/50">
+                        <div class="hidden sm:flex gap-2 px-5 h-14 items-center bg-slate-50/50 rounded-2xl border border-slate-100">
                             @foreach($quiz->questions as $index => $question)
-                                <div class="pagination-dot w-2 h-2 rounded-full bg-slate-200 transition-all duration-500" data-index="{{ $index }}"></div>
+                                <div class="pagination-dot w-2 h-2 rounded-full bg-slate-200 transition-all duration-500 shadow-sm" data-index="{{ $index }}"></div>
                             @endforeach
                         </div>
 
-                        <div class="flex-grow flex justify-end">
-                            <button type="button" id="nextBtn" class="h-12 px-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest shadow-lg shadow-indigo-600/20 transition-all flex items-center gap-3">
-                                Continue <i class="fas fa-arrow-right text-[8px]"></i>
+                        <div class="flex items-center gap-3">
+                            <button type="button" id="nextBtn" class="h-14 px-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.15em] shadow-xl shadow-indigo-600/30 transition-all flex items-center gap-3">
+                                Next <i class="fas fa-chevron-right text-[10px]"></i>
                             </button>
-                            <button type="submit" id="submitBtn" class="hidden h-12 px-10 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest shadow-lg shadow-emerald-600/20 transition-all flex items-center gap-3">
-                                Submit Deployment <i class="fas fa-check-double text-[8px]"></i>
+                            <button type="submit" id="submitBtn" class="hidden h-14 px-10 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.15em] shadow-xl shadow-emerald-600/30 transition-all flex items-center gap-3">
+                                Finish <i class="fas fa-check-double text-[10px]"></i>
                             </button>
                         </div>
                     </div>
@@ -137,6 +152,64 @@
 
 @push('scripts')
 <script>
+/**
+ * Visual Selection Logic via Vanilla JS
+ * Ensures bulletproof interaction even without Tailwind JIT updates
+ */
+function selectOption(element, value) {
+    const group = element.closest('.choice-group');
+    const cards = group.querySelectorAll('.option-card');
+    const input = element.querySelector('.choice-input');
+    
+    // 1. Mark underlying radio as checked
+    input.checked = true;
+    
+    // 2. Reset all cards in this group
+    cards.forEach(card => {
+        const visual = card.querySelector('.option-visual');
+        const letter = card.querySelector('.option-letter');
+        const text = card.querySelector('.option-text');
+        const indicator = card.querySelector('.option-indicator');
+        const dot = card.querySelector('.indicator-dot');
+        const glow = card.querySelector('.selection-glow');
+
+        // Reset to default
+        visual.classList.remove('bg-indigo-600', 'border-indigo-600', 'shadow-2xl', 'shadow-indigo-600/30');
+        visual.classList.add('bg-white', 'border-slate-100');
+        letter.classList.remove('bg-white/20', 'border-transparent', 'text-white');
+        letter.classList.add('bg-slate-50', 'border-slate-100', 'text-slate-400');
+        text.classList.remove('text-white');
+        text.classList.add('text-slate-700');
+        indicator.classList.remove('border-none', 'bg-white');
+        indicator.classList.add('border-2', 'border-slate-300', 'bg-white');
+        dot.classList.add('opacity-0', 'scale-50');
+        dot.classList.remove('opacity-100', 'scale-100');
+        glow.classList.add('opacity-0');
+        glow.classList.remove('opacity-100');
+    });
+
+    // 3. Highlight selected card
+    const selVisual = element.querySelector('.option-visual');
+    const selLetter = element.querySelector('.option-letter');
+    const selText = element.querySelector('.option-text');
+    const selIndicator = element.querySelector('.option-indicator');
+    const selDot = element.querySelector('.indicator-dot');
+    const selGlow = element.querySelector('.selection-glow');
+
+    selVisual.classList.add('bg-indigo-600', 'border-indigo-600', 'shadow-2xl', 'shadow-indigo-600/30');
+    selVisual.classList.remove('bg-white', 'border-slate-100');
+    selLetter.classList.add('bg-white/20', 'border-transparent', 'text-white');
+    selLetter.classList.remove('bg-slate-50', 'border-slate-100', 'text-slate-400');
+    selText.classList.add('text-white');
+    selText.classList.remove('text-slate-700');
+    selIndicator.classList.add('border-none', 'bg-white');
+    selIndicator.classList.remove('border-2', 'border-slate-300', 'bg-white');
+    selDot.classList.remove('opacity-0', 'scale-50');
+    selDot.classList.add('opacity-100', 'scale-100');
+    selGlow.classList.remove('opacity-0');
+    selGlow.classList.add('opacity-100');
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     let currentIdx = 0;
     const questions = document.querySelectorAll('.question-pane');
@@ -176,7 +249,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         globalProgress.style.width = `${((currentIdx + 1) / totalCount) * 100}%`;
-        prevBtn.disabled = currentIdx === 0;
+        
+        // Hide previous button on first question
+        if (currentIdx === 0) {
+            prevBtn.classList.add('invisible', 'opacity-0');
+        } else {
+            prevBtn.classList.remove('invisible', 'opacity-0');
+        }
         
         if (currentIdx === totalCount - 1) {
             nextBtn.classList.add('hidden');
@@ -224,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000);
 
     // Proctoring System
-    let warnings = parseInt("{{ $attempt->violations ?? 0 }}");
+    let warnings = 0;
     const maxWarnings = 3;
     const warningDisplay = document.getElementById('warningCounter');
     const securityOverlay = document.getElementById('securityHUDEnded');
@@ -233,23 +312,24 @@ document.addEventListener('DOMContentLoaded', function() {
         warnings++;
         if(warningDisplay) warningDisplay.textContent = warnings;
 
-        fetch("{{ auth()->user()->role_id == 3 ? route('students.quizzes.violation', $attempt->id) : route('quizzes.violation', $attempt->id) }}", {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json'
+        // Visual alert
+        const hud = document.getElementById('proctoringHUD');
+        hud.classList.remove('bg-slate-50');
+        hud.classList.add('bg-rose-50', 'border-rose-200');
+        setTimeout(() => {
+            hud.classList.add('bg-slate-50');
+            hud.classList.remove('bg-rose-50', 'border-rose-200');
+        }, 1000);
+
+        if (warnings >= maxWarnings) {
+            if(securityOverlay) {
+                securityOverlay.classList.remove('hidden');
+                securityOverlay.classList.add('flex');
             }
-        }).then(res => res.json()).then(data => {
-            if (data.disqualified || warnings >= maxWarnings) {
-                if(securityOverlay) {
-                    securityOverlay.classList.remove('hidden');
-                    securityOverlay.classList.add('flex');
-                }
-                setTimeout(() => { quizForm.submit(); }, 3000);
-            } else {
-                alert(`INSTITUTIONAL ALERT: Unauthorized window switching detected (#${warnings}/${maxWarnings}). Exceeding ${maxWarnings} violations results in immediate disqualification.`);
-            }
-        });
+            setTimeout(() => { quizForm.submit(); }, 3000);
+        } else {
+            alert(`INSTITUTIONAL ALERT: Unauthorized window switching detected (#${warnings}/${maxWarnings}). Exceeding ${maxWarnings} violations results in immediate disqualification.`);
+        }
     }
 
     document.addEventListener('visibilitychange', () => {
@@ -275,5 +355,6 @@ document.addEventListener('DOMContentLoaded', function() {
     ::-webkit-scrollbar-track { background: #f8fafc; }
     ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+    .option-card { -webkit-tap-highlight-color: transparent; }
 </style>
 @endsection

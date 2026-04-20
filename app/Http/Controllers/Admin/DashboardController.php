@@ -93,17 +93,28 @@ class DashboardController extends Controller
             }
 
         } elseif ($userRole === 'teacher') {
-            $myQuizzes = DB::table('quizzes')->where('created_by', $user->id)->count();
-            $draftQuizzes = DB::table('quizzes')->where('created_by', $user->id)->where('status', 'draft')->count();
-            
-            $myQuizIds = DB::table('quizzes')->where('created_by', $user->id)->pluck('id');
-            $totalAttempts = DB::table('attempts')->whereIn('quiz_id', $myQuizIds)->count();
-            
-            $avgScoreData = DB::table('results')
-                ->join('attempts', 'results.attempt_id', '=', 'attempts.id')
-                ->whereIn('attempts.quiz_id', $myQuizIds)
-                ->avg('score');
-            $avgScore = round($avgScoreData ?? 0, 1);
+            // Optimized: Cache teacher-specific statistics for 5 minutes (300s)
+            $teacherStats = Cache::remember("teacher_stats_{$user->id}", 300, function() use ($user) {
+                $myQuizzesCount = DB::table('quizzes')->where('created_by', $user->id)->count();
+                $draftQuizzesCount = DB::table('quizzes')->where('created_by', $user->id)->where('status', 'draft')->count();
+                $myQuizIds = DB::table('quizzes')->where('created_by', $user->id)->pluck('id');
+                $totalAttemptsCount = DB::table('attempts')->whereIn('quiz_id', $myQuizIds)->count();
+                
+                $avgScoreData = DB::table('results')
+                    ->join('attempts', 'results.attempt_id', '=', 'attempts.id')
+                    ->whereIn('attempts.quiz_id', $myQuizIds)
+                    ->avg('score');
+
+                return [
+                    'myQuizzes' => $myQuizzesCount,
+                    'draftQuizzes' => $draftQuizzesCount,
+                    'totalAttempts' => $totalAttemptsCount,
+                    'avgScore' => round($avgScoreData ?? 0, 1),
+                    'myQuizIds' => $myQuizIds
+                ];
+            });
+
+            extract($teacherStats);
 
             $recentAttempts = DB::table('attempts')
                 ->join('quizzes', 'attempts.quiz_id', '=', 'quizzes.id')
@@ -135,19 +146,34 @@ class DashboardController extends Controller
         } elseif ($userRole === 'student') {
             $studentQuizQuery = \App\Models\Quiz::query()
                 ->where('status', 'published')
-                ->with('subject');
+                ->with('subject')
+                ->withCount('questions');
 
-            if ($user->department_id) {
-                $studentQuizQuery->whereHas('subject', function ($q) use ($user) {
-                    $q->where('department_id', $user->department_id);
+            $studentQuizQuery->where(function($q) use ($user) {
+                // 1. Check Department-based subjects (Master Enrollment)
+                if ($user->department_id) {
+                    $q->whereHas('subject', function ($sq) use ($user) {
+                        $sq->where('department_id', $user->department_id);
+                    });
+                }
+                
+                // 2. Check Class-based subjects (Classic Enrollment)
+                $q->orWhereHas('subject.classes.users', function($uq) use ($user) {
+                    $uq->where('users.id', $user->id);
                 });
-            }
+            });
 
             $myQuizzes = (clone $studentQuizQuery)->count();
             $studentQuizzes = $studentQuizQuery->latest('created_at')->limit(12)->get();
             
-            $avgScore = round(DB::table('results')->where('user_id', $user->id)->avg('score') ?? 0, 1);
-            $totalAttempts = DB::table('results')->where('user_id', $user->id)->count();
+            // Optimized: Consolidate student stats into one query
+            $studentStats = DB::table('results')
+                ->where('user_id', $user->id)
+                ->selectRaw('AVG(score) as avg_score, COUNT(*) as total_attempts')
+                ->first();
+
+            $avgScore = round($studentStats->avg_score ?? 0, 1);
+            $totalAttempts = $studentStats->total_attempts ?? 0;
             $recentAttempts = DB::table('results')
                 ->join('quizzes', 'results.quiz_id', '=', 'quizzes.id')
                 ->where('results.user_id', $user->id)

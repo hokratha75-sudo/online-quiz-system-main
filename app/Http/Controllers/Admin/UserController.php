@@ -10,6 +10,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -34,11 +35,23 @@ class UserController extends Controller
             })
             ->paginate(10);
         
+        // Optimized: Single query for all role counts
+        $roleCounts = DB::table('users')
+            ->join('roles', 'users.role_id', '=', 'roles.id')
+            ->where('users.status', 'active')
+            ->selectRaw("
+                COUNT(*) as total,
+                SUM(CASE WHEN roles.role_name = 'admin' THEN 1 ELSE 0 END) as admin_count,
+                SUM(CASE WHEN roles.role_name = 'teacher' THEN 1 ELSE 0 END) as teacher_count,
+                SUM(CASE WHEN roles.role_name = 'student' THEN 1 ELSE 0 END) as student_count
+            ")
+            ->first();
+
         $counts = [
-            'total' => User::where('status', 'active')->count(),
-            'admin' => User::where('status', 'active')->whereHas('role', fn($q) => $q->where('role_name', 'admin'))->count(),
-            'teacher' => User::where('status', 'active')->whereHas('role', fn($q) => $q->where('role_name', 'teacher'))->count(),
-            'student' => User::where('status', 'active')->whereHas('role', fn($q) => $q->where('role_name', 'student'))->count(),
+            'total' => $roleCounts->total ?? 0,
+            'admin' => $roleCounts->admin_count ?? 0,
+            'teacher' => $roleCounts->teacher_count ?? 0,
+            'student' => $roleCounts->student_count ?? 0,
         ];
 
         $dashboardTitle = 'User Management';

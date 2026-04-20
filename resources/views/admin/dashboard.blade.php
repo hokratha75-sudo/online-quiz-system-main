@@ -250,7 +250,7 @@
                         <h4 class="text-lg font-bold text-slate-900 tracking-tight mb-1 group-hover:text-indigo-600 transition-colors">{{ $quiz->title }}</h4>
                         <p class="text-xs font-medium text-slate-500 mb-8">{{ $quiz->subject?->subject_name ?? 'General Quiz' }}</p>
                         
-                        <a href="{{ route('quizzes.take', $quiz->id) }}" class="inline-flex items-center gap-3 text-[10px] font-bold text-indigo-600 uppercase tracking-[0.2em] group-hover:gap-5 transition-all">
+                        <a href="{{ route('students.quizzes.take', $quiz->id) }}" class="inline-flex items-center gap-3 text-[10px] font-bold text-indigo-600 uppercase tracking-[0.2em] group-hover:gap-5 transition-all">
                             Start Quiz <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
@@ -292,6 +292,24 @@
     @endif
 
 </div>
+
+@if($userRole === 'student')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // High Performance: Prefetch quiz assets on hover for student cards
+        const quizCards = document.querySelectorAll('a[href*="/take/"]');
+        quizCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const link = document.createElement('link');
+                link.rel = 'prefetch';
+                link.href = card.href;
+                document.head.appendChild(link);
+                console.log('⚡ Prefetching: ' + card.href);
+            }, { once: true });
+        });
+    });
+</script>
+@endif
 
 @if(!empty($weeklyActivity['labels']))
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

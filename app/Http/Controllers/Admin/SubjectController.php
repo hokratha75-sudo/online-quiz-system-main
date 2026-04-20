@@ -160,12 +160,24 @@ class SubjectController extends Controller
         $user = Auth::user();
         $isStudent = (int)$user->role_id === 3;
         
-        $query = Subject::with(['major.department'])
-            ->whereHas('classes.users', function($q) use ($user) {
-                $q->where('users.id', $user->id);
-            });
+        $query = Subject::with(['major.department']);
             
-        $subjects = $query->latest()->paginate(10);
+        // Admins see everything, students/teachers see their assigned courses only
+        if ((int)$user->role_id !== 1) {
+            $query->where(function($q) use ($user) {
+                // 1. Check Class-based enrollment (pivot table)
+                $q->whereHas('classes.users', function($query) use ($user) {
+                    $query->where('users.id', $user->id);
+                });
+                
+                // 2. Check Department-based enrollment (Master Enrollment feature)
+                if ($user->department_id) {
+                    $q->orWhere('department_id', $user->department_id);
+                }
+            });
+        }
+            
+        $subjects = $query->latest()->paginate(12);
         $dashboardTitle = $isStudent ? 'My Course' : 'Manage Courses';
         
         return view('courses.index', compact('subjects', 'dashboardTitle', 'isStudent'));

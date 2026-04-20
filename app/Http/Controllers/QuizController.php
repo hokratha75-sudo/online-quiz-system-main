@@ -226,6 +226,9 @@ class QuizController extends Controller
             return redirect($fallback)->with('error', 'Could not process quiz submission. No active attempt found.');
         }
 
+        $answerInsertData = [];
+        $now = now();
+
         foreach ($quiz->questions as $question) {
             $submittedValue = $responses[$question->id] ?? null;
             $isCorrect = false;
@@ -250,14 +253,22 @@ class QuizController extends Controller
                 }
             }
 
-            \App\Models\AttemptAnswer::create([
+            // High Performance: Collect for bulk insert
+            $answerInsertData[] = [
                 'attempt_id' => $attempt->id,
                 'question_id' => $question->id,
                 'answer_id' => $answerId,
                 'short_text' => $shortText,
                 'is_correct' => $isCorrect,
                 'points_awarded' => $isCorrect ? ($question->points ?? 1) : 0,
-            ]);
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }
+
+        // Optimized: Single Bulk Insert for all answers
+        if (!empty($answerInsertData)) {
+            \App\Models\AttemptAnswer::insert($answerInsertData);
         }
 
         $score = $totalQuestions > 0 ? ($correctAnswers / $totalQuestions) * 100 : 0;

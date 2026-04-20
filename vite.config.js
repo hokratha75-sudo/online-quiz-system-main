@@ -8,9 +8,17 @@ export default defineConfig({
             refresh: true,
         }),
     ],
-    server: {
-        watch: {
-            ignored: ['**/storage/framework/views/**'],
+    build: {
+        rollupOptions: {
+            output: {
+                // Optimized: Split vendor libraries into their own files for better caching
+                manualChunks(id) {
+                    if (id.includes('node_modules')) {
+                        return 'vendor';
+                    }
+                }
+            }
         },
-    },
+        chunkSizeWarningLimit: 1000,
+    }
 });
