@@ -6,34 +6,57 @@
 <div class="max-w-[1400px] mx-auto p-8 md:p-10 font-inter">
 
     <!-- Header Section -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 mb-8">
         <div>
-            <h1 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight uppercase">Departments Directory</h1>
-            <p class="text-xs font-bold text-indigo-600 mt-1 uppercase tracking-widest">Manage institutional departments and faculties</p>
+            <h1 class="text-2xl md:text-[28px] font-bold text-slate-900 tracking-tight">Departments Directory</h1>
+            <p class="text-[14px] font-medium text-slate-500 mt-1.5">Manage administrative departments and institutional faculties.</p>
         </div>
         <div class="flex items-center gap-3">
-            <button onclick="window.location.reload()" class="bg-white hover:bg-slate-50 text-slate-900 border border-slate-100 px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm italic">
-                <i class="fas fa-sync-alt text-[10px] text-indigo-500"></i> Refresh
+            <button onclick="window.location.reload()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-4 py-2.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-100">
+                <i class="fas fa-sync-alt text-slate-400"></i> Refresh
             </button>
-            <a href="{{ route('admin.departments.export') }}" class="bg-white hover:bg-slate-50 text-slate-900 border border-slate-100 px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm italic">
-                <i class="fas fa-file-excel text-[10px] text-emerald-500"></i> Export
+            <a href="{{ route('admin.departments.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-4 py-2.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-100">
+                <i class="fas fa-file-excel text-emerald-500"></i> Export
             </a>
-            <button data-bs-toggle="modal" data-bs-target="#addDeptModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg">
-                <i class="fas fa-plus text-[10px]"></i> New Department
+            <button data-bs-toggle="modal" data-bs-target="#addDeptModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-2 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <i class="fas fa-plus text-indigo-200 text-xs"></i> New Department
             </button>
         </div>
     </div>
 
     @if(session('success'))
-    <div class="mb-6 bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-3 shadow-sm">
-        <i class="fas fa-check-circle text-blue-500"></i>
-        {{ session('success') }}
+    <div class="mb-8 bg-white border border-emerald-100 rounded-[20px] p-4 flex items-center justify-between shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden transition-all duration-300">
+        <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-500"></div>
+        <div class="flex items-center gap-4 ml-2">
+            <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100/50">
+                <i class="fas fa-check text-emerald-500 text-sm"></i>
+            </div>
+            <div>
+                <h4 class="text-[14px] font-bold text-slate-900 tracking-tight leading-none mb-1">Action Successful</h4>
+                <p class="text-[13px] font-medium text-slate-500">{{ session('success') }}</p>
+            </div>
+        </div>
+        <button type="button" class="w-8 h-8 mr-1 rounded-full hover:bg-slate-50 flex items-center justify-center text-slate-400 transition-colors focus:outline-none" onclick="this.parentElement.style.display='none'">
+            <i class="fas fa-times text-xs"></i>
+        </button>
     </div>
     @endif
+
     @if($errors->any())
-    <div class="mb-6 bg-rose-50 border border-rose-200 text-rose-700 px-4 py-3 rounded-xl text-sm font-semibold flex items-center gap-3 shadow-sm">
-        <i class="fas fa-exclamation-circle text-rose-500 text-base"></i>
-        {{ $errors->first() }}
+    <div class="mb-8 bg-white border border-rose-100 rounded-[20px] p-4 flex items-center justify-between shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden transition-all duration-300">
+        <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-rose-500"></div>
+        <div class="flex items-center gap-4 ml-2">
+            <div class="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center shrink-0 border border-rose-100/50">
+                <i class="fas fa-exclamation-triangle text-rose-500 text-sm"></i>
+            </div>
+            <div>
+                <h4 class="text-[14px] font-bold text-slate-900 tracking-tight leading-none mb-1">Action Failed</h4>
+                <p class="text-[13px] font-medium text-slate-500">{{ $errors->first() }}</p>
+            </div>
+        </div>
+        <button type="button" class="w-8 h-8 mr-1 rounded-full hover:bg-slate-50 flex items-center justify-center text-slate-400 transition-colors focus:outline-none" onclick="this.parentElement.style.display='none'">
+            <i class="fas fa-times text-xs"></i>
+        </button>
     </div>
     @endif
 
@@ -251,19 +274,23 @@
             return;
         }
 
-        if (confirm('Are you definitely sure you want to delete the ' + selected.length + ' selected department(s)? This may affect associated majors.')) {
-            let form = document.getElementById('deleteForm');
-            form.action = '{{ route("admin.departments.bulkDelete") }}';
-            form.innerHTML = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
-            selected.forEach(function(item) {
-                let input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'ids[]';
-                input.value = item.value;
-                form.appendChild(input);
-            });
-            form.submit();
-        }
+        window.premiumConfirm(
+            '<span class="font-bold text-slate-700">You are about to delete ' + selected.length + ' department(s).</span><br>All associated majors and classes may be affected. This action cannot be undone.', 
+            function() {
+                let form = document.getElementById('deleteForm');
+                form.action = '{{ route("admin.departments.bulkDelete") }}';
+                form.innerHTML = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
+                selected.forEach(function(item) {
+                    let input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'ids[]';
+                    input.value = item.value;
+                    form.appendChild(input);
+                });
+                form.submit();
+            },
+            'Delete Multiple Departments?'
+        );
     }
 
     function editSingleRow(btn) {
@@ -303,25 +330,29 @@
             const id = btn.dataset.id;
             const title = btn.dataset.title;
 
-            if (confirm('Are you certain you want to delete "' + title + '"? Associated data might be impacted.')) {
-                const form = document.getElementById('deleteForm');
-                form.action = '/admin/departments/' + id;
-                form.innerHTML = '';
-                
-                const csrf = document.createElement('input');
-                csrf.type = 'hidden';
-                csrf.name = '_token';
-                csrf.value = '{{ csrf_token() }}';
-                form.appendChild(csrf);
+            window.premiumConfirm(
+                'You are about to delete <strong class="text-slate-800">"' + title + '"</strong>.<br>Are you sure? This action cannot be undone.', 
+                function() {
+                    const form = document.getElementById('deleteForm');
+                    form.action = '/admin/departments/' + id;
+                    form.innerHTML = '';
+                    
+                    const csrf = document.createElement('input');
+                    csrf.type = 'hidden';
+                    csrf.name = '_token';
+                    csrf.value = '{{ csrf_token() }}';
+                    form.appendChild(csrf);
 
-                const method = document.createElement('input');
-                method.type = 'hidden';
-                method.name = '_method';
-                method.value = 'DELETE';
-                form.appendChild(method);
+                    const method = document.createElement('input');
+                    method.type = 'hidden';
+                    method.name = '_method';
+                    method.value = 'DELETE';
+                    form.appendChild(method);
 
-                form.submit();
-            }
+                    form.submit();
+                },
+                'Delete Department?'
+            );
         }
     });
 </script>

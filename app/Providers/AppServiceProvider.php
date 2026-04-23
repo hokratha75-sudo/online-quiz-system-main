@@ -23,6 +23,11 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
+        // Force HTTPS when using Ngrok or other secure proxies
+        if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         \Illuminate\Support\Facades\Event::listen(function (\Illuminate\Auth\Events\Failed $event) {
             if (!Schema::hasTable('users')) {
                 return;

@@ -464,6 +464,66 @@
     });
 </script>
 
+<!-- SweetAlert2 UI for Premium Alerts -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    // Global Premium Confirm Function
+    window.premiumConfirm = function(message, confirmCallback, title = 'Delete Account') {
+        Swal.fire({
+            html: `
+                <div class="flex flex-col items-center pt-2">
+                    <svg viewBox="0 0 24 24" fill="none" class="w-[42px] h-[42px] mb-3 text-[#f04438]" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <h3 class="text-[18px] font-bold text-[#111827] tracking-tight leading-none mb-3">${title}</h3>
+                    <p class="text-[14px] text-[#475467] font-medium leading-relaxed px-1">${message}</p>
+                </div>
+            `,
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Delete!',
+            cancelButtonText: 'No, keep it.',
+            width: '360px',
+            customClass: {
+                popup: 'rounded-[20px] shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)] border border-slate-100 p-6',
+                actions: 'flex flex-row w-full gap-3 mt-6 mb-0 px-1',
+                confirmButton: 'flex-1 m-0 bg-[#f04438] hover:bg-[#d92d20] text-white rounded-[10px] py-[11px] text-[14px] font-bold shadow-[0_6px_16px_rgba(240,68,56,0.4)] transition-all',
+                cancelButton: 'flex-1 m-0 bg-[#f2f4f7] hover:bg-[#e4e7ec] text-[#344054] rounded-[10px] py-[11px] text-[14px] font-bold transition-all'
+            },
+            buttonsStyling: false,
+            reverseButtons: true,
+            showCloseButton: false,
+            focusCancel: true
+        }).then((result) => {
+            if (result.isConfirmed && typeof confirmCallback === 'function') {
+                confirmCallback();
+            }
+        });
+    };
+
+    // Auto-intercept basic form deletion
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('form').forEach(form => {
+            let onsubmitAttr = form.getAttribute('onsubmit');
+            if (onsubmitAttr && onsubmitAttr.includes('confirm(')) {
+                let msgMatch = onsubmitAttr.match(/confirm\(['"](.*?)['"]\)/);
+                let msg = msgMatch ? msgMatch[1] : 'Are you sure you want to delete this?';
+                
+                form.removeAttribute('onsubmit');
+                
+                form.addEventListener('submit', function(e) {
+                    if (!form.dataset.confirmed) {
+                        e.preventDefault();
+                        window.premiumConfirm(msg, function() {
+                            form.dataset.confirmed = 'true';
+                            form.submit();
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>
+
 @yield('scripts')
 @stack('scripts')
 </body>

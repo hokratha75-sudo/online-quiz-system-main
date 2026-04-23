@@ -1,93 +1,83 @@
 <!-- Unit Modal: Central Logic Configuration -->
 <div class="modal fade" id="addSubjectModal" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-0 shadow-2xl rounded-[32px] overflow-hidden bg-white">
-            <div class="modal-header bg-slate-900 border-0 px-8 py-6 items-center">
-                <div>
-                    <h5 class="text-lg font-bold text-white uppercase tracking-tight" id="modalTitle">Instantiate Logic Unit</h5>
-                    <p class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mt-1">Configure academic subject parameters</p>
-                </div>
-                <button type="button" class="w-8 h-8 rounded-xl bg-white/10 border border-white/10 text-white/50 hover:text-white flex items-center justify-center transition-all p-0" data-bs-dismiss="modal">
+        <div class="modal-content rounded-[32px] border-0 shadow-2xl overflow-hidden">
+            <div class="bg-indigo-600 px-8 py-6 flex items-center justify-between">
+                <h5 class="text-xl font-bold text-white tracking-tight flex items-center gap-3" id="modalTitle">
+                    <i class="fas fa-book text-indigo-200"></i> Add Subject
+                </h5>
+                <button type="button" class="text-indigo-200 hover:text-white transition-colors" data-bs-dismiss="modal" aria-label="Close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             
-            <form action="{{ route('admin.subjects.store') }}" method="POST">
+            <form action="{{ route('admin.subjects.store') }}" method="POST" class="p-6">
                 @csrf
-                <div class="modal-body p-8 bg-slate-50/50">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         
-                        <div class="md:col-span-2 space-y-2">
-                            <label class="text-[10px] font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
-                                <i class="fas fa-book text-indigo-500"></i> Subject Designation <span class="text-rose-500">*</span>
-                            </label>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Subject Name <span class="text-rose-500">*</span></label>
                             <input type="text" name="subject_name" required 
-                                   class="w-full h-12 bg-white border border-slate-200 rounded-2xl px-4 text-xs font-bold text-slate-900 uppercase tracking-widest focus:outline-none focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 transition-all placeholder:text-slate-300" 
-                                   placeholder="ENTER UNIT NAME...">
+                                   class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 shadow-sm" 
+                                   placeholder="e.g. Advanced Mathematics">
                         </div>
 
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
-                                <i class="fas fa-hashtag text-indigo-500"></i> Protocol Code
-                            </label>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Subject Code <span class="text-slate-400 font-normal">(Optional)</span></label>
                             <input type="text" name="code" 
-                                   class="w-full h-12 bg-white border border-slate-200 rounded-2xl px-4 text-xs font-bold text-slate-900 uppercase tracking-widest focus:outline-none focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 transition-all placeholder:text-slate-300" 
-                                   placeholder="OPTIONAL CODE...">
+                                   class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 shadow-sm uppercase" 
+                                   placeholder="e.g. MATH-101">
                         </div>
 
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
-                                <i class="fas fa-star text-indigo-500"></i> Credits
-                            </label>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Credits <span class="text-slate-400 font-normal">(Optional)</span></label>
                             <input type="number" name="credits" value="3"
-                                   class="w-full h-12 bg-white border border-slate-200 rounded-2xl px-4 text-xs font-bold text-slate-900 uppercase tracking-widest focus:outline-none focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 transition-all placeholder:text-slate-300">
+                                   class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm">
                         </div>
 
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
-                                <i class="fas fa-building text-indigo-500"></i> Sector Alignment
-                            </label>
-                            <select name="department_id" id="departmentSelect"
-                                    class="w-full h-12 bg-white border border-slate-200 rounded-2xl px-4 text-[10px] font-bold text-slate-900 uppercase tracking-widest focus:outline-none focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 transition-all appearance-none outline-none">
-                                <option value="">SELECT SECTOR NODE...</option>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Department Alignment <span class="text-rose-500">*</span></label>
+                            <select name="department_id" id="departmentSelect" required
+                                    class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm appearance-none cursor-pointer">
+                                <option value="">-- Select Department --</option>
                                 @foreach($departments as $dept)
-                                    <option value="{{ $dept->id }}">{{ strtoupper($dept->department_name) }}</option>
+                                    <option value="{{ $dept->id }}">{{ $dept->department_name }}</option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
-                                <i class="fas fa-graduation-cap text-indigo-500"></i> Major Node
-                            </label>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Specialization (Major) <span class="text-slate-400 font-normal">(Optional)</span></label>
                             <select name="major_id" id="majorSelect"
-                                    class="w-full h-12 bg-white border border-slate-200 rounded-2xl px-4 text-[10px] font-bold text-slate-900 uppercase tracking-widest focus:outline-none focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 transition-all appearance-none outline-none">
-                                <option value="">SELECT MAJOR NODE...</option>
+                                    class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm appearance-none cursor-pointer">
+                                <option value="">-- Select Major --</option>
                                 @foreach($majors as $major)
-                                    <option value="{{ $major->id }}" data-department="{{ $major->department_id }}">{{ strtoupper($major->name) }}</option>
+                                    <option value="{{ $major->id }}" data-department="{{ $major->department_id }}">{{ $major->name }}</option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <div class="md:col-span-2 space-y-2 mt-2">
-                            <label class="text-[10px] font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
-                                <i class="fas fa-users text-indigo-500"></i> Synced Classes
+                        <div class="md:col-span-2 mt-2">
+                            <label class="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-1.5">
+                                Assigned Classes 
+                                <span class="text-xs font-normal text-slate-400">(Hold Ctrl/Cmd to select multiple)</span>
                             </label>
-                            <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-2">Hold CMD/CTRL to select multiple classes</p>
                             <select name="classes[]" multiple
-                                    class="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 text-[10px] font-bold text-slate-900 uppercase tracking-widest focus:outline-none focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 transition-all outline-none h-32 custom-scrollbar">
+                                    class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm h-32 custom-scrollbar">
                                 @foreach($classes as $class)
-                                    <option value="{{ $class->id }}" class="py-1 border-b border-slate-50 last:border-0 hover:bg-slate-50">{{ strtoupper($class->name) }}</option>
+                                    <option value="{{ $class->id }}" class="py-1.5 px-3 rounded-md mb-1 hover:bg-slate-50 cursor-pointer">{{ $class->name }}</option>
                                 @endforeach
                             </select>
                         </div>
 
                     </div>
                 </div>
-                <div class="modal-footer border-t border-slate-100 px-8 py-6 bg-white justify-between">
-                    <button type="button" class="h-12 px-6 bg-slate-50 border border-slate-200 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-2xl text-[10px] font-bold uppercase tracking-widest transition-all" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="h-12 px-8 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest transition-all shadow-xl shadow-indigo-600/20 active:scale-95 flex items-center gap-2">
-                        <i class="fas fa-save"></i> Execute Provision
+                
+                <div class="mt-8 flex items-center justify-end gap-3 pt-5 border-t border-slate-100">
+                    <button type="button" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80 px-5 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 shadow-sm">
+                        Save Subject
                     </button>
                 </div>
             </form>

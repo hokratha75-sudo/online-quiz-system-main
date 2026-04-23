@@ -6,22 +6,34 @@
 <div class="max-w-[1400px] mx-auto px-6 py-8 md:px-10 lg:py-10 font-inter">
 
     <!-- Header Section -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 mb-8">
         <div>
-            <h1 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">System Users</h1>
-            <p class="text-sm font-medium text-slate-500 mt-1">Manage platform administrators, teachers, and enrolled students</p>
+            <h1 class="text-2xl md:text-[28px] font-bold text-slate-900 tracking-tight">System Users</h1>
+            <p class="text-[14px] font-medium text-slate-500 mt-1.5">Manage platform administrators, teachers, and enrolled students.</p>
         </div>
         <div class="flex items-center gap-3">
-            <button type="button" data-bs-toggle="modal" data-bs-target="#createUserModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 shadow-md">
-                <i class="fas fa-plus text-xs"></i> Create User
+            <button type="button" data-bs-toggle="modal" data-bs-target="#createUserModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-2 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <i class="fas fa-plus text-indigo-200 text-xs"></i> Create User
             </button>
         </div>
     </div>
 
     @if(session('success'))
-    <div class="mb-6 bg-emerald-50 border border-emerald-200 text-indigo-700 px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-3">
-        <i class="fas fa-check-circle text-indigo-500"></i>
-        {{ session('success') }}
+    <div class="mb-8 bg-white border border-emerald-100 rounded-[20px] p-4 flex items-center justify-between shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden transition-all duration-300">
+        <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-500"></div>
+        <div class="flex items-center gap-4 ml-2">
+            <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100/50">
+                <i class="fas fa-check text-emerald-500 text-sm"></i>
+            </div>
+            <div>
+                <h4 class="text-[14px] font-bold text-slate-900 tracking-tight leading-none mb-1">Action Successful</h4>
+                <p class="text-[13px] font-medium text-slate-500">{{ session('success') }}</p>
+            </div>
+        </div>
+        <button type="button" class="w-8 h-8 mr-1 rounded-full hover:bg-slate-50 flex items-center justify-center text-slate-400 transition-colors focus:outline-none" onclick="this.parentElement.style.display='none'">
+            <i class="fas fa-times text-xs"></i>
+        </button>
     </div>
     @endif
 

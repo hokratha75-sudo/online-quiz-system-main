@@ -3,34 +3,38 @@
 @section('content')
 <div class="max-w-[1400px] mx-auto p-6 md:p-10 font-inter text-slate-900">
     
-    <!-- Header Section: Institutional Grid -->
-    <header class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 mb-8">
         <div>
-            <div class="flex items-center gap-3 mb-3">
-                <div class="w-2.5 h-2.5 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(79,70,229,0.4)]"></div>
-                <span class="text-[10px] font-bold text-indigo-600 uppercase tracking-[0.25em]">Academic Infrastructure</span>
-            </div>
-            <h1 class="text-4xl font-bold text-slate-900 tracking-tight leading-none uppercase">Departmental Units</h1>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-3">Advanced subject control & module distribution matrix. v2.5 Synchronized.</p>
+            <h1 class="text-2xl md:text-[28px] font-bold text-slate-900 tracking-tight">Academic Subjects</h1>
+            <p class="text-[14px] font-medium text-slate-500 mt-1.5">Manage subject control, modules and distribution matrix.</p>
         </div>
         
         <div class="flex items-center gap-3">
-            <button data-bs-toggle="modal" data-bs-target="#addSubjectModal" class="h-10 px-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md flex items-center gap-2">
-                <i class="fas fa-plus text-[10px]"></i> New Subject
-            </button>
-            <div class="h-6 w-px bg-slate-200 mx-1"></div>
-            <a href="{{ route('admin.subjects.export') }}" class="w-10 h-10 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-emerald-500 hover:text-white hover:bg-emerald-500 hover:border-emerald-500 transition-all shadow-sm" title="Export Excel">
-                <i class="fas fa-file-excel"></i>
+            <a href="{{ route('admin.subjects.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-4 py-2.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-100">
+                <i class="fas fa-file-excel text-emerald-500"></i> Export
             </a>
+            <button data-bs-toggle="modal" data-bs-target="#addSubjectModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-2 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <i class="fas fa-plus text-indigo-200 text-xs"></i> New Subject
+            </button>
         </div>
-    </header>
+    </div>
 
     @if(session('success'))
-    <div class="mb-10 p-5 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center gap-4 animate-fade-in shadow-sm">
-        <div class="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/20">
-            <i class="fas fa-check-circle"></i>
+    <div class="mb-8 bg-white border border-emerald-100 rounded-[20px] p-4 flex items-center justify-between shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden transition-all duration-300">
+        <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-500"></div>
+        <div class="flex items-center gap-4 ml-2">
+            <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100/50">
+                <i class="fas fa-check text-emerald-500 text-sm"></i>
+            </div>
+            <div>
+                <h4 class="text-[14px] font-bold text-slate-900 tracking-tight leading-none mb-1">Action Successful</h4>
+                <p class="text-[13px] font-medium text-slate-500">{{ session('success') }}</p>
+            </div>
         </div>
-        <span class="text-[11px] font-bold text-emerald-800 uppercase tracking-widest">{{ session('success') }}</span>
+        <button type="button" class="w-8 h-8 mr-1 rounded-full hover:bg-slate-50 flex items-center justify-center text-slate-400 transition-colors focus:outline-none" onclick="this.parentElement.style.display='none'">
+            <i class="fas fa-times text-xs"></i>
+        </button>
     </div>
     @endif
 

@@ -4,34 +4,46 @@
 <div class="max-w-[1400px] mx-auto p-8 md:p-10 font-inter text-slate-900">
 
     <!-- Header Section -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 mb-8">
         <div>
-            <h1 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight uppercase">{{ ucfirst($tab) }} Index</h1>
-            <p class="text-[10px] font-bold text-indigo-600 mt-1 uppercase tracking-widest leading-none">Manage institutional {{ $tab }} and academic structures</p>
+            <h1 class="text-2xl md:text-[28px] font-bold text-slate-900 tracking-tight">{{ ucfirst($tab) }} Index</h1>
+            <p class="text-[14px] font-medium text-slate-500 mt-1.5">Manage administrative {{ $tab }} and institutional faculties.</p>
         </div>
         <div class="flex items-center gap-3">
-            <button onclick="window.location.reload()" class="bg-white hover:bg-slate-50 text-slate-900 border border-slate-100 px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm">
-                <i class="fas fa-sync-alt text-[10px] text-indigo-500"></i> Refresh
+            <button onclick="window.location.reload()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-4 py-2.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-100">
+                <i class="fas fa-sync-alt text-slate-400"></i> Refresh
             </button>
-            <a href="{{ route('admin.majors.export', ['tab' => $tab]) }}" class="bg-white hover:bg-slate-50 text-slate-900 border border-slate-100 px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm">
-                <i class="fas fa-file-excel text-[10px] text-emerald-500"></i> Export
+            <a href="{{ route('admin.majors.export', ['tab' => $tab]) }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-4 py-2.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-100">
+                <i class="fas fa-file-excel text-emerald-500"></i> Export
             </a>
             @if($tab == 'majors')
-                <button data-bs-toggle="modal" data-bs-target="#addMajorModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg">
-                    <i class="fas fa-plus text-[10px]"></i> New Major
+                <button data-bs-toggle="modal" data-bs-target="#addMajorModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-2 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <i class="fas fa-plus text-indigo-200 text-xs"></i> New Major
                 </button>
             @elseif($tab == 'classes')
-                <button data-bs-toggle="modal" data-bs-target="#addClassModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg">
-                    <i class="fas fa-plus text-[10px]"></i> New Class
+                <button data-bs-toggle="modal" data-bs-target="#addClassModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-2 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <i class="fas fa-plus text-indigo-200 text-xs"></i> New Class
                 </button>
             @endif
         </div>
     </div>
 
     @if(session('success'))
-    <div class="mb-6 bg-emerald-50 border border-emerald-100 text-emerald-700 px-4 py-3 rounded-xl text-xs font-bold flex items-center gap-3 shadow-sm uppercase tracking-tight">
-        <i class="fas fa-check-circle text-emerald-500"></i>
-        {{ session('success') }}
+    <div class="mb-8 bg-white border border-emerald-100 rounded-[20px] p-4 flex items-center justify-between shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden transition-all duration-300">
+        <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-500"></div>
+        <div class="flex items-center gap-4 ml-2">
+            <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100/50">
+                <i class="fas fa-check text-emerald-500 text-sm"></i>
+            </div>
+            <div>
+                <h4 class="text-[14px] font-bold text-slate-900 tracking-tight leading-none mb-1">Action Successful</h4>
+                <p class="text-[13px] font-medium text-slate-500">{{ session('success') }}</p>
+            </div>
+        </div>
+        <button type="button" class="w-8 h-8 mr-1 rounded-full hover:bg-slate-50 flex items-center justify-center text-slate-400 transition-colors focus:outline-none" onclick="this.parentElement.style.display='none'">
+            <i class="fas fa-times text-xs"></i>
+        </button>
     </div>
     @endif
 
@@ -171,37 +183,48 @@
 <!-- Structural Modals -->
 <div class="modal fade" id="addMajorModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-[32px] border-none shadow-2xl shadow-indigo-900/20 overflow-hidden">
-            <div class="bg-indigo-600 p-8 text-white relative">
-                <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 blur-3xl rounded-full"></div>
-                <h3 class="text-xl font-bold uppercase tracking-tight" id="majorModalTitle">New Specialization</h3>
-                <p class="text-[10px] font-bold text-indigo-100 uppercase tracking-widest mt-1 opacity-70">Define institutional knowledge sector</p>
+        <div class="modal-content rounded-[32px] border-0 shadow-2xl overflow-hidden">
+            <div class="bg-indigo-600 px-8 py-6 flex items-center justify-between">
+                <h5 class="text-xl font-bold text-white tracking-tight flex items-center gap-3" id="majorModalTitle">
+                    <i class="fas fa-bookmark text-indigo-200"></i> Add Major
+                </h5>
+                <button type="button" class="text-indigo-200 hover:text-white transition-colors" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <form action="{{ route('admin.majors.store') }}" method="POST" id="majorForm" class="p-8 md:p-10 space-y-8">
+            <form action="{{ route('admin.majors.store') }}" method="POST" id="majorForm" class="p-6">
                 @csrf
                 <input type="hidden" name="_method" value="POST" id="majorFormMethod">
-                <div class="grid grid-cols-2 gap-8">
-                    <div class="space-y-3">
-                        <label class="block text-[10px] font-bold uppercase tracking-widest text-indigo-600 mb-1">Index Code</label>
-                        <input type="text" name="code" id="majorCode" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100 transition-all uppercase tabular-nums">
+                
+                <div class="space-y-5">
+                    <div class="grid grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Major Code <span class="text-rose-500">*</span></label>
+                            <input type="text" name="code" id="majorCode" required placeholder="e.g. CS-01" 
+                                   class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 shadow-sm uppercase">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Major Name <span class="text-rose-500">*</span></label>
+                            <input type="text" name="name" id="majorName" required placeholder="e.g. Computer Science" 
+                                   class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 shadow-sm">
+                        </div>
                     </div>
-                    <div class="space-y-3">
-                        <label class="block text-[10px] font-bold uppercase tracking-widest text-indigo-600 mb-1">Descriptor</label>
-                        <input type="text" name="name" id="majorName" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100 transition-all uppercase tracking-tight">
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Department Alignment <span class="text-rose-500">*</span></label>
+                        <select name="department_id" id="majorDept" required 
+                                class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm appearance-none cursor-pointer">
+                            <option value="">-- Select Department --</option>
+                            @foreach($departments as $d)
+                                <option value="{{ $d->id }}">{{ $d->department_name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
-                <div class="space-y-3">
-                    <label class="block text-[10px] font-bold uppercase tracking-widest text-indigo-600 mb-1">Department Alignment</label>
-                    <select name="department_id" id="majorDept" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100 transition-all appearance-none uppercase">
-                        <option value="">-- AUTHORIZE SECTOR --</option>
-                        @foreach($departments as $d)
-                            <option value="{{ $d->id }}">{{ $d->department_name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="flex items-center gap-4 pt-8 border-t border-slate-50">
-                    <button type="button" data-bs-dismiss="modal" class="flex-grow h-14 rounded-2xl font-bold uppercase tracking-widest text-[10px] text-slate-400 hover:text-slate-900 hover:bg-slate-50 transition-all">Discard</button>
-                    <button type="submit" id="majorBtnSubmit" class="flex-grow h-14 bg-slate-950 hover:bg-indigo-600 text-white rounded-2xl font-bold uppercase tracking-[.2em] text-[10px] transition-all shadow-xl shadow-slate-950/10">Authorize Node</button>
+                
+                <div class="mt-8 flex items-center justify-end gap-3 pt-5 border-t border-slate-100">
+                    <button type="button" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80 px-5 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="majorBtnSubmit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 shadow-sm">Save Major</button>
                 </div>
             </form>
         </div>
@@ -210,37 +233,48 @@
 
 <div class="modal fade" id="addClassModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-[32px] border-none shadow-2xl shadow-indigo-900/20 overflow-hidden">
-            <div class="bg-indigo-600 p-8 text-white relative">
-                <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 blur-3xl rounded-full"></div>
-                <h3 class="text-xl font-bold uppercase tracking-tight" id="classModalTitle">New Learning Unit</h3>
-                <p class="text-[10px] font-bold text-indigo-100 uppercase tracking-widest mt-1 opacity-70">Initialize student grouping protocol</p>
+        <div class="modal-content rounded-[32px] border-0 shadow-2xl overflow-hidden">
+            <div class="bg-indigo-600 px-8 py-6 flex items-center justify-between">
+                <h5 class="text-xl font-bold text-white tracking-tight flex items-center gap-3" id="classModalTitle">
+                    <i class="fas fa-layer-group text-indigo-200"></i> Add Class
+                </h5>
+                <button type="button" class="text-indigo-200 hover:text-white transition-colors" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <form action="{{ route('admin.classes.store') }}" method="POST" id="classForm" class="p-8 md:p-10 space-y-8">
+            <form action="{{ route('admin.classes.store') }}" method="POST" id="classForm" class="p-6">
                 @csrf
                 <input type="hidden" name="_method" value="POST" id="classFormMethod">
-                <div class="grid grid-cols-2 gap-8">
-                    <div class="space-y-3">
-                        <label class="block text-[10px] font-bold uppercase tracking-widest text-indigo-600 mb-1">Index Code</label>
-                        <input type="text" name="code" id="classCode" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100 transition-all uppercase tabular-nums">
+                
+                <div class="space-y-5">
+                    <div class="grid grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Class Code <span class="text-rose-500">*</span></label>
+                            <input type="text" name="code" id="classCode" required placeholder="e.g. M1" 
+                                   class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 shadow-sm uppercase">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Class Name <span class="text-rose-500">*</span></label>
+                            <input type="text" name="name" id="className" required placeholder="e.g. Morning Class" 
+                                   class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 shadow-sm">
+                        </div>
                     </div>
-                    <div class="space-y-3">
-                        <label class="block text-[10px] font-bold uppercase tracking-widest text-indigo-600 mb-1">Descriptor</label>
-                        <input type="text" name="name" id="className" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100 transition-all uppercase tracking-tight">
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Specialization Core <span class="text-rose-500">*</span></label>
+                        <select name="major_id" id="classMajor" required 
+                                class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm appearance-none cursor-pointer">
+                            <option value="">-- Select Major --</option>
+                            @foreach($majors_all as $m)
+                                <option value="{{ $m->id }}">{{ $m->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
-                <div class="space-y-3">
-                    <label class="block text-[10px] font-bold uppercase tracking-widest text-indigo-600 mb-1">Specialization Core</label>
-                    <select name="major_id" id="classMajor" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100 transition-all appearance-none uppercase">
-                        <option value="">-- AUTHORIZE SPECIALIZATION --</option>
-                        @foreach($majors_all as $m)
-                            <option value="{{ $m->id }}">{{ $m->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="flex items-center gap-4 pt-8 border-t border-slate-50">
-                    <button type="button" data-bs-dismiss="modal" class="flex-grow h-14 rounded-2xl font-bold uppercase tracking-widest text-[10px] text-slate-400 hover:text-slate-900 hover:bg-slate-50 transition-all">Discard</button>
-                    <button type="submit" id="classBtnSubmit" class="flex-grow h-14 bg-slate-950 hover:bg-indigo-600 text-white rounded-2xl font-bold uppercase tracking-[.2em] text-[10px] transition-all shadow-xl shadow-slate-950/10">Authorize Node</button>
+                
+                <div class="mt-8 flex items-center justify-end gap-3 pt-5 border-t border-slate-100">
+                    <button type="button" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80 px-5 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="classBtnSubmit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 shadow-sm">Save Class</button>
                 </div>
             </form>
         </div>

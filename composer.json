@@ -13,7 +13,8 @@
         "laravel/framework": "^12.0",
         "laravel/reverb": "^1.0",
         "laravel/tinker": "^2.10.1",
-        "smalot/pdfparser": "^2.12"
+        "smalot/pdfparser": "^2.12",
+        "spatie/laravel-backup": "^10.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
