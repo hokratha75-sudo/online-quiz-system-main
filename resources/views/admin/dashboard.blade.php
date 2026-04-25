@@ -4,19 +4,20 @@
 <div class="max-w-[1400px] mx-auto px-6 py-4 md:px-10 lg:py-6 font-inter text-slate-900">
 
     <!-- Header Section: High-Density Authority -->
-    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+    <header class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
         <div>
-            <h1 class="text-xl md:text-2xl font-bold text-slate-900 tracking-tight uppercase leading-none">Dashboard Overview</h1>
-            <p class="text-[10px] font-bold text-indigo-600 mt-1.5 uppercase tracking-[0.2em] leading-none">Logged In As: {{ strtoupper($username) }} | Active Session</p>
+            <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight leading-none">Dashboard Overview</h1>
+            <p class="text-[10px] font-bold text-indigo-600 mt-2 uppercase tracking-[0.2em] leading-none opacity-80">Logged In As: {{ strtoupper($username) }} • Active Session</p>
         </div>
         @if($userRole === 'admin' || $userRole === 'teacher')
         <div class="flex items-center gap-3">
-            <a href="{{ route('quizzes.create') ?? '#' }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-2xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-xl shadow-indigo-600/20 active:scale-95">
-                <i class="fas fa-plus text-[10px]"></i> Create New Quiz
+            <a href="{{ route('quizzes.create') ?? '#' }}" class="no-underline bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2 shadow-lg shadow-indigo-600/20 active:scale-[0.98] group">
+                <i class="fas fa-plus text-[10px] group-hover:rotate-90 transition-transform duration-300"></i>
+                <span>Create New Quiz</span>
             </a>
             @if($userRole === 'admin')
-            <a href="{{ route('admin.settings.index') }}" class="w-12 h-12 bg-white hover:bg-slate-50 text-slate-400 hover:text-indigo-600 border border-slate-100 rounded-2xl flex items-center justify-center transition-all shadow-sm active:scale-95" title="System Settings">
-                <i class="fas fa-cog text-sm"></i>
+            <a href="{{ route('admin.settings.index') }}" class="w-[52px] h-[52px] bg-white hover:bg-slate-50 text-slate-400 hover:text-indigo-600 border border-slate-100 rounded-2xl flex items-center justify-center transition-all shadow-sm active:scale-95 group" title="System Settings">
+                <i class="fas fa-cog text-lg group-hover:rotate-90 transition-transform duration-500"></i>
             </a>
             @endif
         </div>

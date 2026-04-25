@@ -100,10 +100,7 @@
                             </div>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="space-y-3">
-                                    <label class="block text-[10px] font-bold tracking-widest text-indigo-600 uppercase">Site Alias</label>
-                                    <input type="text" name="site_name" value="{{ old('site_name', $settings['site_name'] ?? 'QuizMaster v2.0') }}" class="w-full px-5 py-4 rounded-xl border border-slate-200 bg-white focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500 transition-all text-sm font-bold text-slate-900 uppercase tracking-tight shadow-sm" placeholder="e.g. QuizMaster v2.0">
-                                </div>
+
                                 <div class="space-y-3">
                                     <label class="block text-[10px] font-bold tracking-widest text-indigo-600 uppercase">Institution Name</label>
                                     <input type="text" name="institution_name" value="{{ old('institution_name', $settings['institution_name'] ?? '') }}" class="w-full px-5 py-4 rounded-xl border border-slate-200 bg-white focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500 transition-all text-sm font-bold text-slate-900 uppercase tracking-tight shadow-sm" placeholder="e.g. My University">

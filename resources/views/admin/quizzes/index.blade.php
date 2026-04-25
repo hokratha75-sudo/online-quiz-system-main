@@ -18,8 +18,9 @@
             <a href="{{ route('quizzes.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 shadow-sm">
                 <i class="fas fa-file-excel text-emerald-500 text-xs"></i> Export
             </a>
-            <a href="{{ route('quizzes.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 shadow-md shadow-indigo-500/20">
-                <i class="fas fa-plus text-xs"></i> Create Quiz
+            <a href="{{ route('quizzes.create') }}" class="no-underline bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2 shadow-lg shadow-indigo-600/20 active:scale-[0.98] group">
+                <i class="fas fa-plus text-[10px] group-hover:rotate-90 transition-transform duration-300"></i>
+                <span>Create Quiz</span>
             </a>
         </div>
     </div>

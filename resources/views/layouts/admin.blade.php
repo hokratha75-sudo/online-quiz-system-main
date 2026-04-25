@@ -18,7 +18,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Figtree:wght@300;400;500;600;700;800;900&family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Bootstrap 5 loaded for backward compatibility with older views -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -39,7 +39,8 @@
             },
             fontFamily: {
               sans: ['Inter', 'Kantumruy Pro', 'sans-serif'],
-              heading: ['Figtree', 'sans-serif'],
+              heading: ['Plus Jakarta Sans', 'Kantumruy Pro', 'sans-serif'],
+              serif: ['Plus Jakarta Sans', 'Kantumruy Pro', 'sans-serif'],
             }
           }
         }
@@ -52,6 +53,14 @@
 
     <!-- Legacy Style Overrides to keep non-refactored pages from breaking completely -->
     <style>
+        /* Global Premium SaaS Typography */
+        h1, h2, h3, h4, h5, h6, .card-title-custom, .font-heading {
+            font-family: 'Plus Jakarta Sans', 'Kantumruy Pro', sans-serif !important;
+        }
+        body {
+            color: #333333;
+        }
+        
         .page-wrap { padding: 30px; flex: 1; }
         .card-custom { background: #ffffff !important; border-radius: 20px !important; border: none !important; box-shadow: 0 10px 30px rgba(0,0,0,0.03) !important; padding: 20px !important; }
         .card-header-inner { border-bottom: 1px solid #f3f4f6 !important; padding: 10px 0 20px 0 !important; margin-bottom: 20px !important; }
@@ -132,9 +141,11 @@
 <!-- Mobile Header Nav -->
 <div class="md:hidden bg-slate-900 border-b border-slate-800 px-5 py-4 flex items-center justify-between sticky top-0 z-40 shadow-2xl">
     <div class="flex items-center gap-3">
-        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-8 h-8 rounded-lg shadow-sm shrink-0 object-cover border border-slate-700">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0 border border-indigo-400/50">
+            <i class="fas fa-graduation-cap text-white text-[13px]"></i>
+        </div>
         <div>
-            <h1 class="text-white font-bold tracking-tight text-base leading-none truncate max-w-[150px]">{{ \App\Models\Setting::get('site_name', 'Online Quiz System') }}</h1>
+            <h1 class="text-white font-bold tracking-tight text-base leading-none truncate max-w-[150px]">Quiz Master</h1>
         </div>
     </div>
     <button @click="sidebarOpen = true" class="w-10 h-10 rounded-xl bg-slate-800 text-slate-300 flex items-center justify-center hover:bg-slate-700 hover:text-white transition-colors focus:outline-none">
@@ -154,10 +165,12 @@
     
     <!-- ផ្នែក Logo និងបរិយាយឈ្មោះប្រព័ន្ធ (Brand) -->
     <div class="px-6 pt-7 pb-6 flex items-center gap-3">
-        <!-- រូបតំណាង (Image) -->
-        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-8 h-8 rounded-lg shadow-sm shrink-0 object-cover border border-slate-700">
+        <!-- រូបតំណាង (Icon) -->
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0 border border-indigo-400/50">
+            <i class="fas fa-graduation-cap text-white text-[13px]"></i>
+        </div>
         <div>
-            <h1 class="text-white font-bold tracking-tight text-lg leading-none truncate max-w-[150px]">{{ \App\Models\Setting::get('site_name', 'Online Quiz System') }}</h1>
+            <h1 class="text-white font-bold tracking-tight text-lg leading-none truncate max-w-[150px]">Quiz Master</h1>
             <span class="text-xs font-semibold text-indigo-400 mt-1 block">Admin Panel</span>
         </div>
     </div>
@@ -326,10 +339,9 @@
 <!-- flex-1: ឱ្យផ្នែកនេះពង្រីកយកទំហំដែលនៅសល់ពី Sidebar -->
 <main class="flex-1 min-w-0 flex flex-col bg-slate-50/50">
     
-@unless($hideSidebar ?? false)
+@unless($hideTopbar ?? ($hideSidebar ?? false))
     <!-- របារផ្នែកខាងលើ (Topbar) ប្រើ Glassmorphism Style -->
     <header class="h-16 px-6 md:px-10 flex items-center justify-between bg-white border-b border-slate-200 shadow-sm sticky top-0 z-40">
-@endunless
         <div class="flex items-center gap-4">
             <h2 class="text-lg font-semibold text-slate-800 tracking-tight flex items-center gap-2">
                 @yield('topbar-title', 'Dashboard')
@@ -405,7 +417,6 @@
                 </div>
             </a>
         </div>
-@unless($hideSidebar ?? false)
     </header>
 @endunless
 

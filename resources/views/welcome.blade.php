@@ -12,6 +12,7 @@
     <!-- Preload Assets -->
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
@@ -52,8 +53,10 @@
             :class="scrolled ? 'glass-header h-16' : 'h-24 bg-transparent'">
         <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
             <div class="flex items-center gap-3 group cursor-pointer">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-10 h-10 rounded-xl shadow-lg border border-white/20 group-hover:scale-105 transition-transform object-cover">
-                <span class="text-white font-bold text-xl tracking-tight">{{ \App\Models\Setting::get('site_name', 'Online Quiz System') }}</span>
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/30 border border-indigo-400/50 group-hover:scale-105 transition-transform">
+                    <i class="fas fa-graduation-cap text-white text-[15px]"></i>
+                </div>
+                <span class="text-white font-bold text-xl tracking-tight">Quiz Master</span>
             </div>
             
             <nav class="hidden md:flex items-center gap-10">
