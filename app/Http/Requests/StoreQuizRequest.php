@@ -17,11 +17,13 @@ class StoreQuizRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'subject_id' => 'required|exists:subjects,id',
-            'status' => 'required|in:draft,published',
-            'description' => 'nullable|string|max:1000',
-            'time_limit' => 'nullable|integer|min:1|max:180',
+            'title'          => 'required|string|max:255',
+            'subject_id'     => 'required|exists:subjects,id',
+            'status'         => 'required|in:draft,published',
+            'description'    => 'nullable|string|max:1000',
+            'time_limit'     => 'nullable|integer|min:1|max:180',
+            'opened_at'      => 'nullable|date',
+            'closed_at'      => 'nullable|date|after_or_equal:opened_at',
         ];
     }
 

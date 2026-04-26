@@ -71,14 +71,16 @@ class QuizController extends Controller
     public function store(StoreQuizRequest $request)
     {
         $quiz = Quiz::create([
-            'title' => $request->title,
-            'subject_id' => $request->subject_id,
-            'status' => $request->status,
-            'description' => $request->description,
-            'time_limit' => $request->time_limit ?? 30,
+            'title'            => $request->title,
+            'subject_id'       => $request->subject_id,
+            'status'           => $request->status,
+            'description'      => $request->description,
+            'time_limit'       => $request->time_limit ?? 30,
             'shuffle_questions' => $request->boolean('shuffle_questions'),
-            'pass_percentage' => $request->input('pass_percentage', 60),
-            'created_by' => auth()->id(),
+            'pass_percentage'  => $request->input('pass_percentage', 60),
+            'opened_at'        => $request->filled('opened_at') ? $request->opened_at : null,
+            'closed_at'        => $request->filled('closed_at') ? $request->closed_at : null,
+            'created_by'       => auth()->id(),
         ]);
 
         if ($quiz->status === 'published') {
@@ -119,13 +121,15 @@ class QuizController extends Controller
         $wasPublished = $quiz->status === 'published';
 
         $quiz->update([
-            'title' => $request->title,
-            'subject_id' => $request->subject_id,
-            'status' => $request->status,
-            'description' => $request->description,
-            'time_limit' => $request->time_limit ?? 30,
+            'title'            => $request->title,
+            'subject_id'       => $request->subject_id,
+            'status'           => $request->status,
+            'description'      => $request->description,
+            'time_limit'       => $request->time_limit ?? 30,
             'shuffle_questions' => $request->boolean('shuffle_questions'),
-            'pass_percentage' => $request->input('pass_percentage', 60),
+            'pass_percentage'  => $request->input('pass_percentage', 60),
+            'opened_at'        => $request->filled('opened_at') ? $request->opened_at : null,
+            'closed_at'        => $request->filled('closed_at') ? $request->closed_at : null,
         ]);
 
         if (!$wasPublished && $quiz->status === 'published') {

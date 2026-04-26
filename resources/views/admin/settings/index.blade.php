@@ -87,50 +87,6 @@
                         @csrf
                         <input type="hidden" name="_tab" value="general">
 
-                        <!-- Site Identity (Bento Box) -->
-                        <div class="bg-slate-50/50 border border-slate-100 rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-md hover:border-slate-200/60">
-                            <div class="flex items-center gap-4 mb-8">
-                                <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-lg">
-                                    <i class="fas fa-id-card text-xs"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-xs font-bold tracking-widest text-slate-900 uppercase">Site Identity</h3>
-                                    <p class="text-[10px] font-bold text-indigo-600 mt-1 uppercase tracking-tight">Branding and Localization</p>
-                                </div>
-                            </div>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                                <div class="space-y-3">
-                                    <label class="block text-[10px] font-bold tracking-widest text-indigo-600 uppercase">Institution Name</label>
-                                    <input type="text" name="institution_name" value="{{ old('institution_name', $settings['institution_name'] ?? '') }}" class="w-full px-5 py-4 rounded-xl border border-slate-200 bg-white focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500 transition-all text-sm font-bold text-slate-900 uppercase tracking-tight shadow-sm" placeholder="e.g. My University">
-                                    <p class="text-[9px] font-bold text-slate-400 uppercase tracking-tight">Active institutional domain name.</p>
-                                </div>
-                                <div class="space-y-3">
-                                    <label class="block text-[10px] font-bold tracking-widest text-indigo-600 uppercase">Contact Email</label>
-                                    <div class="relative">
-                                        <input type="email" name="contact_email" value="{{ old('contact_email', $settings['contact_email'] ?? '') }}" class="w-full px-5 py-4 rounded-xl border border-slate-200 bg-white focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500 transition-all text-sm font-bold text-slate-900 uppercase tracking-tight shadow-sm" placeholder="admin@example.com">
-                                    </div>
-                                </div>
-                                <div class="space-y-3">
-                                    <label class="block text-[10px] font-bold tracking-widest text-indigo-600 uppercase">Timezone Index</label>
-                                    <select name="timezone" class="w-full px-5 py-4 rounded-xl border border-slate-200 bg-white focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-500 transition-all text-sm font-bold text-slate-900 uppercase tracking-tight shadow-sm appearance-none">
-                                        @php
-                                            $currentTz = $settings['timezone'] ?? 'Asia/Phnom_Penh';
-                                            $timezones = [
-                                                'Asia/Phnom_Penh' => 'Phnom Penh (GMT+7)',
-                                                'Asia/Bangkok' => 'Bangkok (GMT+7)',
-                                                'UTC' => 'UTC (GMT+0)',
-                                            ];
-                                        @endphp
-                                        @foreach($timezones as $tz => $label)
-                                            <option value="{{ $tz }}" {{ old('timezone', $currentTz) === $tz ? 'selected' : '' }}>{{ $label }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- Maintenance Mode -->
                         <div class="bg-slate-50/50 border border-slate-100 rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-md hover:border-slate-200/60">
                             <div class="flex items-center gap-4 mb-6">

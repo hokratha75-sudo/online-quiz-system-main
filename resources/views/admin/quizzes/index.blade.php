@@ -75,6 +75,24 @@
                     <div class="text-xs font-semibold text-indigo-600 tracking-wide mb-1.5">{{ $item->subject?->subject_name ?? 'General Quiz' }}</div>
                     <h3 class="text-lg font-bold text-slate-900 leading-tight group-hover:text-indigo-600 transition-colors">{{ $item->title }}</h3>
                     <p class="text-sm font-medium text-slate-500 mt-2 line-clamp-2 leading-relaxed">{{ $item->description ?: 'No briefing provided for this module.' }}</p>
+
+                    {{-- Deadline Row --}}
+                    @if($item->opened_at || $item->closed_at)
+                    <div class="mt-4 bg-slate-100/80 rounded-xl px-4 py-3 space-y-1">
+                        @if($item->opened_at)
+                        <p class="text-[13px] text-slate-700 leading-relaxed">
+                            <span class="font-bold text-slate-800">Opened:</span>
+                            {{ \Carbon\Carbon::parse($item->opened_at)->format('l, d F Y, g:i A') }}
+                        </p>
+                        @endif
+                        @if($item->closed_at)
+                        <p class="text-[13px] text-slate-700 leading-relaxed">
+                            <span class="font-bold text-slate-800">Closed:</span>
+                            {{ \Carbon\Carbon::parse($item->closed_at)->format('l, d F Y, g:i A') }}
+                        </p>
+                        @endif
+                    </div>
+                    @endif
                 </div>
 
                 <!-- Stats -->

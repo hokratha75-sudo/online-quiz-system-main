@@ -55,24 +55,32 @@
 
         <!-- Table Content -->
         <div class="overflow-x-auto min-h-[400px]">
-            <table class="w-full text-left border-collapse whitespace-nowrap">
+            <table class="w-full text-left table-fixed whitespace-nowrap">
+                <colgroup>
+                    <col class="w-[5%]">
+                    <col class="w-[22%]">
+                    <col class="w-[28%]">
+                    <col class="w-[13%]">
+                    <col class="w-[17%]">
+                    <col class="w-[15%]">
+                </colgroup>
                 <thead>
-                    <tr class="bg-white border-b border-slate-50">
-                        <th class="px-6 py-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wider w-16">#</th>
-                        <th class="px-6 py-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">User Profile</th>
-                        <th class="px-6 py-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Contact</th>
-                        <th class="px-6 py-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Role</th>
-                        <th class="px-6 py-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Joined Date</th>
-                        <th class="px-6 py-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+                    <tr class="bg-white border-b border-slate-100">
+                        <th class="pl-6 pr-2 py-4 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">#</th>
+                        <th class="px-4 py-4 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">User Profile</th>
+                        <th class="px-4 py-4 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Contact</th>
+                        <th class="px-4 py-4 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Role</th>
+                        <th class="px-4 py-4 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Joined Date</th>
+                        <th class="px-4 pr-6 py-4 text-[11px] font-semibold text-slate-400 uppercase tracking-wider text-center">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100/80 bg-white">
+                <tbody class="divide-y divide-slate-100/60 bg-white">
                     @forelse($users as $user)
-                    <tr class="hover:bg-slate-50/50 transition-colors group">
-                        <td class="px-6 py-5">
+                    <tr class="hover:bg-slate-50/60 transition-colors duration-150 group">
+                        <td class="pl-6 pr-2 py-4">
                             <span class="text-xs font-bold text-slate-400 tabular-nums">{{ $users->firstItem() + $loop->index }}</span>
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-4 py-4">
                             <div class="flex items-center gap-3">
                                 <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shrink-0 shadow-lg shadow-indigo-600/20 border border-indigo-500/30 uppercase tabular-nums">
                                     @if($user->profile_photo)
@@ -81,18 +89,18 @@
                                         {{ substr($user->username ?? 'U', 0, 1) }}
                                     @endif
                                 </div>
-                                <div>
-                                    <h4 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors tabular-nums tracking-tight">{{ $user->username }}</h4>
+                                <div class="min-w-0">
+                                    <h4 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors tracking-tight truncate">{{ $user->username }}</h4>
                                 </div>
                             </div>
                         </td>
-                        <td class="px-6 py-5">
-                            <div class="flex items-center gap-2 text-xs font-bold text-slate-500">
-                                <i class="far fa-envelope text-indigo-500"></i>
-                                {{ $user->email ?? '--' }}
+                        <td class="px-4 py-4">
+                            <div class="flex items-center gap-2 text-xs font-bold text-slate-500 min-w-0">
+                                <i class="far fa-envelope text-indigo-400 shrink-0"></i>
+                                <span class="truncate">{{ $user->email ?? '--' }}</span>
                             </div>
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-4 py-4">
                             @php
                                 $roleName = strtolower($user->role->role_name ?? 'admin');
                                 $badgeClass = 'bg-slate-50 text-slate-600 border-slate-200';
@@ -105,28 +113,28 @@
                                     $badgeClass = 'bg-emerald-50 text-indigo-700 border-emerald-200';
                                 }
                             @endphp
-                            <span class="px-2.5 py-1 rounded-md border text-[11px] font-semibold tracking-wide flex inline-flex items-center gap-1.5 {{ $badgeClass }}">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border text-[11px] font-semibold tracking-wide {{ $badgeClass }}">
                                 {{ ucfirst($roleName) }}
                             </span>
                         </td>
-                        <td class="px-6 py-4">
-                            <span class="text-xs font-medium text-slate-600 tabular-nums">{{ optional($user->created_at)->format('M d, Y') }}</span>
+                        <td class="px-4 py-4">
+                            <span class="text-xs font-medium text-slate-500 tabular-nums">{{ optional($user->created_at)->format('M d, Y') }}</span>
                         </td>
-                        <td class="px-6 py-4 text-right">
-                            <div class="flex items-center justify-end gap-2 transition-opacity">
-                                <a href="{{ route('admin.users.edit', $user->id) }}" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-indigo-500 hover:bg-emerald-50 transition-colors tooltip-trigger" title="Edit">
+                        <td class="px-4 pr-6 py-4">
+                            <div class="flex items-center justify-center gap-1 transition-opacity">
+                                <a href="{{ route('admin.users.edit', $user->id) }}" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-indigo-500 hover:bg-indigo-50 transition-colors" title="Edit">
                                     <i class="far fa-edit text-sm"></i>
                                 </a>
                                 @if($user->id !== auth()->id())
                                 <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline" onsubmit="return confirm('Delete this user permanently?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors tooltip-trigger" title="Delete">
+                                    <button type="submit" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors" title="Delete">
                                         <i class="far fa-trash-alt text-sm"></i>
                                     </button>
                                 </form>
                                 @else
-                                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-200 cursor-not-allowed tooltip-trigger" title="Cannot delete your own account">
+                                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-200 cursor-not-allowed" title="Cannot delete your own account">
                                     <i class="far fa-trash-alt text-sm"></i>
                                 </div>
                                 @endif

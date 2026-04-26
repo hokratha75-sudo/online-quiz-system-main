@@ -26,6 +26,24 @@
 
     <!-- Main Content Container -->
     <div class="max-w-4xl mx-auto px-6 -mt-16 relative z-20">
+
+        {{-- Quiz Availability Banner --}}
+        @if($quiz->opened_at || $quiz->closed_at)
+        <div class="bg-white rounded-2xl border border-slate-200/80 px-6 py-4 mb-6 shadow-sm space-y-1">
+            @if($quiz->opened_at)
+            <p class="text-[13px] text-slate-700 leading-relaxed">
+                <span class="font-bold text-slate-800">Opened:</span>
+                {{ \Carbon\Carbon::parse($quiz->opened_at)->format('l, d F Y, g:i A') }}
+            </p>
+            @endif
+            @if($quiz->closed_at)
+            <p class="text-[13px] text-slate-700 leading-relaxed">
+                <span class="font-bold text-slate-800">Closed:</span>
+                {{ \Carbon\Carbon::parse($quiz->closed_at)->format('l, d F Y, g:i A') }}
+            </p>
+            @endif
+        </div>
+        @endif
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             <!-- Information Grid -->

@@ -17,22 +17,23 @@ class StoreQuestionRequest extends FormRequest
 
     public function rules(): array
     {
+        $isShortAnswer = $this->input('type') === 'short_answer';
+
         return [
-            'quiz_id' => 'required|exists:quizzes,id',
-            'content' => 'required|string|max:5000',
-            'type' => 'required|string|in:single_choice,multiple_choice,boolean,true_false,short_answer',
-            'points' => 'required|integer|min:1|max:100',
-            'options' => 'required_unless:type,short_answer|array|min:2|max:10',
-            'options.*' => 'required_unless:type,short_answer|string|max:1000',
-            'correct' => 'required_unless:type,short_answer|array|min:1',
-            'correct.*' => 'integer|min:0|max:10',
+            'quiz_id'    => 'required|exists:quizzes,id',
+            'content'    => 'required|string|max:5000',
+            'type'       => 'required|string|in:single_choice,multiple_choice,boolean,true_false,short_answer',
+            'points'     => 'required|integer|min:1|max:100',
+            'options'    => $isShortAnswer ? 'nullable|array' : 'required|array|min:2|max:10',
+            'options.*'  => $isShortAnswer ? 'nullable|string|max:1000' : 'required|string|max:1000',
+            'correct'    => $isShortAnswer ? 'nullable|array' : 'required|array|min:1',
+            'correct.*'  => 'integer|min:0|max:10',
             'is_reusable' => 'boolean',
         ];
     }
 
     protected function prepareForValidation()
     {
-        // XSS Protection: Strip potentially dangerous tags
         $safeTags = '<b><i><u><br><p>';
         $this->merge([
             'content' => strip_tags($this->content, $safeTags),

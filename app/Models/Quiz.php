@@ -14,7 +14,9 @@ class Quiz extends Model
         'description', 
         'time_limit', 
         'shuffle_questions', 
-        'pass_percentage'
+        'pass_percentage', 
+        'opened_at', 
+        'closed_at'
     ];
 
     public function subject()

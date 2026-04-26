@@ -16,8 +16,8 @@
                 <i class="fas fa-arrow-left text-xs"></i>
             </a>
             <div>
-                <h1 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight uppercase">{{ $quiz->title }}</h1>
-                <p class="text-xs font-bold text-indigo-600 mt-1 uppercase tracking-widest">Configure settings and manage quiz questions</p>
+                <h1 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">{{ $quiz->title }}</h1>
+                <p class="text-sm font-medium text-slate-500 mt-1">Edit quiz settings and manage questions</p>
             </div>
         </div>
         <div class="flex items-center gap-3">
@@ -45,7 +45,7 @@
                     <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex justify-center items-center shadow-sm">
                         <i class="fas fa-cog text-[10px]"></i>
                     </div>
-                    <h3 class="text-xs font-bold text-slate-900 tracking-widest uppercase">Configuration</h3>
+                    <h3 class="text-xs font-bold text-slate-900 tracking-widest uppercase">Quiz Settings</h3>
                 </div>
 
                 <div class="p-6 space-y-6 flex-grow">
@@ -104,16 +104,45 @@
                         </div>
                         <div>
                             <h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest group-hover:text-indigo-600 transition-all">Shuffle Questions</h4>
-                            <p class="text-[10px] font-bold text-slate-500 uppercase mt-0.5 leading-relaxed tracking-tight">Randomize the order of inquiries</p>
+                            <p class="text-[10px] text-slate-500 mt-0.5 leading-relaxed">Randomize the question order each time a student takes the quiz</p>
                         </div>
                     </label>
+
+                    {{-- ── Deadline Section ── --}}
+                    <div class="mt-2 rounded-2xl border border-amber-100 bg-amber-50/60 p-5 space-y-4">
+                        <div class="flex items-center gap-2 mb-1">
+                        <i class="fas fa-calendar-alt text-amber-500 text-xs"></i>
+                        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-widest">Quiz Availability</h4>
+                        <span class="text-[10px] text-slate-400 font-medium ml-auto">Optional</span>
+                    </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                                <i class="fas fa-door-open text-emerald-500 mr-1"></i> Opens At
+                            </label>
+                            <input type="datetime-local" name="opened_at"
+                                   value="{{ $quiz->opened_at ? \Carbon\Carbon::parse($quiz->opened_at)->format('Y-m-d\TH:i') : '' }}"
+                                   class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-400/30 focus:border-amber-400 transition-all shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                                <i class="fas fa-door-closed text-rose-500 mr-1"></i> Closes At
+                            </label>
+                            <input type="datetime-local" name="closed_at"
+                                   value="{{ $quiz->closed_at ? \Carbon\Carbon::parse($quiz->closed_at)->format('Y-m-d\TH:i') : '' }}"
+                                   class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-400/30 focus:border-rose-400 transition-all shadow-sm">
+                        </div>
+                        <p class="text-[10px] text-slate-400 leading-relaxed">
+                            <i class="fas fa-info-circle mr-0.5"></i>
+                            Students can only attempt this quiz within the set time window. Leave blank for no restriction.
+                        </p>
+                    </div>
                 </div>
 
                 <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/30 flex flex-col gap-3">
-                    <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white px-6 py-2.5 rounded-xl text-sm font-medium transition-all shadow-sm flex justify-center items-center gap-2">
+                    <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm flex justify-center items-center gap-2">
                         <i class="fas fa-save text-xs"></i> Save Settings
                     </button>
-                    <button type="button" onclick="deleteQuiz()" class="w-full bg-white hover:bg-rose-50 border border-slate-200/80 hover:border-rose-200 text-rose-600 px-6 py-2.5 rounded-xl text-sm font-medium transition-all shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex justify-center items-center gap-2">
+                    <button type="button" onclick="deleteQuiz()" class="w-full bg-white hover:bg-rose-50 border border-slate-200/80 hover:border-rose-200 text-rose-600 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-[0_1px_2px_rgba(0,0,0,0.02)] flex justify-center items-center gap-2">
                         <i class="far fa-trash-alt text-xs"></i> Delete Quiz
                     </button>
                 </div>
@@ -128,7 +157,7 @@
                         <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex justify-center items-center shadow-sm">
                             <i class="fas fa-list-ul text-[10px]"></i>
                         </div>
-                        <h3 class="text-xs font-bold text-slate-900 tracking-widest uppercase">Assessment Matrix (<span id="questionCount" class="text-indigo-600 tabular-nums">{{ $quiz->questions->count() }}</span> Questions)</h3>
+                        <h3 class="text-xs font-bold text-slate-900 tracking-widest uppercase">Questions (<span id="questionCount" class="text-indigo-600 tabular-nums">{{ $quiz->questions->count() }}</span> total)</h3>
                     </div>
                 </div>
 

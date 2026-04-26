@@ -97,6 +97,32 @@
                         <p class="text-[10px] font-bold text-slate-500 uppercase mt-0.5 leading-relaxed tracking-tight">Randomize the order of inquiries</p>
                     </div>
                 </label>
+
+                <div class="rounded-2xl border border-amber-100 bg-amber-50/60 p-5 space-y-4">
+                    <div class="flex items-center gap-2 mb-1">
+                        <i class="fas fa-calendar-alt text-amber-500 text-xs"></i>
+                        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-widest">Quiz Availability</h4>
+                        <span class="text-[10px] text-slate-400 font-medium ml-auto">Optional</span>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                            <i class="fas fa-door-open text-emerald-500 mr-1"></i> Opens At
+                        </label>
+                        <input type="datetime-local" name="opened_at" value="{{ old('opened_at') }}"
+                               class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-400/30 focus:border-amber-400 transition-all shadow-sm">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                            <i class="fas fa-door-closed text-rose-500 mr-1"></i> Closes At
+                        </label>
+                        <input type="datetime-local" name="closed_at" value="{{ old('closed_at') }}"
+                               class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-400/30 focus:border-rose-400 transition-all shadow-sm">
+                    </div>
+                    <p class="text-[10px] text-slate-400 leading-relaxed">
+                        <i class="fas fa-info-circle mr-0.5"></i>
+                        Students can only attempt this quiz within the set time window. Leave blank for no restriction.
+                    </p>
+                </div>
             </div>
 
             <div class="px-8 py-5 border-t border-slate-100 bg-slate-50 flex items-center justify-between">
