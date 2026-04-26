@@ -1,94 +1,185 @@
-# QuizMaster v2.0 - Online Quiz System
+# 🎓 QuizMaster v2.0 — Online Quiz System
 
-
-🛠 System Requirements / តម្រូវការប្រព័ន្ធ
-
-Ensure your environment meets these minimum requirements:
-សូមប្រាកដថាប្រព័ន្ធរបស់អ្នកបំពេញតាមលក្ខខណ្ឌដូចខាងក្រោម៖
-
-- **PHP**: `>= 8.2`
-- **Composer**: Version `2.x`
-- **Node.js & NPM**: Latest stable version.
-- **Database**: PostgreSQL (Recommended) or MySQL `~8.0` / MariaDB `~10.5`
-- **Web Server**: Apache / Nginx (Laragon is recommended for Windows users).
-- **Required Extensions**: `PDO`, `Mbstring`, `OpenSSL`, `cURL`, `XML`, `ZIP`, `GD`, `BCMath`
+A modern, feature-rich online quiz platform built with **Laravel 12**, **PostgreSQL**, **Tailwind CSS**, and **Alpine.js**.
 
 ---
 
- ការណែនាំពីវិធីដំឡើង project
+## 🛠 System Requirements
 
-### 1. Clone the Project / ទាញយក Project
+Ensure your environment meets these minimum requirements before installing:
+
+| Requirement | Version |
+|---|---|
+| **PHP** | `>= 8.2` |
+| **Composer** | `2.x` |
+| **Node.js & NPM** | Latest stable |
+| **Database** | PostgreSQL `>= 13` (Recommended) |
+| **Web Server** | Apache / Nginx (Laragon recommended on Windows) |
+| **PHP Extensions** | `PDO`, `pgsql`, `Mbstring`, `OpenSSL`, `cURL`, `XML`, `ZIP`, `GD`, `BCMath` |
+
+---
+
+## 🚀 Installation Guide (For New Setup)
+
+Follow these steps to set up the project on your machine.
+
+### Step 1 — Clone the Project
+
 ```bash
-git clone <repository-url>
+cd C:\laragon\www
+git clone https://github.com/YOUR_USERNAME/online-quiz-system-main.git
 cd online-quiz-system-main
 ```
-Or extract the source zip into your web server directory (e.g., `C:\laragon\www\online-quiz-system-main`).
 
-### 2. Install Dependencies / ដំឡើងបណ្ណាល័យជំនួយ
-Run these commands in your project root:
-រត់ Command ខាងក្រោមនៅក្នុង Folder របស់ Project៖
+---
+
+### Step 2 — Install PHP Dependencies
 
 ```bash
-# Install PHP packages
 composer install
-
-# Install JS packages and build assets
-npm install
-npm run build
 ```
 
-### 3. Environment Setup / កំណត់រចនាសម្ព័ន្ធប្រព័ន្ធ
+---
+
+### Step 3 — Install Node.js Dependencies & Build Assets
+
 ```bash
-cp .env.example .env
+npm install
+npm run dev
+```
+
+---
+
+### Step 4 — Setup Environment File
+
+```bash
+copy .env.example .env
 php artisan key:generate
 ```
-Edit `.env` and update your database credentials:
-កែតម្រូវឯកសារ `.env` និងផ្លាស់ប្តូរព័ត៌មាន Database របស់អ្នក៖
+
+Open `.env` and update your database credentials:
 
 ```env
-DB_CONNECTION=mysql # or pgsql
+DB_CONNECTION=pgsql
 DB_HOST=127.0.0.1
-DB_PORT=3306 # or 5432
-DB_DATABASE=online_quiz_system
-DB_USERNAME=root
-DB_PASSWORD=
+DB_PORT=5432
+DB_DATABASE=online_quiz_project
+DB_USERNAME=postgres
+DB_PASSWORD=your_password_here
 ```
 
-### 4. Database & Storage / រៀបចំ Database និង Storage
-```bash
-# Create tables and seed initial data
-php artisan migrate --seed
+---
 
-# Create storage link for images/files
+### Step 5 — Create the Database
+
+Open **CMD** and navigate to PostgreSQL:
+
+```cmd
+cd "C:\Program Files\PostgreSQL\18\bin"
+psql -U postgres
+```
+
+Inside the `psql` prompt, run:
+
+```sql
+CREATE DATABASE online_quiz_project;
+\q
+```
+
+---
+
+### Step 6 — Import Database from Backup
+
+If you received a `backup.sql` file from the project owner:
+
+```cmd
+cd "C:\Program Files\PostgreSQL\18\bin"
+psql -U postgres -d online_quiz_project -f "C:\path\to\backup.sql"
+```
+
+> Enter your PostgreSQL password when prompted.
+
+**OR** — Run migrations + seeders from scratch:
+
+```bash
+php artisan migrate --seed
 php artisan storage:link
 ```
 
-### 5. Run the System / បើកដំណើរការប្រព័ន្ធ
+---
+
+### Step 7 — Start the Application
+
 ```bash
 php artisan serve
 ```
-Visit: `http://localhost:8000`
+
+🌐 Open your browser: **http://localhost:8000**
 
 ---
 
-## 🔐 Default Login Credentials / គណនីចូលប្រើប្រាស់លំនាំដើម
+## 🔐 Default Login Credentials
 
 | Role | Email | Username | Password |
-|:--- |:--- |:--- |:--- |
+|:---|:---|:---|:---|
 | **Admin** | `admin@gmail.com` | `admin` | `admin123` |
 | **Teacher** | `teacher2@example.com` | `teacher2` | `teacher123` |
 | **Student** | `student1@gmail.com` | `student1` | `student123` |
 
 ---
 
-## 🛠 Maintenance & Quick Tools / ឧបករណ៍ជំនួយ
+## 💾 Database Backup (For Project Owner)
 
-If you are using the system locally, you can use these special URLs to manage the database directly from your browser:
-ប្រសិនបើអ្នកប្រើប្រាស់ក្នុងម៉ាស៊ីនផ្ទាល់ អ្នកអាចប្រើប្រាស់ Link ពិសេសខាងក្រោមដើម្បីគ្រប់គ្រង Database៖
+To export the database for sharing with others:
 
-- **`http://localhost:8000/migrate`**: Run database migrations.
-- **`http://localhost:8000/seed`**: Populate database with academic structure & test data.
-- **`http://localhost:8000/cleanup-duplicates`**: Automatically find and delete duplicate data (Users, subjects, etc.).
-- **`http://localhost:8000/link-storage`**: Repair storage symbolic link if images are not showing.
+```cmd
+cd "C:\Program Files\PostgreSQL\18\bin"
+pg_dump -U postgres -f "C:\Users\asusx\Desktop\backup.sql" online_quiz_project
+```
 
+Send the generated `backup.sql` file to your friend along with this README.
 
+---
+
+## ✅ Quick Setup Checklist
+
+| # | Step | Done |
+|---|---|---|
+| 1 | Clone project from GitHub | ☐ |
+| 2 | `composer install` | ☐ |
+| 3 | `npm install && npm run dev` | ☐ |
+| 4 | Copy `.env.example` → `.env` + generate key | ☐ |
+| 5 | Edit DB settings in `.env` | ☐ |
+| 6 | Create database in PostgreSQL | ☐ |
+| 7 | Import `backup.sql` (or run `migrate --seed`) | ☐ |
+| 8 | `php artisan serve` | ☐ |
+| 9 | Open **http://localhost:8000** ✅ | ☐ |
+
+---
+
+## 🛠 Maintenance & Quick Tools
+
+If running locally, these special URLs are available for database management:
+
+| URL | Action |
+|---|---|
+| `http://localhost:8000/migrate` | Run database migrations |
+| `http://localhost:8000/seed` | Populate database with test data |
+| `http://localhost:8000/cleanup-duplicates` | Remove duplicate records |
+| `http://localhost:8000/link-storage` | Fix storage symbolic link |
+
+---
+
+## 🧰 Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Backend** | Laravel 12 (PHP 8.2) |
+| **Database** | PostgreSQL 18 |
+| **Frontend** | Blade, Tailwind CSS, Alpine.js |
+| **Auth** | Laravel built-in Auth |
+| **Assets** | Vite + Node.js |
+
+---
+
+> Built with ❤️ — QuizMaster v2.0 © 2026
