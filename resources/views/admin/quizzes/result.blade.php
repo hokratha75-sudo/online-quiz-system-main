@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="min-h-screen bg-slate-50/50 pb-20 font-inter">
+<div class="min-h-screen bg-slate-50/50 pb-20 font-sans">
     
     @php 
         $isStudent = auth()->user()->role_id == 3;
@@ -16,13 +16,11 @@
                 <div class="w-20 h-20 bg-white/10 text-indigo-200 rounded-[28px] flex items-center justify-center mx-auto mb-8 text-3xl border border-white/5 shadow-2xl animate-pulse">
                     <i class="fas fa-hourglass-half"></i>
                 </div>
-                <h1 class="text-3xl font-bold text-white tracking-tight uppercase mb-4">Results Pending Audit</h1>
-                <p class="text-indigo-200/60 text-xs font-bold leading-relaxed max-w-md mx-auto uppercase tracking-wide">
-                    Your assessment vectors are currently being verified by the academic proctoring department. Access will be granted once certified.
-                </p>
+                                                                <h1 class="text-3xl font-bold text-white tracking-tight mb-4" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Your Results are Coming Soon</h1>
+                                    Your teacher is currently reviewing your hard work. We'll send you a notification as soon as your final results are ready to view!
                 <div class="mt-12">
                     <a href="{{ route('students.dashboard') }}" class="inline-flex items-center gap-3 bg-white text-indigo-600 px-8 py-3.5 rounded-2xl font-bold text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-white/5">
-                        <i class="fas fa-arrow-left"></i> Return to Terminal
+                                                <i class="fas fa-arrow-left"></i> Return to Dashboard
                     </a>
                 </div>
             </div>
@@ -40,11 +38,11 @@
                 <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 flex items-center justify-center mx-auto mb-6 text-2xl shadow-xl">
                     <i class="fas {{ $passed ? 'fa-award text-yellow-300' : 'fa-info-circle text-rose-100' }}"></i>
                 </div>
-                <h1 class="text-3xl md:text-4xl font-bold tracking-tight uppercase mb-2 leading-none">
-                    {{ $passed ? 'EXCELLENCE CONFIRMED' : 'RETRY RECOMMENDED' }}
+                                                                <h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-2 leading-none" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">
+                    {{ $passed ? 'Congratulations!' : 'Keep Growing!' }}
                 </h1>
-                <p class="text-white/60 text-[10px] font-bold uppercase tracking-[0.2em]">
-                    {{ $passed ? 'AUTHORIZED DEPLOYMENT • VECTOR MATCH' : 'FAILSAFE TRIGGERED • BELOW THRESHOLD' }}
+                                <p class="text-white/60 text-[10px] font-bold uppercase tracking-[0.2em]">
+                    {{ $passed ? "You've successfully completed this challenge!" : "Don't give up! Every mistake is a learning opportunity." }}
                 </p>
             </div>
         </div>
@@ -66,13 +64,13 @@
                     </div>
 
                     <div class="flex-grow text-center md:text-left">
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg {{ $passed ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600' }} text-[10px] font-bold uppercase tracking-widest mb-4 border border-current opacity-70">
+                                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg {{ $passed ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600' }} text-[10px] font-bold uppercase tracking-widest mb-4 border border-current opacity-70">
                             <i class="fas {{ $passed ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
-                            {{ $passed ? 'AUTHORIZED PASS' : 'SYNC THRESHOLD FAILED' }}
+                            {{ $passed ? 'Passed' : 'Failed' }}
                         </div>
-                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight leading-none mb-3 uppercase">VALIDATION REPORT</h2>
-                        <p class="text-xs font-bold text-slate-400 leading-relaxed max-w-sm uppercase tracking-tight">
-                            Your performance vector for <strong>{{ $attempt->quiz->title }}</strong> has been logged in the institutional ledger.
+                                                                                                <h2 class="text-2xl font-bold text-slate-900 tracking-tight leading-none mb-3" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Performance Overview</h2>
+                                                <p class="text-xs font-medium text-slate-400 leading-relaxed max-w-sm tracking-tight">
+                            Your performance for <strong>{{ $attempt->quiz->title }}</strong> has been recorded in the system.
                         </p>
                     </div>
                 </div>
@@ -85,23 +83,23 @@
                             $diff = \Carbon\Carbon::parse($attempt->started_at)->diff($attempt->completed_at);
                             $timeStr = ($diff->i > 0 ? $diff->i . 'm ' : '') . $diff->s . 's';
                         @endphp
-                        <span class="text-lg font-bold text-slate-900 tabular-nums">{{ $timeStr }}</span>
-                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Period</span>
+                                                <span class="text-lg font-bold text-slate-900 tabular-nums">{{ $timeStr }}</span>
+                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Time Taken</span>
                     </div>
                     <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col items-center hover:bg-white hover:border-indigo-500/20 transition-all shadow-sm">
                         <i class="far fa-calendar text-indigo-600 text-sm mb-3"></i>
-                        <span class="text-lg font-bold text-slate-900 tabular-nums">{{ $attempt->completed_at->format('d M') }}</span>
-                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Stamp</span>
+                                                <span class="text-lg font-bold text-slate-900 tabular-nums">{{ $attempt->completed_at->format('d M') }}</span>
+                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Date</span>
                     </div>
                     <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col items-center text-center hover:bg-white hover:border-indigo-500/20 transition-all shadow-sm">
                         <i class="far fa-shield text-{{ $attempt->violations > 0 ? 'rose' : 'emerald' }}-500 text-sm mb-3"></i>
-                        <span class="text-lg font-bold {{ $attempt->violations > 0 ? 'text-rose-500' : 'text-emerald-500' }}">{{ $attempt->violations ? $attempt->violations : 'CLEAN' }}</span>
-                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Trust</span>
+                                                <span class="text-lg font-bold {{ $attempt->violations > 0 ? 'text-rose-500' : 'text-emerald-500' }}">{{ $attempt->violations ? $attempt->violations : 'NONE' }}</span>
+                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Focus Alerts</span>
                     </div>
                     <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col items-center hover:bg-white hover:border-indigo-500/20 transition-all shadow-sm">
                         <i class="far fa-star text-indigo-600 text-sm mb-3"></i>
-                        <span class="text-lg font-bold text-slate-900 tabular-nums">{{ $attempt->quiz->pass_percentage }}%</span>
-                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Aim</span>
+                                                <span class="text-lg font-bold text-slate-900 tabular-nums">{{ $attempt->quiz->pass_percentage }}%</span>
+                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Required</span>
                     </div>
                 </div>
 
@@ -116,8 +114,8 @@
                             <i class="fas fa-comment-dots text-sm"></i>
                         </div>
                         <div>
-                            <div class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-2">Auditor Feedback</div>
-                            <p class="text-slate-700 text-sm font-bold leading-relaxed uppercase tracking-tight opacity-80">"{{ $attempt->result->teacher_feedback }}"</p>
+                                                        <div class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-2">Instructor Feedback</div>
+                            <p class="text-slate-700 text-sm font-medium leading-relaxed tracking-tight">"{{ $attempt->result->teacher_feedback }}"</p>
                         </div>
                     </div>
                 </div>
@@ -125,11 +123,11 @@
 
                 <!-- Action Footer: Compact Buttons -->
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="{{ $isStudent ? route('students.dashboard') : route('quizzes.index') }}" class="h-14 px-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all shadow-xl shadow-indigo-600/20">
-                        <i class="fas fa-home"></i> Return to Terminal
+                                        <a href="{{ $isStudent ? route('students.dashboard') : route('quizzes.index') }}" class="h-14 px-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all shadow-xl shadow-indigo-600/20">
+                        <i class="fas fa-home"></i> Return to Dashboard
                     </a>
-                    <a href="{{ $isStudent ? route('students.quizzes.take', $attempt->quiz_id) : route('quizzes.take', $attempt->quiz_id) }}" class="h-14 px-10 bg-white border border-slate-200 text-slate-500 hover:border-slate-800 hover:text-slate-900 rounded-2xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all">
-                        <i class="fas fa-rotate-right"></i> {{ $isStudent ? 'Request New Attempt' : 'Simulate Session' }}
+                                        <a href="{{ $isStudent ? route('students.quizzes.take', $attempt->quiz_id) : route('quizzes.take', $attempt->quiz_id) }}" class="h-14 px-10 bg-white border border-slate-200 text-slate-500 hover:border-slate-800 hover:text-slate-900 rounded-2xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all">
+                        <i class="fas fa-rotate-right"></i> {{ $isStudent ? 'Retake Quiz' : 'Try Again' }}
                     </a>
                 </div>
             </div>
@@ -142,8 +140,8 @@
                         <i class="fas fa-gavel text-sm"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-bold text-slate-900 uppercase tracking-tight">Manual Audit Adjustment</h3>
-                        <p class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mt-1.5">Verify result vectors and certify records.</p>
+                                                                                                <h3 class="text-xl font-bold text-slate-900" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Review & Feedback</h3>
+                        <p class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mt-1.5">Verify student responses and provide guidance.</p>
                     </div>
                 </div>
 
@@ -153,8 +151,8 @@
                         <div class="p-8 bg-slate-50 rounded-[32px] border border-slate-100">
                             <div class="flex flex-col md:flex-row justify-between items-start gap-6 mb-8">
                                 <div class="flex-grow">
-                                    <div class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-2 px-2.5 py-1 bg-indigo-50 border border-indigo-100 rounded-md inline-block">Vector #{{ $index + 1 }}</div>
-                                    <h4 class="text-lg font-bold text-slate-800 leading-snug uppercase tracking-tight">{!! $q->content !!}</h4>
+                                                                        <div class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-2 px-2.5 py-1 bg-indigo-50 border border-indigo-100 rounded-md inline-block">Question #{{ $index + 1 }}</div>
+                                    <h4 class="text-lg font-bold text-slate-800 leading-snug tracking-tight">{!! $q->content !!}</h4>
                                 </div>
                                 <div class="shrink-0 flex items-center gap-2.5 px-4 py-2 rounded-xl bg-white border border-slate-100 shadow-sm">
                                     <i class="fas {{ $q->type === 'short_answer' ? 'fa-pen-nib text-amber-500' : 'fa-list-ul text-indigo-600' }} text-[10px]"></i>
@@ -164,8 +162,8 @@
 
                             @if($q->type === 'short_answer')
                                 <div class="p-8 bg-white border border-slate-200 rounded-[28px] text-slate-700 font-bold uppercase text-sm leading-relaxed relative shadow-inner">
-                                    <div class="absolute -top-3 left-8 px-3 bg-indigo-600 text-[10px] font-bold text-white uppercase tracking-widest rounded-full h-6 flex items-center">Candidate Input</div>
-                                    "{{ $ans->short_text ?? 'ERR: DATA LOSS DETECTED' }}"
+                                                                        <div class="absolute -top-3 left-8 px-3 bg-indigo-600 text-[10px] font-bold text-white uppercase tracking-widest rounded-full h-6 flex items-center">Student Answer</div>
+                                    "{{ $ans->short_text ?? 'No answer provided' }}"
                                 </div>
                             @else
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -175,7 +173,7 @@
                                             <div class="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold shadow-sm transition-all {{ $isSelected ? ($option->is_correct ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white') : 'bg-slate-50 text-slate-300' }}">
                                                 {{ $option->is_correct ? '✓' : '✗' }}
                                             </div>
-                                            <span class="text-sm font-bold uppercase tracking-tight {{ $isSelected ? 'text-slate-900' : 'text-slate-400' }}">{{ $option->answer_text }}</span>
+                                                                                        <span class="text-sm font-bold tracking-tight {{ $isSelected ? 'text-slate-900' : 'text-slate-400' }}">{{ $option->answer_text }}</span>
                                         </div>
                                     @endforeach
                                 </div>
@@ -189,8 +187,8 @@
                     @csrf
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 bg-indigo-950 rounded-[40px] p-10 md:p-16 text-white shadow-3xl">
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-[0.2em] text-indigo-300 mb-6 flex items-center gap-3">
-                                <i class="fas fa-sliders-h"></i> Audit Score Index
+                                                        <label class="block text-xs font-bold uppercase tracking-[0.2em] text-indigo-300 mb-6 flex items-center gap-3">
+                                <i class="fas fa-sliders-h"></i> Adjusted Score
                             </label>
                             <div class="relative">
                                 <input type="number" name="manual_score" value="{{ $attempt->result->manual_score ?? round($attempt->result->score) }}" min="0" max="100" class="w-full bg-white/5 border-2 border-white/10 rounded-[28px] p-8 text-5xl font-bold text-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 outline-none transition-all tabular-nums">
@@ -203,10 +201,10 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-[0.2em] text-indigo-300 mb-6 flex items-center gap-3">
-                                <i class="fas fa-file-signature"></i> Professional Observation
+                                                        <label class="block text-xs font-bold uppercase tracking-[0.2em] text-indigo-300 mb-6 flex items-center gap-3">
+                                <i class="fas fa-file-signature"></i> Instructor Comments
                             </label>
-                            <textarea name="teacher_feedback" rows="5" class="w-full bg-white/5 border-2 border-white/10 rounded-[28px] p-8 text-indigo-50 font-bold uppercase tracking-tight focus:border-indigo-500 outline-none transition-all placeholder:text-white/10 text-sm leading-relaxed" placeholder="Record constructive analysis concerning candidate performance vectors...">{{ $attempt->result->teacher_feedback }}</textarea>
+                                                        <textarea name="teacher_feedback" rows="5" class="w-full bg-white/5 border-2 border-white/10 rounded-[28px] p-8 text-indigo-50 font-medium tracking-tight focus:border-indigo-500 outline-none transition-all placeholder:text-white/10 text-sm leading-relaxed" placeholder="Enter feedback for the student...">{{ $attempt->result->teacher_feedback }}</textarea>
                         </div>
 
                         <div class="lg:col-span-2 mt-8 flex flex-col md:flex-row items-center justify-between gap-10 p-10 bg-white/5 rounded-[40px] border border-white/10">
@@ -216,13 +214,13 @@
                                     <div class="w-16 h-9 bg-white/10 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-7 after:w-7 after:transition-all peer-checked:bg-indigo-500 shadow-inner"></div>
                                 </div>
                                 <div class="flex flex-col">
-                                    <span class="text-sm font-bold uppercase tracking-widest text-white group-hover:text-indigo-300 transition-colors">Authorize Publication</span>
-                                    <span class="text-[10px] font-bold text-indigo-400 mt-1 uppercase tracking-widest opacity-60">Authorize immediate record release to candidate terminal.</span>
+                                                                        <span class="text-sm font-bold uppercase tracking-widest text-white group-hover:text-indigo-300 transition-colors">Publish Results</span>
+                                    <span class="text-[10px] font-bold text-indigo-400 mt-1 uppercase tracking-widest opacity-60">Make these results visible to the student.</span>
                                 </div>
                             </label>
 
                             <button type="submit" class="w-full md:w-auto h-16 px-14 bg-white text-indigo-950 rounded-2xl font-bold uppercase tracking-[0.2em] shadow-xl hover:scale-105 active:scale-95 transition-all text-[11px]">
-                                Finalize Audit Protocol
+                                                                Save and Finalize
                             </button>
                         </div>
                     </div>

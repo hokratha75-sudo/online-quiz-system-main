@@ -9,12 +9,12 @@
     <!-- Header Section -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 mb-8">
         <div>
-            <h1 class="text-2xl md:text-[28px] font-bold text-slate-900 tracking-tight">System Users</h1>
-            <p class="text-[14px] font-medium text-slate-500 mt-1.5">Manage platform administrators, teachers, and enrolled students.</p>
+                                                                                                <h1 class="text-2xl md:text-[28px] font-bold text-slate-900 tracking-tight" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">School Community</h1>
+                                                <p class="text-[14px] font-medium text-slate-500 mt-1.5">Manage everyone who uses the app, from teachers to students.</p>
         </div>
         <div class="flex items-center gap-3">
             <button type="button" data-bs-toggle="modal" data-bs-target="#createUserModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-2 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                <i class="fas fa-plus text-indigo-200 text-xs"></i> Create User
+                                                                <i class="fas fa-plus text-indigo-200 text-xs"></i> Create User
             </button>
         </div>
     </div>
@@ -43,12 +43,12 @@
         <!-- Toolbar -->
         <div class="p-6 border-b border-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
             <div class="flex items-center gap-3">
-                <h3 class="text-sm font-bold text-slate-900">User Directory</h3>
-                <span class="inline-flex items-center px-2.5 py-1 rounded-md bg-white border border-slate-200 text-indigo-600 text-xs font-semibold shadow-sm tabular-nums">{{ $users->total() }} Records</span>
+                                                                <h3 class="text-sm font-bold text-slate-900">Member List</h3>
+                                                                <span class="inline-flex items-center px-2.5 py-1 rounded-md bg-white border border-slate-200 text-indigo-600 text-xs font-semibold shadow-sm tabular-nums">{{ $users->total() }} Members</span>
             </div>
             <form action="{{ route('admin.users.index') }}" method="GET" class="relative w-full sm:w-80">
                 <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Search by name or email..." 
+                                                                <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Search by name or email..." 
                        class="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all placeholder:text-slate-400 shadow-sm">
             </form>
         </div>
@@ -67,11 +67,11 @@
                 <thead>
                     <tr class="bg-white border-b border-slate-100">
                         <th class="pl-6 pr-2 py-4 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">#</th>
-                        <th class="px-4 py-4 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">User Profile</th>
-                        <th class="px-4 py-4 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Contact</th>
-                        <th class="px-4 py-4 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Role</th>
-                        <th class="px-4 py-4 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Joined Date</th>
-                        <th class="px-4 pr-6 py-4 text-[11px] font-semibold text-slate-400 uppercase tracking-wider text-center">Actions</th>
+                                                                                                <th class="px-4 py-4 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Name</th>
+                                                                                                <th class="px-4 py-4 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Contact</th>
+                                                                                                <th class="px-4 py-4 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Role</th>
+                                                                                                <th class="px-4 py-4 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Member Since</th>
+                                                                                                <th class="px-4 pr-6 py-4 text-[11px] font-semibold text-slate-400 uppercase tracking-wider text-center">Manage</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100/60 bg-white">
@@ -126,7 +126,7 @@
                                     <i class="far fa-edit text-sm"></i>
                                 </a>
                                 @if($user->id !== auth()->id())
-                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline" onsubmit="return confirm('Delete this user permanently?')">
+                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to remove this member? This will permanently delete their account and all associated progress.')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors" title="Delete">
@@ -165,7 +165,7 @@
         @if($users->hasPages())
         <div class="px-8 py-5 border-t border-slate-50 bg-slate-50/50 flex flex-col md:flex-row items-center justify-between gap-4">
             <span class="text-xs font-medium text-slate-500 tabular-nums">
-                Displaying {{ $users->firstItem() ?? 0 }} - {{ $users->lastItem() ?? 0 }} of {{ $users->total() }} Users
+                Showing {{ $users->firstItem() ?? 0 }} - {{ $users->lastItem() ?? 0 }} of {{ $users->total() }} Members
             </span>
             <div class="flex justify-end custom-pagination">
                 {{ $users->withQueryString()->links() }}
@@ -174,7 +174,7 @@
         @else
         <div class="px-8 py-4 border-t border-slate-50 bg-slate-50/50 flex justify-start">
             <span class="text-xs font-medium text-slate-500 tabular-nums">
-                Total Records: {{ $users->total() }} Users
+                Total Members: {{ $users->total() }}
             </span>
         </div>
         @endif
@@ -260,8 +260,8 @@
         <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden bg-white">
             <div class="modal-header border-b border-slate-100 bg-slate-50 px-8 py-6 flex items-center justify-between">
                 <div>
-                    <h5 class="text-xl font-bold text-slate-900 tracking-tight" id="createUserModalLabel">Register New User</h5>
-                    <p class="text-sm font-medium text-slate-500 mt-1">Create an administrative node, teacher, or student profile.</p>
+                                                                                                                                                                <h5 class="text-xl font-bold text-slate-900 tracking-tight" id="createUserModalLabel" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Register New Member</h5>
+                                                                                <p class="text-sm font-medium text-slate-500 mt-1">Create an account for a teacher, student, or admin.</p>
                 </div>
                 <button type="button" class="w-10 h-10 rounded-xl bg-white border border-slate-200 text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all flex items-center justify-center p-0" data-bs-dismiss="modal">
                     <i class="fas fa-times"></i>
@@ -276,21 +276,21 @@
                         <!-- Authentication Matrix -->
                         <div class="bg-slate-50 p-6 rounded-[24px] border border-slate-100 shadow-sm">
                             <h6 class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
-                                <i class="fas fa-shield-alt text-indigo-500"></i> Authentication
+                                <i class="fas fa-shield-alt text-indigo-500"></i> Login Details
                             </h6>
                             <div class="space-y-5">
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-2">Username <span class="text-rose-500">*</span></label>
+                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Username <span class="text-rose-500">*</span></label>
                                     <input type="text" name="username" value="{{ old('username') }}" required
                                            class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-2">Email <span class="text-rose-500">*</span></label>
+                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Email <span class="text-rose-500">*</span></label>
                                     <input type="email" name="email" value="{{ old('email') }}" required
                                            class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-2">Role <span class="text-rose-500">*</span></label>
+                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Role <span class="text-rose-500">*</span></label>
                                     <select name="role_id" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all cursor-pointer appearance-none">
                                         @foreach($roles as $role)
                                             <option value="{{ $role->id }}">{{ ucfirst($role->role_name) }}</option>
@@ -299,12 +299,12 @@
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-700 mb-2">Password <span class="text-rose-500">*</span></label>
+                                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Password <span class="text-rose-500">*</span></label>
                                         <input type="password" name="password" required
                                                class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-700 mb-2">Confirm <span class="text-rose-500">*</span></label>
+                                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Confirm <span class="text-rose-500">*</span></label>
                                         <input type="password" name="password_confirmation" required
                                                class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all">
                                     </div>
@@ -315,41 +315,41 @@
                         <!-- Personal Information -->
                         <div class="bg-slate-50 p-6 rounded-[24px] border border-slate-100 shadow-sm">
                             <h6 class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
-                                <i class="fas fa-user-tag text-indigo-500"></i> Personal Info
+                                <i class="fas fa-user-tag text-indigo-500"></i> Profile Info
                             </h6>
                             <div class="space-y-5">
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-700 mb-2">First Name <span class="text-rose-500">*</span></label>
+                                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">First Name <span class="text-rose-500">*</span></label>
                                         <input type="text" name="first_name" value="{{ old('first_name') }}" required
                                                class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-700 mb-2">Last Name <span class="text-rose-500">*</span></label>
+                                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Last Name <span class="text-rose-500">*</span></label>
                                         <input type="text" name="last_name" value="{{ old('last_name') }}" required
                                                class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all">
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-700 mb-2">Phone</label>
+                                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Phone</label>
                                         <input type="text" name="phone" value="{{ old('phone') }}"
                                                class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-700 mb-2">Birthday</label>
+                                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Birthday</label>
                                         <input type="date" name="birthday" value="{{ old('birthday') }}"
                                                class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all">
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-700 mb-2">Address</label>
+                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Address</label>
                                     <input type="text" name="address" value="{{ old('address') }}"
                                            class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all">
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-700 mb-2">Gender</label>
+                                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Gender</label>
                                         <select name="sex" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all cursor-pointer appearance-none">
                                             <option value="Male">Male</option>
                                             <option value="Female">Female</option>
@@ -367,8 +367,8 @@
                     </div>
 
                     <div class="flex justify-end gap-3 pt-6 border-t border-slate-100 mt-8">
-                        <button type="button" class="px-6 py-3 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-sm font-semibold transition-all" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-all shadow-md active:scale-95">Create User</button>
+                                                                                                <button type="button" class="px-6 py-3 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-sm font-semibold transition-all" data-bs-dismiss="modal">Cancel</button>
+                                                                                                <button type="submit" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-all shadow-md active:scale-95">Create User</button>
                     </div>
                 </form>
             </div>

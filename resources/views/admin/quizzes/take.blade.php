@@ -6,9 +6,9 @@
 @endphp
 
 @section('styles')
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 <style>
-    .font-heading { font-family: 'Plus Jakarta Sans', 'Kantumruy Pro', sans-serif; }
+        .font-heading { font-family: 'Open Sans', Helvetica, Arial, sans-serif !important; }
     .text-dark-gray { color: #333333; }
 </style>
 @endsection
@@ -20,13 +20,13 @@
         <div class="w-24 h-24 bg-rose-50 text-rose-500 rounded-3xl flex items-center justify-center mx-auto mb-8 text-4xl animate-pulse shadow-sm">
             <i class="fas fa-shield-slash"></i>
         </div>
-        <h2 class="font-heading text-3xl font-bold text-slate-900 tracking-tight mb-4">Lockdown Breach</h2>
-        <p class="text-slate-500 font-bold leading-relaxed mb-10 text-xs uppercase tracking-wide">We detected multiple unauthorized window transitions. Deployment has been frozen and flagged for administrative verification.</p>
+                <h2 class="font-heading text-3xl font-bold text-slate-900 tracking-tight mb-4">Focus Required</h2>
+                <p class="text-slate-500 font-medium leading-relaxed mb-10 text-sm">We noticed you stepped away from the quiz multiple times. To ensure fairness for all students, your session has been paused and will be reviewed by your teacher.</p>
         <button onclick="window.location.href='{{ route('students.dashboard') }}'" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-bold uppercase tracking-widest shadow-xl shadow-indigo-600/20 hover:bg-indigo-700 transition-all">Back to Dashboard</button>
     </div>
 </div>
 
-<div class="min-h-screen bg-[#fafafa] select-none font-inter" oncontextmenu="return false;">
+<div class="min-h-screen bg-[#fafafa] select-none font-sans" oncontextmenu="return false;">
     
     <!-- Top Header -->
     <header class="bg-white border-b border-slate-200 z-50 shadow-sm relative">
@@ -303,19 +303,28 @@
 
         // Proctoring System
         let warnings = 0;
+        let isSubmitting = false;
         const maxWarnings = 3;
         const securityOverlay = document.getElementById('securityHUDEnded');
         
+        quizForm.addEventListener('submit', () => {
+            isSubmitting = true;
+        });
+
         function triggerWarning() {
+            if (isSubmitting) return;
             warnings++;
             if (warnings >= maxWarnings) {
                 if(securityOverlay) {
                     securityOverlay.classList.remove('hidden');
                     securityOverlay.classList.add('flex');
                 }
-                setTimeout(() => { quizForm.submit(); }, 3000);
+                setTimeout(() => { 
+                    isSubmitting = true;
+                    quizForm.submit(); 
+                }, 3000);
             } else {
-                alert(`INSTITUTIONAL ALERT: Unauthorized window switching detected (#${warnings}/${maxWarnings}). Exceeding ${maxWarnings} violations results in immediate disqualification.`);
+                alert(`Careful! Please stay focused on your quiz. Switching tabs or windows too often (#${warnings}/${maxWarnings}) will cause your session to be automatically submitted to ensure a fair testing environment. Please stay on this page to make sure your hard work counts!`);
             }
         }
 

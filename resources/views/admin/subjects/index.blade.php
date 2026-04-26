@@ -7,7 +7,7 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 mb-8">
         <div>
             <h1 class="text-2xl md:text-[28px] font-bold text-slate-900 tracking-tight">Academic Subjects</h1>
-            <p class="text-[14px] font-medium text-slate-500 mt-1.5">Manage subject control, modules and distribution matrix.</p>
+            <p class="text-[14px] font-medium text-slate-500 mt-1.5">Manage your course list and learning modules.</p>
         </div>
         
         <div class="flex items-center gap-3">
@@ -56,7 +56,7 @@
                     <i class="fas fa-pen-nib text-indigo-500"></i> Edit Selected
                 </button>
                 <button onclick="deleteSelected()" class="h-10 px-5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 hover:border-rose-200 hover:text-rose-600 hover:bg-rose-50 transition-all flex items-center gap-2 shadow-sm shrink-0">
-                    <i class="fas fa-trash text-rose-500"></i> Delete Selected
+                    <i class="fas fa-trash text-rose-500"></i> Remove Selected
                 </button>
             </div>
         </div>
@@ -188,8 +188,8 @@
         const classSelect = modal.querySelector('select[name="classes[]"]');
         Array.from(classSelect.options).forEach(opt => opt.selected = class_ids.includes(parseInt(opt.value)));
         
-        modal.querySelector('h5').textContent = 'MUTATE LOGIC UNIT';
-        modal.querySelector('button[type="submit"]').textContent = 'APPLY MUTATION';
+        modal.querySelector('h5').textContent = 'Edit Subject Details';
+        modal.querySelector('button[type="submit"]').textContent = 'Save Changes';
         
         const bsModal = new bootstrap.Modal(modal);
         bsModal.show();
@@ -201,48 +201,56 @@
     }
 
     function deleteRecord(id, name) {
-        if (confirm('Permanently decommission Unit: "' + name + '"? This action will sever all academic links.')) {
-            const form = document.getElementById('singleDeleteForm');
-            form.action = '/admin/subjects/' + id;
-            // Update CSRF token to fresh value
-            const tokenInput = form.querySelector('input[name="_token"]');
-            if (tokenInput) {
-                tokenInput.value = getCsrfToken();
-            }
-            form.submit();
-        }
+        window.premiumConfirm(
+            'Permanently remove subject: "' + name + '"? This will also remove it from all student courses and results.',
+            function() {
+                const form = document.getElementById('singleDeleteForm');
+                form.action = '/admin/subjects/' + id;
+                // Update CSRF token to fresh value
+                const tokenInput = form.querySelector('input[name="_token"]');
+                if (tokenInput) {
+                    tokenInput.value = getCsrfToken();
+                }
+                form.submit();
+            },
+            'Remove Subject?'
+        );
     }
 
     function deleteSelected() {
         const selected = document.querySelectorAll('.row-checkbox:checked');
         if (selected.length === 0) {
-            alert('Select units for decommissioning.');
+            alert('Please select at least one subject to remove.');
             return;
         }
 
-        if (confirm('Execute bulk decommissioning of ' + selected.length + ' unit(s)?')) {
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '{{ route("admin.subjects.bulkDelete") }}';
-            form.style.display = 'none';
+        window.premiumConfirm(
+            'Are you sure you want to remove these ' + selected.length + ' subjects? This data cannot be recovered and will affect student records.',
+            function() {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{{ route("admin.subjects.bulkDelete") }}';
+                form.style.display = 'none';
 
-            const tokenInput = document.createElement('input');
-            tokenInput.type = 'hidden';
-            tokenInput.name = '_token';
-            tokenInput.value = getCsrfToken();
-            form.appendChild(tokenInput);
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '_token';
+                tokenInput.value = getCsrfToken();
+                form.appendChild(tokenInput);
 
-            selected.forEach(cb => {
-                const idInput = document.createElement('input');
-                idInput.type = 'hidden';
-                idInput.name = 'ids[]';
-                idInput.value = cb.value;
-                form.appendChild(idInput);
-            });
+                selected.forEach(cb => {
+                    const idInput = document.createElement('input');
+                    idInput.type = 'hidden';
+                    idInput.name = 'ids[]';
+                    idInput.value = cb.value;
+                    form.appendChild(idInput);
+                });
 
-            document.body.appendChild(form);
-            form.submit();
-        }
+                document.body.appendChild(form);
+                form.submit();
+            },
+            'Remove Multiple Subjects?'
+        );
     }
 
     function editSelected() {

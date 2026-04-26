@@ -13,7 +13,7 @@
                 </div>
             </div>
             <h3 class="text-3xl font-bold text-slate-900 tabular-nums tracking-tight">{{ number_format($totalStudents) }}</h3>
-            <div class="mt-2 text-xs font-medium text-slate-400">Total Registered Nodes</div>
+                        <div class="mt-2 text-xs font-medium text-slate-400">Total Registered Students</div>
         </div>
         
         <div class="bg-white rounded-[24px] border border-slate-50 p-8 shadow-sm group hover:shadow-md transition-all">
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <h3 class="text-3xl font-bold text-slate-900 tabular-nums tracking-tight">{{ $passRate }}%</h3>
-            <div class="mt-2 text-xs font-medium text-slate-400">Institutional Success</div>
+                        <div class="mt-2 text-xs font-medium text-slate-400">Global Success Rate</div>
         </div>
 
         <div class="bg-indigo-600 rounded-[24px] p-8 shadow-xl shadow-indigo-600/20 group relative overflow-hidden transition-all hover:-translate-y-1">
@@ -53,7 +53,7 @@
         </div>
     </div>
 
-    <!-- Analytical Framework -->
+        <!-- Performance Analytics -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
         <!-- Performance Distribution -->
         <div class="bg-white rounded-[32px] border border-slate-50 p-8 shadow-sm">
@@ -65,7 +65,7 @@
             </div>
         </div>
         
-        <!-- Subject Vectors -->
+                <!-- Subject Analysis -->
         <div class="bg-white rounded-[32px] border border-slate-50 p-8 shadow-sm">
             <h6 class="text-sm font-bold text-slate-900 mb-8 flex items-center gap-2">
                 <i class="fas fa-graduation-cap text-indigo-500"></i> Subject Performance
@@ -75,7 +75,7 @@
             </div>
         </div>
 
-        <!-- Logic Ratio -->
+                <!-- Success Ratio -->
         <div class="bg-white rounded-[32px] border border-slate-50 p-8 shadow-sm text-center">
             <h6 class="text-sm font-bold text-slate-900 mb-8 flex items-center gap-2 justify-center">
                 <i class="fas fa-chart-pie text-indigo-500"></i> Pass/Fail Ratio
@@ -92,7 +92,7 @@
         </div>
     </div>
 
-    <!-- Advanced Filter Matrix -->
+        <!-- Advanced Filters -->
     <div class="bg-white rounded-[24px] border border-slate-50 p-6 mb-10 shadow-sm">
         <form action="{{ route('quizzes.reports') }}" method="GET" class="grid grid-cols-1 md:grid-cols-12 gap-4 w-full items-center">
             <div class="md:col-span-3 relative group">
@@ -136,7 +136,7 @@
         </form>
     </div>
 
-    <!-- Archival Table Node -->
+        <!-- Student Reports -->
     <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden mb-10">
         <div class="px-10 py-8 border-b border-slate-50 flex flex-col md:flex-row justify-between items-center gap-6 bg-slate-50/10">
             <div>
@@ -209,7 +209,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="7" class="py-16 text-center text-sm font-medium text-slate-500">No diagnostic logs found</td></tr>
+                                                <tr><td colspan="7" class="py-16 text-center text-sm font-medium text-slate-500">No assessment records found</td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -314,7 +314,7 @@ document.addEventListener('DOMContentLoaded', function() {
     new Chart(ctxPassFail, {
         type: 'doughnut',
         data: {
-            labels: ['Authorized', 'Rejected'],
+                        labels: ['Passed', 'Failed'],
             datasets: [{
                 data: [passRateValue, 100 - passRateValue],
                 backgroundColor: ['#10b981', '#fb7185'],

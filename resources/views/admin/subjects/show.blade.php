@@ -3,7 +3,7 @@
 @section('content')
 <div class="max-w-[1400px] mx-auto p-6 md:p-10 font-inter text-slate-900">
     
-    <!-- Header: Institutional Hero Navigation -->
+        <!-- Header: Subject Details -->
     <header class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
         <div class="flex items-center gap-6">
             <div class="w-16 h-16 rounded-[24px] bg-indigo-600 text-white flex items-center justify-center text-2xl shadow-xl shadow-indigo-600/30">
@@ -11,13 +11,13 @@
             </div>
             <div>
                 <div class="flex items-center gap-3 mb-2">
-                    <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg text-[10px] font-bold uppercase tracking-widest border border-indigo-100">LOGIC UNIT #{{ $subject->id }}</span>
+                                        <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-lg text-[10px] font-bold uppercase tracking-widest border border-indigo-100">SUBJECT ID #{{ $subject->id }}</span>
                 </div>
                 <h1 class="text-3xl font-bold text-slate-900 tracking-tight leading-none uppercase">{{ $subject->subject_name }}</h1>
                 <div class="mt-2 flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                     @if($subject->department)
                         <i class="fas fa-building text-indigo-500"></i>
-                        <a href="{{ route('admin.departments.show', $subject->department->id) }}" class="hover:text-indigo-600 transition-colors">{{ $subject->department->department_name }} Sector</a>
+                                                <a href="{{ route('admin.departments.show', $subject->department->id) }}" class="hover:text-indigo-600 transition-colors">{{ $subject->department->department_name }} Department</a>
                     @endif
                 </div>
             </div>
@@ -36,25 +36,24 @@
         <!-- Primary Metrics & Profile -->
         <div class="lg:col-span-1 space-y-8">
             <div class="bg-white rounded-[32px] p-8 border border-slate-100 shadow-sm">
-                <h3 class="text-[10px] font-bold text-slate-900 uppercase tracking-widest mb-8 flex items-center gap-2">
-                    <i class="fas fa-info-circle text-indigo-500"></i> Logic Unit Metadata
+                                    <i class="fas fa-info-circle text-indigo-500"></i> Subject Information
                 </h3>
                 
                 <div class="space-y-6">
                     <div class="flex items-center justify-between py-4 border-b border-slate-50">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Architect</span>
+                                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Created By</span>
                         <span class="text-xs font-bold text-slate-900 uppercase leading-none">{{ $subject->creator->username ?? 'SYSTEM-GEN' }}</span>
                     </div>
                     <div class="flex items-center justify-between py-4 border-b border-slate-50">
                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Status</span>
-                        <span class="px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-lg text-[9px] font-bold uppercase tracking-widest border border-emerald-100">Live Sync</span>
+                                                <span class="px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-lg text-[9px] font-bold uppercase tracking-widest border border-emerald-100">Active</span>
                     </div>
                     <div class="flex items-center justify-between py-4 border-b border-slate-50">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Vectors Count</span>
-                        <span class="text-xs font-bold text-indigo-600 tabular-nums leading-none">{{ $subject->quizzes->count() }} Assessment Nodes</span>
+                                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Quizzes Count</span>
+                        <span class="text-xs font-bold text-indigo-600 tabular-nums leading-none">{{ $subject->quizzes->count() }} Quizzes</span>
                     </div>
                     <div class="flex items-center justify-between py-4">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Established</span>
+                                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Created Date</span>
                         <span class="text-xs font-bold text-slate-900 uppercase leading-none">{{ $subject->created_at?->format('d M, Y') }}</span>
                     </div>
                 </div>
@@ -64,19 +63,19 @@
                 <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:rotate-12 transition-transform duration-500">
                     <i class="fas fa-graduation-cap text-6xl"></i>
                 </div>
-                <h4 class="text-[10px] font-bold text-indigo-100 uppercase tracking-[0.2em] mb-8 relative z-10">Sync Summary</h4>
-                <p class="text-2xl font-bold leading-tight uppercase tracking-tight relative z-10 mb-2">Institutional <br/> Integration Ready</p>
-                <p class="text-[10px] font-bold text-indigo-200 uppercase tracking-widest relative z-10 opacity-60">Verified academic course unit ledger.</p>
+                                <h4 class="text-[10px] font-bold text-indigo-100 uppercase tracking-[0.2em] mb-8 relative z-10">Subject Summary</h4>
+                <p class="text-2xl font-bold leading-tight uppercase tracking-tight relative z-10 mb-2">Ready for <br/> Enrollment</p>
+                <p class="text-[10px] font-bold text-indigo-200 uppercase tracking-widest relative z-10 opacity-60">Full course subject information and assessments.</p>
             </div>
         </div>
 
         <!-- Analytical List: Quizzes -->
         <div class="lg:col-span-2 bg-white rounded-[32px] p-10 border border-slate-100 shadow-sm overflow-hidden">
             <header class="flex items-center justify-between mb-12">
-                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-widest flex items-center gap-3">
-                    <i class="fas fa-question-circle text-indigo-500"></i> Assessment Vector Registry
+                                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-widest flex items-center gap-3">
+                    <i class="fas fa-question-circle text-indigo-500"></i> Assessment Quizzes
                 </h3>
-                <span class="px-4 py-2 bg-slate-50 rounded-xl text-[10px] font-bold text-slate-400 uppercase tracking-widest border border-slate-100">{{ $subject->quizzes->count() }} Nodes Detected</span>
+                <span class="px-4 py-2 bg-slate-50 rounded-xl text-[10px] font-bold text-slate-400 uppercase tracking-widest border border-slate-100">{{ $subject->quizzes->count() }} Quizzes Found</span>
             </header>
 
             <div class="space-y-6">
@@ -90,7 +89,7 @@
                             <h4 class="text-sm font-bold text-slate-900 uppercase tracking-tight group-hover:text-indigo-600 transition-colors">{{ $quiz->title }}</h4>
                             <div class="flex items-center gap-4 mt-2">
                                 <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest tabular-nums leading-none">
-                                    <i class="far fa-clock me-1 text-indigo-400"></i> Established: {{ $quiz->created_at?->format('d M Y') }}
+                                                                        <i class="far fa-clock me-1 text-indigo-400"></i> Created: {{ $quiz->created_at?->format('d M Y') }}
                                 </span>
                                 @if($quiz->creator)
                                 <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none">
@@ -114,7 +113,7 @@
                     <div class="w-20 h-20 bg-slate-50 rounded-[32px] flex items-center justify-center mx-auto mb-6">
                         <i class="fas fa-inbox text-3xl text-slate-200"></i>
                     </div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">No assessment nodes synchronized yet.</p>
+                                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">No quizzes found for this subject.</p>
                 </div>
                 @endforelse
             </div>

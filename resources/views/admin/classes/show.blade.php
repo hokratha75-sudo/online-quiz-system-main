@@ -2,8 +2,8 @@
 @section('title', $class->name . ' — Class Detail')
 @section('styles')
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-.detail-page { font-family: 'Inter', sans-serif; }
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+.detail-page { font-family: 'Open Sans', Helvetica, Arial, sans-serif; }
 /* Hero */
 .detail-hero { background: linear-gradient(135deg, #064e3b 0%, #059669 60%, #10b981 100%); border-radius: 20px; padding: 32px 36px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; position: relative; overflow: hidden; box-shadow: 0 10px 40px rgba(16,185,129,0.25); margin-bottom: 28px; }
 .detail-hero::before { content: ''; position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(255,255,255,0.05); border-radius: 50%; }

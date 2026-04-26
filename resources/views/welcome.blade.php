@@ -65,7 +65,7 @@
 
             <div class="flex items-center gap-4">
                 @if (Auth::check())
-                    <a href="{{ url('/dashboard') }}" class="h-10 px-6 bg-indigo-600 text-white rounded-xl text-sm font-semibold flex items-center shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 transition-all active:scale-95">Dashboard</a>
+                                                            <a href="{{ url('/dashboard') }}" class="h-10 px-6 bg-indigo-600 text-white rounded-xl text-sm font-semibold flex items-center shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 transition-all active:scale-95">Dashboard</a>
                 @else
                     <a href="{{ route('login') }}" class="h-10 px-6 bg-white text-slate-900 rounded-xl text-sm font-bold flex items-center shadow-lg shadow-white/10 hover:scale-105 active:scale-95 transition-all">Log In</a>
                 @endif
@@ -83,22 +83,22 @@
         <div class="max-w-6xl mx-auto relative z-10 text-center">
             
             <div class="inline-flex items-center gap-3 px-5 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-semibold text-indigo-100 mb-10 shadow-lg border-indigo-500/20 backdrop-blur-sm">
-                <span class="flex h-2 w-2 rounded-full bg-emerald-400"></span> New Update v2.5.0 Available
+                                                <span class="flex h-2 w-2 rounded-full bg-emerald-400"></span> New Update v2.5.0 Available
             </div>
             
-            <h1 class="text-5xl md:text-7xl lg:text-[80px] font-extrabold text-white tracking-tight mb-8 leading-tight">
+                                                                        <h1 class="text-5xl md:text-7xl lg:text-[80px] font-extrabold text-white tracking-tight mb-8 leading-tight" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">
                 Smart & Fast <br/> <span class="bg-gradient-to-r from-indigo-400 via-indigo-200 to-white bg-clip-text text-transparent">Assessment.</span>
             </h1>
             
-            <p class="text-indigo-100/80 text-base md:text-lg font-medium leading-relaxed max-w-2xl mx-auto mb-16">
+                                    <p class="text-indigo-100/80 text-base md:text-lg font-medium leading-relaxed max-w-2xl mx-auto mb-16">
                 Empower your institution with a high-performance system for creating, testing, and tracking academic progress seamlessly.
             </p>
 
             <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-                <a href="{{ url('/register') }}" class="w-full sm:w-64 h-16 bg-white text-slate-900 rounded-[20px] font-bold text-sm flex items-center justify-center gap-3 shadow-xl shadow-white/10 hover:scale-105 active:scale-95 transition-all">
+                                                <a href="{{ url('/register') }}" class="w-full sm:w-64 h-16 bg-white text-slate-900 rounded-[20px] font-bold text-sm flex items-center justify-center gap-3 shadow-xl shadow-white/10 hover:scale-105 active:scale-95 transition-all">
                     Register Now <i class="fas fa-arrow-right text-xs"></i>
                 </a>
-                <a href="{{ route('login') }}" class="w-full sm:w-64 h-16 bg-white/5 border border-white/10 text-white rounded-[20px] font-bold text-sm flex items-center justify-center gap-3 backdrop-blur-md hover:bg-white/10 transition-all active:scale-95">
+                                                <a href="{{ route('login') }}" class="w-full sm:w-64 h-16 bg-white/5 border border-white/10 text-white rounded-[20px] font-bold text-sm flex items-center justify-center gap-3 backdrop-blur-md hover:bg-white/10 transition-all active:scale-95">
                     Log In <i class="far fa-user text-xs"></i>
                 </a>
             </div>
@@ -111,7 +111,7 @@
                         <div class="w-3 h-3 rounded-full bg-amber-500/50"></div>
                         <div class="w-3 h-3 rounded-full bg-emerald-500/50"></div>
                     </div>
-                    <div class="h-6 px-4 bg-white/5 rounded-full text-xs font-semibold text-indigo-200 flex items-center">Dashboard Preview</div>
+                                                            <div class="h-6 px-4 bg-white/5 rounded-full text-xs font-semibold text-indigo-200 flex items-center">Dashboard Preview</div>
                 </div>
                 <div class="grid grid-cols-3 gap-4 mb-20">
                     <div class="h-24 bg-white/5 rounded-2xl animate-pulse"></div>

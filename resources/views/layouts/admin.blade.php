@@ -6,19 +6,17 @@
     <title>{{ $dashboardTitle ?? 'Admin' }} - QuizMaster</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <meta name="description" content="Institutional-grade synchronized assessment and certification platform. Evolutionary learning infrastructure.">
-    <meta name="keywords" content="quiz master, institutional assessment, evolutionary learning, certification protocol">
-    <meta name="author" content="QuizMaster Framework v2.4.0">
-    <meta property="og:title" content="QuizMaster Terminal">
-    <meta property="og:description" content="Evolutionary assessment and performance protocol.">
+        <meta name="description" content="Professional online quiz and assessment system for educational institutions.">
+    <meta name="keywords" content="online quiz system, institutional assessment, student testing, exam management">
+    <meta name="author" content="Online Quiz System">
+    <meta property="og:title" content="Online Quiz System">
+    <meta property="og:description" content="Professional assessment and performance tracking platform.">
     
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     
     <!-- Bootstrap 5 loaded for backward compatibility with older views -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -37,10 +35,9 @@
             colors: {
               primary: '#4f46e5',
             },
-            fontFamily: {
-              sans: ['Inter', 'Kantumruy Pro', 'sans-serif'],
-              heading: ['Plus Jakarta Sans', 'Kantumruy Pro', 'sans-serif'],
-              serif: ['Plus Jakarta Sans', 'Kantumruy Pro', 'sans-serif'],
+                                    fontFamily: {
+              sans: ['"Open Sans"', 'Helvetica', 'Arial', 'sans-serif'],
+              heading: ['"Open Sans"', 'Helvetica', 'Arial', 'sans-serif'],
             }
           }
         }
@@ -53,11 +50,14 @@
 
     <!-- Legacy Style Overrides to keep non-refactored pages from breaking completely -->
     <style>
-        /* Global Premium SaaS Typography */
+                /* Global Moodle-style Typography */
         h1, h2, h3, h4, h5, h6, .card-title-custom, .font-heading {
-            font-family: 'Plus Jakarta Sans', 'Kantumruy Pro', sans-serif !important;
+            font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;
+            font-weight: 600 !important;
         }
         body {
+            font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;
+            font-weight: 400;
             color: #333333;
         }
         
@@ -85,19 +85,22 @@
         
         /* Simplified Sidebar Styles */
         .sidebar-item {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid transparent;
+            transition: all 0.2s ease;
             text-decoration: none !important;
+            font-weight: 600 !important;
+            font-family: 'Open Sans', sans-serif !important;
         }
         .sidebar-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: white !important;
+            background: rgba(79, 70, 229, 0.05);
+            color: #6366f1 !important;
         }
         .sidebar-item-active {
-            background: rgba(79, 70, 229, 0.1) !important;
-            border: 1px solid rgba(79, 70, 229, 0.25) !important;
-            color: #818cf8 !important; /* Indigo-400 */
-            backdrop-filter: blur(10px);
+            background: #4f46e5 !important;
+            color: white !important;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+        }
+        .sidebar-item-active i {
+            color: white !important;
         }
         .sidebar-item * { text-decoration: none !important; }
 
@@ -121,6 +124,7 @@
 <body x-data="{ sidebarOpen: false }" class="bg-slate-50 text-slate-900 font-sans antialiased flex flex-col md:flex-row min-h-screen overflow-x-hidden">
 @php
     $authUser = auth()->user();
+    $role = (int)($authUser->role_id ?? 0);
     $dashboardRoute = auth()->check() && (int) auth()->user()->role_id === 1 ? route('admin.dashboard') : route('dashboard');
     $departmentDataActive = request()->routeIs('admin.departments.*') || (request()->routeIs('admin.majors.index') && request('tab') === 'departments');
     $majorActive = request()->routeIs('admin.majors.show') || (request()->routeIs('admin.majors.index') && request('tab', 'majors') === 'majors');
@@ -171,11 +175,13 @@
         </div>
         <div>
             <h1 class="text-white font-bold tracking-tight text-lg leading-none truncate max-w-[150px]">Quiz Master</h1>
-            <span class="text-xs font-semibold text-indigo-400 mt-1 block">Admin Panel</span>
+            <span class="text-xs font-semibold text-indigo-400 mt-1 block">
+                @if($role === 1) Admin Panel @elseif($role === 2) Teacher Hub @else Student Home @endif
+            </span>
         </div>
     </div>
 
-    @php $role = (int)($authUser->role_id ?? 0); @endphp
+
 
     <div class="flex-1 overflow-y-auto px-3 space-y-1.5 custom-scrollbar pb-6">
         <!-- Dashboard menu -->
@@ -185,7 +191,7 @@
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('dashboard') || request()->routeIs('students.dashboard') ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                     <i class="fas fa-home text-[12px]"></i>
                 </div>
-                <span class="text-sm font-bold tracking-tight">Dashboard</span>
+                                                <span class="text-sm font-bold tracking-tight">Dashboard</span>
             </a>
         </div>
 
@@ -193,7 +199,7 @@
         <!-- System Administration -->
         <div class="pt-2">
             <div class="px-4 mb-2 flex items-center justify-between">
-                <h2 class="text-[11px] font-bold text-indigo-500 uppercase tracking-widest">Administration</h2>
+                                                <h2 class="text-[11px] font-bold text-indigo-500 uppercase tracking-widest">Administration</h2>
                 <div class="h-px bg-slate-800 flex-grow ml-4"></div>
             </div>
             <div class="space-y-1">
@@ -202,7 +208,7 @@
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.users.*') ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                         <i class="fas fa-users text-[12px]"></i>
                     </div>
-                    <span class="text-sm font-bold tracking-tight text-inherit">Users</span>
+                                                            <span class="text-sm font-bold tracking-tight text-inherit">Users</span>
                 </a>
                 
                 <div x-data="{ expanded: {{ $departmentMenuOpen ? 'true' : 'false' }} }">
@@ -211,16 +217,16 @@
                         <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ $departmentMenuOpen ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                             <i class="fas fa-building text-[12px]"></i>
                         </div>
-                        <span class="text-sm tracking-tight flex-1 text-left">Academic</span>
+                                                                        <span class="text-sm tracking-tight flex-1 text-left">Academic</span>
                         <i class="fas fa-chevron-down text-[10px] opacity-40 transition-transform duration-300" :class="expanded ? 'rotate-180' : ''"></i>
                     </button>
                     <div x-show="expanded" x-collapse>
                         <div class="pl-4 pr-3 py-1 space-y-0.5 mt-1 border-l border-slate-700 ml-[36px]">
-                            <a href="{{ route('admin.departments.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.departments.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Departments</a>
-                            <a href="{{ route('admin.majors.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.majors.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Majors</a>
-                            <a href="{{ route('admin.classes.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.classes.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Classes</a>
-                            <a href="{{ route('admin.subjects.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.subjects.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Subjects</a>
-                            <a href="{{ route('admin.enrollments.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.enrollments.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Enrollments</a>
+                                                                                    <a href="{{ route('admin.departments.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.departments.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Departments</a>
+                                                                                    <a href="{{ route('admin.majors.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.majors.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Majors</a>
+                                                                                    <a href="{{ route('admin.classes.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.classes.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Classes</a>
+                                                                                    <a href="{{ route('admin.subjects.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.subjects.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Subjects</a>
+                                                                                    <a href="{{ route('admin.enrollments.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.enrollments.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Enrollments</a>
                         </div>
                     </div>
                 </div>
@@ -230,7 +236,7 @@
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.settings.*') ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                         <i class="fas fa-sliders-h text-[12px]"></i>
                     </div>
-                    <span class="text-sm tracking-tight">Settings</span>
+                                                            <span class="text-sm tracking-tight">Settings</span>
                 </a>
             </div>
         </div>
@@ -240,7 +246,7 @@
         <!-- Assessment Management -->
         <div class="pt-2">
             <div class="px-4 mb-2 flex items-center justify-between">
-                <h2 class="text-[11px] font-bold text-emerald-500 uppercase tracking-widest">Assessment Hub</h2>
+                                                <h2 class="text-[11px] font-bold text-emerald-500 uppercase tracking-widest">Assessment Hub</h2>
                 <div class="h-px bg-slate-800 flex-grow ml-4"></div>
             </div>
             <div class="space-y-1">
@@ -249,28 +255,28 @@
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('quizzes.*') && !request()->routeIs('quizzes.reports') ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                         <i class="fas fa-book-open text-[12px]"></i>
                     </div>
-                    <span class="text-sm tracking-tight text-inherit">Quizzes</span>
+                                                            <span class="text-sm tracking-tight">Quizzes</span>
                 </a>
                 <a href="{{ route('courses.index') }}" 
                    class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('courses.index') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('courses.index') ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                         <i class="fas fa-chalkboard text-[12px]"></i>
                     </div>
-                    <span class="text-sm tracking-tight text-inherit">Courses</span>
+                                                            <span class="text-sm tracking-tight">Courses</span>
                 </a>
                 <a href="{{ route('questions.bank') }}" 
                    class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('questions.bank') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('questions.bank') ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                         <i class="fas fa-database text-[12px]"></i>
                     </div>
-                    <span class="text-sm tracking-tight text-inherit">Question Bank</span>
+                                                            <span class="text-sm tracking-tight">Question Bank</span>
                 </a>
                 <a href="{{ route('quizzes.reports') }}" 
                    class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('quizzes.reports') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('quizzes.reports') ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                         <i class="fas fa-chart-pie text-[12px]"></i>
                     </div>
-                    <span class="text-sm tracking-tight text-inherit">Reports</span>
+                                                            <span class="text-sm tracking-tight">Reports</span>
                 </a>
             </div>
         </div>
@@ -280,7 +286,7 @@
         <!-- Student Area -->
         <div class="pt-2">
             <div class="px-4 mb-2 flex items-center justify-between opacity-40">
-                <h2 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Learning Node</h2>
+                                                <h2 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Learning Space</h2>
                 <div class="h-px bg-slate-800 flex-grow ml-4"></div>
             </div>
             <div class="space-y-1">
@@ -289,14 +295,14 @@
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('students.results') ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                         <i class="fas fa-star text-[12px]"></i>
                     </div>
-                    <span class="text-sm tracking-tight">Results</span>
+                                                            <span class="text-sm tracking-tight">Results</span>
                 </a>
                 <a href="{{ route('courses.index') }}" 
                    class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('courses.index') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('courses.index') ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
                         <i class="fas fa-book text-[12px]"></i>
                     </div>
-                    <span class="text-sm tracking-tight">My Courses</span>
+                                                            <span class="text-sm tracking-tight">My Courses</span>
                 </a>
             </div>
         </div>
@@ -318,7 +324,7 @@
                     <p class="text-[11px] font-bold text-slate-100 truncate tracking-wide max-w-[65px]">{{ $authUser->username ?? 'User' }}</p>
                     <div class="flex items-center gap-1 shrink-0">
                         <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_4px_rgba(16,185,129,0.5)]"></div>
-                        <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Online</p>
+                                                                        <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Online</p>
                     </div>
                 </div>
             </div>
@@ -327,7 +333,7 @@
                 @csrf
                 <button type="submit" class="px-2 py-1.5 rounded-lg flex items-center justify-center gap-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all font-bold">
                     <i class="fas fa-sign-out-alt text-[10px]"></i> 
-                    <span class="text-[9px] uppercase tracking-wider">Logout</span>
+                                                            <span class="text-[9px] uppercase tracking-wider">Logout</span>
                 </button>
             </form>
         </div>
@@ -370,8 +376,8 @@
 
                 <div x-show="open" x-transition.opacity.scale.95 style="display: none;" class="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden z-50">
                     <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
-                        <h3 class="text-sm font-semibold tracking-tight text-slate-800">Notifications</h3>
-                        <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-600"><span x-text="unreadCount"></span> new</span>
+                                                                        <h3 class="text-sm font-semibold tracking-tight text-slate-800">Notifications</h3>
+                                                                        <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-600"><span x-text="unreadCount"></span> new</span>
                     </div>
                     
                     <div class="max-h-[300px] overflow-y-auto custom-scrollbar">
@@ -393,12 +399,12 @@
                             @endforeach
                             <form action="{{ route('notifications.markAllRead') }}" method="POST" class="p-2 border-t border-slate-100 text-center">
                                 @csrf
-                                <button type="submit" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 p-2">Mark all as read</button>
+                                                                                                <button type="submit" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 p-2">Mark all as read</button>
                             </form>
                         @else
                             <div class="p-8 text-center">
                                 <i class="fas fa-bell-slash text-slate-300 text-2xl mb-3"></i>
-                                <p class="text-sm text-slate-500 font-medium tracking-tight">You're caught up!</p>
+                                                                                                <p class="text-sm text-slate-500 font-medium tracking-tight">You're caught up!</p>
                             </div>
                         @endif
                     </div>

@@ -3,8 +3,8 @@
 
 @section('styles')
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-.detail-page { font-family: 'Inter', sans-serif; }
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+.detail-page { font-family: 'Open Sans', Helvetica, Arial, sans-serif; }
 /* Hero */
 .detail-hero { background: linear-gradient(135deg, #0c4a6e 0%, #0284c7 60%, #38bdf8 100%); border-radius: 20px; padding: 32px 36px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; position: relative; overflow: hidden; box-shadow: 0 10px 40px rgba(2,132,199,0.28); margin-bottom: 28px; }
 .detail-hero::before { content: ''; position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(255,255,255,0.05); border-radius: 50%; }
@@ -83,17 +83,39 @@
             </div>
             <div class="panel-body">
                 @forelse($subject->quizzes->where('status', 'active') as $quiz)
-                <a href="{{ $userRole == 'student' ? route('students.quizzes.take', $quiz->id) : '#' }}" class="quiz-card">
-                    <div class="qc-top">
-                        <span class="qc-title">{{ $quiz->title }}</span>
-                        <span class="qc-status active">Available</span>
-                    </div>
-                    <div class="qc-meta">
-                        <span><i class="far fa-clock me-1"></i> {{ $quiz->time_limit ?? 'No' }} mins</span>
-                        <span><i class="fas fa-file-alt me-1"></i> {{ $quiz->questions->count() }} Questions</span>
-                        @if($userRole == 'student')
-                        <span class="ms-auto text-primary">Take Quiz <i class="fas fa-chevron-right ms-1"></i></span>
-                        @endif
+                <a href="{{ $userRole == 'student' ? route('students.quizzes.take', $quiz->id) : '#' }}" class="group bg-white rounded-2xl border border-slate-100 p-6 shadow-sm hover:shadow-md transition-all duration-300 no-underline block mb-4">
+                    <div class="flex flex-col">
+                        <div class="mb-4">
+                            <h4 class="text-lg font-extrabold text-slate-900 leading-tight mb-1 group-hover:text-indigo-600 transition-colors tracking-tight">{{ $quiz->title }}</h4>
+                            <div class="flex items-center gap-3">
+                                <div class="flex items-center gap-2 text-[10px] font-bold text-slate-500">
+                                    <i class="far fa-calendar-alt text-indigo-500"></i>
+                                    <span>{{ \Carbon\Carbon::parse($quiz->opened_at)->format('M d') }} - {{ \Carbon\Carbon::parse($quiz->closed_at)->format('M d, Y') }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-4 border-t border-slate-50">
+                            <div class="flex items-center gap-4">
+                                <div class="flex items-center gap-2 text-slate-400">
+                                    <div class="w-6 h-6 rounded-md bg-blue-50 flex items-center justify-center text-blue-500">
+                                        <i class="fas fa-list-ul text-[9px]"></i>
+                                    </div>
+                                    <span class="text-[10px] font-black text-slate-600 uppercase tracking-tight">{{ $quiz->questions->count() }} Qs</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-slate-400">
+                                    <div class="w-6 h-6 rounded-md bg-indigo-50 flex items-center justify-center text-indigo-500">
+                                        <i class="far fa-clock text-[9px]"></i>
+                                    </div>
+                                    <span class="text-[10px] font-black text-slate-600 uppercase tracking-tight">{{ $quiz->time_limit ?? 30 }}m</span>
+                                </div>
+                            </div>
+                            @if($userRole == 'student')
+                            <div class="text-[9px] font-black text-indigo-600 uppercase tracking-[0.2em] flex items-center gap-2 group-hover:gap-3 transition-all">
+                                Take <i class="fas fa-arrow-right text-[8px]"></i>
+                            </div>
+                            @endif
+                        </div>
                     </div>
                 </a>
                 @empty
@@ -137,7 +159,7 @@
                         @if($userRole != 'student')
                         <form action="{{ route('materials.destroy', $material->id) }}" method="POST" class="d-inline">
                             @csrf @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-soft-danger rounded-circle ms-1" onclick="return confirm('Delete this material?')">
+                            <button type="submit" class="btn btn-sm btn-soft-danger rounded-circle ms-1" onclick="return confirm('Are you sure you want to remove this study material? Students will no longer be able to access it.')">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </form>

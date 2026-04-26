@@ -7,8 +7,8 @@
             <i class="fas fa-microchip text-xl"></i>
         </div>
         <div>
-            <h1 class="text-2xl font-bold tracking-tight text-slate-900 uppercase">System Blueprint</h1>
-            <p class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mt-1">Configure global synchronization parameters</p>
+            <h1 class="text-2xl font-bold tracking-tight text-slate-900 uppercase">School Framework</h1>
+            <p class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mt-1">Configure global app preferences</p>
         </div>
     </div>
 
@@ -68,13 +68,13 @@
             <!-- Tabs Nav -->
             <div class="border-b border-slate-50 px-6 md:px-8 pt-6 flex gap-10">
                 <button @click="tab = 'general'" :class="tab === 'general' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-400 hover:text-slate-900 hover:border-slate-200'" class="pb-4 px-2 border-b-2 font-bold text-[11px] uppercase tracking-widest transition-all">
-                    <i class="fas fa-globe mr-1.5"></i> Platform
+                    <i class="fas fa-globe mr-1.5"></i> General Settings
                 </button>
                 <button @click="tab = 'quiz'" :class="tab === 'quiz' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-400 hover:text-slate-900 hover:border-slate-200'" class="pb-4 px-2 border-b-2 font-bold text-[11px] uppercase tracking-widest transition-all">
-                    <i class="fas fa-clipboard-list mr-1.5"></i> Assessment
+                    <i class="fas fa-clipboard-list mr-1.5"></i> Quiz Rules
                 </button>
                 <button @click="tab = 'security'" :class="tab === 'security' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-400 hover:text-slate-900 hover:border-slate-200'" class="pb-4 px-2 border-b-2 font-bold text-[11px] uppercase tracking-widest transition-all">
-                    <i class="fas fa-shield-alt mr-1.5"></i> Integrity
+                    <i class="fas fa-shield-alt mr-1.5"></i> Exam Security
                 </button>
             </div>
 
@@ -94,8 +94,8 @@
                                     <i class="fas fa-tools"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-base font-semibold tracking-tight text-slate-900">Maintenance Mode</h3>
-                                    <p class="text-xs text-slate-500 mt-0.5">Disable student access temporarily</p>
+                                    <h3 class="text-base font-semibold tracking-tight text-slate-900">System Rest Time</h3>
+                                    <p class="text-xs text-slate-500 mt-0.5">Pause student activities for maintenance</p>
                                 </div>
                             </div>
 
@@ -161,7 +161,7 @@
                         <!-- Sticky Footer Actions -->
                         <div class="sticky bottom-0 -mx-6 md:-mx-8 px-6 md:px-8 py-6 bg-white/80 backdrop-blur-md border-t border-slate-50 flex justify-end z-20 mt-8">
                             <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-10 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all shadow-xl shadow-indigo-600/20 flex items-center gap-3 hover:scale-[1.02] active:scale-[0.98]">
-                                <i class="fas fa-check-circle text-white/50"></i> Save Configuration
+                                <i class="fas fa-check-circle text-white/50"></i> Save Preferences
                             </button>
                         </div>
                     </form>
@@ -180,8 +180,8 @@
                                     <i class="fas fa-cog"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-base font-semibold tracking-tight text-slate-900">Default Architecture</h3>
-                                    <p class="text-xs text-slate-500 mt-0.5">Pre-filled values for new assessments</p>
+                                    <h3 class="text-base font-semibold tracking-tight text-slate-900">Quick Start Defaults</h3>
+                                    <p class="text-xs text-slate-500 mt-0.5">Pre-set values for new quizzes</p>
                                 </div>
                             </div>
                             
@@ -216,8 +216,8 @@
                                     <i class="fas fa-random"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-base font-semibold tracking-tight text-slate-900">Randomization & Delivery</h3>
-                                    <p class="text-xs text-slate-500 mt-0.5">Control how questions are displayed to students</p>
+                                    <h3 class="text-base font-semibold tracking-tight text-slate-900">Question Delivery</h3>
+                                    <p class="text-xs text-slate-500 mt-0.5">Control how students see and interact with questions</p>
                                 </div>
                             </div>
 
@@ -296,7 +296,7 @@
                         <!-- Sticky Footer Actions -->
                         <div class="sticky bottom-0 -mx-6 md:-mx-8 px-6 md:px-8 py-4 bg-white/80 backdrop-blur-md border-t border-slate-100 flex justify-end z-20 mt-8">
                             <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ease-in-out shadow-lg shadow-indigo-500/25 flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98]">
-                                <i class="fas fa-check-circle"></i> Update Assessment Rules
+                                <i class="fas fa-check-circle"></i> Update Quiz Rules
                             </button>
                         </div>
                     </form>
@@ -314,8 +314,8 @@
                                     <i class="fas fa-user-shield"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-base font-semibold tracking-tight text-slate-900">Proctoring & Integrity</h3>
-                                    <p class="text-xs text-slate-500 mt-0.5">Enforce strict rules during quiz attempts</p>
+                                    <h3 class="text-base font-semibold tracking-tight text-slate-900">Exam Safety & Fairness</h3>
+                                    <p class="text-xs text-slate-500 mt-0.5">Encourage academic honesty during attempts</p>
                                 </div>
                             </div>
 
@@ -391,12 +391,12 @@
                             </div>
 
                             <div class="mt-8 border-t border-slate-200 pt-8">
-                                <label class="block text-xs font-semibold tracking-wide text-slate-600 uppercase mb-3">Violation Threshold</label>
+                                <label class="block text-xs font-semibold tracking-wide text-slate-600 uppercase mb-3">Warning Limit</label>
                                 <div class="relative flex items-center max-w-xs">
                                     <input type="number" name="max_violations" value="{{ old('max_violations', $settings['max_violations'] ?? 3) }}" min="1" max="20" class="w-full pl-4 pr-12 py-3 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all duration-300 outline-none text-sm text-slate-800 font-medium">
                                     <span class="absolute right-4 text-xs font-semibold text-slate-400">Strikes</span>
                                 </div>
-                                <p class="text-xs text-slate-500 mt-2">After this number of infractions, the test will be invalidated or auto-submitted.</p>
+                                <p class="text-xs text-slate-500 mt-2">After this number of warnings, the test will be finished automatically.</p>
                             </div>
                         </div>
 

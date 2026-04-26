@@ -59,7 +59,7 @@
             
             <div class="flex items-center gap-3 w-full sm:w-auto">
                 <button class="bg-white hover:bg-rose-50 text-rose-600 border border-slate-100 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm whitespace-nowrap" onclick="deleteSelected()">
-                    <i class="fas fa-trash-alt text-[10px]"></i> Delete Selected
+                    <i class="fas fa-trash-alt text-[10px]"></i> Remove Selected
                 </button>
                 <div class="relative w-full sm:w-64">
                     <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-indigo-600 text-[10px]"></i>
@@ -306,48 +306,52 @@
         document.querySelectorAll('.row-checkbox').forEach(cb => { cb.checked = state; });
     });
 
-    // Data Purge Protocol
+    // Data Removal Logic
     function deleteSelected() {
         const selected = document.querySelectorAll('.row-checkbox:checked');
-        if (!selected.length) return alert('INSTITUTIONAL ERROR: Zero nodes selected for purge.');
+        if (!selected.length) return alert('Please select at least one item to remove.');
 
-        if (confirm(`CRITICAL PROTOCOL: Authorize terminal purge of ${selected.length} academic nodes?`)) {
-            const form = document.getElementById('deleteForm');
-            if (currentTab === 'majors') form.action = '{{ route("admin.majors.bulkDelete") }}';
-            if (currentTab === 'classes') form.action = '{{ route("admin.classes.bulkDelete") }}';
-            
-            form.innerHTML = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
-            selected.forEach(item => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'ids[]';
-                input.value = item.value;
-                form.appendChild(input);
-            });
-            form.submit();
-        }
+        window.premiumConfirm(
+            `Are you sure you want to remove these ${selected.length} items? This will also affect all associated student records and course data.`,
+            function() {
+                const form = document.getElementById('deleteForm');
+                if (currentTab === 'majors') form.action = '{{ route("admin.majors.bulkDelete") }}';
+                if (currentTab === 'classes') form.action = '{{ route("admin.classes.bulkDelete") }}';
+                
+                form.innerHTML = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
+                selected.forEach(item => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'ids[]';
+                    input.value = item.value;
+                    form.appendChild(input);
+                });
+                form.submit();
+            },
+            'Remove Multiple Items?'
+        );
     }
 
     // Modal Synchronization Logic
     function editRecord(id, name, code, dept, major) {
         if (currentTab === 'majors') {
-            document.getElementById('majorModalTitle').innerText = 'Mutate Node';
+            document.getElementById('majorModalTitle').innerText = 'Edit Major Details';
             document.getElementById('majorForm').action = '/admin/majors/' + id;
             document.getElementById('majorFormMethod').value = 'PUT';
             document.getElementById('majorCode').value = code;
             document.getElementById('majorName').value = name;
             document.getElementById('majorDept').value = dept;
-            document.getElementById('majorBtnSubmit').innerText = 'Authorize Mutation';
+            document.getElementById('majorBtnSubmit').innerText = 'Save Changes';
             new bootstrap.Modal(document.getElementById('addMajorModal')).show();
         } 
         else if (currentTab === 'classes') {
-            document.getElementById('classModalTitle').innerText = 'Mutate Node';
+            document.getElementById('classModalTitle').innerText = 'Edit Class Details';
             document.getElementById('classForm').action = '/admin/classes/' + id;
             document.getElementById('classFormMethod').value = 'PUT';
             document.getElementById('classCode').value = code;
             document.getElementById('className').value = name;
             document.getElementById('classMajor').value = major;
-            document.getElementById('classBtnSubmit').innerText = 'Authorize Mutation';
+            document.getElementById('classBtnSubmit').innerText = 'Save Changes';
             new bootstrap.Modal(document.getElementById('addClassModal')).show();
         }
     }
@@ -360,8 +364,8 @@
             form.reset();
             form.action = '/admin/' + (prefix === 'major' ? 'majors' : 'classes');
             document.getElementById(prefix + 'FormMethod').value = 'POST';
-            document.getElementById(prefix + 'ModalTitle').innerText = 'New ' + (prefix === 'major' ? 'Specialization' : 'Learning Unit');
-            document.getElementById(prefix + 'BtnSubmit').innerText = 'Authorize Node';
+            document.getElementById(prefix + 'ModalTitle').innerText = 'New ' + (prefix === 'major' ? 'Major' : 'Class');
+            document.getElementById(prefix + 'BtnSubmit').innerText = 'Save Item';
         });
     });
 </script>

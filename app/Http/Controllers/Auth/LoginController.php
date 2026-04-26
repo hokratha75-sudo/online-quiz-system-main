@@ -33,7 +33,9 @@ class LoginController extends Controller
             ]);
         }
 
-        $user = User::where('username', $request->username)->first();
+        $user = User::where('username', $request->username)
+                    ->orWhere('email', $request->username)
+                    ->first();
 
         if ($user && Hash::check($request->password, $user->password_hash)) {
             RateLimiter::clear($throttleKey);

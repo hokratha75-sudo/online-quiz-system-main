@@ -72,11 +72,11 @@
                     <span class="text-white font-bold text-2xl tracking-tight">Quiz Master</span>
                 </div>
                 
-                <h1 class="text-[40px] md:text-[46px] font-extrabold text-white tracking-tight leading-[1.1] mb-6">
+                                                                                                <h1 class="text-[40px] md:text-[46px] font-extrabold text-white tracking-tight leading-[1.1] mb-6" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">
                     Elevate your <br/> 
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-300">learning</span> experience.
                 </h1>
-                <p class="text-indigo-100/90 text-sm font-medium leading-relaxed max-w-sm">
+                                                <p class="text-indigo-100/90 text-sm font-medium leading-relaxed max-w-sm">
                     The premium platform for synchronized assessments, analytics, and institutional management.
                 </p>
             </div>
@@ -87,8 +87,8 @@
                         <div class="w-9 h-9 rounded-full border-2 border-[#312e81] bg-emerald-500 flex items-center justify-center text-[10px] font-bold text-white shadow-xl"><i class="fas fa-shield-check"></i></div>
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-xs font-bold text-white tracking-wide">Enterprise Security</span>
-                        <span class="text-[11px] font-medium text-indigo-200 mt-0.5">End-to-end Encrypted</span>
+                                                                        <span class="text-xs font-bold text-white tracking-wide">Enterprise Security</span>
+                                                                        <span class="text-[11px] font-medium text-indigo-200 mt-0.5">End-to-end Encrypted</span>
                     </div>
                 </div>
             </div>
@@ -99,7 +99,7 @@
             
             <div class="max-w-[400px] mx-auto w-full">
                 <div class="mb-10 text-center md:text-left">
-                    <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Welcome Back</h2>
+                                                                                                                        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Welcome Back</h2>
                     <p class="text-sm font-medium text-slate-500 mt-2">Please enter your details to sign in.</p>
                 </div>
 
@@ -109,7 +109,7 @@
                             <i class="fas fa-exclamation-triangle text-xs"></i>
                         </div>
                         <div class="flex flex-col">
-                            <span class="text-sm font-bold text-rose-800 mb-0.5">Authentication Failed</span>
+                                                                                    <span class="text-sm font-bold text-rose-800 mb-0.5">Authentication Failed</span>
                             <span class="text-[13px] font-medium text-rose-600 leading-relaxed">
                                 {{ $errors->first() }}
                             </span>
@@ -121,21 +121,21 @@
                     @csrf
                     
                     <div class="space-y-2 group">
-                        <label for="username" class="block text-[13px] font-bold text-slate-700 ml-1 transition-colors group-focus-within:text-indigo-600">Email or Username</label>
+                                                                        <label for="username" class="block text-[13px] font-bold text-slate-700 ml-1 transition-colors group-focus-within:text-indigo-600">Email or Username</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                 <i class="far fa-user text-slate-400 group-focus-within:text-indigo-500 transition-colors"></i>
                             </div>
                             <input type="text" id="username" name="username" required 
                                    class="w-full bg-slate-50/50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white block px-11 py-3.5 transition-all outline-none font-medium placeholder:text-slate-400 placeholder:font-normal" 
-                                   placeholder="Enter your email or username">
+                                                                                                         placeholder="Enter your email or username">
                         </div>
                     </div>
 
                     <div class="space-y-2 group">
                         <div class="flex justify-between items-center px-1">
-                            <label for="password" class="block text-[13px] font-bold text-slate-700 transition-colors group-focus-within:text-indigo-600">Password</label>
-                            <a href="#" class="text-[13px] font-bold text-indigo-600 hover:text-indigo-800 transition-colors">Forgot Password?</a>
+                                                                                    <label for="password" class="block text-[13px] font-bold text-slate-700 transition-colors group-focus-within:text-indigo-600">Password</label>
+                                                                                    <a href="#" class="text-[13px] font-bold text-indigo-600 hover:text-indigo-800 transition-colors">Forgot Password?</a>
                         </div>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -154,21 +154,21 @@
                                 <div class="w-5 h-5 border-2 border-slate-300 rounded-[6px] peer-checked:bg-indigo-600 peer-checked:border-indigo-600 transition-all"></div>
                                 <i class="fas fa-check text-white text-[10px] absolute opacity-0 peer-checked:opacity-100 transition-opacity"></i>
                             </div>
-                            <span class="text-[13px] font-semibold text-slate-600 group-hover/check:text-slate-900 transition-colors">Remember me</span>
+                                                                                    <span class="text-[13px] font-semibold text-slate-600 group-hover/check:text-slate-900 transition-colors">Remember me</span>
                         </label>
                     </div>
 
                     <div class="pt-4">
                         <button type="submit" class="group relative w-full flex justify-center py-4 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500/20 active:scale-[0.98] transition-all shadow-lg shadow-indigo-500/25 overflow-hidden">
                             <span class="relative z-10 flex items-center gap-2">
-                                Sign In <i class="fas fa-arrow-right text-[11px] group-hover:translate-x-1 transition-transform"></i>
+                                                                                                Sign In <i class="fas fa-arrow-right text-[11px] group-hover:translate-x-1 transition-transform"></i>
                             </span>
                         </button>
                     </div>
                     
                     <div class="pt-6 text-center">
                         <p class="text-[13px] font-medium text-slate-500">
-                            Don't have an account? <a href="{{ route('register') }}" class="text-indigo-600 hover:text-indigo-800 font-bold transition-colors">Create one now</a>
+                                                                                    Don't have an account? <a href="{{ route('register') }}" class="text-indigo-600 hover:text-indigo-800 font-bold transition-colors">Create one now</a>
                         </p>
                     </div>
 

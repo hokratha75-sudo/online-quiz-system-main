@@ -139,7 +139,7 @@
                 
                 <div class="relative z-10 flex justify-between items-start mb-6">
                     <div>
-                        <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{{ $sp['count'] }} DEPLOYMENTS</div>
+                                                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{{ $sp['count'] }} ATTEMPTS</div>
                         <h4 class="text-sm font-bold text-slate-900 uppercase tracking-tight truncate max-w-[180px]">{{ $sp['name'] }}</h4>
                     </div>
                     <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-sm" style="background: {{ $subColor }}">
@@ -149,11 +149,11 @@
 
                 <div class="relative z-10 grid grid-cols-2 gap-4">
                     <div class="bg-slate-50/50 rounded-xl p-3 border border-slate-100/50">
-                        <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Yield Avg</div>
+                                                <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Average Score</div>
                         <div class="text-base font-bold text-slate-800 tabular-nums leading-none">{{ $sp['avg'] }}%</div>
                     </div>
                     <div class="bg-indigo-50/30 rounded-xl p-3 border border-indigo-50">
-                        <div class="text-[9px] font-bold text-indigo-400 uppercase tracking-widest mb-1">Peak Result</div>
+                                                <div class="text-[9px] font-bold text-indigo-400 uppercase tracking-widest mb-1">Highest Score</div>
                         <div class="text-base font-bold text-indigo-700 tabular-nums leading-none">{{ $sp['best'] }}%</div>
                     </div>
                 </div>
@@ -167,23 +167,23 @@
     <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden">
         <div class="px-8 py-6 border-b border-slate-50 bg-slate-50/30 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-widest">Deployment Logs</h3>
-                <p class="text-[10px] font-bold text-indigo-600 mt-1 uppercase tracking-tight">Archive of verified assessment vectors</p>
+                                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-widest">Exam History</h3>
+                <p class="text-[10px] font-bold text-indigo-600 mt-1 uppercase tracking-tight">Archive of verified assessment records</p>
             </div>
             <a href="{{ route('students.dashboard') }}" class="h-11 px-6 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 transition-all shadow-lg shadow-indigo-600/20">
-                <i class="fas fa-plus text-[8px]"></i> New Sync Session
+                <i class="fas fa-plus text-[8px]"></i> New Quiz Attempt
             </a>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="border-b border-slate-50">
-                        <th class="ps-8 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Protocol / Subject</th>
+                                                <th class="ps-8 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Quiz / Subject</th>
                         <th class="px-6 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Status</th>
-                        <th class="px-6 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Yield Index</th>
+                        <th class="px-6 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Score</th>
                         <th class="px-6 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Grade</th>
                         <th class="px-6 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Timestamp</th>
-                        <th class="pe-8 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest text-right">Audit</th>
+                        <th class="pe-8 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest text-right">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-50">
@@ -196,12 +196,12 @@
                             </div>
                         </td>
                         <td class="px-6 py-3">
-                            @if($result->is_published === false)
-                                <span class="px-3 py-1 bg-amber-50 text-amber-600 border border-amber-100 rounded-md text-[9px] font-bold uppercase tracking-widest">PENDING AUDIT</span>
+                                                        @if($result->is_published === false)
+                                <span class="px-3 py-1 bg-amber-50 text-amber-600 border border-amber-100 rounded-md text-[9px] font-bold uppercase tracking-widest">PENDING REVIEW</span>
                             @elseif($result->passed)
-                                <span class="px-3 py-1 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-md text-[9px] font-bold uppercase tracking-widest">SUCCESS CERTIFIED</span>
+                                <span class="px-3 py-1 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-md text-[9px] font-bold uppercase tracking-widest">PASSED</span>
                             @else
-                                <span class="px-3 py-1 bg-rose-50 text-rose-600 border border-rose-100 rounded-md text-[9px] font-bold uppercase tracking-widest">SYNC FAILED</span>
+                                <span class="px-3 py-1 bg-rose-50 text-rose-600 border border-rose-100 rounded-md text-[9px] font-bold uppercase tracking-widest">FAILED</span>
                             @endif
                         </td>
                         <td class="px-6 py-3">
@@ -242,7 +242,7 @@
                             <div class="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100">
                                 <i class="fas fa-clipboard-list text-2xl"></i>
                             </div>
-                            <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Zero Deployment Records Found</h5>
+                                                        <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest">No Exam Records Found</h5>
                         </td>
                     </tr>
                     @endforelse
@@ -311,7 +311,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     padding: 12,
                     displayColors: false,
                     callbacks: {
-                        label: (ctx) => `YIELD: ${ctx.raw}%`
+                                                label: (ctx) => `SCORE: ${ctx.raw}%`
                     }
                 }
             },
