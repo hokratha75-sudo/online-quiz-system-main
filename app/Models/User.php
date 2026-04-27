@@ -108,4 +108,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(LoginHistory::class);
     }
+
+    public function results()
+    {
+        return $this->hasMany(Result::class);
+    }
+
+    public function attempts()
+    {
+        return $this->hasMany(Attempt::class);
+    }
 }

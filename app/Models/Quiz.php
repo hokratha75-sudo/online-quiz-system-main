@@ -19,6 +19,15 @@ class Quiz extends Model
         'closed_at'
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'opened_at' => 'datetime',
+            'closed_at' => 'datetime',
+            'shuffle_questions' => 'boolean',
+        ];
+    }
+
     public function subject()
     {
         return $this->belongsTo(Subject::class);

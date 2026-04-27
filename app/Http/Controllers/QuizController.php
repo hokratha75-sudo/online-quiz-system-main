@@ -521,6 +521,142 @@ class QuizController extends Controller
         ));
     }
 
+    /**
+     * View Student Spotlight (Leaderboard).
+     */
+    /**
+     * View Academic Rankings (Leaderboard).
+     */
+    public function leaderboard()
+    {
+        $user = Auth::user();
+        $userRole = $user->isAdmin() ? 'admin' : ($user->isTeacher() ? 'teacher' : 'student');
+        $dashboardTitle = 'Leaderboard';
+        $subjectId = request('subject_id');
+
+        // Fetch subjects for filtering
+        if ((int)$user->role_id === 3) {
+            $filterSubjects = $user->classes()->with('subjects')->get()
+                ->pluck('subjects')->flatten()->unique('id');
+        } else {
+            $filterSubjects = \App\Models\Subject::all();
+        }
+
+        if ((int)$user->role_id === 3) {
+            // Students only see rankings for people in the same subjects
+            $classes = $user->classes()->with('subjects')->get();
+            
+            $rankingsBySubject = [];
+            foreach ($classes as $class) {
+                foreach ($class->subjects as $subject) {
+                    // Apply filter if specified
+                    if ($subjectId && $subject->id != $subjectId) continue;
+
+                    // Get students enrolled in this subject via this specific class
+                    $studentIds = \DB::table('class_user')
+                        ->where('class_model_id', $class->id)
+                        ->where('role', 'student')
+                        ->pluck('user_id');
+
+                    $key = "{$subject->subject_name} ({$class->name})";
+                    $rankingsBySubject[$key] = $this->getRankingsForStudents($studentIds, $subject->id);
+                }
+            }
+
+            return view('admin.quizzes.leaderboard', compact('rankingsBySubject', 'userRole', 'dashboardTitle', 'filterSubjects'));
+        }
+
+        // Admins/Teachers see global or filtered rankings
+        if ($subjectId) {
+            $studentIds = \DB::table('class_user')
+                ->join('class_subject', 'class_user.class_model_id', '=', 'class_subject.class_model_id')
+                ->where('class_subject.subject_id', $subjectId)
+                ->where('class_user.role', 'student')
+                ->pluck('user_id');
+            $rankings = $this->getRankingsForStudents($studentIds, $subjectId);
+        } else {
+            $rankings = $this->getRankingsForStudents(\App\Models\User::where('role_id', 3)->pluck('id'));
+        }
+
+        return view('admin.quizzes.leaderboard', compact('rankings', 'userRole', 'dashboardTitle', 'filterSubjects'));
+    }
+
+    private function getRankingsForStudents($studentIds, $subjectId = null)
+    {
+        if (empty($studentIds) || count($studentIds) == 0) return collect([]);
+
+        return \App\Models\User::whereIn('id', $studentIds)
+            ->with(['results' => function($query) use ($subjectId) {
+                $query->where('is_published', true);
+                if ($subjectId) {
+                    $query->whereHas('quiz', function($q) use ($subjectId) {
+                        $q->where('subject_id', $subjectId);
+                    });
+                }
+            }])
+            ->get()
+            ->map(function($student) {
+                $relevantResults = $student->results;
+                $quizzesTaken = $relevantResults->count();
+                $avgScore = $relevantResults->avg('score') ?? 0;
+                $passRate = $quizzesTaken > 0 
+                    ? ($relevantResults->where('passed', true)->count() / $quizzesTaken) * 100 
+                    : 0;
+                
+                return (object)[
+                    'id' => $student->id,
+                    'username' => $student->username,
+                    'profile_photo' => $student->profile_photo,
+                    'avg_score' => round($avgScore, 1),
+                    'quizzes_taken' => $quizzesTaken,
+                    'pass_rate' => round($passRate, 1)
+                ];
+            })
+            ->sortByDesc('avg_score')
+            ->values()
+            ->take(10);
+    }
+
+    /**
+     * View Study Planner (Calendar).
+     */
+    /**
+     * View Study Planner (Calendar).
+     */
+    public function planner()
+    {
+        $user = Auth::user();
+        $userRole = $user->isAdmin() ? 'admin' : ($user->isTeacher() ? 'teacher' : 'student');
+        $dashboardTitle = 'Calendar';
+
+        // Fetch events: Published quizzes with deadlines
+        $events = \App\Models\Quiz::where('status', 'published')
+            ->whereNotNull('opened_at')
+            ->get()
+            ->map(function($quiz) use ($user) {
+                $isCompleted = false;
+                if ($user->role_id == 3) {
+                    $isCompleted = \App\Models\Result::where('user_id', $user->id)
+                        ->where('quiz_id', $quiz->id)
+                        ->exists();
+                }
+
+                return [
+                    'title' => $quiz->title,
+                    'start' => $quiz->opened_at->toIso8601String(),
+                    'end' => $quiz->closed_at ? $quiz->closed_at->toIso8601String() : $quiz->opened_at->addHours(1)->toIso8601String(),
+                    'url' => route('students.quizzes.show', $quiz->id),
+                    'extendedProps' => [
+                        'status' => $isCompleted ? 'completed' : 'active',
+                    ],
+                    'backgroundColor' => $isCompleted ? '#10b981' : '#6366f1',
+                    'borderColor' => $isCompleted ? '#059669' : '#4f46e5',
+                ];
+            });
+
+        return view('admin.quizzes.planner', compact('events', 'userRole', 'dashboardTitle'));
+    }
+
     public function bulkDelete(Request $request)
     {
         $request->validate(['ids' => 'required|array']);

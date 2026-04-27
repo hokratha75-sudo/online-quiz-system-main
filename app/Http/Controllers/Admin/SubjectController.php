@@ -160,8 +160,19 @@ class SubjectController extends Controller
         $user = Auth::user();
         $isStudent = (int)$user->role_id === 3;
         
-        $query = Subject::with(['major.department']);
+        $query = Subject::with(['major.department', 'classes' => function($q) {
+            $q->withCount('students');
+        }]);
             
+        // Apply Search Filter
+        $search = $request->get('search');
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('subjects.subject_name', 'LIKE', "%{$search}%")
+                  ->orWhere('subjects.code', 'LIKE', "%{$search}%");
+            });
+        }
+
         // Admins see everything, students/teachers see their assigned courses only
         if ((int)$user->role_id !== 1) {
             $query->where(function($q) use ($user) {
@@ -172,12 +183,12 @@ class SubjectController extends Controller
                 
                 // 2. Check Department-based enrollment (Master Enrollment feature)
                 if ($user->department_id) {
-                    $q->orWhere('department_id', $user->department_id);
+                    $q->orWhere('subjects.department_id', $user->department_id);
                 }
             });
         }
             
-        $subjects = $query->latest()->paginate(12);
+        $subjects = $query->latest()->paginate(12)->appends(['search' => $search]);
         $dashboardTitle = $isStudent ? 'My Course' : 'Manage Courses';
         
         return view('courses.index', compact('subjects', 'dashboardTitle', 'isStudent'));

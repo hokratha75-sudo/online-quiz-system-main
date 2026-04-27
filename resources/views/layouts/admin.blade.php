@@ -193,6 +193,15 @@
                 </div>
                                                 <span class="text-sm font-bold tracking-tight">Dashboard</span>
             </a>
+            @if($role === 1 || $role === 2)
+            <a href="{{ route('planner') }}" 
+               class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('planner') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('planner') ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
+                    <i class="fas fa-calendar-day text-[12px]"></i>
+                </div>
+                                                        <span class="text-sm tracking-tight">Calendar</span>
+            </a>
+            @endif
         </div>
 
         @if($role === 1)
@@ -278,6 +287,13 @@
                     </div>
                                                             <span class="text-sm tracking-tight">Reports</span>
                 </a>
+                <a href="{{ route('leaderboard') }}" 
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('leaderboard') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('leaderboard') ? 'bg-yellow-500 text-white shadow-lg shadow-yellow-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
+                        <i class="fas fa-crown text-[12px]"></i>
+                    </div>
+                                                            <span class="text-sm tracking-tight">Leaderboard</span>
+                </a>
             </div>
         </div>
         @endif
@@ -303,6 +319,20 @@
                         <i class="fas fa-book text-[12px]"></i>
                     </div>
                                                             <span class="text-sm tracking-tight">My Courses</span>
+                </a>
+                <a href="{{ route('leaderboard') }}" 
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('leaderboard') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('leaderboard') ? 'bg-yellow-500 text-white shadow-lg shadow-yellow-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
+                        <i class="fas fa-crown text-[12px]"></i>
+                    </div>
+                                                            <span class="text-sm tracking-tight">Leaderboard</span>
+                </a>
+                <a href="{{ route('planner') }}" 
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('planner') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('planner') ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
+                        <i class="fas fa-calendar-day text-[12px]"></i>
+                    </div>
+                                                            <span class="text-sm tracking-tight">Calendar</span>
                 </a>
             </div>
         </div>

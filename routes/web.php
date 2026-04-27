@@ -182,6 +182,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/quizzes/result/{attempt}', [QuizController::class, 'result'])->name('quizzes.result');
     });
 
+    // --- SHARED ROUTES ---
+    Route::get('/leaderboard', [QuizController::class, 'leaderboard'])->name('leaderboard');
+    Route::get('/planner', [QuizController::class, 'planner'])->name('planner');
+
     // Notifications Mark as Read
     Route::post('/notifications/mark-as-read/{id}', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
     Route::post('/notifications/mark-all-read', function() {
