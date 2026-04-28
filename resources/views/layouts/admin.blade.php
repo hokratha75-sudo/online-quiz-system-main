@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $dashboardTitle ?? 'Admin' }} - QuizMaster</title>
+    <title>{{ $dashboardTitle ?? 'Admin' }} - Quiz System</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <meta name="description" content="Professional online quiz and assessment system for educational institutions.">
@@ -95,12 +95,13 @@
             color: #6366f1 !important;
         }
         .sidebar-item-active {
-            background: #4f46e5 !important;
+            background: rgba(91, 79, 207, 0.1) !important;
             color: white !important;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+            border-left: 2px solid #5b4fcf;
+            border-radius: 0 !important;
         }
         .sidebar-item-active i {
-            color: white !important;
+            color: #5b4fcf !important;
         }
         .sidebar-item * { text-decoration: none !important; }
 
@@ -143,13 +144,13 @@
 -->
 @unless($hideSidebar ?? false)
 <!-- Mobile Header Nav -->
-<div class="md:hidden bg-slate-900 border-b border-slate-800 px-5 py-4 flex items-center justify-between sticky top-0 z-40 shadow-2xl">
+<div class="md:hidden bg-[#1a1d2e] border-b border-slate-800 px-5 py-4 flex items-center justify-between sticky top-0 z-40 shadow-2xl">
     <div class="flex items-center gap-3">
         <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0 border border-indigo-400/50">
             <i class="fas fa-graduation-cap text-white text-[13px]"></i>
         </div>
         <div>
-            <h1 class="text-white font-bold tracking-tight text-base leading-none truncate max-w-[150px]">Quiz Master</h1>
+            <h1 class="text-white font-bold tracking-tight text-base leading-none truncate max-w-[150px]">Quiz System</h1>
         </div>
     </div>
     <button @click="sidebarOpen = true" class="w-10 h-10 rounded-xl bg-slate-800 text-slate-300 flex items-center justify-center hover:bg-slate-700 hover:text-white transition-colors focus:outline-none">
@@ -158,10 +159,10 @@
 </div>
 
 <!-- Mobile Drawer Overlay -->
-<div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 md:hidden" style="display: none;"></div>
+<div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 bg-[#1a1d2e]/60 backdrop-blur-sm z-40 md:hidden" style="display: none;"></div>
 
 <!-- Sidebar Layout -->
-<aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="w-[280px] md:w-[260px] shrink-0 bg-slate-900 border-r border-slate-800 flex flex-col h-screen fixed inset-y-0 left-0 transform transition-transform duration-300 ease-in-out md:translate-x-0 md:sticky md:top-0 custom-scrollbar z-50">
+<aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="w-[280px] md:w-[260px] shrink-0 bg-[#1a1d2e] border-r border-slate-800 flex flex-col h-screen fixed inset-y-0 left-0 transform transition-transform duration-300 ease-in-out md:translate-x-0 md:sticky md:top-0 custom-scrollbar z-50">
     <!-- Close button for mobile inside sidebar -->
     <button @click="sidebarOpen = false" class="md:hidden absolute top-6 right-5 w-8 h-8 rounded-lg bg-slate-800 text-slate-400 flex items-center justify-center hover:text-white transition-colors">
         <i class="fas fa-times"></i>
@@ -174,7 +175,7 @@
             <i class="fas fa-graduation-cap text-white text-[13px]"></i>
         </div>
         <div>
-            <h1 class="text-white font-bold tracking-tight text-lg leading-none truncate max-w-[150px]">Quiz Master</h1>
+            <h1 class="text-white font-bold tracking-tight text-lg leading-none truncate max-w-[150px]">Quiz System</h1>
             <span class="text-xs font-semibold text-indigo-400 mt-1 block">
                 @if($role === 1) Admin Panel @elseif($role === 2) Teacher Hub @else Student Home @endif
             </span>
@@ -208,7 +209,7 @@
         <!-- System Administration -->
         <div class="pt-2">
             <div class="px-4 mb-2 flex items-center justify-between">
-                                                <h2 class="text-[11px] font-bold text-indigo-500 uppercase tracking-widest">Administration</h2>
+                <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Administration</h2>
                 <div class="h-px bg-slate-800 flex-grow ml-4"></div>
             </div>
             <div class="space-y-1">
@@ -255,7 +256,7 @@
         <!-- Assessment Management -->
         <div class="pt-2">
             <div class="px-4 mb-2 flex items-center justify-between">
-                                                <h2 class="text-[11px] font-bold text-emerald-500 uppercase tracking-widest">Assessment Hub</h2>
+                <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Assessment Hub</h2>
                 <div class="h-px bg-slate-800 flex-grow ml-4"></div>
             </div>
             <div class="space-y-1">
@@ -340,30 +341,29 @@
     </div>
 
     <!-- User Profile Footer -->
-    <div class="p-3 mt-auto border-t border-slate-800 bg-slate-900/50">
-        <div class="flex items-center justify-between border border-slate-700/60 rounded-xl bg-slate-800/30 p-1.5 shadow-lg w-full">
-            <div class="group flex items-center gap-2 flex-1 min-w-0 cursor-pointer hover:opacity-80 transition-opacity pl-1" onclick="window.location='{{ route('profile.edit') }}'">
-                <div class="w-8 h-8 rounded-lg overflow-hidden bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs uppercase shadow-inner border border-indigo-500/30 shrink-0">
+    <div class="p-4 mt-auto border-t border-slate-800/50 bg-[#1a1d2e]">
+        <div class="flex items-center justify-between w-full">
+            <div class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity" onclick="window.location='{{ route('profile.edit') }}'">
+                <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
                     @if($authUser && $authUser->profile_photo)
-                        <img src="{{ asset('storage/' . $authUser->profile_photo) }}" alt="Avatar" class="w-full h-full object-cover">
+                        <img src="{{ asset('storage/' . $authUser->profile_photo) }}" alt="Avatar" class="w-full h-full object-cover rounded-full">
                     @else
-                        {{ substr($authUser?->username ?? 'A', 0, 1) }}
+                        {{ substr($authUser?->username ?? 'R', 0, 1) }}
                     @endif
                 </div>
-                <div class="flex items-center gap-1.5 overflow-hidden flex-1">
-                    <p class="text-[11px] font-bold text-slate-100 truncate tracking-wide max-w-[65px]">{{ $authUser->username ?? 'User' }}</p>
-                    <div class="flex items-center gap-1 shrink-0">
-                        <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_4px_rgba(16,185,129,0.5)]"></div>
-                                                                        <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Online</p>
+                <div>
+                    <p class="text-[14px] font-bold text-white leading-none mb-1">{{ $authUser->username ?? 'User' }}</p>
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                        <p class="text-[11px] font-medium text-slate-500">Online</p>
                     </div>
                 </div>
             </div>
             
-            <form action="{{ route('logout') }}" method="POST" class="m-0 shrink-0 border-l border-slate-700/60 pl-1 ml-1">
+            <form action="{{ route('logout') }}" method="POST" class="m-0">
                 @csrf
-                <button type="submit" class="px-2 py-1.5 rounded-lg flex items-center justify-center gap-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all font-bold">
-                    <i class="fas fa-sign-out-alt text-[10px]"></i> 
-                                                            <span class="text-[9px] uppercase tracking-wider">Logout</span>
+                <button type="submit" class="px-3 py-1.5 rounded-lg border border-slate-700/50 text-slate-500 hover:text-white hover:border-slate-500 transition-all text-xs font-medium">
+                    Logout
                 </button>
             </form>
         </div>

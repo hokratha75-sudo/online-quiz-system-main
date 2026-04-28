@@ -103,28 +103,64 @@
                 </div>
             </article>
 
-                        <!-- Recently Added Quizzes -->
-            <aside class="bg-white rounded-[32px] p-8 border border-slate-50 shadow-sm">
-                                                                                                <h3 class="text-sm font-bold text-slate-900 mb-8" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Recently Added Quizzes</h3>
-                <div class="space-y-6">
-                    @forelse($recentQuizzes as $quiz)
-                    <div class="flex items-start gap-4 group cursor-pointer" onclick="window.location='{{ route('quizzes.show', $quiz['id'] ?? 0) }}'">
-                        <div class="w-10 h-10 rounded-xl bg-indigo-50/50 flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all border border-indigo-100/50">
-                            <i class="fas fa-layer-group text-sm"></i>
-                        </div>
-                        <div class="flex-grow">
-                            <h4 class="text-sm font-semibold text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors">{{ $quiz['title'] ?? 'Untitled Quiz' }}</h4>
-                                                                                    <p class="text-xs font-medium text-slate-500 mt-0.5">Author: {{ $quiz['creator_name'] ?? 'Unknown' }}</p>
-                        </div>
-                        <span class="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold capitalize shadow-sm border {{ strtolower($quiz['status'] ?? 'draft') === 'published' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-slate-50 text-slate-600 border-slate-100' }}">
-                            {{ $quiz['status'] ?? 'Draft' }}
-                        </span>
+            <!-- Right Column: Student Distribution & Attendance -->
+            <div class="space-y-8">
+                <!-- Students Distribution -->
+                <article class="bg-white rounded-[32px] p-8 border border-slate-50 shadow-sm relative overflow-hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-sm font-bold text-slate-900" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Students</h3>
+                        <button class="text-slate-300 hover:text-slate-500"><i class="fas fa-ellipsis-h"></i></button>
                     </div>
-                    @empty
-                    <div class="py-12 text-center text-xs font-semibold text-slate-400 uppercase tracking-widest">No recent quizzes found.</div>
-                    @endforelse
-                </div>
-            </aside>
+                    
+                    <div class="relative flex justify-center py-4">
+                        <!-- Centered Icons -->
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div class="flex items-center gap-2 opacity-20">
+                                <i class="fas fa-male text-3xl text-sky-400"></i>
+                                <i class="fas fa-female text-3xl text-amber-400"></i>
+                            </div>
+                        </div>
+                        <div class="w-48 h-48">
+                            <canvas id="studentGenderChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 grid grid-cols-2 gap-4">
+                        <div class="text-center">
+                            <div class="flex items-center justify-center gap-2 mb-1">
+                                <span class="w-2.5 h-2.5 rounded-full bg-sky-300"></span>
+                                <span class="text-[15px] font-bold text-slate-900 tabular-nums">{{ number_format($studentGenderStats['Male'] ?? 0) }}</span>
+                            </div>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Boys</p>
+                        </div>
+                        <div class="text-center border-l border-slate-50">
+                            <div class="flex items-center justify-center gap-2 mb-1">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-300"></span>
+                                <span class="text-[15px] font-bold text-slate-900 tabular-nums">{{ number_format($studentGenderStats['Female'] ?? 0) }}</span>
+                            </div>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Girls</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Recently Added Quizzes (Moved down) -->
+                <aside class="bg-white rounded-[32px] p-8 border border-slate-50 shadow-sm">
+                    <h3 class="text-sm font-bold text-slate-900 mb-6" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Latest Content</h3>
+                    <div class="space-y-4">
+                        @foreach(array_slice($recentQuizzes, 0, 3) as $quiz)
+                        <div class="flex items-center gap-3 group cursor-pointer" onclick="window.location='{{ route('quizzes.show', $quiz['id'] ?? 0) }}'">
+                            <div class="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                                <i class="fas fa-layer-group text-[12px]"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h4 class="text-xs font-bold text-slate-900 truncate tracking-tight">{{ $quiz['title'] ?? 'Untitled' }}</h4>
+                                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{{ $quiz['creator_name'] ?? 'Staff' }}</p>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </aside>
+            </div>
         </div>
     @endif
 
@@ -379,6 +415,46 @@
                 }
             }
         });
+
+        // Student Gender Distribution Chart
+        const genderCtx = document.getElementById('studentGenderChart');
+        if(genderCtx) {
+            new Chart(genderCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Boys', 'Girls'],
+                    datasets: [{
+                        data: [
+                            {{ $studentGenderStats['Male'] ?? 0 }}, 
+                            {{ $studentGenderStats['Female'] ?? 0 }}
+                        ],
+                        backgroundColor: ['#7dd3fc', '#fcd34d'],
+                        hoverBackgroundColor: ['#38bdf8', '#fbbf24'],
+                        borderWidth: 0,
+                        weight: 0.5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '80%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    let value = context.parsed || 0;
+                                    let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    let percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                                    return ` ${label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
     });
 </script>
 @endif

@@ -1,4 +1,4 @@
-# 🎓 QuizMaster v2.0 — Online Quiz System
+# 🎓 Quiz System v2.0 — Online Quiz System
 
 A modern, feature-rich online quiz platform built with **Laravel 12**, **PostgreSQL**, **Tailwind CSS**, and **Alpine.js**.
 
@@ -182,4 +182,4 @@ If running locally, these special URLs are available for database management:
 
 ---
 
-> Built with ❤️ — QuizMaster v2.0 © 2026
+> Built with ❤️ — Quiz System v2.0 © 2026

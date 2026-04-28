@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="hidden md:flex items-center gap-3">
-            <span class="px-4 py-2 bg-indigo-50 text-indigo-600 border border-indigo-100 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-sm">Entity ID: #{{ $user->id }}</span>
+            <span class="px-4 py-2 bg-indigo-50 text-indigo-600 border border-indigo-100 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-sm">User ID: #{{ $user->id }}</span>
         </div>
     </div>
 
@@ -23,7 +23,7 @@
         <div class="mb-8 bg-rose-50 border border-rose-100 rounded-2xl p-6 shadow-sm">
             <div class="flex items-center gap-3 text-rose-600 font-bold uppercase text-[10px] tracking-widest mb-3">
                 <i class="fas fa-exclamation-triangle mt-px"></i>
-                Validation Protocols Failed
+                Please fix the following errors
             </div>
             <ul class="space-y-1">
                 @foreach($errors->all() as $error)
@@ -46,7 +46,7 @@
                 <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-md">
                     <i class="fas fa-shield-alt text-[10px]"></i>
                 </div>
-                <h3 class="text-xs font-bold text-slate-900 tracking-widest uppercase">Authentication Matrix</h3>
+                <h3 class="text-xs font-bold text-slate-900 tracking-widest uppercase">Account Settings</h3>
             </div>
             
             <div class="p-8">
@@ -57,12 +57,12 @@
                                class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all shadow-sm">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Email Index <span class="text-rose-500">*</span></label>
+                        <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Email <span class="text-rose-500">*</span></label>
                         <input type="email" name="email" value="{{ old('email', $user->email) }}" required 
                                class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all shadow-sm">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Access Tier <span class="text-rose-500">*</span></label>
+                        <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Role <span class="text-rose-500">*</span></label>
                         <select name="role_id" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all appearance-none cursor-pointer">
                             @foreach($roles as $role)
                                 <option value="{{ $role->id }}" {{ old('role_id', $user->role_id) == $role->id ? 'selected' : '' }}>
@@ -72,13 +72,13 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">New Security Pass</label>
+                        <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">New Password</label>
                         <input type="password" name="password" placeholder="••••••••" 
                                class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all shadow-sm">
                         <p class="mt-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Leave blank to keep current • Min 8 characters</p>
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Auth Protocol</label>
+                        <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Login Method</label>
                         <select name="auth_method" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all appearance-none cursor-pointer">
                             <option value="manual" {{ old('auth_method', $user->auth_method) == 'manual' ? 'selected' : '' }}>Internal Database</option>
                             <option value="ldap" {{ old('auth_method', $user->auth_method) == 'ldap' ? 'selected' : '' }}>Institutional LDAP</option>
@@ -94,40 +94,40 @@
                 <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-md">
                     <i class="fas fa-user-tag text-[10px]"></i>
                 </div>
-                <h3 class="text-xs font-bold text-slate-900 tracking-widest uppercase">Personal Intelligence</h3>
+                <h3 class="text-xs font-bold text-slate-900 tracking-widest uppercase">Personal Information</h3>
             </div>
             
             <div class="p-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div class="grid grid-cols-2 gap-4">
                         <div class="col-span-1">
-                            <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Given Name <span class="text-rose-500">*</span></label>
+                            <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">First Name <span class="text-rose-500">*</span></label>
                             <input type="text" name="first_name" value="{{ old('first_name', $user->first_name) }}" required 
                                    class="w-full px-4 py-3.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all shadow-sm">
                         </div>
                         <div class="col-span-1">
-                            <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Surname <span class="text-rose-500">*</span></label>
+                            <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Last Name <span class="text-rose-500">*</span></label>
                             <input type="text" name="last_name" value="{{ old('last_name', $user->last_name) }}" required 
                                    class="w-full px-4 py-3.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all shadow-sm">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Comm Index (Phone)</label>
+                        <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Phone Number</label>
                         <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" 
                                class="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all shadow-sm tabular-nums">
                     </div>
                     <div class="md:col-span-2">
-                        <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Physical Location (Address)</label>
+                        <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Address</label>
                         <input type="text" name="address" value="{{ old('address', $user->address) }}" 
                                class="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all shadow-sm">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Origin Date (Birthday)</label>
+                        <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Date of Birth</label>
                         <input type="date" name="birthday" value="{{ old('birthday', $user->birthday ? \Carbon\Carbon::parse($user->birthday)->format('Y-m-d') : '') }}" 
                                class="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all shadow-sm tabular-nums">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Gender Index</label>
+                        <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Gender</label>
                         <select name="sex" class="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all appearance-none cursor-pointer">
                             <option value="" {{ old('sex', $user->sex) == '' ? 'selected' : '' }}>NOT DISCLOSED</option>
                             <option value="Male" {{ old('sex', $user->sex) == 'Male' ? 'selected' : '' }}>MALE</option>
@@ -151,12 +151,12 @@
                                 </button>
                             </div>
                             <div class="flex-grow text-center sm:text-left">
-                                <h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest">Visual Identity</h4>
-                                <p class="text-[10px] font-bold text-slate-400 uppercase mt-1 tracking-tight">Modify profile visualization node</p>
+                                <h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest">Profile Photo</h4>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase mt-1 tracking-tight">Update your profile picture</p>
                                 <p class="text-[10px] font-bold text-slate-400 uppercase mt-2 tracking-tight">JPG, PNG or GIF • Max 2MB</p>
                                 <input type="file" name="profile_photo" id="photoInput" class="hidden" accept="image/*">
                                 <button type="button" onclick="document.getElementById('photoInput').click()" class="mt-3 text-[10px] font-bold text-indigo-600 hover:text-indigo-800 uppercase tracking-widest transition-colors flex items-center gap-2 mx-auto sm:mx-0">
-                                   <i class="fas fa-upload"></i> Initialize File Upload
+                                   <i class="fas fa-upload"></i> Upload Photo
                                 </button>
                             </div>
                         </div>
@@ -171,7 +171,7 @@
                 <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-md">
                     <i class="fas fa-gavel text-[10px]"></i>
                 </div>
-                <h3 class="text-xs font-bold text-slate-900 tracking-widest uppercase">System Policies</h3>
+                <h3 class="text-xs font-bold text-slate-900 tracking-widest uppercase">Account Status</h3>
             </div>
             
             <div class="p-8">
@@ -182,8 +182,8 @@
                             <div class="w-10 h-6 bg-slate-100 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-600"></div>
                         </div>
                         <div>
-                            <h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest group-hover:text-rose-600">Suspend Node</h4>
-                            <p class="text-[10px] font-bold text-slate-400 uppercase mt-0.5 tracking-tight">Block system authentication</p>
+                            <h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest group-hover:text-rose-600">Suspend Account</h4>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase mt-0.5 tracking-tight">Prevent this user from logging in</p>
                         </div>
                     </label>
                     
@@ -193,8 +193,8 @@
                             <div class="w-10 h-6 bg-slate-100 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                         </div>
                         <div>
-                            <h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest group-hover:text-indigo-600">Enforce Rotation</h4>
-                            <p class="text-[10px] font-bold text-slate-400 uppercase mt-0.5 tracking-tight">Mandatory password reset on visit</p>
+                            <h4 class="text-xs font-bold text-slate-900 uppercase tracking-widest group-hover:text-indigo-600">Force Password Reset</h4>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase mt-0.5 tracking-tight">User must change password on next login</p>
                         </div>
                     </label>
                 </div>
@@ -202,7 +202,7 @@
         </div>
 
         <div class="flex flex-col md:flex-row items-center gap-4 pt-6">
-            <button type="submit" class="w-full md:w-auto px-10 h-14 bg-slate-950 hover:bg-slate-900 text-white rounded-2xl font-bold uppercase tracking-widest text-xs transition-all shadow-xl shadow-slate-900/20">Commit Changes</button>
+            <button type="submit" class="w-full md:w-auto px-10 h-14 bg-slate-950 hover:bg-slate-900 text-white rounded-2xl font-bold uppercase tracking-widest text-xs transition-all shadow-xl shadow-slate-900/20">Save Changes</button>
             <a href="{{ route('admin.users.index') }}" class="w-full md:w-auto px-10 h-14 bg-white border border-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-2xl font-bold uppercase tracking-widest text-xs transition-all flex items-center justify-center">Discard</a>
         </div>
     </form>

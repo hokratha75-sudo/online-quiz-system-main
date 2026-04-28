@@ -127,15 +127,15 @@
             <div class="form-grid">
                 <div class="form-group">
                     <label class="form-label-custom">First Name</label>
-                    <input type="text" name="first_name" class="form-input-custom" value="{{ old('first_name', $user->first_name) }}" placeholder="e.g. John" required>
+                    <input type="text" name="first_name" class="form-input-custom" value="{{ old('first_name', $user->first_name) }}" placeholder="e.g. Hok" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label-custom">Last Name</label>
-                    <input type="text" name="last_name" class="form-input-custom" value="{{ old('last_name', $user->last_name) }}" placeholder="e.g. Doe" required>
+                    <input type="text" name="last_name" class="form-input-custom" value="{{ old('last_name', $user->last_name) }}" placeholder="e.g. Ratha" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label-custom">Email Address</label>
-                    <input type="email" name="email" class="form-input-custom" value="{{ old('email', $user->email) }}" placeholder="john.doe@example.com" required>
+                    <input type="email" name="email" class="form-input-custom" value="{{ old('email', $user->email) }}" placeholder="hok.ratha@example.com" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label-custom">Phone Number</label>

@@ -14,10 +14,16 @@ class ClassEnrollmentController extends Controller
     {
         $departments = Department::with(['users', 'subjects'])->orderBy('department_name')->get();
         
-        $dashboardTitle = 'Department Enrollments & Assignments';
+        $stats = [
+            'total_faculty' => User::where('role_id', 2)->count(),
+            'total_students' => User::where('role_id', 3)->count(),
+            'total_subjects' => Subject::count(),
+        ];
+        
+        $dashboardTitle = 'Academic Enrollments';
         $userRole = 'admin';
 
-        return view('admin.enrollments.index', compact('departments', 'dashboardTitle', 'userRole'));
+        return view('admin.enrollments.index', compact('departments', 'dashboardTitle', 'userRole', 'stats'));
     }
 
     public function manage(Department $department)

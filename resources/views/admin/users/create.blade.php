@@ -52,12 +52,12 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <div>
                         <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Username <span class="text-rose-500">*</span></label>
-                        <input type="text" name="username" value="{{ old('username') }}" placeholder="e.g. johndoe" required 
+                        <input type="text" name="username" value="{{ old('username') }}" placeholder="e.g. hokratha" required 
                                class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all shadow-sm">
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Email <span class="text-rose-500">*</span></label>
-                        <input type="email" name="email" value="{{ old('email') }}" placeholder="john@example.com" required 
+                        <input type="email" name="email" value="{{ old('email') }}" placeholder="hokratha@example.com" required 
                                class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all shadow-sm">
                     </div>
                     <div>
@@ -99,12 +99,12 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div class="col-span-1">
                             <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Given Name <span class="text-rose-500">*</span></label>
-                            <input type="text" name="first_name" value="{{ old('first_name') }}" required placeholder="John" 
+                            <input type="text" name="first_name" value="{{ old('first_name') }}" required placeholder="Hok" 
                                    class="w-full px-4 py-3.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all shadow-sm">
                         </div>
                         <div class="col-span-1">
                             <label class="block text-[11px] font-bold tracking-widest text-indigo-600 uppercase mb-3 ml-1">Surname <span class="text-rose-500">*</span></label>
-                            <input type="text" name="last_name" value="{{ old('last_name') }}" required placeholder="Doe" 
+                            <input type="text" name="last_name" value="{{ old('last_name') }}" required placeholder="Ratha" 
                                    class="w-full px-4 py-3.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all shadow-sm">
                         </div>
                     </div>

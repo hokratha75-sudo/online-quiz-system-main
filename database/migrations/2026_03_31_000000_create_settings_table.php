@@ -19,8 +19,8 @@ return new class extends Migration
         // Seed default settings
         $defaults = [
             // General
-            ['key' => 'site_name', 'value' => 'QuizMaster v2.0', 'group' => 'general'],
-            ['key' => 'contact_email', 'value' => 'admin@quizmaster.com', 'group' => 'general'],
+            ['key' => 'site_name', 'value' => 'Quiz System v2.0', 'group' => 'general'],
+            ['key' => 'contact_email', 'value' => 'admin@quizsystem.com', 'group' => 'general'],
             ['key' => 'timezone', 'value' => 'Asia/Phnom_Penh', 'group' => 'general'],
             ['key' => 'site_logo', 'value' => null, 'group' => 'general'],
             ['key' => 'maintenance_mode', 'value' => '0', 'group' => 'general'],

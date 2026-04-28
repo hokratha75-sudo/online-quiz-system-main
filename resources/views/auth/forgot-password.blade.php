@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password - Quiz System</title>
+    
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#007bff',
+              'primary-dark': '#0069d9',
+              label: '#5e5873',
+              input: '#d8d6de',
+              placeholder: '#b9b9c3'
+            },
+            fontFamily: {
+              sans: ['Public Sans', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+    
+    <style>
+        body { background-color: #f8f7fa; }
+        .form-input:focus {
+            border-color: #007bff !important;
+            box-shadow: 0 3px 10px 0 rgba(0, 123, 255, 0.15);
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen flex items-center justify-center p-6">
+
+    <div class="w-full max-w-[450px] bg-white rounded-xl shadow-[0_4px_24px_0_rgba(34,41,47,0.1)] p-8 md:p-10">
+        
+        <div class="mb-8 text-center">
+            <div class="flex items-center justify-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
+                    <i class="fas fa-graduation-cap text-white text-xl"></i>
+                </div>
+                <span class="text-slate-800 font-bold text-2xl tracking-tight">Quiz System</span>
+            </div>
+            
+            <h2 class="text-xl font-semibold text-slate-800 mb-1 text-left">Forgot Password?</h2>
+            <p class="text-slate-500 text-sm text-left">Enter your email and we'll send you instructions to reset your password</p>
+        </div>
+
+        @if(session('status'))
+            <div class="mb-6 p-4 bg-emerald-50 border border-emerald-100 rounded-lg flex items-start gap-3">
+                <i class="fas fa-circle-check text-emerald-500 mt-1"></i>
+                <div class="text-sm text-emerald-600 font-medium">
+                    {{ session('status') }}
+                </div>
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div class="mb-6 p-4 bg-red-50 border border-red-100 rounded-lg flex items-start gap-3">
+                <i class="fas fa-circle-exclamation text-red-500 mt-1"></i>
+                <div class="text-sm text-red-600 font-medium">
+                    {{ $errors->first() }}
+                </div>
+            </div>
+        @endif
+
+        <form method="POST" action="{{ route('password.email') }}" class="space-y-4">
+            @csrf
+            
+            <div>
+                <label for="email" class="block text-xs font-semibold text-label uppercase tracking-wider mb-2">Email</label>
+                <input type="email" id="email" name="email" required 
+                       class="w-full bg-white border border-input text-slate-800 text-sm rounded-md px-4 py-2.5 transition-all outline-none form-input placeholder:text-placeholder" 
+                       placeholder="Enter your email"
+                       value="{{ old('email') }}">
+            </div>
+
+            <div class="pt-2">
+                <button type="submit" class="w-full flex justify-center py-2.5 px-4 border border-transparent text-sm font-semibold rounded-md text-white bg-primary hover:bg-primary-dark transition-all shadow-md shadow-primary/20">
+                    Send Reset Link
+                </button>
+            </div>
+            
+            <div class="pt-4 text-center">
+                <a href="{{ route('login') }}" class="text-sm text-primary font-semibold hover:underline flex items-center justify-center gap-2">
+                    <i class="fas fa-chevron-left text-xs"></i> Back to login
+                </a>
+            </div>
+
+        </form>
+    </div>
+
+</body>
+</html>

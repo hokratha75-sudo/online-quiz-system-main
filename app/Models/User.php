@@ -44,8 +44,25 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password_hash',
-        'remember_token',
     ];
+
+    /**
+     * Disable remember token as it doesn't exist in the database schema.
+     */
+    public function getRememberTokenName()
+    {
+        return null;
+    }
+
+    public function setRememberToken($value)
+    {
+        // Do nothing
+    }
+
+    public function getRememberToken()
+    {
+        return null;
+    }
 
     /**
      * Get the password for the user.

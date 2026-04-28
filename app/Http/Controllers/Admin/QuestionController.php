@@ -85,12 +85,97 @@ class QuestionController extends Controller
     /**
      * View the Global Question Bank.
      */
-    public function bank()
+    public function bank(\Illuminate\Http\Request $request)
     {
-        $questions = Question::reusable()->with(['quiz.subject'])->latest()->get();
+        $query = Question::reusable()->with(['quiz.subject']);
+        
+        // --- Apply Filters ---
+        if ($request->filled('type') && $request->type !== 'all') {
+            $query->where('type', $request->type);
+        }
+        if ($request->filled('subject_id')) {
+            $query->whereHas('quiz', function($q) use ($request) {
+                $q->where('subject_id', $request->subject_id);
+            });
+        }
+        if ($request->filled('search')) {
+            $query->where('content', 'LIKE', '%' . $request->search . '%');
+        }
+
+        // Calculate Global Bank Statistics
+        $stats = [
+            'total' => Question::reusable()->count(),
+            'mc' => Question::reusable()->where('type', 'multiple_choice')->count(),
+            'sc' => Question::reusable()->where('type', 'single_choice')->count(),
+            'tf' => Question::reusable()->where('type', 'true_false')->count(),
+        ];
+
+        $questions = $query->latest()->paginate(15)->appends($request->all());
+        $subjects = \App\Models\Subject::orderBy('subject_name')->get();
         $userRole = auth()->user()?->isAdmin() ? 'admin' : 'teacher';
         $dashboardTitle = 'Global Question Bank';
 
-        return view('admin.questions.bank', compact('questions', 'userRole', 'dashboardTitle'));
+        return view('admin.questions.bank', compact('questions', 'userRole', 'dashboardTitle', 'stats', 'subjects'));
+    }
+
+    /**
+     * Export Question Bank to CSV.
+     */
+    public function export()
+    {
+        $headers = ['ID', 'Content', 'Type', 'Quiz', 'Subject', 'Points', 'Date Added'];
+        $questions = Question::reusable()->with(['quiz.subject'])->get();
+        
+        $data = [];
+        foreach ($questions as $q) {
+            $data[] = [
+                $q->id,
+                strip_tags($q->content),
+                ucfirst(str_replace('_', ' ', $q->type)),
+                $q->quiz->title ?? 'N/A',
+                $q->quiz->subject->subject_name ?? 'N/A',
+                $q->points,
+                $q->created_at->format('Y-m-d')
+            ];
+        }
+
+        $filename = 'question_bank_export_' . date('Y-m-d') . '.csv';
+        
+        $callback = function() use ($headers, $data) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $headers);
+            foreach ($data as $row) {
+                fputcsv($file, $row);
+            }
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, [
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=$filename",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        ]);
+    }
+
+    /**
+     * Bulk Delete questions securely.
+     */
+    public function bulkDelete(\Illuminate\Http\Request $request)
+    {
+        $request->validate(['ids' => 'required|array']);
+        
+        // OWASP: Verify authorization for each question before deleting
+        $deletedCount = 0;
+        foreach ($request->ids as $id) {
+            $question = Question::find($id);
+            if ($question && (auth()->user()?->isAdmin() || (int)$question->quiz->created_by === (int)auth()->id())) {
+                $question->delete();
+                $deletedCount++;
+            }
+        }
+
+        return redirect()->back()->with('success', "Successfully removed $deletedCount questions from the bank.");
     }
 }

@@ -25,7 +25,7 @@ class QuizController extends Controller
         $userRole = $user->role_id == 1 ? 'admin' : ($user->role_id == 2 ? 'teacher' : 'student');
         $dashboardTitle = 'All Quizzes';
 
-        $query = Quiz::with(['subject.department'])->withCount('questions');
+        $query = Quiz::with(['subject.department'])->withCount(['questions', 'attempts']);
 
         // Teacher only sees their quizzes
         if ($userRole === 'teacher') {
@@ -441,7 +441,7 @@ class QuizController extends Controller
         // Export Handle
         if ($request->has('export') && $request->export === 'csv') {
             $exportData = $baseQuery->latest('completed_at')->get();
-            $csvFileName = 'QuizMaster_Report_' . date('Y_m_d_His') . '.csv';
+            $csvFileName = 'Quiz_System_Report_' . date('Y_m_d_His') . '.csv';
             $headers = [
                 "Content-type"        => "text/csv",
                 "Content-Disposition" => "attachment; filename=$csvFileName",

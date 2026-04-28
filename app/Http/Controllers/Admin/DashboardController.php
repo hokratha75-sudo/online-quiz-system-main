@@ -27,6 +27,7 @@ class DashboardController extends Controller
         $newUsers = 0; $recentQuizzes = []; $departmentStats = []; $notifications = [];
         $myQuizzes = 0; $totalAttempts = 0; $avgScore = 0; $draftQuizzes = 0;
         $weeklyActivity = ['new_quizzes'=>0,'new_attempts'=>0]; $recentAttempts = []; $topQuizzes = []; $topPerformer = null;
+        $studentGenderStats = [];
 
         // For Student ONLY show relevant quizzes
         $studentQuizzes = [];
@@ -43,7 +44,22 @@ class DashboardController extends Controller
         }
 
         if ($userRole === 'admin') {
+            // Force fresh stats for gender to avoid cache lag
+            Cache::forget('admin_dashboard_stats');
+            
             $stats = Cache::remember('admin_dashboard_stats', 600, function() {
+                $genderData = DB::table('users')
+                    ->where('role_id', 3)
+                    ->select(DB::raw('LOWER(sex) as gender'), DB::raw('count(*) as count'))
+                    ->groupBy('gender')
+                    ->get();
+
+                $mappedStats = ['Male' => 0, 'Female' => 0];
+                foreach($genderData as $gd) {
+                    if($gd->gender == 'male') $mappedStats['Male'] = $gd->count;
+                    if($gd->gender == 'female') $mappedStats['Female'] = $gd->count;
+                }
+
                 return [
                     'totalUsers' => DB::table('users')->where('role_id', 3)->where('status', 'active')->count(),
                     'totalTeachers' => DB::table('users')->where('role_id', 2)->count(),
@@ -53,6 +69,7 @@ class DashboardController extends Controller
                     'pendingReviews' => DB::table('quizzes')->where('status', 'draft')->count(),
                     'totalDepartments' => DB::table('departments')->count(),
                     'newUsers' => DB::table('users')->where('created_at', '>=', now()->subDays(30))->count(),
+                    'studentGenderStats' => $mappedStats
                 ];
             });
 
@@ -207,7 +224,7 @@ class DashboardController extends Controller
             'totalUsers', 'totalTeachers', 'totalQuizzes', 'totalQuestions', 'totalBank', 'pendingReviews', 'totalDepartments', 'newUsers',
             'recentQuizzes', 'departmentStats', 'notifications',
             'myQuizzes', 'totalAttempts', 'avgScore', 'draftQuizzes', 'weeklyActivity', 'recentAttempts', 'topQuizzes',
-            'studentQuizzes', 'topPerformer'
+            'studentQuizzes', 'topPerformer', 'studentGenderStats'
         ));
     }
 }

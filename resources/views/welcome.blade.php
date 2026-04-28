@@ -56,7 +56,7 @@
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/30 border border-indigo-400/50 group-hover:scale-105 transition-transform">
                     <i class="fas fa-graduation-cap text-white text-[15px]"></i>
                 </div>
-                <span class="text-white font-bold text-xl tracking-tight">Quiz Master</span>
+                <span class="text-white font-bold text-xl tracking-tight">Quiz System</span>
             </div>
             
             <nav class="hidden md:flex items-center gap-10">

@@ -25,46 +25,46 @@
     </div>
 
     @if(session('success'))
-    <div class="mb-8 bg-white border border-emerald-100 rounded-[20px] p-4 flex items-center justify-between shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden transition-all duration-300">
-        <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-500"></div>
-        <div class="flex items-center gap-4 ml-2">
-            <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100/50">
-                <i class="fas fa-check text-emerald-500 text-sm"></i>
+    <div class="mb-6 bg-white border border-emerald-100 rounded-2xl p-3.5 flex items-center justify-between shadow-sm relative overflow-hidden transition-all duration-300">
+        <div class="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500"></div>
+        <div class="flex items-center gap-3.5">
+            <div class="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100/50">
+                <i class="fas fa-check text-emerald-500 text-xs"></i>
             </div>
             <div>
-                <h4 class="text-[14px] font-bold text-slate-900 tracking-tight leading-none mb-1">Action Successful</h4>
-                <p class="text-[13px] font-medium text-slate-500">{{ session('success') }}</p>
+                <h4 class="text-[13px] font-bold text-slate-900 leading-tight">Action Successful</h4>
+                <p class="text-[11px] font-medium text-slate-500">{{ session('success') }}</p>
             </div>
         </div>
-        <button type="button" class="w-8 h-8 mr-1 rounded-full hover:bg-slate-50 flex items-center justify-center text-slate-400 transition-colors focus:outline-none" onclick="this.parentElement.style.display='none'">
+        <button type="button" class="text-slate-400 hover:text-slate-600 px-2" onclick="this.parentElement.style.display='none'">
             <i class="fas fa-times text-xs"></i>
         </button>
     </div>
     @endif
 
     @if($errors->any())
-    <div class="mb-8 bg-white border border-rose-100 rounded-[20px] p-4 flex items-center justify-between shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden transition-all duration-300">
-        <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-rose-500"></div>
-        <div class="flex items-center gap-4 ml-2">
-            <div class="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center shrink-0 border border-rose-100/50">
-                <i class="fas fa-exclamation-triangle text-rose-500 text-sm"></i>
+    <div class="mb-6 bg-white border border-rose-100 rounded-2xl p-3.5 flex items-center justify-between shadow-sm relative overflow-hidden transition-all duration-300">
+        <div class="absolute left-0 top-0 bottom-0 w-1 bg-rose-500"></div>
+        <div class="flex items-center gap-3.5">
+            <div class="w-9 h-9 rounded-full bg-rose-50 flex items-center justify-center shrink-0 border border-rose-100/50">
+                <i class="fas fa-exclamation-triangle text-rose-500 text-xs"></i>
             </div>
             <div>
-                <h4 class="text-[14px] font-bold text-slate-900 tracking-tight leading-none mb-1">Action Failed</h4>
-                <p class="text-[13px] font-medium text-slate-500">{{ $errors->first() }}</p>
+                <h4 class="text-[13px] font-bold text-slate-900 leading-tight">Action Failed</h4>
+                <p class="text-[11px] font-medium text-slate-500">{{ $errors->first() }}</p>
             </div>
         </div>
-        <button type="button" class="w-8 h-8 mr-1 rounded-full hover:bg-slate-50 flex items-center justify-center text-slate-400 transition-colors focus:outline-none" onclick="this.parentElement.style.display='none'">
+        <button type="button" class="text-slate-400 hover:text-slate-600 px-2" onclick="this.parentElement.style.display='none'">
             <i class="fas fa-times text-xs"></i>
         </button>
     </div>
     @endif
 
     <!-- Data Table Card -->
-    <div class="bg-white rounded-[20px] border border-slate-200/70 shadow-[0_2px_10px_rgba(0,0,0,0.02)] flex flex-col overflow-hidden">
+    <div class="bg-white rounded-[20px] border border-slate-100/70 shadow-[0_2px_5px_rgba(0,0,0,0.02)] flex flex-col overflow-hidden">
         
         <!-- Toolbar -->
-        <div class="p-6 border-b border-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
+        <div class="p-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
             <div class="flex items-center gap-3">
                 <h3 class="text-xs font-bold text-slate-900 tracking-widest uppercase">Active Departments</h3>
                 <span class="px-2.5 py-1 rounded-md bg-white border border-slate-100 text-indigo-600 text-[10px] font-bold tracking-widest uppercase shadow-sm tabular-nums">{{ $departments->total() }} Records</span>

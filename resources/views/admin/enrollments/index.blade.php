@@ -1,134 +1,132 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="max-w-[1400px] mx-auto p-6 md:p-10 font-inter text-slate-900">
+<div class="min-h-screen bg-slate-50/50 text-slate-900 p-6 md:p-10 font-inter">
     
-    <!-- Header Section -->
-    <!-- Header Section -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 mb-8">
-        <div>
-            <h1 class="text-2xl md:text-[28px] font-bold text-slate-900 tracking-tight">Academic Enrollments</h1>
-            <p class="text-[14px] font-medium text-slate-500 mt-1.5">Assign which teachers and students have access to which departments.</p>
+    <!-- Breadcrumb & Header -->
+    <div class="mb-10">
+        <div class="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">
+            <i class="fas fa-circle text-[6px] text-indigo-500"></i>
+            <span>Institutional Hierarchy</span>
         </div>
         
-        <div class="flex items-center gap-4">
-            <div class="bg-indigo-50/50 border border-indigo-100/50 px-4 py-2.5 rounded-xl text-[13px] font-semibold text-indigo-600 flex items-center gap-2">
-                <i class="fas fa-lock text-xs text-indigo-400"></i> Admin Area
-            </div>
-        </div>
-    </div>
-
-    @if(session('success'))
-    <div class="mb-8 bg-white border border-emerald-100 rounded-[20px] p-4 flex items-center justify-between shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden transition-all duration-300">
-        <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-500"></div>
-        <div class="flex items-center gap-4 ml-2">
-            <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100/50">
-                <i class="fas fa-check text-emerald-500 text-sm"></i>
-            </div>
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-                <h4 class="text-[14px] font-bold text-slate-900 tracking-tight leading-none mb-1">Action Successful</h4>
-                <p class="text-[13px] font-medium text-slate-500">{{ session('success') }}</p>
+                <h1 class="text-3xl font-bold text-slate-900 tracking-tight mb-2">Enrollment Management</h1>
+                <p class="text-sm text-slate-600 max-w-2xl font-medium opacity-80">Administrative portal for departmental assignments and user access control.</p>
             </div>
-        </div>
-        <button type="button" class="w-8 h-8 mr-1 rounded-full hover:bg-slate-50 flex items-center justify-center text-slate-400 transition-colors focus:outline-none" onclick="this.parentElement.style.display='none'">
-            <i class="fas fa-times text-xs"></i>
-        </button>
-    </div>
-    @endif
-
-    <!-- Global Metrics Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-        <div class="bg-white rounded-[24px] p-8 border border-slate-100 shadow-sm group hover:shadow-md transition-all">
-            <div class="flex justify-between items-center mb-6">
-                <span class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Total Departments</span>
-                <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm">
-                    <i class="fas fa-building text-sm"></i>
+            
+            <div class="flex items-center">
+                <div class="bg-indigo-50 border border-indigo-100 px-4 py-2 rounded-full flex items-center gap-2 text-[10px] font-bold text-indigo-600 uppercase tracking-widest shadow-sm">
+                    <i class="fas fa-check-circle"></i>
+                    Session Verified
                 </div>
             </div>
-            <h3 class="text-3xl font-bold tracking-tight text-slate-900 tabular-nums leading-none">{{ $departments->count() }}</h3>
-            <div class="mt-2 text-xs font-medium text-slate-400">Available Departments</div>
-        </div>
-
-        <div class="bg-white rounded-[24px] p-8 border border-slate-100 shadow-sm group hover:shadow-md transition-all">
-            <div class="flex justify-between items-center mb-6">
-                <span class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Total Students</span>
-                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm">
-                    <i class="fas fa-user-graduate text-sm"></i>
-                </div>
-            </div>
-            <h3 class="text-3xl font-bold tracking-tight text-slate-900 tabular-nums leading-none">{{ $departments->sum(fn($d) => $d->users->where('role_id', 3)->count()) }}</h3>
-            <div class="mt-2 text-xs font-medium text-slate-400">Currently Enrolled</div>
-        </div>
-
-        <div class="bg-white rounded-[24px] p-8 border border-slate-100 shadow-sm group hover:shadow-md transition-all">
-            <div class="flex justify-between items-center mb-6">
-                <span class="text-sm font-semibold text-slate-600 uppercase tracking-wider">Total Teachers</span>
-                <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center group-hover:bg-rose-600 group-hover:text-white transition-all shadow-sm">
-                    <i class="fas fa-chalkboard-teacher text-sm"></i>
-                </div>
-            </div>
-            <h3 class="text-3xl font-bold tracking-tight text-slate-900 tabular-nums leading-none">{{ $departments->sum(fn($d) => $d->users->where('role_id', 2)->count()) }}</h3>
-            <div class="mt-2 text-xs font-medium text-slate-400">Assigned Teachers</div>
         </div>
     </div>
 
-    <!-- Relationship Matrix Interface -->
-    <div class="bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden mb-12">
-        <div class="p-8 border-b border-slate-50 flex flex-col md:flex-row items-center justify-between gap-6 bg-slate-50/50">
-            <div>
-                <h3 class="text-sm font-bold text-slate-900 leading-none">Department Access Control</h3>
-                <p class="text-xs font-medium text-slate-500 mt-2">View and assign faculty and students for each department</p>
+    <!-- Stats Row -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm shadow-slate-100">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+                    <i class="fas fa-users-viewfinder"></i>
+                </div>
+                <span class="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Faculty Members</span>
             </div>
-            <div class="relative group">
-                <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                <input type="text" id="deptSearch" placeholder="Search Departments..." 
-                       class="h-11 pl-12 pr-6 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all w-64 placeholder:text-slate-400 shadow-sm">
+            <div class="text-3xl font-bold text-slate-900 mb-1 tracking-tight">{{ number_format($stats['total_faculty']) }}</div>
+            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Teaching Staff</p>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm shadow-slate-100">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <span class="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Student Body</span>
+            </div>
+            <div class="text-3xl font-bold text-slate-900 mb-1 tracking-tight">{{ number_format($stats['total_students']) }}</div>
+            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Active Learners</p>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm shadow-slate-100">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
+                    <i class="fas fa-book-bookmark"></i>
+                </div>
+                <span class="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Curriculum Items</span>
+            </div>
+            <div class="text-3xl font-bold text-slate-900 mb-1 tracking-tight">{{ number_format($stats['total_subjects']) }}</div>
+            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Across {{ $departments->count() }} divisions</p>
+        </div>
+    </div>
+
+    <!-- Main Content Card -->
+    <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm shadow-slate-100">
+        <!-- Toolbar -->
+        <div class="px-8 py-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div class="flex items-center gap-4">
+                <h3 class="text-lg font-bold text-slate-900 tracking-tight">Departmental Overview</h3>
+                <div class="px-3 py-1 bg-indigo-50 text-indigo-600 text-[10px] font-bold uppercase tracking-widest rounded-md border border-indigo-100">
+                    {{ $departments->count() }} Sectors
+                </div>
+            </div>
+            
+            <div class="relative w-full sm:w-96 group">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs group-focus-within:text-indigo-600 transition-colors"></i>
+                <input type="text" id="deptSearch" placeholder="Filter by department name..." 
+                       class="w-full h-11 pl-11 pr-4 bg-slate-50 border border-slate-200 text-sm font-semibold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all placeholder:text-slate-400 rounded-xl">
             </div>
         </div>
 
+        <!-- Table -->
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse whitespace-nowrap" id="deptTable">
                 <thead>
-                    <tr class="bg-white border-b border-slate-100">
-                        <th class="ps-8 py-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Department Details</th>
-                        <th class="px-6 py-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wider text-center">Faculty Assigned</th>
-                        <th class="px-6 py-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wider text-center">Enrolled Students</th>
-                        <th class="px-6 py-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wider text-center">Total Subjects</th>
-                        <th class="pe-8 py-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+                    <tr class="bg-slate-50/50 border-b border-slate-200">
+                        <th class="ps-8 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Departmental Identity</th>
+                        <th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Faculty Count</th>
+                        <th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Student Count</th>
+                        <th class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Subject Count</th>
+                        <th class="pe-8 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-right">Access Control</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-50">
+                <tbody class="divide-y divide-slate-100">
                     @forelse($departments as $department)
-                    <tr class="hover:bg-slate-50/50 transition-all group">
-                        <td class="ps-8 py-5">
-                            <div class="flex flex-col">
-                                <span class="text-sm font-bold text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors leading-none">{{ $department->department_name }}</span>
-                                <span class="text-xs font-medium text-slate-500 mt-1">ID: {{ str_pad($department->id, 3, '0', STR_PAD_LEFT) }}</span>
+                    @php
+                        $facultyCount = $department->users->where('role_id', 2)->count();
+                        $studentCount = $department->users->where('role_id', 3)->count();
+                        $subjectCount = $department->subjects->count();
+                    @endphp
+                    <tr class="hover:bg-slate-50/80 transition-all group">
+                        <td class="ps-8 py-6">
+                            <div class="flex items-center gap-4">
+                                <span class="text-[11px] font-bold text-slate-400 w-6">{{ $loop->iteration }}</span>
+                                <div class="flex flex-col">
+                                    <span class="text-[14px] font-bold text-slate-900 group-hover:text-indigo-600 transition-colors tracking-tight uppercase">{{ $department->department_name }}</span>
+                                    <span class="text-[9px] font-bold text-slate-500 mt-0.5 tracking-widest">IDENTIFIER: #{{ str_pad($department->id, 3, '0', STR_PAD_LEFT) }}</span>
+                                </div>
                             </div>
                         </td>
-                        <td class="px-6 py-5 text-center">
-                            @php $teachersCount = $department->users->where('role_id', 2)->count(); @endphp
-                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-teal-50 border border-teal-100 text-teal-700 shadow-sm text-xs font-semibold">
-                                <i class="fas fa-chalkboard-teacher"></i>
-                                <span>{{ $teachersCount }}</span>
+                        <td class="px-6 py-6 text-center">
+                            <div class="inline-flex items-center justify-center w-12 h-7 rounded-full bg-slate-50 border border-slate-200 text-[11px] font-bold {{ $facultyCount > 0 ? 'text-slate-900' : 'text-slate-400 opacity-80' }}">
+                                {{ $facultyCount }}
                             </div>
                         </td>
-                        <td class="px-6 py-5 text-center">
-                            @php $studentsCount = $department->users->where('role_id', 3)->count(); @endphp
-                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-cyan-50 border border-cyan-100 text-cyan-700 shadow-sm text-xs font-semibold">
-                                <i class="fas fa-users"></i>
-                                <span>{{ $studentsCount }}</span>
+                        <td class="px-6 py-6 text-center">
+                            <div class="inline-flex items-center justify-center w-12 h-7 rounded-full bg-slate-50 border border-slate-200 text-[11px] font-bold {{ $studentCount > 0 ? 'text-slate-900' : 'text-slate-400 opacity-80' }}">
+                                {{ $studentCount }}
                             </div>
                         </td>
-                        <td class="px-6 py-5 text-center">
-                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-700 shadow-sm text-xs font-semibold">
-                                <i class="fas fa-layer-group"></i>
-                                <span>{{ $department->subjects->count() }}</span>
+                        <td class="px-6 py-6 text-center">
+                            <div class="inline-flex items-center justify-center w-12 h-7 rounded-full bg-slate-50 border border-slate-200 text-[11px] font-bold {{ $subjectCount > 0 ? 'text-slate-900' : 'text-slate-400 opacity-80' }}">
+                                {{ $subjectCount }}
                             </div>
                         </td>
-                        <td class="pe-8 py-5 text-right">
-                            <a href="{{ route('admin.enrollments.manage', $department->id) }}" class="inline-flex items-center h-10 px-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold transition-all shadow-md active:scale-95 gap-2">
-                                <i class="fas fa-sliders-h text-indigo-200"></i> Manage Access
+                        <td class="pe-8 py-6 text-right">
+                            <a href="{{ route('admin.enrollments.manage', $department->id) }}" class="inline-flex items-center h-8 px-4 rounded-lg border border-slate-200 bg-white hover:border-indigo-600 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 text-[10px] font-bold uppercase tracking-widest transition-all group/btn shadow-sm">
+                                <span>Manage</span>
+                                <i class="fas fa-arrow-right-long ms-2 text-[8px] group-hover/btn:translate-x-1 transition-transform"></i>
                             </a>
                         </td>
                     </tr>
@@ -136,8 +134,8 @@
                     <tr>
                         <td colspan="5" class="py-24 text-center">
                             <div class="flex flex-col items-center">
-                                <i class="fas fa-building text-3xl text-slate-200 mb-4"></i>
-                                <p class="text-xs font-medium text-slate-500">No departments found in the system</p>
+                                <i class="fas fa-layer-group text-slate-200 text-4xl mb-4"></i>
+                                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em]">No departmental records identified</p>
                             </div>
                         </td>
                     </tr>
@@ -152,13 +150,14 @@
 
 @section('scripts')
 <script>
-    // Modern Search Logic for Sectors
+    // Modern Search Logic
     document.getElementById('deptSearch').addEventListener('keyup', function() {
         const query = this.value.toUpperCase();
         document.querySelectorAll('#deptTable tbody tr').forEach(row => {
-            const text = row.querySelector('td:first-child').textContent.toUpperCase();
-            row.style.display = text.includes(query) ? '' : 'none';
+            const deptName = row.querySelector('td:first-child .text-\\[14px\\]').textContent.toUpperCase();
+            row.style.display = deptName.includes(query) ? '' : 'none';
         });
     });
 </script>
 @endsection
+

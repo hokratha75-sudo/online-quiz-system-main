@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\Quiz;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +24,13 @@ Route::get('/quizzes', function () {
 Route::get('/test', function () {
     return response()->json(['message' => 'API is working! Hello from Quiz System.']);
 });
+
+// ========================================
+// POST CRUD API (Training / Demo Purpose)
+// ========================================
+// GET    /api/posts        → index   (list all)
+// POST   /api/posts        → store   (create)
+// GET    /api/posts/{id}   → show    (view one)
+// PUT    /api/posts/{id}   → update  (edit)
+// DELETE /api/posts/{id}   → destroy (delete)
+Route::apiResource('posts', PostController::class);

@@ -20,18 +20,18 @@
     </div>
 
     @if(session('success'))
-    <div class="mb-8 bg-white border border-emerald-100 rounded-[20px] p-4 flex items-center justify-between shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden transition-all duration-300">
-        <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-500"></div>
-        <div class="flex items-center gap-4 ml-2">
-            <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100/50">
-                <i class="fas fa-check text-emerald-500 text-sm"></i>
+    <div class="mb-6 bg-white border border-emerald-100 rounded-2xl p-3.5 flex items-center justify-between shadow-sm relative overflow-hidden transition-all duration-300">
+        <div class="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500"></div>
+        <div class="flex items-center gap-3.5">
+            <div class="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100/50">
+                <i class="fas fa-check text-emerald-500 text-xs"></i>
             </div>
             <div>
-                <h4 class="text-[14px] font-bold text-slate-900 tracking-tight leading-none mb-1">Action Successful</h4>
-                <p class="text-[13px] font-medium text-slate-500">{{ session('success') }}</p>
+                <h4 class="text-[13px] font-bold text-slate-900 leading-tight">Action Successful</h4>
+                <p class="text-[11px] font-medium text-slate-500">{{ session('success') }}</p>
             </div>
         </div>
-        <button type="button" class="w-8 h-8 mr-1 rounded-full hover:bg-slate-50 flex items-center justify-center text-slate-400 transition-colors focus:outline-none" onclick="this.parentElement.style.display='none'">
+        <button type="button" class="text-slate-400 hover:text-slate-600 px-2" onclick="this.parentElement.style.display='none'">
             <i class="fas fa-times text-xs"></i>
         </button>
     </div>
@@ -256,109 +256,127 @@
 
 <!-- Create User Modal -->
 <div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden bg-white">
-            <div class="modal-header border-b border-slate-100 bg-slate-50 px-8 py-6 flex items-center justify-between">
-                <div>
-                                                                                                                                                                <h5 class="text-xl font-bold text-slate-900 tracking-tight" id="createUserModalLabel" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Register New Member</h5>
-                                                                                <p class="text-sm font-medium text-slate-500 mt-1">Create an account for a teacher, student, or admin.</p>
-                </div>
-                <button type="button" class="w-10 h-10 rounded-xl bg-white border border-slate-200 text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all flex items-center justify-center p-0" data-bs-dismiss="modal">
-                    <i class="fas fa-times"></i>
+    <div class="modal-dialog modal-xl modal-dialog-centered" id="createUserModalDialog" style="max-width: 950px;">
+        <div class="modal-content border border-slate-300 shadow-2xl bg-white rounded-none overflow-hidden">
+            <div class="modal-header px-8 py-6 flex items-center justify-between border-b border-slate-200 bg-slate-50">
+                <h5 class="text-xl font-bold text-slate-900 tracking-tight" id="createUserModalLabel" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Create a new user</h5>
+                <button type="button" class="text-slate-400 hover:text-slate-600 transition-colors" data-bs-dismiss="modal">
+                    <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
             <div class="modal-body p-8">
-                <form action="{{ route('admin.users.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+                <form id="createUserForm" action="{{ route('admin.users.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                         
-                        <!-- Authentication Matrix -->
-                        <div class="bg-slate-50 p-6 rounded-[24px] border border-slate-100 shadow-sm">
-                            <h6 class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
-                                <i class="fas fa-shield-alt text-indigo-500"></i> Login Details
-                            </h6>
-                            <div class="space-y-5">
+                        <!-- Column 1: Authentication Information -->
+                        <div class="space-y-6">
+                            <h6 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Authentication Information</h6>
+                            
+                            <div class="space-y-4">
                                 <div>
-                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Username <span class="text-rose-500">*</span></label>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-2">Username</label>
                                     <input type="text" name="username" value="{{ old('username') }}" required
-                                           class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all">
+                                           class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-none text-sm focus:bg-white focus:border-indigo-600 transition-all outline-none"
+                                           placeholder="Enter username">
                                 </div>
                                 <div>
-                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Email <span class="text-rose-500">*</span></label>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-2">Email</label>
                                     <input type="email" name="email" value="{{ old('email') }}" required
-                                           class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all">
+                                           class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-none text-sm focus:bg-white focus:border-indigo-600 transition-all outline-none"
+                                           placeholder="user@example.com">
                                 </div>
                                 <div>
-                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Role <span class="text-rose-500">*</span></label>
-                                    <select name="role_id" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all cursor-pointer appearance-none">
-                                        @foreach($roles as $role)
-                                            <option value="{{ $role->id }}">{{ ucfirst($role->role_name) }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-2">Password</label>
+                                    <input type="password" name="password" required
+                                           class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-none text-sm focus:bg-white focus:border-indigo-600 transition-all outline-none"
+                                           placeholder="••••••••">
                                 </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Password <span class="text-rose-500">*</span></label>
-                                        <input type="password" name="password" required
-                                               class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all">
-                                    </div>
-                                    <div>
-                                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Confirm <span class="text-rose-500">*</span></label>
-                                        <input type="password" name="password_confirmation" required
-                                               class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all">
-                                    </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-2">Confirm Password</label>
+                                    <input type="password" name="password_confirmation" required
+                                           class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-none text-sm focus:bg-white focus:border-indigo-600 transition-all outline-none"
+                                           placeholder="••••••••">
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Personal Information -->
-                        <div class="bg-slate-50 p-6 rounded-[24px] border border-slate-100 shadow-sm">
-                            <h6 class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
-                                <i class="fas fa-user-tag text-indigo-500"></i> Profile Info
-                            </h6>
-                            <div class="space-y-5">
+                        <!-- Column 2: Personal Information -->
+                        <div class="space-y-6">
+                            <h6 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Personal Information</h6>
+                            
+                            <div class="space-y-4">
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">First Name <span class="text-rose-500">*</span></label>
+                                        <label class="block text-xs font-semibold text-slate-600 mb-2">First Name</label>
                                         <input type="text" name="first_name" value="{{ old('first_name') }}" required
-                                               class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all">
+                                               class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-none text-sm focus:bg-white focus:border-indigo-600 transition-all outline-none"
+                                               placeholder="Hok">
                                     </div>
                                     <div>
-                                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Last Name <span class="text-rose-500">*</span></label>
+                                        <label class="block text-xs font-semibold text-slate-600 mb-2">Last Name</label>
                                         <input type="text" name="last_name" value="{{ old('last_name') }}" required
-                                               class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all">
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Phone</label>
-                                        <input type="text" name="phone" value="{{ old('phone') }}"
-                                               class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all">
-                                    </div>
-                                    <div>
-                                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Birthday</label>
-                                        <input type="date" name="birthday" value="{{ old('birthday') }}"
-                                               class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all">
+                                               class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-none text-sm focus:bg-white focus:border-indigo-600 transition-all outline-none"
+                                               placeholder="Ratha">
                                     </div>
                                 </div>
                                 <div>
-                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Address</label>
-                                    <input type="text" name="address" value="{{ old('address') }}"
-                                           class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all">
+                                    <label class="block text-xs font-semibold text-slate-600 mb-2">Phone</label>
+                                    <input type="text" name="phone" value="{{ old('phone') }}"
+                                           class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-none text-sm focus:bg-white focus:border-indigo-600 transition-all outline-none"
+                                           placeholder="+855 00 000 000">
                                 </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-2">Address</label>
+                                    <input type="text" name="address" value="{{ old('address') }}"
+                                           class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-none text-sm focus:bg-white focus:border-indigo-600 transition-all outline-none"
+                                           placeholder="City, Country">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Column 3: Profile & Settings -->
+                        <div class="space-y-6">
+                            <h6 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Profile & Settings</h6>
+                            
+                            <div class="space-y-4">
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                                                                                                                                                <label class="block text-xs font-bold text-slate-700 mb-2">Gender</label>
-                                        <select name="sex" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all cursor-pointer appearance-none">
-                                            <option value="Male">Male</option>
-                                            <option value="Female">Female</option>
-                                        </select>
+                                        <label class="block text-xs font-semibold text-slate-600 mb-2">Sex</label>
+                                        <div class="relative">
+                                            <select name="sex" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-none text-sm focus:bg-white focus:border-indigo-600 transition-all outline-none appearance-none cursor-pointer">
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                            </select>
+                                            <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[10px]"></i>
+                                        </div>
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-700 mb-2">Profile Photo (Optional)</label>
-                                        <input type="file" name="profile_photo" accept="image/*"
-                                               class="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all">
+                                        <label class="block text-xs font-semibold text-slate-600 mb-2">Role</label>
+                                        <div class="relative">
+                                            <select name="role_id" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-none text-sm focus:bg-white focus:border-indigo-600 transition-all outline-none appearance-none cursor-pointer">
+                                                @foreach($roles as $role)
+                                                    <option value="{{ $role->id }}">{{ ucfirst($role->role_name) }}</option>
+                                                @endforeach
+                                            </select>
+                                            <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[10px]"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-2">Date of Birth</label>
+                                    <input type="date" name="birthday" value="{{ old('birthday') }}"
+                                           class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-none text-sm focus:bg-white focus:border-indigo-600 transition-all outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-2">Upload photo</label>
+                                    <div class="relative group cursor-pointer">
+                                        <input type="file" name="profile_photo" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" id="photoInput">
+                                        <div class="w-full px-4 py-6 border-2 border-dashed border-slate-300 rounded-none flex flex-col items-center gap-2 group-hover:border-indigo-600 transition-colors bg-slate-50/50" id="photoPreview">
+                                            <i class="fas fa-cloud-upload-alt text-2xl text-slate-300 group-hover:text-indigo-600 transition-colors"></i>
+                                            <span class="text-xs font-medium text-slate-400" id="uploadLabel">Click to upload photo</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -366,9 +384,10 @@
 
                     </div>
 
-                    <div class="flex justify-end gap-3 pt-6 border-t border-slate-100 mt-8">
-                                                                                                <button type="button" class="px-6 py-3 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-sm font-semibold transition-all" data-bs-dismiss="modal">Cancel</button>
-                                                                                                <button type="submit" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-all shadow-md active:scale-95">Create User</button>
+                    <div class="mt-12">
+                        <button type="submit" class="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-none font-bold text-sm transition-all shadow-xl shadow-indigo-600/10 active:scale-[0.99]">
+                            Create User
+                        </button>
                     </div>
                 </form>
             </div>
@@ -387,5 +406,154 @@
     });
 </script>
 @endif
+
+
+<script>
+(function () {
+    const modal   = document.getElementById('createUserModal');
+    const dialog  = document.getElementById('createUserModalDialog');
+    const content = dialog ? dialog.querySelector('.modal-content') : null;
+    const header  = document.getElementById('createUserModalHeader');
+
+    if (!dialog || !content || !header) return;
+
+    // ── Add resize handles ──────────────────────────────────────────────
+    const edges = ['n','s','e','w','ne','nw','se','sw'];
+    const cursors = { n:'n-resize', s:'s-resize', e:'e-resize', w:'w-resize',
+                      ne:'ne-resize', nw:'nw-resize', se:'se-resize', sw:'sw-resize' };
+
+    edges.forEach(dir => {
+        const h = document.createElement('div');
+        h.dataset.dir = dir;
+        h.style.cssText = `position:absolute;z-index:10;`;
+        const isN = dir.includes('n'), isS = dir.includes('s'),
+              isE = dir.includes('e'), isW = dir.includes('w');
+        const corner = (isN||isS) && (isE||isW);
+        h.style.cursor = cursors[dir];
+        if (corner) {
+            h.style.width  = '14px';
+            h.style.height = '14px';
+            h.style.top    = isN ? '0' : 'auto';
+            h.style.bottom = isS ? '0' : 'auto';
+            h.style.left   = isW ? '0' : 'auto';
+            h.style.right  = isE ? '0' : 'auto';
+        } else {
+            if (dir === 'n' || dir === 's') {
+                h.style.left   = '14px';
+                h.style.right  = '14px';
+                h.style.height = '6px';
+                h.style.top    = dir === 'n' ? '0' : 'auto';
+                h.style.bottom = dir === 's' ? '0' : 'auto';
+            } else {
+                h.style.top    = '14px';
+                h.style.bottom = '14px';
+                h.style.width  = '6px';
+                h.style.left   = dir === 'w' ? '0' : 'auto';
+                h.style.right  = dir === 'e' ? '0' : 'auto';
+            }
+        }
+        content.appendChild(h);
+    });
+
+    // ── Shared state ────────────────────────────────────────────────────
+    let mode = null; // 'drag' | resize dir
+    let startX, startY, origLeft, origTop, origW, origH;
+
+    const MIN_W = 500, MIN_H = 350;
+
+    function fixedRect() {
+        const r = dialog.getBoundingClientRect();
+        dialog.style.position = 'fixed';
+        dialog.style.margin   = '0';
+        dialog.style.left     = r.left + 'px';
+        dialog.style.top      = r.top  + 'px';
+        dialog.style.width    = r.width + 'px';
+        content.style.height  = r.height + 'px';
+        return r;
+    }
+
+    // ── Drag (header) ───────────────────────────────────────────────────
+    header.addEventListener('mousedown', e => {
+        if (e.target.closest('button')) return;
+        mode = 'drag';
+        header.style.cursor = 'grabbing';
+        const r = fixedRect();
+        startX = e.clientX; startY = e.clientY;
+        origLeft = r.left;  origTop  = r.top;
+        e.preventDefault();
+    });
+
+    // ── Resize handles ───────────────────────────────────────────────────
+    content.addEventListener('mousedown', e => {
+        const handle = e.target.closest('[data-dir]');
+        if (!handle) return;
+        mode = handle.dataset.dir;
+        const r = fixedRect();
+        startX = e.clientX; startY = e.clientY;
+        origLeft = r.left;  origTop = r.top;
+        origW = r.width;    origH  = r.height;
+        e.preventDefault();
+    });
+
+    // ── Move / Resize ────────────────────────────────────────────────────
+    document.addEventListener('mousemove', e => {
+        if (!mode) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+
+        if (mode === 'drag') {
+            let nextL = origLeft + dx;
+            let nextT = origTop + dy;
+            
+            // Boundary checks for drag
+            nextL = Math.max(0, Math.min(vw - dialog.offsetWidth, nextL));
+            nextT = Math.max(0, Math.min(vh - dialog.offsetHeight, nextT));
+
+            dialog.style.left = nextL + 'px';
+            dialog.style.top  = nextT + 'px';
+            return;
+        }
+
+        let newL = origLeft, newT = origTop, newW = origW, newH = origH;
+
+        if (mode.includes('e')) newW = Math.max(MIN_W, Math.min(vw - origLeft, origW + dx));
+        if (mode.includes('s')) newH = Math.max(MIN_H, Math.min(vh - origTop, origH + dy));
+        if (mode.includes('w')) { 
+            newW = Math.max(MIN_W, Math.min(origLeft + origW, origW - dx)); 
+            newL = origLeft + origW - newW; 
+        }
+        if (mode.includes('n')) { 
+            newH = Math.max(MIN_H, Math.min(origTop + origH, origH - dy)); 
+            newT = origTop + origH - newH; 
+        }
+
+        dialog.style.left    = newL + 'px';
+        dialog.style.top     = newT + 'px';
+        dialog.style.width   = newW + 'px';
+        content.style.height = newH + 'px';
+        content.style.display = 'flex';
+        content.style.flexDirection = 'column';
+    });
+
+    // ── Release ──────────────────────────────────────────────────────────
+    document.addEventListener('mouseup', () => {
+        if (mode === 'drag') header.style.cursor = 'grab';
+        mode = null;
+    });
+
+    // ── Reset on open ────────────────────────────────────────────────────
+    modal.addEventListener('show.bs.modal', () => {
+        dialog.style.position = '';
+        dialog.style.left     = '';
+        dialog.style.top      = '';
+        dialog.style.width    = '';
+        dialog.style.margin   = 'auto';
+        content.style.height  = '';
+    });
+})();
+</script>
 
 @endsection

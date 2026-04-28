@@ -3,16 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Quiz System</title>
+    <title>Reset Password - Quiz System</title>
     
-    <!-- SEO & Performance Nodes -->
-    <meta name="description" content="Secure portal for the Online Quiz System.">
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -37,9 +34,7 @@
     </script>
     
     <style>
-        body {
-            background-color: #f8f7fa;
-        }
+        body { background-color: #f8f7fa; }
         .form-input:focus {
             border-color: #007bff !important;
             box-shadow: 0 3px 10px 0 rgba(0, 123, 255, 0.15);
@@ -69,8 +64,8 @@
                 <span class="text-slate-800 font-bold text-2xl tracking-tight">Quiz System</span>
             </div>
             
-            <h2 class="text-xl font-semibold text-slate-800 mb-1 text-left">Welcome Back</h2>
-            <p class="text-slate-500 text-sm text-left">sign-in to your account</p>
+            <h2 class="text-xl font-semibold text-slate-800 mb-1 text-left">Reset Password</h2>
+            <p class="text-slate-500 text-sm text-left">Your new password must be different from previously used passwords</p>
         </div>
 
         @if($errors->any())
@@ -82,22 +77,21 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('login') }}" class="space-y-4">
+        <form method="POST" action="{{ route('password.update') }}" class="space-y-4">
             @csrf
             
+            <input type="hidden" name="token" value="{{ $token }}">
+
             <div>
-                <label for="username" class="block text-xs font-semibold text-label uppercase tracking-wider mb-2">Email or Username</label>
-                <input type="text" id="username" name="username" required 
-                       class="w-full bg-white border border-input text-slate-800 text-sm rounded-md px-4 py-2.5 transition-all outline-none form-input placeholder:text-placeholder" 
-                       placeholder="Enter your email or username"
-                       value="{{ old('username') }}">
+                <label for="email" class="block text-xs font-semibold text-label uppercase tracking-wider mb-2">Email</label>
+                <input type="email" id="email" name="email" required 
+                       class="w-full bg-slate-50 border border-input text-slate-800 text-sm rounded-md px-4 py-2.5 transition-all outline-none form-input placeholder:text-placeholder" 
+                       placeholder="Enter your email"
+                       value="{{ $email ?? old('email') }}" readonly>
             </div>
 
             <div x-data="{ show: false }">
-                <div class="flex justify-between items-center mb-2">
-                    <label for="password" class="block text-xs font-semibold text-label uppercase tracking-wider">Password</label>
-                    <a href="{{ route('password.request') }}" class="text-xs font-medium text-primary hover:underline">Forgot Password?</a>
-                </div>
+                <label for="password" class="block text-xs font-semibold text-label uppercase tracking-wider mb-2">New Password</label>
                 <div class="relative">
                     <input :type="show ? 'text' : 'password'" id="password" name="password" required 
                            class="w-full bg-white border border-input text-slate-800 text-sm rounded-md px-4 py-2.5 transition-all outline-none form-input placeholder:text-placeholder" 
@@ -107,24 +101,23 @@
                     </button>
                 </div>
             </div>
-            
-            <div class="flex items-center pt-1">
-                <label class="flex items-center gap-2 cursor-pointer group">
-                    <input type="checkbox" name="remember" class="w-4 h-4 rounded border-input text-primary focus:ring-primary/20 cursor-pointer">
-                    <span class="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">Remember Me</span>
-                </label>
+
+            <div x-data="{ show: false }">
+                <label for="password_confirmation" class="block text-xs font-semibold text-label uppercase tracking-wider mb-2">Confirm New Password</label>
+                <div class="relative">
+                    <input :type="show ? 'text' : 'password'" id="password_confirmation" name="password_confirmation" required 
+                           class="w-full bg-white border border-input text-slate-800 text-sm rounded-md px-4 py-2.5 transition-all outline-none form-input placeholder:text-placeholder" 
+                           placeholder="············">
+                    <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors">
+                        <i class="fas" :class="show ? 'fa-eye-slash' : 'fa-eye'"></i>
+                    </button>
+                </div>
             </div>
 
             <div class="pt-2">
                 <button type="submit" class="w-full flex justify-center py-2.5 px-4 border border-transparent text-sm font-semibold rounded-md text-white bg-primary hover:bg-primary-dark transition-all shadow-md shadow-primary/20">
-                    Login
+                    Set New Password
                 </button>
-            </div>
-            
-            <div class="pt-4 text-center">
-                <p class="text-sm text-slate-600">
-                    New on our platform? <a href="{{ route('register') }}" class="text-primary font-semibold hover:underline">Create an account</a>
-                </p>
             </div>
 
         </form>

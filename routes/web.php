@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -36,6 +38,16 @@ Route::get('migrate', function () {
 Route::get('seed', function () {
     Artisan::call('db:seed --class=AcademicStructureSeeder --force');
     return Artisan::output() ?: 'Seeding completed successfully!';
+});
+
+Route::get('/check-sessions', function () {
+    $hasTable = \Illuminate\Support\Facades\Schema::hasTable('sessions');
+    $count = $hasTable ? \Illuminate\Support\Facades\DB::table('sessions')->count() : 0;
+    return response()->json([
+        'has_sessions_table' => $hasTable,
+        'session_count' => $count,
+        'driver' => config('session.driver'),
+    ]);
 });
 
 Route::get('cleanup-duplicates', function () {
@@ -113,6 +125,12 @@ Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
+// Password Reset Routes
+Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+
 // Authenticated Routes
 Route::middleware(['auth'])->group(function () {
 
@@ -167,6 +185,8 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('quizzes', QuizController::class);
         Route::get('/reports', [QuizController::class, 'reports'])->name('quizzes.reports');
         Route::get('/question-bank', [QuestionController::class, 'bank'])->name('questions.bank');
+        Route::get('/questions/export', [QuestionController::class, 'export'])->name('questions.export');
+        Route::post('/questions/bulk-delete', [QuestionController::class, 'bulkDelete'])->name('questions.bulkDelete');
         Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
         Route::delete('/questions/{question}', [QuestionController::class, 'destroy'])->name('questions.destroy');
     });
