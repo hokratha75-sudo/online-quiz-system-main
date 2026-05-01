@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # 🎓 Quiz System v2.0 — Online Quiz System
+=======
+# Online Quiz System
+>>>>>>> 3163cbf2305062d74cb57e6c39b1f4cc3225437a
 
 A modern, feature-rich online quiz platform built with **Laravel 12**, **PostgreSQL**, **Tailwind CSS**, and **Alpine.js**.
 
