@@ -1,25 +1,25 @@
 @extends('layouts.admin')
 
-@section('topbar-title', 'Academic Structure')
+@section('topbar-title', 'Departments Management')
 
 @section('content')
 <div class="max-w-[1400px] mx-auto p-8 md:p-10 font-inter">
 
     <!-- Header Section -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 mb-8">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
-            <h1 class="text-2xl md:text-[28px] font-bold text-slate-900 tracking-tight">Departments Directory</h1>
-            <p class="text-[14px] font-medium text-slate-500 mt-1.5">Manage administrative departments and institutional faculties.</p>
+            <h1 class="text-3xl font-bold text-slate-900 tracking-tight leading-none">Departments Management</h1>
+            <p class="text-sm font-medium text-slate-400 mt-2">Manage administrative departments and institutional faculties.</p>
         </div>
-        <div class="flex items-center gap-3">
-            <button onclick="window.location.reload()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-4 py-2.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-100">
+        <div class="flex items-center justify-end gap-3">
+            <button onclick="window.location.reload()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-[16px] text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm">
                 <i class="fas fa-sync-alt text-slate-400"></i> Refresh
             </button>
-            <a href="{{ route('admin.departments.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-4 py-2.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-100">
+            <a href="{{ route('admin.departments.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-[16px] text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm">
                 <i class="fas fa-file-excel text-emerald-500"></i> Export
             </a>
-            <button data-bs-toggle="modal" data-bs-target="#addDeptModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-2 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                <i class="fas fa-plus text-indigo-200 text-xs"></i> New Department
+            <button data-bs-toggle="modal" data-bs-target="#addDeptModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-[16px] text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg shadow-indigo-600/20 active:scale-[0.98]">
+                <i class="fas fa-plus text-white/80"></i> New Department
             </button>
         </div>
     </div>

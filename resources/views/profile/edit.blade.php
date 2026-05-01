@@ -5,7 +5,7 @@
     :root {
         --form-bg: #ffffff;
         --input-bg: #f8fafc;
-        --accent-blue: #4f46e5;
+        --accent-blue: #140ca8ff;
         --text-main: #1e293b;
         --text-muted: #64748b;
         --border-color: #e2e8f0;
@@ -19,8 +19,8 @@
         border: 1px solid var(--border-color);
         position: relative;
     }
-    .profile-header-banner { height: 140px; background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%); position: relative; border-radius: 20px 20px 0 0; }
-    .profile-avatar-wrapper { position: absolute; bottom: -60px; left: 40px; z-index: 20; }
+    .profile-header-banner { height: 90px; background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%); position: relative; border-radius: 20px 20px 0 0; }
+    .profile-avatar-wrapper { position: absolute; bottom: -65px; left: 40px; z-index: 20; }
     .profile-avatar-main { width: 130px; height: 130px; border-radius: 28px; object-fit: cover; border: 6px solid #fff; box-shadow: 0 12px 30px rgba(0,0,0,0.12); background: #f1f5f9; }
     
     .profile-body { padding: 80px 40px 40px; }
@@ -76,12 +76,9 @@
     }
 </style>
 @endsection
+@section('topbar-title', 'Account Settings')
 
 @section('content')
-<div class="user-management-heading mb-4 px-2">
-    <h1 class="h3 fw-bold mb-1">Account Settings</h1>
-    <p class="text-muted small">Update your personal information and how you appear on the platform.</p>
-</div>
 
 @if(session('success'))
     <div class="alert alert-success border-0 shadow-sm rounded-4 d-flex align-items-center gap-3 p-3 mb-4">

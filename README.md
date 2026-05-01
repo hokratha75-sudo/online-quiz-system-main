@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 # 🎓 Quiz System v2.0 — Online Quiz System
-=======
-# Online Quiz System
->>>>>>> 3163cbf2305062d74cb57e6c39b1f4cc3225437a
 
 A modern, feature-rich online quiz platform built with **Laravel 12**, **PostgreSQL**, **Tailwind CSS**, and **Alpine.js**.
 
@@ -31,7 +27,7 @@ Follow these steps to set up the project on your machine.
 
 ```bash
 cd C:\laragon\www
-git clone https://github.com/YOUR_USERNAME/online-quiz-system-main.git
+git clone https://github.com/hokratha75-sudo/online-quiz-system-main.git
 cd online-quiz-system-main
 ```
 
@@ -119,6 +115,42 @@ php artisan serve
 ```
 
 🌐 Open your browser: **http://localhost:8000**
+
+---
+
+## 👥 Team Collaboration (For Team Members)
+
+If you are a team member cloning this repository, follow these steps after being invited to the repository:
+
+1. **Clone the project:**
+   ```bash
+   git clone https://github.com/hokratha75-sudo/online-quiz-system-main.git
+   cd online-quiz-system-main
+   ```
+
+2. **Install Dependencies:**
+   ```bash
+   composer install
+   npm install
+   ```
+
+3. **Setup Environment:**
+   ```bash
+   copy .env.example .env
+   php artisan key:generate
+   ```
+   *Note: Ask your team leader for the database credentials or follow the database setup steps above.*
+
+4. **Run Migrations & Seeders:**
+   ```bash
+   php artisan migrate --seed
+   ```
+
+5. **Start Development Servers:**
+   ```bash
+   php artisan serve
+   npm run dev
+   ```
 
 ---
 

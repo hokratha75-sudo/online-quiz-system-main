@@ -49,6 +49,9 @@
     @yield('styles')
 
     <style>
+        /* Alpine.js Cloak */
+        [x-cloak] { display: none !important; }
+
         /* === Clean Standard UI System (Requested) === */
         .card-standard { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03); }
         .card-header-standard { background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 20px 28px; }
@@ -60,8 +63,11 @@
         .table-standard tr:last-child td { border-bottom: none; }
         .table-standard tr:hover { background: #f8fafc; }
 
+        /* Sidebar Base */
+        .sidebar-item { text-decoration: none !important; }
+
         /* Sidebar Active State */
-        .sidebar-item-active { background: #4f46e5 !important; color: #ffffff !important; box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.2) !important; }
+        .sidebar-item-active { background: #4f46e5 !important; color: #ffffff !important; box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.2) !important; border: none !important; }
         .sidebar-item-active i { color: #ffffff !important; }
         .sidebar-item-active div { background: rgba(255, 255, 255, 0.2) !important; box-shadow: none !important; }
 
@@ -76,10 +82,14 @@
         .label-blue { background: #3b82f6; }
         .label-green { background: #10b981; }
 
-        .pagination-clean { display: flex; gap: 6px; }
-        .pagination-clean a, .pagination-clean span { border: 1px solid #e2e8f0; padding: 8px 14px; font-size: 12px; font-weight: 700; border-radius: 12px; background: white; color: #64748b; text-decoration: none; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
-        .pagination-clean a:hover { border-color: #cbd5e1; color: #0f172a; background: #f8fafc; }
-        .pagination-clean .active { background: #4f46e5; color: #ffffff; border-color: #4f46e5; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2); }
+        /* Clean Pagination Styles */
+        .pagination-clean .pagination { margin-bottom: 0; gap: 4px; }
+        .pagination-clean .page-item .page-link { border-radius: 12px !important; border: none !important; color: #64748b; font-weight: 700; font-size: 12px; padding: 8px 16px; background: transparent; transition: all 0.2s; box-shadow: none !important; }
+        .pagination-clean .page-item.active .page-link { background-color: #4f46e5 !important; color: white !important; box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.2) !important; }
+        .pagination-clean .page-item:not(.active) .page-link:hover { background-color: #f1f5f9; color: #1e293b; }
+        /* Hide Bootstrap's redundant 'Showing 1 to 10...' text in the pagination wrapper */
+        .pagination-clean nav > div.d-none.flex-sm-fill { justify-content: flex-end !important; }
+        .pagination-clean nav > div.d-none.flex-sm-fill > div:first-child { display: none !important; }
     </style>
 </head>
 <!-- === ចាប់ផ្ដើមរចនាសម្ព័ន្ធ Layout === -->
@@ -111,7 +121,7 @@
 -->
 @unless($hideSidebar ?? false)
 <!-- Mobile Header Nav -->
-<div class="md:hidden bg-[#1a1d2e] border-b border-slate-800 px-5 py-4 flex items-center justify-between sticky top-0 z-40 shadow-2xl">
+<div class="md:hidden bg-neutral-900 border-b border-neutral-800 px-5 py-4 flex items-center justify-between sticky top-0 z-40 shadow-2xl">
     <div class="flex items-center gap-3">
         <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0 border border-indigo-400/50">
             <i class="fas fa-graduation-cap text-white text-[13px]"></i>
@@ -126,10 +136,10 @@
 </div>
 
 <!-- Mobile Drawer Overlay -->
-<div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 bg-[#1a1d2e]/60 backdrop-blur-sm z-40 md:hidden" style="display: none;"></div>
+<div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm z-40 md:hidden" style="display: none;"></div>
 
 <!-- Sidebar Layout -->
-<aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="w-[280px] md:w-[260px] shrink-0 bg-[#1a1d2e] border-r border-slate-800 flex flex-col h-screen fixed inset-y-0 left-0 transform transition-transform duration-300 ease-in-out md:translate-x-0 md:sticky md:top-0 custom-scrollbar z-50">
+<nav x-cloak class="w-[280px] md:w-[260px] shrink-0 bg-neutral-900 border-r border-neutral-800 flex flex-col h-screen fixed inset-y-0 left-0 transform transition-transform duration-300 ease-in-out md:translate-x-0 md:sticky md:top-0 z-50" x-bind:class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" aria-label="sidebar navigation">
     <!-- Close button for mobile inside sidebar -->
     <button @click="sidebarOpen = false" class="md:hidden absolute top-6 right-5 w-8 h-8 rounded-lg bg-slate-800 text-slate-400 flex items-center justify-center hover:text-white transition-colors">
         <i class="fas fa-times"></i>
@@ -243,7 +253,7 @@
         <!-- Assessment Management -->
         <div class="pt-4">
             <div class="px-4 mb-3 flex items-center justify-between">
-                <h2 class="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em]">Assessment Hub</h2>
+                <h2 class="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em]">Assessments</h2>
                 <div class="h-px bg-slate-800/50 flex-grow ml-4"></div>
             </div>
             <div class="space-y-1">
@@ -328,7 +338,7 @@
     </div>
 
     <!-- User Profile Footer -->
-    <div class="p-4 mt-auto border-t border-slate-800/50 bg-[#1a1d2e]">
+    <div class="p-4 mt-auto border-t border-neutral-800/50 bg-neutral-900">
         <div class="flex items-center justify-between w-full">
             <div class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity" onclick="window.location='{{ route('profile.edit') }}'">
                 <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
@@ -355,7 +365,7 @@
             </form>
         </div>
     </div>
-</aside>
+</nav>
 @endunless
 
 <!-- === ផ្នែកផ្ទៃព័ត៌មានកណ្ដាល (Main Content Area) === -->
@@ -364,7 +374,7 @@
     
 @unless($hideTopbar ?? ($hideSidebar ?? false))
     <!-- របារផ្នែកខាងលើ (Topbar) ប្រើ Glassmorphism Style -->
-    <header class="h-16 px-6 md:px-10 flex items-center justify-between bg-white border-b border-slate-200 shadow-sm sticky top-0 z-40">
+    <header class="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-neutral-200 bg-white px-6 py-2 md:px-10">
         <div class="flex items-center gap-4">
             <h2 class="text-lg font-semibold text-slate-800 tracking-tight flex items-center gap-2">
                 @yield('topbar-title', 'Dashboard')
@@ -429,16 +439,12 @@
             </div>
 
             <!-- Profile Info -->
-            <a href="{{ route('profile.edit') }}" class="flex items-center gap-2.5 pl-2.5 pr-1.5 py-1.5 rounded-full border border-slate-200/60 bg-white hover:bg-slate-50 transition-colors shadow-sm shadow-slate-100 cursor-pointer group">
-                <span class="text-sm font-semibold text-slate-700 tracking-tight ml-1">{{ $authUser->username ?? 'Profile' }}</span>
-                <div class="w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center text-[10px] font-bold overflow-hidden shadow-inner uppercase">
-                    @if($authUser && $authUser->profile_photo)
-                        <img src="{{ asset('storage/' . $authUser->profile_photo) }}" alt="Avatar" class="w-full h-full object-cover">
-                    @else
-                        {{ substr($authUser?->username ?? 'A', 0, 1) }}
-                    @endif
-                </div>
-            </a>
+            <button type="button" onclick="window.location='{{ route('profile.edit') }}'" class="flex items-center gap-2 rounded-md bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-900 hover:bg-neutral-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-colors" aria-haspopup="true">
+                <span>{{ $authUser->username ?? 'Profile' }}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" class="size-4" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
+                </svg>
+            </button>
         </div>
     </header>
 @endunless

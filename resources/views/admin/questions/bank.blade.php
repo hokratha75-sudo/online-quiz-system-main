@@ -78,12 +78,15 @@
                 </div>
  
                 <!-- Select Dropdown -->
-                <select name="subject_id" onchange="this.form.submit()" class="form-select shadow-sm text-[10px] font-bold text-slate-600 uppercase tracking-widest rounded-2xl py-3 px-4 cursor-pointer">
-                    <option value="">ALL SUBJECTS</option>
-                    @foreach($subjects as $subject)
-                        <option value="{{ $subject->id }}" {{ request('subject_id') == $subject->id ? 'selected' : '' }}>{{ $subject->subject_name }}</option>
-                    @endforeach
-                </select>
+                <div class="relative w-full max-w-xs">
+                    <select name="subject_id" onchange="this.form.submit()" class="w-full appearance-none rounded-md border border-neutral-300 bg-neutral-50 px-4 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:cursor-not-allowed disabled:opacity-75 dark:border-neutral-700 dark:bg-neutral-900/50 dark:focus-visible:outline-white">
+                        <option value="">ALL SUBJECTS</option>
+                        @foreach($subjects as $subject)
+                            <option value="{{ $subject->id }}" {{ request('subject_id') == $subject->id ? 'selected' : '' }}>{{ $subject->subject_name }}</option>
+                        @endforeach
+                    </select>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-neutral-600 dark:text-neutral-300" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
  
                 <button type="button" id="bulkDeleteBtn" style="display: none;" class="h-12 px-6 bg-rose-50 text-rose-600 border border-rose-100 rounded-2xl text-[10px] font-bold uppercase tracking-widest transition-all flex items-center gap-3">
                     <i class="fas fa-trash-can text-sm"></i> Delete Selected
@@ -93,26 +96,23 @@
     </form>
 
     <!-- Content Table -->
-    <div class="card-standard mb-8">
-        <div class="card-header-standard">
-            <h3>Standardized Question Bank</h3>
-        </div>
+    <div class="w-full overflow-hidden rounded-md border border-neutral-300 dark:border-neutral-700 mb-8">
         <div class="overflow-x-auto">
-            <table class="table table-hover table-borderless align-middle mb-0" id="bankTable">
-                <thead class="table-light text-slate-500 text-xs uppercase tracking-widest">
+            <table class="w-full text-left text-sm text-neutral-600 dark:text-neutral-300" id="bankTable">
+                <thead class="border-b border-neutral-300 bg-neutral-50 text-sm text-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white">
                     <tr>
-                        <th width="40" class="text-center">
+                        <th scope="col" width="40" class="p-4 text-center">
                             <input type="checkbox" id="selectAll" class="form-check-input shadow-none cursor-pointer">
                         </th>
-                        <th class="py-3">#</th>
-                        <th class="py-3">Question Content</th>
-                        <th width="140" class="text-center py-3">Subject</th>
-                        <th width="140" class="text-center py-3">Type</th>
-                        <th width="80" class="text-center py-3">Points</th>
-                        <th width="130" class="text-center py-3">Actions</th>
+                        <th scope="col" class="p-4">#</th>
+                        <th scope="col" class="p-4">Question Content</th>
+                        <th scope="col" width="140" class="p-4 text-center">Subject</th>
+                        <th scope="col" width="140" class="p-4 text-center">Type</th>
+                        <th scope="col" width="80" class="p-4 text-center">Points</th>
+                        <th scope="col" width="130" class="p-4 text-center">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-neutral-300 dark:divide-neutral-700">
                     @forelse($questions as $index => $question)
                         <tr>
                             <td class="text-center">

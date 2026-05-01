@@ -11,10 +11,10 @@
         
         <div class="flex items-center gap-4">
             <a href="{{ route('admin.subjects.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-6 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-3 shadow-sm uppercase tracking-widest">
-                <i class="far fa-file-export text-slate-400 text-sm"></i> Export
+                <i class="fas fa-file-export text-slate-400 text-sm"></i> Export
             </a>
             <button data-bs-toggle="modal" data-bs-target="#addSubjectModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-7 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-3 shadow-xl shadow-indigo-600/20 active:scale-[0.98] uppercase tracking-widest">
-                <i class="far fa-plus"></i> New Subject
+                <i class="fas fa-plus"></i> New Subject
             </button>
         </div>
     </div>
@@ -24,7 +24,7 @@
         <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-500"></div>
         <div class="flex items-center gap-5">
             <div class="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100">
-                <i class="far fa-circle-check text-emerald-500 text-lg"></i>
+                <i class="fas fa-circle-check text-emerald-500 text-lg"></i>
             </div>
             <div>
                 <h4 class="text-base font-bold text-slate-900 leading-tight">Success</h4>
@@ -32,7 +32,7 @@
             </div>
         </div>
         <button type="button" class="text-slate-300 hover:text-slate-500 transition-colors px-4" onclick="this.parentElement.style.display='none'">
-            <i class="far fa-xmark text-lg"></i>
+            <i class="fas fa-xmark text-lg"></i>
         </button>
     </div>
     @endif
@@ -40,7 +40,7 @@
     <!-- Search & Control Bar -->
     <div class="flex flex-col md:flex-row items-center justify-between gap-8 mb-10">
         <div class="relative w-full md:w-[480px] group">
-            <i class="far fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors"></i>
+            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors"></i>
             <input type="text" id="subjectSearch" placeholder="SEARCH SUBJECTS..." 
                    class="w-full h-14 pl-14 pr-6 bg-white border border-slate-200 text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:text-slate-300 rounded-[20px] shadow-sm uppercase tracking-widest">
         </div>
@@ -51,10 +51,10 @@
             </span>
             <div class="flex items-center gap-3">
                 <button onclick="editSelected()" class="w-11 h-11 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-500 transition-all shadow-sm">
-                    <i class="far fa-pen-to-square text-lg"></i>
+                    <i class="fas fa-pen-to-square text-lg"></i>
                 </button>
                 <button onclick="deleteSelected()" class="w-11 h-11 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-slate-400 hover:text-rose-600 hover:border-rose-500 transition-all shadow-sm">
-                    <i class="far fa-trash-can text-lg"></i>
+                    <i class="fas fa-trash-can text-lg"></i>
                 </button>
             </div>
         </div>
@@ -116,15 +116,15 @@
                         <td class="text-center">
                             <div class="flex items-center justify-center gap-3">
                                 <a href="{{ route('admin.subjects.show', $item->id) }}" class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all shadow-sm" title="View">
-                                    <i class="far fa-eye text-sm"></i>
+                                    <i class="fas fa-eye text-sm"></i>
                                 </a>
                                 <button onclick="editRecord({{ $item->id }}, '{{ addslashes($item->subject_name) }}', {{ $item->department_id }}, {{ $item->major_id ?? 'null' }}, {{ json_encode($item->classes->pluck('id')) }})"
                                         class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all shadow-sm" title="Edit">
-                                    <i class="far fa-pen-to-square text-sm"></i>
+                                    <i class="fas fa-pen-to-square text-sm"></i>
                                 </button>
                                 <button onclick="deleteRecord({{ $item->id }}, '{{ addslashes($item->subject_name) }}')"
                                         class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-all shadow-sm" title="Delete">
-                                    <i class="far fa-trash-can text-sm"></i>
+                                    <i class="fas fa-trash-can text-sm"></i>
                                 </button>
                             </div>
                         </td>
@@ -140,11 +140,11 @@
 
         <div class="p-6 border-t border-slate-100 flex justify-end">
             <div class="pagination-clean">
-                <a href="#"><i class="far fa-chevron-left text-[10px]"></i></a>
+                <a href="#"><i class="fas fa-chevron-left text-[10px]"></i></a>
                 <span class="active">1</span>
                 <a href="#">2</a>
                 <a href="#">3</a>
-                <a href="#"><i class="far fa-chevron-right text-[10px]"></i></a>
+                <a href="#"><i class="fas fa-chevron-right text-[10px]"></i></a>
             </div>
         </div>
     </div>

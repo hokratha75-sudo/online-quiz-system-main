@@ -11,19 +11,19 @@
             <p class="text-[14px] font-medium text-slate-500 mt-1.5">Manage administrative {{ $tab }} and institutional faculties.</p>
         </div>
         <div class="flex items-center gap-3">
-            <button onclick="window.location.reload()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-4 py-2.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-100">
-                <i class="fas fa-sync-alt text-slate-400"></i> Refresh
+            <button onclick="window.location.reload()" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md border border-neutral-300 bg-transparent px-4 py-2 text-sm font-medium tracking-wide text-neutral-600 transition hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:border-neutral-700 dark:text-neutral-300 dark:focus-visible:outline-white">
+                <i class="fas fa-sync-alt"></i> Refresh
             </button>
-            <a href="{{ route('admin.majors.export', ['tab' => $tab]) }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-4 py-2.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-100">
+            <a href="{{ route('admin.majors.export', ['tab' => $tab]) }}" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md border border-neutral-300 bg-transparent px-4 py-2 text-sm font-medium tracking-wide text-neutral-600 transition hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:border-neutral-700 dark:text-neutral-300 dark:focus-visible:outline-white">
                 <i class="fas fa-file-excel text-emerald-500"></i> Export
             </a>
             @if($tab == 'majors')
-                <button data-bs-toggle="modal" data-bs-target="#addMajorModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-2 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                    <i class="fas fa-plus text-indigo-200 text-xs"></i> New Major
+                <button data-bs-toggle="modal" data-bs-target="#addMajorModal" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium tracking-wide text-white transition hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                    <i class="fas fa-plus text-xs text-indigo-200"></i> New Major
                 </button>
             @elseif($tab == 'classes')
-                <button data-bs-toggle="modal" data-bs-target="#addClassModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-2 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                    <i class="fas fa-plus text-indigo-200 text-xs"></i> New Class
+                <button data-bs-toggle="modal" data-bs-target="#addClassModal" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium tracking-wide text-white transition hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                    <i class="fas fa-plus text-xs text-indigo-200"></i> New Class
                 </button>
             @endif
         </div>
@@ -48,113 +48,111 @@
     @endif
 
     <!-- Data Table Card -->
-    <div class="bg-white rounded-[24px] border border-slate-100 shadow-sm overflow-hidden mb-8">
+    <div class="w-full overflow-hidden rounded-md border border-neutral-300 dark:border-neutral-700 mb-8">
         
         <!-- Toolbar -->
-        <div class="p-6 border-b border-slate-50 flex flex-col md:flex-row items-center justify-between gap-6 bg-slate-50/10">
+        <div class="p-4 border-b border-neutral-200 flex flex-col md:flex-row items-center justify-between gap-4 bg-neutral-50 text-neutral-900">
             <div class="flex items-center gap-4">
-                <h3 class="text-xs font-bold text-slate-900 tracking-widest uppercase">Active {{ ucfirst($tab) }}</h3>
-                <span class="px-2.5 py-1 rounded-md bg-white border border-slate-100 text-indigo-600 text-[10px] font-bold tracking-widest uppercase shadow-sm tabular-nums whitespace-nowrap">{{ $items->total() }} Nodes Recorded</span>
+                <h3 class="text-xs font-bold tracking-widest uppercase">Active {{ ucfirst($tab) }}</h3>
+                <span class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                    {{ $items->total() }} Nodes Recorded
+                </span>
             </div>
             
             <div class="flex items-center gap-3 w-full sm:w-auto">
-                <button class="bg-white hover:bg-rose-50 text-rose-600 border border-slate-100 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm whitespace-nowrap" onclick="deleteSelected()">
+                <button onclick="deleteSelected()" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-medium tracking-wide text-rose-600 transition-colors hover:bg-rose-100 hover:border-rose-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600">
                     <i class="fas fa-trash-alt text-[10px]"></i> Remove Selected
                 </button>
                 <div class="relative w-full sm:w-64">
-                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-indigo-600 text-[10px]"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400" aria-hidden="true">
+                        <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/>
+                    </svg>
                     <input type="text" id="tableSearch" placeholder="Search indices..." 
-                           class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-100 rounded-xl text-xs font-bold text-slate-900 uppercase tracking-widest focus:outline-none focus:border-indigo-500 transition-all shadow-sm">
+                           class="w-full rounded-md border border-neutral-300 bg-white py-2 pl-10 pr-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-75" />
                 </div>
             </div>
         </div>
 
         <div class="overflow-x-auto min-h-[300px]">
-            <table class="w-full text-left border-collapse whitespace-nowrap" id="dataTable">
-                <thead>
-                    <tr class="bg-slate-50/50 border-b border-slate-200/70">
-                        <th class="ps-8 py-4 w-12 text-center text-slate-500">
-                            #
-                        </th>
-                        <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-left w-24">Code</th>
+            <table class="w-full border-collapse text-left text-sm text-neutral-600" id="dataTable">
+                <thead class="border-b border-neutral-200 bg-neutral-50 text-sm text-neutral-900">
+                    <tr>
+                        <th scope="col" class="p-4 w-12 text-center">#</th>
+                        <th scope="col" class="p-4 w-24">Code</th>
                         @if($tab == 'majors')
-                            <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-left">Major Details</th>
-                            <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-left">Department</th>
-                            <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Classes</th>
-                            <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Subjects</th>
+                            <th scope="col" class="p-4">Major Details</th>
+                            <th scope="col" class="p-4">Department</th>
+                            <th scope="col" class="p-4 text-center">Classes</th>
+                            <th scope="col" class="p-4 text-center">Subjects</th>
                         @elseif($tab == 'classes')
-                            <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-left">Class Details</th>
-                            <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-left">Major</th>
-                            <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Students</th>
-                            <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Subjects</th>
+                            <th scope="col" class="p-4">Class Details</th>
+                            <th scope="col" class="p-4">Major</th>
+                            <th scope="col" class="p-4 text-center">Students</th>
+                            <th scope="col" class="p-4 text-center">Subjects</th>
                         @endif
-                        <th class="pe-8 py-4 text-right">
-                            <input type="checkbox" id="selectAll" class="w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500 cursor-pointer transition-colors shadow-sm inline-block translate-y-[2px]">
+                        <th scope="col" class="p-4 text-right">
+                            <input type="checkbox" id="selectAll" class="h-4 w-4 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-600">
                         </th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 bg-white">
+                <tbody class="divide-y divide-neutral-200">
                     @forelse($items as $item)
-                    <tr class="table-row hover:bg-slate-50/50 transition-all group">
-                        <td class="ps-8 py-4 text-xs font-semibold text-slate-400 tabular-nums text-center">{{ $loop->iteration + ($items->currentPage() - 1) * $items->perPage() }}</td>
-                        <td class="px-5 py-4">
-                            <span class="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700 tracking-wide">{{ $item->code }}</span>
+                    <tr class="table-row hover:bg-neutral-100 transition-colors border-b border-neutral-100 group">
+                        <td class="p-4 text-center">{{ $loop->iteration + ($items->currentPage() - 1) * $items->perPage() }}</td>
+                        <td class="p-4">
+                            <span class="inline-flex items-center rounded bg-neutral-200 px-2 py-1 text-xs font-mono font-medium text-neutral-700">{{ $item->code }}</span>
                         </td>
                         
                         @if($tab == 'majors')
-                            <td class="px-5 py-4">
-                                <a href="{{ route('admin.majors.show', $item->id) }}" class="flex items-center gap-3.5 transition-all group-hover:translate-x-1">
-                                    <div class="w-10 h-10 rounded-xl bg-indigo-50/80 text-indigo-600 flex items-center justify-center shrink-0 border border-indigo-100/50 shadow-sm">
-                                        <i class="fas fa-bookmark text-sm"></i>
-                                    </div>
-                                    <h4 class="text-sm font-semibold text-slate-900 tracking-tight">{{ $item->name }}</h4>
+                            <td class="p-4">
+                                <a href="{{ route('admin.majors.show', $item->id) }}" class="flex items-center gap-2">
+                                    <i class="fas fa-bookmark text-indigo-600"></i>
+                                    <span class="font-medium text-neutral-900">{{ $item->name }}</span>
                                 </a>
                             </td>
-                            <td class="px-5 py-4">
-                                <div class="text-xs font-medium text-slate-500">{{ $item->department->department_name ?? 'SYSTEM UNIT' }}</div>
+                            <td class="p-4">
+                                <div class="text-neutral-900">{{ $item->department->department_name ?? 'SYSTEM UNIT' }}</div>
                             </td>
-                            <td class="px-5 py-4 text-center">
-                                <span class="inline-flex items-center justify-center min-w-[32px] px-2 py-1 rounded-md text-xs font-bold {{ ($item->classes_count ?? 0) > 0 ? 'bg-indigo-50 text-indigo-700 border border-indigo-200 shadow-sm' : 'bg-slate-50 text-slate-500 border border-slate-200' }}">
+                            <td class="p-4 text-center">
+                                <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ ($item->classes_count ?? 0) > 0 ? 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-700/10' : 'bg-neutral-100 text-neutral-600' }}">
                                     {{ $item->classes_count ?? 0 }}
                                 </span>
                             </td>
-                            <td class="px-5 py-4 text-center">
-                                <span class="inline-flex items-center justify-center min-w-[32px] px-2 py-1 rounded-md text-xs font-bold {{ ($item->subjects_count ?? 0) > 0 ? 'bg-amber-50 text-amber-700 border border-amber-200 shadow-sm' : 'bg-slate-50 text-slate-500 border border-slate-200' }}">
+                            <td class="p-4 text-center">
+                                <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ ($item->subjects_count ?? 0) > 0 ? 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-700/10' : 'bg-neutral-100 text-neutral-600' }}">
                                     {{ $item->subjects_count ?? 0 }}
                                 </span>
                             </td>
                         @elseif($tab == 'classes')
-                            <td class="px-5 py-4">
-                                <div class="flex items-center gap-3.5 transition-all group-hover:translate-x-1">
-                                    <div class="w-10 h-10 rounded-xl bg-sky-50/80 text-sky-600 flex items-center justify-center shrink-0 border border-sky-100/50 shadow-sm">
-                                        <i class="fas fa-layer-group text-sm"></i>
-                                    </div>
-                                    <h4 class="text-sm font-semibold text-slate-900 tracking-tight">{{ $item->name }}</h4>
+                            <td class="p-4">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-layer-group text-indigo-600"></i>
+                                    <span class="font-medium text-neutral-900">{{ $item->name }}</span>
                                 </div>
                             </td>
-                            <td class="px-5 py-4">
-                                <div class="text-xs font-medium text-slate-500">{{ $item->major->name ?? 'N/A' }}</div>
+                            <td class="p-4">
+                                <div class="text-neutral-900">{{ $item->major->name ?? 'N/A' }}</div>
                             </td>
-                            <td class="px-5 py-4 text-center">
-                                <span class="inline-flex items-center justify-center min-w-[32px] px-2 py-1 rounded-md text-xs font-bold {{ ($item->students_count ?? 0) > 0 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-sm' : 'bg-slate-50 text-slate-500 border border-slate-200' }}">
+                            <td class="p-4 text-center">
+                                <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ ($item->students_count ?? 0) > 0 ? 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-700/10' : 'bg-neutral-100 text-neutral-600' }}">
                                     {{ $item->students_count ?? 0 }}
                                 </span>
                             </td>
-                            <td class="px-5 py-4 text-center">
-                                <span class="inline-flex items-center justify-center min-w-[32px] px-2 py-1 rounded-md text-xs font-bold {{ ($item->subjects_count ?? 0) > 0 ? 'bg-amber-50 text-amber-700 border border-amber-200 shadow-sm' : 'bg-slate-50 text-slate-500 border border-slate-200' }}">
+                            <td class="p-4 text-center">
+                                <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ ($item->subjects_count ?? 0) > 0 ? 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-700/10' : 'bg-neutral-100 text-neutral-600' }}">
                                     {{ $item->subjects_count ?? 0 }}
                                 </span>
                             </td>
                         @endif
                         
-                        <td class="pe-8 py-4 text-right">
-                            <div class="flex items-center justify-end gap-1.5 opacity-70 group-hover:opacity-100 transition-opacity">
+                        <td class="p-4 text-right">
+                            <div class="flex items-center justify-end gap-2">
                                 <button type="button" 
                                         onclick="editRecord({{ $item->id }}, '{{ addslashes($item->name) }}', '{{ $item->code ?? '' }}', '{{ $item->department_id ?? '' }}', '{{ $item->major_id ?? '' }}')" 
-                                        class="btn btn-sm btn-outline-secondary rounded-lg shadow-sm" title="Edit">
-                                    <i class="fas fa-edit text-[13px]"></i>
+                                        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md px-2 py-2 text-sm font-medium tracking-wide text-neutral-600 transition hover:bg-neutral-100 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" title="Edit">
+                                    <i class="fas fa-edit"></i>
                                 </button>
-                                <input type="checkbox" class="row-checkbox w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500 cursor-pointer shadow-sm ms-2" value="{{ $item->id }}" data-name="{{ $item->name }}">
+                                <input type="checkbox" class="row-checkbox h-4 w-4 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-600" value="{{ $item->id }}" data-name="{{ $item->name }}">
                             </div>
                         </td>
                     </tr>

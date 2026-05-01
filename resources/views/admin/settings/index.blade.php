@@ -66,23 +66,20 @@
         
         <div class="relative z-10">
             <!-- Tabs Nav -->
-            <ul class="nav nav-tabs px-8 pt-6 border-bottom-0 bg-slate-50/50" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button @click="tab = 'general'" :class="tab === 'general' ? 'active bg-white text-indigo-600 border-bottom-0' : 'text-slate-500 hover:text-slate-700'" class="nav-link border-top-0 border-start-0 border-end-0 py-3 px-5 font-bold text-[11px] uppercase tracking-widest rounded-t-xl transition-colors">
+            <!-- Tabs Nav -->
+            <div class="w-full border-b border-neutral-300 dark:border-neutral-700 bg-neutral-50/50 pt-4 px-6">
+                <div class="flex gap-2 overflow-x-auto">
+                    <button @click="tab = 'general'" :class="tab === 'general' ? 'border-b-2 border-black text-black font-bold dark:border-white dark:text-white' : 'text-neutral-600 font-medium hover:border-b-2 hover:border-neutral-300 hover:text-neutral-900 dark:text-neutral-300 dark:hover:border-neutral-700 dark:hover:text-white'" class="h-min px-4 py-2 text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:focus-visible:outline-white" role="tab" :aria-selected="tab === 'general'" :tabindex="tab === 'general' ? '0' : '-1'">
                         <i class="fas fa-compass mr-2"></i> General
                     </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button @click="tab = 'quiz'" :class="tab === 'quiz' ? 'active bg-white text-indigo-600 border-bottom-0' : 'text-slate-500 hover:text-slate-700'" class="nav-link border-top-0 border-start-0 border-end-0 py-3 px-5 font-bold text-[11px] uppercase tracking-widest rounded-t-xl transition-colors">
+                    <button @click="tab = 'quiz'" :class="tab === 'quiz' ? 'border-b-2 border-black text-black font-bold dark:border-white dark:text-white' : 'text-neutral-600 font-medium hover:border-b-2 hover:border-neutral-300 hover:text-neutral-900 dark:text-neutral-300 dark:hover:border-neutral-700 dark:hover:text-white'" class="h-min px-4 py-2 text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:focus-visible:outline-white" role="tab" :aria-selected="tab === 'quiz'" :tabindex="tab === 'quiz' ? '0' : '-1'">
                         <i class="fas fa-file-lines mr-2"></i> Quiz Rules
                     </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button @click="tab = 'security'" :class="tab === 'security' ? 'active bg-white text-indigo-600 border-bottom-0' : 'text-slate-500 hover:text-slate-700'" class="nav-link border-top-0 border-start-0 border-end-0 py-3 px-5 font-bold text-[11px] uppercase tracking-widest rounded-t-xl transition-colors">
+                    <button @click="tab = 'security'" :class="tab === 'security' ? 'border-b-2 border-black text-black font-bold dark:border-white dark:text-white' : 'text-neutral-600 font-medium hover:border-b-2 hover:border-neutral-300 hover:text-neutral-900 dark:text-neutral-300 dark:hover:border-neutral-700 dark:hover:text-white'" class="h-min px-4 py-2 text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:focus-visible:outline-white" role="tab" :aria-selected="tab === 'security'" :tabindex="tab === 'security' ? '0' : '-1'">
                         <i class="fas fa-shield-halved mr-2"></i> Security
                     </button>
-                </li>
-            </ul>
+                </div>
+            </div>
 
             <!-- Tab Content Area -->
             <div class="p-6 md:p-8 bg-white">
@@ -145,21 +142,12 @@
                                              <div x-show="loading" class="animate-spin text-rose-500">
                                                  <i class="fas fa-circle-notch"></i>
                                              </div>
-                                             <button 
-                                                 type="button"
-                                                 @click="enabled = !enabled; toggle()"
-                                                 :class="enabled ? 'bg-indigo-600' : 'bg-slate-300'"
-                                                 class="relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600/20"
-                                                 role="switch"
-                                                 aria-label="Maintenance Mode"
-                                                 :aria-checked="enabled.toString()"
-                                             >
-                                                 <span 
-                                                     aria-hidden="true"
-                                                     :class="enabled ? 'translate-x-5' : 'translate-x-0'"
-                                                     class="pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-xl ring-0 transition duration-300 ease-in-out"
-                                                 ></span>
-                                             </button>
+                                             <label for="maintenance_toggle" class="flex cursor-pointer items-center gap-2">
+                                                 <div class="relative flex items-center">
+                                                     <input type="checkbox" id="maintenance_toggle" class="peer sr-only" x-model="enabled" @change="toggle()" />
+                                                     <div class="h-6 w-11 rounded-full bg-neutral-300 transition-colors after:absolute after:left-1 after:top-1 after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-all peer-checked:bg-black peer-checked:after:translate-x-5 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-black dark:bg-neutral-700 dark:peer-checked:bg-white dark:peer-focus-visible:outline-white"></div>
+                                                 </div>
+                                             </label>
                                          </div>
                                      </div>
                         </div>
@@ -278,21 +266,12 @@
                                         <div x-show="loading" class="animate-spin text-emerald-500 text-[10px]">
                                             <i class="fas fa-circle-notch"></i>
                                         </div>
-                                        <button 
-                                             type="button"
-                                             @click="enabled = !enabled; toggle()"
-                                             :class="enabled ? 'bg-emerald-500' : 'bg-slate-200'"
-                                             class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:ring-offset-2"
-                                             role="switch"
-                                             aria-label="{{ $toggle['title'] }}"
-                                             :aria-checked="enabled.toString()"
-                                         >
-                                             <span 
-                                                 aria-hidden="true"
-                                                 :class="enabled ? 'translate-x-5' : 'translate-x-0'"
-                                                 class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-300 ease-in-out"
-                                             ></span>
-                                         </button>
+                                         <label :for="'quiz_toggle_' + name" class="flex cursor-pointer items-center gap-2">
+                                             <div class="relative flex items-center">
+                                                 <input type="checkbox" :id="'quiz_toggle_' + name" class="peer sr-only" x-model="enabled" @change="toggle()" />
+                                                 <div class="h-6 w-11 rounded-full bg-neutral-300 transition-colors after:absolute after:left-1 after:top-1 after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-all peer-checked:bg-black peer-checked:after:translate-x-5 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-black dark:bg-neutral-700 dark:peer-checked:bg-white dark:peer-focus-visible:outline-white"></div>
+                                             </div>
+                                         </label>
                                     </div>
                                 </div>
                                 @endforeach
@@ -376,21 +355,12 @@
                                         <div x-show="loading" class="animate-spin text-red-500 text-[10px]">
                                             <i class="fas fa-circle-notch"></i>
                                         </div>
-                                         <button 
-                                             type="button"
-                                             @click="enabled = !enabled; toggle()"
-                                             :class="enabled ? 'bg-red-500' : 'bg-slate-200'"
-                                             class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:ring-offset-2"
-                                             role="switch"
-                                             aria-label="{{ $toggle['title'] }}"
-                                             :aria-checked="enabled.toString()"
-                                         >
-                                             <span 
-                                                 aria-hidden="true"
-                                                 :class="enabled ? 'translate-x-5' : 'translate-x-0'"
-                                                 class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-300 ease-in-out"
-                                             ></span>
-                                         </button>
+                                         <label :for="'sec_toggle_' + name" class="flex cursor-pointer items-center gap-2">
+                                             <div class="relative flex items-center">
+                                                 <input type="checkbox" :id="'sec_toggle_' + name" class="peer sr-only" x-model="enabled" @change="toggle()" />
+                                                 <div class="h-6 w-11 rounded-full bg-neutral-300 transition-colors after:absolute after:left-1 after:top-1 after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-all peer-checked:bg-black peer-checked:after:translate-x-5 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-black dark:bg-neutral-700 dark:peer-checked:bg-white dark:peer-focus-visible:outline-white"></div>
+                                             </div>
+                                         </label>
                                     </div>
                                 </div>
                                 @endforeach
