@@ -102,11 +102,19 @@ class DashboardController extends Controller
 
             foreach($weeklyQuizzes as $q) {
                 $dateKey = date('M d', strtotime($q->date));
-                if($days->has($dateKey)) $days->get($dateKey)['quizzes'] = $q->count;
+                if($days->has($dateKey)) {
+                    $item = $days->get($dateKey);
+                    $item['quizzes'] = $q->count;
+                    $days->put($dateKey, $item);
+                }
             }
             foreach($weeklyAttempts as $a) {
                 $dateKey = date('M d', strtotime($a->date));
-                if($days->has($dateKey)) $days->get($dateKey)['attempts'] = $a->count;
+                if($days->has($dateKey)) {
+                    $item = $days->get($dateKey);
+                    $item['attempts'] = $a->count;
+                    $days->put($dateKey, $item);
+                }
             }
 
         } elseif ($userRole === 'teacher') {
@@ -151,7 +159,11 @@ class DashboardController extends Controller
                 ->groupBy('date')->get();
             foreach($weeklyAttempts as $a) {
                 $dateKey = date('M d', strtotime($a->date));
-                if($days->has($dateKey)) $days->get($dateKey)['attempts'] = $a->count;
+                if($days->has($dateKey)) {
+                    $item = $days->get($dateKey);
+                    $item['attempts'] = $a->count;
+                    $days->put($dateKey, $item);
+                }
             }
             $weeklyActivity = ['labels' => $days->keys(), 'attempts' => $days->pluck('attempts')];
 
@@ -207,7 +219,11 @@ class DashboardController extends Controller
                 ->groupBy('date')->get();
             foreach($weeklyAttempts as $a) {
                 $dateKey = date('M d', strtotime($a->date));
-                if($days->has($dateKey)) $days->get($dateKey)['attempts'] = $a->count;
+                if($days->has($dateKey)) {
+                    $item = $days->get($dateKey);
+                    $item['attempts'] = $a->count;
+                    $days->put($dateKey, $item);
+                }
             }
         }
 

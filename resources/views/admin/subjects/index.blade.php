@@ -3,161 +3,150 @@
 @section('content')
 <div class="max-w-[1400px] mx-auto p-6 md:p-10 font-inter text-slate-900 bg-slate-50/30 min-h-screen">
     
-    <!-- Header Section -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 mb-10">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
         <div>
-            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Academic Subjects</h1>
-            <p class="text-[14px] font-medium text-slate-500 mt-1.5">Manage your course list and learning modules.</p>
+            <h1 class="text-3xl font-bold text-slate-900 tracking-tight leading-none">Academic Subjects</h1>
+            <p class="text-sm font-medium text-slate-400 mt-2">Manage your course list and learning modules.</p>
         </div>
         
-        <div class="flex items-center gap-3">
-            <a href="{{ route('admin.subjects.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-4 py-2.5 rounded-xl text-[13px] font-semibold transition-all flex items-center gap-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-100">
-                <i class="fas fa-file-export text-slate-400"></i> Export
+        <div class="flex items-center gap-4">
+            <a href="{{ route('admin.subjects.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-6 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-3 shadow-sm uppercase tracking-widest">
+                <i class="far fa-file-export text-slate-400 text-sm"></i> Export
             </a>
-            <button data-bs-toggle="modal" data-bs-target="#addSubjectModal" class="bg-indigo-600 hover:bg-slate-900 text-white px-5 py-2.5 rounded-xl text-[13px] font-bold transition-all flex items-center gap-2 shadow-lg shadow-indigo-200 active:scale-[0.98]">
-                <i class="fas fa-plus text-indigo-200 text-[10px]"></i> New Subject
+            <button data-bs-toggle="modal" data-bs-target="#addSubjectModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-7 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-3 shadow-xl shadow-indigo-600/20 active:scale-[0.98] uppercase tracking-widest">
+                <i class="far fa-plus"></i> New Subject
             </button>
         </div>
     </div>
 
     @if(session('success'))
-    <div class="mb-6 bg-white border border-emerald-100 rounded-2xl p-3.5 flex items-center justify-between shadow-sm relative overflow-hidden">
-        <div class="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500"></div>
-        <div class="flex items-center gap-3.5">
-            <div class="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100">
-                <i class="fas fa-check text-emerald-500 text-xs"></i>
+    <div class="mb-10 bg-white border border-emerald-100 rounded-[24px] p-6 flex items-center justify-between shadow-xl shadow-emerald-500/5 relative overflow-hidden">
+        <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-emerald-500"></div>
+        <div class="flex items-center gap-5">
+            <div class="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100">
+                <i class="far fa-circle-check text-emerald-500 text-lg"></i>
             </div>
             <div>
-                <h4 class="text-[13px] font-bold text-slate-900 leading-tight">Success</h4>
-                <p class="text-[11px] font-medium text-slate-500">{{ session('success') }}</p>
+                <h4 class="text-base font-bold text-slate-900 leading-tight">Success</h4>
+                <p class="text-sm font-medium text-slate-400 mt-1">{{ session('success') }}</p>
             </div>
         </div>
-        <button type="button" class="text-slate-400 hover:text-slate-600 px-2" onclick="this.parentElement.style.display='none'">
-            <i class="fas fa-times text-xs"></i>
+        <button type="button" class="text-slate-300 hover:text-slate-500 transition-colors px-4" onclick="this.parentElement.style.display='none'">
+            <i class="far fa-xmark text-lg"></i>
         </button>
     </div>
     @endif
 
     <!-- Search & Control Bar -->
-    <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
-        <div class="relative w-full md:w-96 group">
-            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs group-focus-within:text-indigo-600 transition-colors"></i>
+    <div class="flex flex-col md:flex-row items-center justify-between gap-8 mb-10">
+        <div class="relative w-full md:w-[480px] group">
+            <i class="far fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors"></i>
             <input type="text" id="subjectSearch" placeholder="SEARCH SUBJECTS..." 
-                   class="w-full h-12 pl-11 pr-4 bg-white border border-slate-200 text-xs font-bold text-slate-900 outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all placeholder:text-slate-300 rounded-2xl shadow-sm uppercase tracking-widest">
+                   class="w-full h-14 pl-14 pr-6 bg-white border border-slate-200 text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:text-slate-300 rounded-[20px] shadow-sm uppercase tracking-widest">
         </div>
         
-        <div class="flex items-center gap-3">
-            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest px-4 mr-2 border-r border-slate-200">
-                {{ $subjects->count() }} total units
+        <div class="flex items-center gap-6">
+            <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] px-6 py-2.5 bg-slate-100 rounded-full">
+                {{ $subjects->count() }} Total Units
             </span>
-            <div class="flex items-center gap-2">
-                <button onclick="editSelected()" class="w-10 h-10 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-200 transition-all shadow-sm">
-                    <i class="fas fa-pen-nib"></i>
+            <div class="flex items-center gap-3">
+                <button onclick="editSelected()" class="w-11 h-11 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-500 transition-all shadow-sm">
+                    <i class="far fa-pen-to-square text-lg"></i>
                 </button>
-                <button onclick="deleteSelected()" class="w-10 h-10 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-600 hover:border-rose-200 transition-all shadow-sm">
-                    <i class="fas fa-trash"></i>
+                <button onclick="deleteSelected()" class="w-11 h-11 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-slate-400 hover:text-rose-600 hover:border-rose-500 transition-all shadow-sm">
+                    <i class="far fa-trash-can text-lg"></i>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Subject List-->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="subjectGrid">
-        @forelse($subjects as $item)
-        <div class="subject-card group bg-white rounded-[30px] border border-slate-100 shadow-sm p-6 hover:shadow-2xl hover:shadow-slate-200/40 transition-all duration-500 flex flex-col relative overflow-hidden h-full"
-             data-title="{{ strtoupper($item->subject_name) }}" data-code="{{ strtoupper($item->code) }}">
-            
-            <!-- Selection Checkbox (Top Left Overlay) -->
-            <div class="absolute top-5 left-5 z-10">
-                <input type="checkbox" class="row-checkbox w-5 h-5 rounded-md border-slate-200 text-indigo-600 focus:ring-indigo-500/20 cursor-pointer transition-all bg-white shadow-sm" 
-                       value="{{ $item->id }}" data-name="{{ $item->subject_name }}" data-department="{{ $item->department_id }}" 
-                       data-major="{{ $item->major_id }}" data-classes="{{ json_encode($item->classes->pluck('id')->toArray()) }}">
-            </div>
+    <!-- Subject Table (Standard Clean Style) -->
+    <div class="card-standard">
+        <div class="card-header-standard">
+            <h3>Academic Subject Directory</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="table-standard" id="subjectTable">
+                <thead>
+                    <tr>
+                        <th style="width: 40px; text-align: center;">
+                            <input type="checkbox" id="selectAll" class="w-4 h-4 rounded border-slate-300 text-indigo-600">
+                        </th>
+                        <th style="width: 60px;">#</th>
+                        <th>Subject Name & Code</th>
+                        <th>Department</th>
+                        <th style="width: 200px;">Progress (Students)</th>
+                        <th style="width: 100px;">Label</th>
+                        <th style="width: 150px; text-align: center;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($subjects as $index => $item)
+                    <tr class="subject-row" data-title="{{ strtoupper($item->subject_name) }}" data-code="{{ strtoupper($item->code) }}">
+                        <td style="text-align: center;">
+                            <input type="checkbox" class="row-checkbox w-4 h-4 rounded border-slate-300 text-indigo-600" 
+                                   value="{{ $item->id }}" data-name="{{ $item->subject_name }}" data-department="{{ $item->department_id }}" 
+                                   data-major="{{ $item->major_id }}" data-classes="{{ json_encode($item->classes->pluck('id')->toArray()) }}">
+                        </td>
+                        <td>{{ $index + 1 }}.</td>
+                        <td>
+                            <div class="flex flex-col">
+                                <span class="font-bold text-slate-900">{{ $item->subject_name }}</span>
+                                <span class="text-[11px] text-slate-400 font-bold tracking-widest">{{ $item->code ?? 'SUB-'.$item->id }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="text-[12px] font-medium text-slate-600">{{ $item->department->department_name ?? 'General' }}</span>
+                        </td>
+                        <td>
+                            @php
+                                $enrollmentRate = $item->enrollments_count > 0 ? min(($item->enrollments_count / 50) * 100, 100) : 0; // Simulated
+                                $barColor = $enrollmentRate > 80 ? 'bg-indigo-500' : ($enrollmentRate > 50 ? 'bg-blue-500' : 'bg-slate-400');
+                            @endphp
+                            <div class="flex items-center gap-3">
+                                <div class="progress-clean flex-1">
+                                    <div class="progress-bar-clean {{ $barColor }}" style="width: {{ $enrollmentRate }}%"></div>
+                                </div>
+                                <span class="text-[11px] font-bold text-slate-500 w-8 text-right">{{ $item->enrollments_count ?? 0 }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="label-standard label-blue">CREDITS: {{ $item->credits ?? 3 }}</span>
+                        </td>
+                        <td class="text-center">
+                            <div class="flex items-center justify-center gap-3">
+                                <a href="{{ route('admin.subjects.show', $item->id) }}" class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all shadow-sm" title="View">
+                                    <i class="far fa-eye text-sm"></i>
+                                </a>
+                                <button onclick="editRecord({{ $item->id }}, '{{ addslashes($item->subject_name) }}', {{ $item->department_id }}, {{ $item->major_id ?? 'null' }}, {{ json_encode($item->classes->pluck('id')) }})"
+                                        class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all shadow-sm" title="Edit">
+                                    <i class="far fa-pen-to-square text-sm"></i>
+                                </button>
+                                <button onclick="deleteRecord({{ $item->id }}, '{{ addslashes($item->subject_name) }}')"
+                                        class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-all shadow-sm" title="Delete">
+                                    <i class="far fa-trash-can text-sm"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="7" class="py-10 text-center text-slate-400 font-medium">No subjects cataloged in the academic directory.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
 
-            <!-- Top Section: Header -->
-            <div class="flex items-start justify-end mb-5">
-                <div class="flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full border border-emerald-100 text-[9px] font-bold">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                    ACTIVE
-                </div>
-            </div>
-
-            <!-- Center Section: Brand Identity -->
-            <div class="flex flex-col items-center text-center mb-6">
-                <div class="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-4 group-hover:scale-105 transition-transform duration-500 border border-indigo-100/50">
-                    <i class="fas fa-book-open text-xl"></i>
-                </div>
-                <h3 class="text-lg font-bold text-slate-900 mb-3 px-2 group-hover:text-indigo-600 transition-colors line-clamp-1">{{ $item->subject_name }}</h3>
-                
-                <div class="flex items-center gap-2">
-                    <span class="px-3 py-0.5 bg-slate-50 border border-slate-100 text-[9px] font-bold text-slate-400 rounded-full tracking-wider uppercase">{{ $item->code ?? 'SUB-' . $item->id }}</span>
-                    <span class="px-3 py-0.5 bg-slate-50 border border-slate-100 text-[9px] font-bold text-slate-400 rounded-full tracking-wider uppercase">{{ $item->credits ?? '3' }} CREDITS</span>
-                </div>
-            </div>
-
-            <!-- Data Dashboard Box -->
-            <div class="bg-slate-50/50 rounded-2xl p-4 grid grid-cols-2 gap-y-4 gap-x-2 mb-6 border border-slate-100">
-                <div>
-                    <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Department</span>
-                    <div class="flex items-center gap-2">
-                        <i class="fas fa-graduation-cap text-[9px] text-slate-300"></i>
-                        <span class="text-[11px] font-bold text-slate-600 truncate">{{ $item->department->department_name ?? 'General' }}</span>
-                    </div>
-                </div>
-                <div>
-                    <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Students</span>
-                    <div class="flex items-center gap-2">
-                        <i class="fas fa-users text-[9px] text-slate-300"></i>
-                        <span class="text-[11px] font-bold text-slate-600">{{ $item->enrollments_count ?? 0 }} enrolled</span>
-                    </div>
-                </div>
-                <div>
-                    <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Instructor</span>
-                    <div class="flex items-center gap-2">
-                        <i class="fas fa-user-tie text-[9px] text-slate-300"></i>
-                        <span class="text-[11px] font-bold text-slate-600">Not assigned</span>
-                    </div>
-                </div>
-                <div>
-                    <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Quizzes</span>
-                    <div class="flex items-center gap-2">
-                        <i class="fas fa-check-double text-[9px] text-slate-300"></i>
-                        <span class="text-[11px] font-bold text-slate-600">{{ $item->quizzes_count ?? 0 }} created</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card Actions -->
-            <div class="pt-5 border-t border-slate-100 flex items-center gap-3">
-                <div class="flex items-center gap-2">
-                    <button onclick="editRecord({{ $item->id }}, '{{ addslashes($item->subject_name) }}', {{ $item->department_id }}, {{ $item->major_id ?? 'null' }}, {{ json_encode($item->classes->pluck('id')) }})"
-                            class="w-10 h-10 rounded-xl border border-slate-200 text-slate-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50 transition-all flex items-center justify-center" title="Edit Unit">
-                        <i class="fas fa-pen-to-square text-xs"></i>
-                    </button>
-                    <button onclick="deleteRecord({{ $item->id }}, '{{ addslashes($item->subject_name) }}')"
-                            class="w-10 h-10 rounded-xl border border-slate-200 text-slate-400 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 transition-all flex items-center justify-center" title="Remove Unit">
-                        <i class="fas fa-trash-can text-xs"></i>
-                    </button>
-                </div>
-                
-                <a href="{{ route('admin.subjects.show', $item->id) }}" class="flex-1 h-10 bg-[#1e212d] hover:bg-indigo-600 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all group/btn">
-                    <span>View course</span>
-                    <i class="fas fa-arrow-right text-[10px] group-hover/btn:translate-x-1 transition-transform"></i>
-                </a>
+        <div class="p-6 border-t border-slate-100 flex justify-end">
+            <div class="pagination-clean">
+                <a href="#"><i class="far fa-chevron-left text-[10px]"></i></a>
+                <span class="active">1</span>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#"><i class="far fa-chevron-right text-[10px]"></i></a>
             </div>
         </div>
-        @empty
-        <div class="col-span-full py-32 flex flex-col items-center justify-center bg-white rounded-[40px] border border-dashed border-slate-200">
-            <div class="w-20 h-20 rounded-full bg-slate-50 flex items-center justify-center text-slate-200 mb-6">
-                <i class="fas fa-inbox text-3xl"></i>
-            </div>
-            <h3 class="text-xl font-bold text-slate-900 mb-2 tracking-tight">No Subjects Cataloged</h3>
-            <p class="text-slate-500 text-sm mb-8">Start your academic directory by adding your first unit.</p>
-            <button data-bs-toggle="modal" data-bs-target="#addSubjectModal" class="bg-indigo-600 text-white px-8 py-3 rounded-2xl font-bold shadow-lg shadow-indigo-100">
-                New Subject
-            </button>
-        </div>
-        @endforelse
     </div>
 </div>
 
@@ -173,19 +162,36 @@
 
 @section('scripts')
 <script>
-    // Modern Search Logic (Card Based)
+    // Modern Search Logic (Table Row Based)
     const subjectSearch = document.getElementById('subjectSearch');
-    const subjectCards = document.querySelectorAll('.subject-card');
+    const subjectRows = document.querySelectorAll('.subject-row');
 
     subjectSearch.addEventListener('keyup', function() {
         const query = this.value.toUpperCase();
-        subjectCards.forEach(card => {
-            const title = card.getAttribute('data-title');
-            const code = card.getAttribute('data-code');
+        subjectRows.forEach(row => {
+            const title = row.getAttribute('data-title');
+            const code = row.getAttribute('data-code');
             const hasMatch = title.includes(query) || code.includes(query);
-            card.style.display = hasMatch ? '' : 'none';
+            row.style.display = hasMatch ? '' : 'none';
         });
     });
+
+    // Select All Logic
+    const selectAll = document.getElementById('selectAll');
+    if (selectAll) {
+        selectAll.addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(cb => {
+                if (rowIsVisible(cb)) {
+                    cb.checked = selectAll.checked;
+                }
+            });
+        });
+    }
+
+    function rowIsVisible(checkbox) {
+        return checkbox.closest('tr').style.display !== 'none';
+    }
 
     function editRecord(id, name, dept_id, major_id, class_ids) {
         const modal = document.getElementById('addSubjectModal');

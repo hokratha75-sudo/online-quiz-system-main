@@ -4,19 +4,17 @@
 <div class="max-w-[1400px] mx-auto p-8 md:p-10 font-inter text-slate-900 bg-slate-50/30 min-h-screen">
     
     <!-- Header -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
         <div>
-            <h1 class="text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
-                Question Bank
-            </h1>
-            <p class="text-sm font-medium text-slate-500 mt-1">Centralized management and reuse of student assessment questions</p>
+            <h1 class="text-3xl font-bold text-slate-900 tracking-tight leading-none">Question Bank</h1>
+            <p class="text-sm font-medium text-slate-400 mt-2">Centralized management and reuse of student assessment questions</p>
         </div>
-        <div class="flex items-center gap-3">
-            <a href="{{ route('questions.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shadow-sm">
-                <i class="fas fa-file-export text-slate-400"></i> Export CSV
+        <div class="flex items-center gap-4">
+            <a href="{{ route('questions.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-6 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-3 shadow-sm uppercase tracking-widest">
+                <i class="fas fa-file-export text-slate-400 text-sm"></i> Export CSV
             </a>
-            <a href="{{ route('quizzes.create') }}" class="bg-indigo-600 hover:bg-slate-900 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shadow-lg shadow-indigo-200">
-                <i class="fas fa-plus text-[10px]"></i> Create Question
+            <a href="{{ route('quizzes.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-7 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-3 shadow-xl shadow-indigo-600/20 active:scale-[0.98] uppercase tracking-widest">
+                <i class="fas fa-plus"></i> Create Question
             </a>
         </div>
     </div>
@@ -56,118 +54,108 @@
 
     <!-- Controls & Filters -->
     <form action="{{ route('questions.bank') }}" method="GET" id="filterForm">
-        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-6">
-            <div class="flex items-center p-1 bg-slate-100 rounded-xl w-fit">
-                <input type="radio" name="type" value="all" id="type_all" class="hidden peer/all" {{ request('type', 'all') == 'all' ? 'checked' : '' }} onchange="this.form.submit()">
-                <label for="type_all" class="px-4 py-2 text-xs font-bold cursor-pointer rounded-lg transition-all {{ request('type', 'all') == 'all' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700' }}">All Questions</label>
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-8 mb-10">
+            <!-- BOOTSTRAP FILTER TABS (Button Group) -->
+            <div class="btn-group shadow-sm" role="group" aria-label="Question type filters">
+                <input type="radio" class="btn-check" name="type" value="all" id="type_all" {{ request('type', 'all') == 'all' ? 'checked' : '' }} onchange="this.form.submit()">
+                <label class="btn btn-outline-primary px-4 py-2 text-xs font-bold" for="type_all">All Questions</label>
 
-                <input type="radio" name="type" value="multiple_choice" id="type_mc" class="hidden peer/mc" {{ request('type') == 'multiple_choice' ? 'checked' : '' }} onchange="this.form.submit()">
-                <label for="type_mc" class="px-4 py-2 text-xs font-bold cursor-pointer rounded-lg transition-all {{ request('type') == 'multiple_choice' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700' }}">Multiple Choice</label>
-
-                <input type="radio" name="type" value="true_false" id="type_tf" class="hidden peer/tf" {{ request('type') == 'true_false' ? 'checked' : '' }} onchange="this.form.submit()">
-                <label for="type_tf" class="px-4 py-2 text-xs font-bold cursor-pointer rounded-lg transition-all {{ request('type') == 'true_false' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700' }}">True/False</label>
+                <input type="radio" class="btn-check" name="type" value="multiple_choice" id="type_mc" {{ request('type') == 'multiple_choice' ? 'checked' : '' }} onchange="this.form.submit()">
+                <label class="btn btn-outline-primary px-4 py-2 text-xs font-bold" for="type_mc">Multiple Choice</label>
+                
+                <input type="radio" class="btn-check" name="type" value="true_false" id="type_tf" {{ request('type') == 'true_false' ? 'checked' : '' }} onchange="this.form.submit()">
+                <label class="btn btn-outline-primary px-4 py-2 text-xs font-bold" for="type_tf">True/False</label>
             </div>
-
-            <div class="flex items-center gap-3">
-                <div class="relative group">
-                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs group-focus-within:text-indigo-600 transition-colors"></i>
+ 
+            <div class="flex items-center gap-4">
+                <!-- Search Input Group -->
+                <div class="input-group shadow-sm rounded-2xl overflow-hidden w-64 lg:w-80">
+                    <span class="input-group-text bg-white border-end-0 text-slate-400 ps-4">
+                        <i class="fas fa-search"></i>
+                    </span>
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="SEARCH CONTENT..." 
-                           class="h-10 pl-11 pr-4 bg-white border border-slate-200 text-[10px] font-bold text-slate-900 outline-none focus:border-indigo-500 rounded-xl shadow-sm uppercase tracking-widest placeholder:text-slate-300 w-48 lg:w-64">
+                           class="form-control border-start-0 text-[10px] font-bold text-slate-700 placeholder-slate-300 uppercase tracking-widest py-3 px-0 shadow-none focus:ring-0">
                 </div>
-
-                <div class="relative">
-                    <select name="subject_id" onchange="this.form.submit()" class="h-10 pl-4 pr-10 bg-white border border-slate-200 rounded-xl text-[10px] font-bold text-slate-600 appearance-none outline-none focus:border-indigo-500 transition-all cursor-pointer shadow-sm uppercase tracking-widest">
-                        <option value="">ALL SUBJECTS</option>
-                        @foreach($subjects as $subject)
-                            <option value="{{ $subject->id }}" {{ request('subject_id') == $subject->id ? 'selected' : '' }}>{{ $subject->subject_name }}</option>
-                        @endforeach
-                    </select>
-                    <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 pointer-events-none"></i>
-                </div>
-
-                <button type="button" id="bulkDeleteBtn" style="display: none;" class="h-10 px-4 bg-rose-50 text-rose-600 border border-rose-100 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all flex items-center gap-2">
-                    <i class="fas fa-trash-can"></i> Delete Selected
+ 
+                <!-- Select Dropdown -->
+                <select name="subject_id" onchange="this.form.submit()" class="form-select shadow-sm text-[10px] font-bold text-slate-600 uppercase tracking-widest rounded-2xl py-3 px-4 cursor-pointer">
+                    <option value="">ALL SUBJECTS</option>
+                    @foreach($subjects as $subject)
+                        <option value="{{ $subject->id }}" {{ request('subject_id') == $subject->id ? 'selected' : '' }}>{{ $subject->subject_name }}</option>
+                    @endforeach
+                </select>
+ 
+                <button type="button" id="bulkDeleteBtn" style="display: none;" class="h-12 px-6 bg-rose-50 text-rose-600 border border-rose-100 rounded-2xl text-[10px] font-bold uppercase tracking-widest transition-all flex items-center gap-3">
+                    <i class="fas fa-trash-can text-sm"></i> Delete Selected
                 </button>
             </div>
         </div>
     </form>
 
     <!-- Content Table -->
-    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden mb-8">
+    <div class="card-standard mb-8">
+        <div class="card-header-standard">
+            <h3>Standardized Question Bank</h3>
+        </div>
         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse whitespace-nowrap" id="bankTable">
-                <thead>
-                    <tr class="bg-slate-50/30 border-b border-slate-100">
-                        <th width="40" class="ps-8 py-5">
-                            <input type="checkbox" id="selectAll" class="w-4 h-4 rounded border-slate-200 text-indigo-600 focus:ring-indigo-500/20 shadow-sm cursor-pointer">
+            <table class="table table-hover table-borderless align-middle mb-0" id="bankTable">
+                <thead class="table-light text-slate-500 text-xs uppercase tracking-widest">
+                    <tr>
+                        <th width="40" class="text-center">
+                            <input type="checkbox" id="selectAll" class="form-check-input shadow-none cursor-pointer">
                         </th>
-                        <th class="px-6 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Question Content</th>
-                        <th width="140" class="px-6 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">Subject</th>
-                        <th width="140" class="px-6 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">Type</th>
-                        <th width="100" class="px-6 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">Score</th>
-                        <th width="180" class="pe-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Actions</th>
+                        <th class="py-3">#</th>
+                        <th class="py-3">Question Content</th>
+                        <th width="140" class="text-center py-3">Subject</th>
+                        <th width="140" class="text-center py-3">Type</th>
+                        <th width="80" class="text-center py-3">Points</th>
+                        <th width="130" class="text-center py-3">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-50">
-                    @forelse($questions as $question)
-                        <tr class="hover:bg-slate-50/30 transition-all group">
-                            <td class="ps-8 py-4">
-                                <input type="checkbox" class="question-checkbox w-4 h-4 rounded border-slate-200 text-indigo-600 focus:ring-indigo-500/20 shadow-sm cursor-pointer" value="{{ $question->id }}">
+                <tbody>
+                    @forelse($questions as $index => $question)
+                        <tr>
+                            <td class="text-center">
+                                <input type="checkbox" class="form-check-input shadow-none cursor-pointer question-checkbox" value="{{ $question->id }}">
                             </td>
-                            <td class="px-6 py-4">
-                                <div class="max-w-[500px]">
-                                    <p class="text-sm font-bold text-slate-900 line-clamp-1 mb-1 tracking-tight">
+                            <td class="text-slate-500 font-medium">{{ $questions->firstItem() + $index }}.</td>
+                            <td>
+                                <div class="max-w-[400px]">
+                                    <p class="text-[13px] font-bold text-slate-900 line-clamp-1 mb-0.5">
                                         {!! strip_tags($question->content) !!}
                                     </p>
-                                    <div class="flex items-center gap-3">
-                                        <span class="px-2 py-0.5 bg-slate-100 text-slate-500 text-[9px] font-bold rounded uppercase tracking-wider">
-                                            {{ $question->quiz->title ?? 'N/A' }}
-                                        </span>
-                                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Added {{ $question->created_at->format('M d, Y') }}</span>
-                                    </div>
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                        REF: {{ $question->quiz->title ?? 'Global Bank' }}
+                                    </span>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 text-center">
-                                <span class="text-[11px] font-bold text-slate-600 uppercase tracking-wide bg-amber-50 text-amber-700 px-3 py-1 rounded-full border border-amber-100">
-                                    {{ $question->quiz->subject->subject_name ?? 'N/A' }}
-                                </span>
+                            <td class="text-center">
+                                <span class="badge bg-light text-dark border">{{ $question->quiz->subject->subject_name ?? 'N/A' }}</span>
                             </td>
-                            <td class="px-6 py-4 text-center">
-                                @php
-                                    $typeStyles = [
-                                        'multiple_choice' => 'bg-indigo-50 text-indigo-600 border-indigo-100',
-                                        'single_choice' => 'bg-teal-50 text-teal-600 border-teal-100',
-                                        'true_false' => 'bg-amber-50 text-amber-600 border-amber-100'
-                                    ];
-                                    $style = $typeStyles[$question->type] ?? 'bg-slate-50 text-slate-600 border-slate-100';
-                                @endphp
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider {{ $style }} border">
-                                    {{ str_replace('_', ' ', $question->type) }}
-                                </span>
+                            <td class="text-center">
+                                @if($question->type == 'multiple_choice')
+                                    <span class="badge bg-primary rounded-pill px-3 py-2 text-[10px] tracking-widest">MULTIPLE CHOICE</span>
+                                @elseif($question->type == 'single_choice')
+                                    <span class="badge bg-success rounded-pill px-3 py-2 text-[10px] tracking-widest">SINGLE CHOICE</span>
+                                @else
+                                    <span class="badge bg-warning text-dark rounded-pill px-3 py-2 text-[10px] tracking-widest">TRUE / FALSE</span>
+                                @endif
                             </td>
-                            <td class="px-6 py-4 text-center">
-                                <span class="text-xs font-bold text-slate-900 tabular-nums">{{ $question->points }} pts</span>
-                            </td>
-                            <td class="pe-8 py-4 text-right">
-                                <div class="flex items-center justify-end gap-2">
-                                    <button class="w-9 h-9 rounded-xl bg-[#1e212d] text-white hover:bg-indigo-600 transition-all shadow-md flex items-center justify-center" title="View Question">
-                                        <i class="fas fa-eye text-[11px]"></i>
+                            <td class="text-center font-bold text-slate-700">{{ $question->points }} pts</td>
+                            <td class="text-center">
+                                <div class="flex items-center justify-center gap-2">
+                                    <button class="btn btn-sm btn-outline-secondary rounded-xl" data-bs-toggle="tooltip" title="View">
+                                        <i class="fas fa-eye"></i>
                                     </button>
-                                    <button type="button" class="w-9 h-9 rounded-xl border border-slate-200 bg-white text-slate-400 hover:text-rose-600 hover:border-rose-100 hover:bg-rose-50 transition-all flex items-center justify-center btn-delete-question" data-id="{{ $question->id }}" title="Delete">
-                                        <i class="fas fa-trash-can text-[11px]"></i>
+                                    <button class="btn btn-sm btn-outline-danger rounded-xl btn-delete-question" data-bs-toggle="tooltip" title="Delete" data-id="{{ $question->id }}">
+                                        <i class="fas fa-trash-can"></i>
                                     </button>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-32 text-center">
-                                <div class="w-20 h-20 bg-slate-50 border border-slate-100 rounded-[24px] flex items-center justify-center mx-auto mb-6 text-slate-200">
-                                    <i class="fas fa-database text-3xl"></i>
-                                </div>
-                                <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">No questions found matching your criteria</h4>
-                                <p class="text-xs text-slate-400 mt-2">Try adjusting your filters or search terms.</p>
-                            </td>
+                            <td colspan="7" class="py-16 text-center text-slate-400 font-medium">No results found matching your search.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -175,11 +163,11 @@
         </div>
         
         <!-- Pagination Footer -->
-        <div class="px-8 py-5 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between">
-            <p class="text-xs font-medium text-slate-500">
-                Showing {{ $questions->firstItem() }} to {{ $questions->lastItem() }} of {{ $questions->total() }} results
+        <div class="px-6 py-4 border-t border-slate-200 flex items-center justify-between">
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+                ITEMS {{ $questions->firstItem() }} - {{ $questions->lastItem() }} OF {{ $questions->total() }}
             </p>
-            <div class="flex items-center gap-2">
+            <div class="pagination-clean">
                 {{ $questions->links() }}
             </div>
         </div>

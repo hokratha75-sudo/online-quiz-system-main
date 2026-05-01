@@ -1,389 +1,184 @@
 @extends('layouts.admin')
 
-@section('title', $department->name . ' - Department Detail')
-
-@section('styles')
-<style>
-    .department-detail-page {
-        padding: 22px 20px 28px;
-    }
-
-    .department-hero {
-        background: linear-gradient(135deg, #21406a 0%, #2b5e97 100%);
-        border-radius: 18px;
-        box-shadow: 0 10px 30px rgba(43, 94, 151, 0.22);
-        color: #fff;
-        display: flex;
-        gap: 18px;
-        align-items: center;
-        justify-content: space-between;
-        padding: 24px 28px;
-        margin-bottom: 22px;
-        flex-wrap: wrap;
-    }
-
-    .department-hero-main {
-        display: flex;
-        gap: 18px;
-        align-items: center;
-        min-width: 260px;
-    }
-
-    .department-icon {
-        width: 74px;
-        height: 74px;
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.12);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 34px;
-    }
-
-    .department-code {
-        display: inline-block;
-        padding: 3px 12px;
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.16);
-        color: #dce9f8;
-        font-size: 12px;
-        font-weight: 700;
-        margin-bottom: 8px;
-    }
-
-    .department-title {
-        margin: 0;
-        font-size: 24px;
-        font-weight: 700;
-    }
-
-    .department-stats {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .department-stat {
-        min-width: 72px;
-        text-align: center;
-        padding: 10px 14px;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-    }
-
-    .department-stat strong {
-        display: block;
-        font-size: 28px;
-        line-height: 1;
-    }
-
-    .department-stat span {
-        font-size: 11px;
-        color: #dce9f8;
-    }
-
-    .department-back {
-        color: #dce9f8;
-        text-decoration: none;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 999px;
-        padding: 9px 16px;
-        font-weight: 600;
-    }
-
-    .department-back:hover {
-        color: #fff;
-        background: rgba(255, 255, 255, 0.08);
-    }
-
-    .major-card {
-        background: #fff;
-        border-radius: 16px;
-        box-shadow: 0 3px 16px rgba(0, 0, 0, 0.08);
-        overflow: hidden;
-        margin-bottom: 18px;
-        border: 1px solid #edf1f5;
-    }
-
-    .major-card-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        padding: 14px 18px;
-        border-bottom: 1px solid #edf1f5;
-        background: #fbfdff;
-        flex-wrap: wrap;
-    }
-
-    .major-badge {
-        display: inline-block;
-        background: #dbeafe;
-        color: #1d4ed8;
-        border-radius: 6px;
-        padding: 2px 8px;
-        font-size: 11px;
-        font-weight: 700;
-        margin-bottom: 6px;
-    }
-
-    .major-name {
-        display: block;
-        color: #1f2937;
-        font-size: 20px;
-        font-weight: 700;
-        text-decoration: none;
-    }
-
-    .major-name:hover {
-        color: #0d6efd;
-    }
-
-    .major-head-stats {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-    }
-
-    .major-pill {
-        border-radius: 999px;
-        padding: 5px 10px;
-        font-size: 12px;
-        font-weight: 700;
-    }
-
-    .major-pill.classes {
-        background: #e7f7ef;
-        color: #198754;
-    }
-
-    .major-pill.courses {
-        background: #e3f5fd;
-        color: #0dcaf0;
-    }
-
-    .major-card-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0;
-    }
-
-    .major-column {
-        padding: 14px 18px 18px;
-    }
-
-    .major-column + .major-column {
-        border-left: 1px solid #edf1f5;
-    }
-
-    .major-column-title {
-        font-size: 12px;
-        font-weight: 700;
-        color: #52606d;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        margin-bottom: 12px;
-    }
-
-    .mini-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        border: 1px solid #eef2f7;
-        border-radius: 10px;
-        padding: 10px 12px;
-        background: #fbfefe;
-        margin-bottom: 8px;
-    }
-
-    .mini-row-code {
-        display: inline-block;
-        font-size: 11px;
-        font-weight: 700;
-        border-radius: 6px;
-        padding: 2px 8px;
-        margin-right: 8px;
-    }
-
-    .mini-row-code.class-code {
-        background: #e7f7ef;
-        color: #198754;
-    }
-
-    .mini-row-code.subject-code {
-        background: #d9f3ff;
-        color: #0aa2d0;
-    }
-
-    .mini-row-name {
-        color: #1f2937;
-        font-weight: 600;
-        text-decoration: none;
-    }
-
-    .mini-row-meta {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-    }
-
-    .mini-pill {
-        font-size: 11px;
-        font-weight: 700;
-        border-radius: 999px;
-        padding: 3px 9px;
-    }
-
-    .mini-pill.year {
-        background: #f1f5f9;
-        color: #64748b;
-    }
-
-    .mini-pill.students {
-        background: #fff3cd;
-        color: #d39e00;
-    }
-
-    .mini-pill.credits {
-        background: #d9f3ff;
-        color: #0aa2d0;
-    }
-
-    .empty-card {
-        background: #fff;
-        border-radius: 16px;
-        box-shadow: 0 3px 16px rgba(0, 0, 0, 0.08);
-        border: 1px solid #edf1f5;
-        padding: 34px 20px;
-        text-align: center;
-        color: #6c757d;
-    }
-
-    @media (max-width: 991.98px) {
-        .major-card-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .major-column + .major-column {
-            border-left: 0;
-            border-top: 1px solid #edf1f5;
-        }
-    }
-</style>
-@endsection
+@section('title', $department->department_name . ' - Department Detail')
 
 @section('content')
-<div class="department-detail-page">
-    <nav aria-label="breadcrumb" class="mb-3">
-        <ol class="breadcrumb mb-0" style="font-size: 14px;">
-            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('admin.departments.index') }}">Departments</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ $department->department_name }}</li>
-        </ol>
-    </nav>
-
-    <div class="department-hero">
-        <div class="department-hero-main">
-            <div class="department-icon">
-                <i class="fas fa-building"></i>
+<div class="max-w-full mx-auto p-6 md:p-10 font-inter text-slate-900 bg-slate-50/50 min-h-screen">
+    
+    <!-- Elegant Header Section -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-slate-200 pb-10">
+        <div>
+            <div class="text-[10px] font-bold text-indigo-600 uppercase tracking-[0.25em] mb-3">
+                <i class="fas fa-building text-[9px] mr-1"></i> Department Hub
             </div>
-            <div>
-                <span class="department-code">{{ $department->code ?? 'DEPT' }}</span>
-                <h1 class="department-title">{{ $department->department_name }}</h1>
-            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">{{ $department->department_name }}</h1>
+            <p class="text-sm text-slate-500 mt-2 max-w-2xl leading-relaxed uppercase tracking-widest text-[11px]">CODE: {{ $department->code ?? 'N/A' }} | Managing academic structures and offerings</p>
         </div>
-
-        <div class="department-stats">
-            <div class="department-stat" style="border: 1px solid rgba(255,255,255,0.4); border-radius: 50%; width: 70px; height: 70px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0;">
-                <strong style="font-size: 22px;">{{ $department->majors_count }}</strong>
-                <span style="font-size: 10px;">Majors</span>
-            </div>
-            <div class="department-stat" style="border: 1px solid rgba(255,255,255,0.4); border-radius: 50%; width: 70px; height: 70px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0;">
-                <strong style="font-size: 22px;">{{ $department->classes_count }}</strong>
-                <span style="font-size: 10px;">Classes</span>
-            </div>
-            <div class="department-stat" style="border: 1px solid rgba(255,255,255,0.4); border-radius: 50%; width: 70px; height: 70px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 0;">
-                <strong style="font-size: 22px;">{{ $department->subjects_count }}</strong>
-                <span style="font-size: 10px;">Courses</span>
-            </div>
-            <a href="{{ route('admin.departments.index') }}" class="department-back ms-3" style="background: rgba(255,255,255,0.1); border-radius: 20px;">
-                <i class="fas fa-arrow-left me-1"></i> Back
+        
+        <div class="flex items-center gap-4">
+            <a href="{{ route('admin.departments.index') }}" class="h-10 px-6 bg-white border border-slate-200 text-slate-600 hover:text-indigo-600 hover:border-indigo-100 transition-all text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 shadow-sm rounded-2xl">
+                <i class="fas fa-arrow-left text-[9px]"></i> Directory
+            </a>
+            <a href="{{ route('admin.departments.edit', $department->id) }}" class="h-10 px-6 bg-indigo-600 hover:bg-indigo-700 text-white transition-all text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-indigo-600/20 rounded-2xl">
+                <i class="fas fa-edit text-[9px]"></i> Edit Dept
             </a>
         </div>
     </div>
 
-    @forelse($department->majors as $major)
-        <div class="major-card">
-            <div class="major-card-head">
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <div style="background: #0d6efd; color: white; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 12px; font-size: 20px;">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <div>
-                        <span class="major-badge" style="background: #e0edff; color: #0d6efd; border-radius: 4px;">{{ $major->code }}</span>
-                        <a href="{{ route('admin.majors.show', $major->id) }}" class="major-name" style="margin-top: 2px;">{{ $major->name }}</a>
-                    </div>
-                </div>
-                <div class="major-head-stats">
-                    <span class="major-pill classes" style="background: #fff; border: 1px solid #198754;"><i class="fas fa-chalkboard me-1"></i> {{ $major->classes->count() }} Classes</span>
-                    <span class="major-pill courses" style="background: #fff; border: 1px solid #0dcaf0;"><i class="fas fa-book me-1"></i> {{ $major->subjects->count() }} Courses</span>
-                </div>
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div class="bg-white border border-slate-200 p-6 flex items-center gap-5 relative overflow-hidden group shadow-sm rounded-[24px]">
+            <div class="absolute right-0 top-0 w-32 h-32 bg-indigo-50/50 rounded-bl-full -mr-16 -mt-16 transition-transform group-hover:scale-110"></div>
+            <div class="w-14 h-14 bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl shrink-0 border border-indigo-100 relative z-10 rounded-2xl">
+                <i class="fas fa-graduation-cap"></i>
             </div>
-
-            <div class="major-card-grid">
-                <div class="major-column">
-                    <div class="major-column-title" style="color: #198754; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-chalkboard"></i> CLASSES
-                    </div>
-                    @forelse($major->classes as $class)
-                        <div class="mini-row">
-                            <div>
-                                <span class="mini-row-code class-code">{{ $class->code }}</span>
-                                <a href="{{ route('admin.classes.show', $class->id) }}" class="mini-row-name">{{ $class->name }}</a>
-                            </div>
-                            <div class="mini-row-meta">
-                                @if($class->academic_year)
-                                    <span class="mini-pill year">{{ $class->academic_year }}</span>
-                                @endif
-                                <span class="mini-pill students">
-                                    <i class="fas fa-user-graduate me-1"></i>{{ $class->students_count }}
-                                </span>
-                            </div>
-                        </div>
-                    @empty
-                        <div class="text-muted small">No classes assigned.</div>
-                    @endforelse
-                </div>
-
-                <div class="major-column">
-                    <div class="major-column-title" style="color: #0dcaf0; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-book"></i> COURSES
-                    </div>
-                    @forelse($major->subjects as $subject)
-                        <div class="mini-row">
-                            <div>
-                                <span class="mini-row-code subject-code">{{ $subject->code }}</span>
-                                <a href="{{ route('admin.subjects.show', $subject->id) }}" class="mini-row-name">{{ $subject->name }}</a>
-                            </div>
-                            <div class="mini-row-meta">
-                                <span class="mini-pill credits">{{ $subject->credits }} Credits</span>
-                            </div>
-                        </div>
-                    @empty
-                        <div class="text-muted small">No courses assigned.</div>
-                    @endforelse
-                </div>
+            <div class="relative z-10">
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Majors</div>
+                <div class="text-3xl font-bold text-slate-900 tracking-tight">{{ $department->majors_count }}</div>
             </div>
         </div>
-    @empty
-        <div class="empty-card">
-            <i class="fas fa-folder-open fa-2x mb-3"></i>
-            <div>No major structure has been assigned to this department yet.</div>
+        
+        <div class="bg-white border border-slate-200 p-6 flex items-center gap-5 relative overflow-hidden group shadow-sm rounded-[24px]">
+            <div class="absolute right-0 top-0 w-32 h-32 bg-emerald-50/50 rounded-bl-full -mr-16 -mt-16 transition-transform group-hover:scale-110"></div>
+            <div class="w-14 h-14 bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0 border border-emerald-100 relative z-10 rounded-2xl">
+                <i class="fas fa-chalkboard"></i>
+            </div>
+            <div class="relative z-10">
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Active Classes</div>
+                <div class="text-3xl font-bold text-slate-900 tracking-tight">{{ $department->classes_count }}</div>
+            </div>
         </div>
-    @endforelse
+
+        <div class="bg-white border border-slate-200 p-6 flex items-center gap-5 relative overflow-hidden group shadow-sm rounded-[24px]">
+            <div class="absolute right-0 top-0 w-32 h-32 bg-amber-50/50 rounded-bl-full -mr-16 -mt-16 transition-transform group-hover:scale-110"></div>
+            <div class="w-14 h-14 bg-amber-50 text-amber-600 flex items-center justify-center text-xl shrink-0 border border-amber-100 relative z-10 rounded-2xl">
+                <i class="fas fa-book"></i>
+            </div>
+            <div class="relative z-10">
+                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Course Catalog</div>
+                <div class="text-3xl font-bold text-slate-900 tracking-tight">{{ $department->subjects_count }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Major Structures -->
+    <div class="mb-6 flex items-center justify-between">
+        <h2 class="text-[10px] font-bold text-slate-900 uppercase tracking-[0.2em] flex items-center gap-2">
+            <span class="w-1.5 h-4 bg-indigo-600 inline-block"></span> Academic Structures
+        </h2>
+    </div>
+
+    <div class="space-y-8">
+        @forelse($department->majors as $major)
+            <div class="bg-white border border-slate-200 overflow-hidden shadow-sm rounded-[24px]">
+                <!-- Major Header -->
+                <div class="p-6 md:p-8 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-6 bg-slate-50/50">
+                    <div class="flex items-start gap-5">
+                        <div class="w-12 h-12 bg-indigo-600 text-white flex items-center justify-center text-lg shrink-0 shadow-md shadow-indigo-600/20 rounded-2xl">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-3 mb-1.5">
+                                <span class="px-2 py-0.5 bg-indigo-50 text-indigo-600 text-[9px] font-bold uppercase tracking-widest border border-indigo-100 rounded-lg">{{ $major->code }}</span>
+                            </div>
+                            <a href="{{ route('admin.majors.show', $major->id) }}" class="text-xl font-bold text-slate-900 hover:text-indigo-600 transition-colors tracking-tight">{{ $major->name }}</a>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-3">
+                        <div class="px-4 py-2 bg-white border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 rounded-xl">
+                            <i class="fas fa-chalkboard text-slate-400"></i> {{ $major->classes->count() }} Classes
+                        </div>
+                        <div class="px-4 py-2 bg-white border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 rounded-xl">
+                            <i class="fas fa-book text-slate-400"></i> {{ $major->subjects->count() }} Courses
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Major Content (Classes and Courses Grid) -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
+                    
+                    <!-- Classes Column -->
+                    <div class="p-6 md:p-8">
+                        <h3 class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+                            <span class="w-1 h-3 bg-emerald-500"></span> Associated Classes
+                        </h3>
+                        
+                        <div class="space-y-3">
+                            @forelse($major->classes as $class)
+                                <div class="group flex items-center justify-between p-4 border border-slate-100 hover:border-emerald-200 hover:bg-emerald-50/30 transition-all bg-white rounded-2xl">
+                                    <div class="flex items-center gap-3.5">
+                                        <div class="w-9 h-9 bg-slate-50 text-slate-400 group-hover:text-emerald-500 group-hover:bg-emerald-50 flex items-center justify-center text-xs transition-colors border border-slate-100 group-hover:border-emerald-100 rounded-xl">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <div>
+                                            <a href="{{ route('admin.classes.show', $class->id) }}" class="text-sm font-bold text-slate-900 group-hover:text-emerald-600 transition-colors uppercase tracking-tight block mb-0.5">{{ $class->name }}</a>
+                                            <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">CODE: {{ $class->code }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-right">
+                                        @if($class->academic_year)
+                                            <span class="px-2 py-1 bg-slate-50 text-slate-500 border border-slate-200 text-[9px] font-bold uppercase tracking-widest rounded-md">{{ $class->academic_year }}</span>
+                                        @endif
+                                        <span class="px-2 py-1 bg-emerald-50 text-emerald-600 border border-emerald-100 text-[9px] font-bold uppercase tracking-widest flex items-center gap-1.5 min-w-[70px] justify-center rounded-md">
+                                            <i class="fas fa-user-graduate text-[8px]"></i> {{ $class->students_count }}
+                                        </span>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="text-center py-10 border border-dashed border-slate-200 bg-slate-50/50 rounded-2xl">
+                                    <i class="fas fa-users-slash text-slate-300 text-2xl mb-3"></i>
+                                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">No classes assigned</div>
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
+
+                    <!-- Courses Column -->
+                    <div class="p-6 md:p-8 bg-slate-50/20">
+                        <h3 class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+                            <span class="w-1 h-3 bg-amber-500"></span> Core Curriculum
+                        </h3>
+                        
+                        <div class="space-y-3">
+                            @forelse($major->subjects as $subject)
+                                <div class="group flex items-center justify-between p-4 border border-slate-100 hover:border-amber-200 hover:bg-amber-50/30 transition-all bg-white rounded-2xl">
+                                    <div class="flex items-center gap-3.5">
+                                        <div class="w-9 h-9 bg-slate-50 text-slate-400 group-hover:text-amber-500 group-hover:bg-amber-50 flex items-center justify-center text-xs transition-colors border border-slate-100 group-hover:border-amber-100 rounded-xl">
+                                            <i class="fas fa-book-open"></i>
+                                        </div>
+                                        <div>
+                                            <a href="{{ route('admin.subjects.show', $subject->id) }}" class="text-sm font-bold text-slate-900 group-hover:text-amber-600 transition-colors uppercase tracking-tight block mb-0.5">{{ $subject->name }}</a>
+                                            <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">CODE: {{ $subject->code }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="px-2 py-1 bg-amber-50 text-amber-600 border border-amber-100 text-[9px] font-bold uppercase tracking-widest min-w-[70px] text-center rounded-md">{{ $subject->credits }} Credits</span>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="text-center py-10 border border-dashed border-slate-200 bg-white rounded-2xl">
+                                    <i class="fas fa-book-open text-slate-300 text-2xl mb-3"></i>
+                                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">No courses assigned</div>
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        @empty
+            <div class="text-center py-24 border border-dashed border-slate-300 bg-white shadow-sm rounded-[24px]">
+                <div class="w-16 h-16 bg-slate-50 text-slate-300 flex items-center justify-center text-2xl mx-auto mb-5 border border-slate-200 rounded-2xl">
+                    <i class="fas fa-folder-open"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 tracking-tight mb-2">No Academic Structure</h3>
+                <p class="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-8">This department hasn't been assigned any majors yet.</p>
+                <a href="{{ route('admin.majors.create', ['department_id' => $department->id]) }}" class="inline-flex h-10 items-center px-8 bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold uppercase tracking-[0.15em] transition-all shadow-lg shadow-indigo-600/20 rounded-2xl">
+                    <i class="fas fa-plus text-[9px] mr-2"></i> Add First Major
+                </a>
+            </div>
+        @endforelse
+    </div>
 </div>
 @endsection

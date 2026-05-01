@@ -205,6 +205,9 @@ Route::middleware(['auth'])->group(function () {
     // --- SHARED ROUTES ---
     Route::get('/leaderboard', [QuizController::class, 'leaderboard'])->name('leaderboard');
     Route::get('/planner', [QuizController::class, 'planner'])->name('planner');
+    Route::post('/planner/store', [QuizController::class, 'storePlannerEvent'])->name('planner.store');
+    Route::post('/planner/update', [QuizController::class, 'updatePlannerEvent'])->name('planner.update');
+    Route::delete('/planner/destroy/{id}', [QuizController::class, 'destroyPlannerEvent'])->name('planner.destroy');
 
     // Notifications Mark as Read
     Route::post('/notifications/mark-as-read/{id}', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
@@ -213,33 +216,4 @@ Route::middleware(['auth'])->group(function () {
         return back();
     })->name('notifications.markAllRead');
 
-});
-
-// Test Route for View & Stored Procedure
-Route::get('/test-view-sp', function () {
-    try {
-        // 1. Test Database View
-        $viewData = \Illuminate\Support\Facades\DB::table('vw_quiz_analytics')->get();
-        
-        // 2. Test Stored Procedure
-        $attemptId = 1; 
-        \Illuminate\Support\Facades\DB::statement('CALL sp_calculate_attempt_score(?)', [$attemptId]);
-        $updatedResult = \Illuminate\Support\Facades\DB::table('results')->where('attempt_id', $attemptId)->first();
-        
-        return response()->json([
-            'message' => 'យេ! ដំណើរការល្អឥតខ្ចោះ (Test Successful!)',
-            '1_view_analytics_data' => $viewData,
-            '2_procedure_updated_score_for_attempt_id_' . $attemptId => $updatedResult
-        ], 200, [], JSON_PRETTY_PRINT);
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'មានបញ្ហា៖ ' . $e->getMessage()]);
-    }
-});
-
-Route::get('/db-info', function () {
-    return response()->json([
-        'attempts' => \Illuminate\Support\Facades\Schema::getColumnListing('attempts'),
-        'results' => \Illuminate\Support\Facades\Schema::getColumnListing('results'),
-        'attempt_answers' => \Illuminate\Support\Facades\Schema::getColumnListing('attempt_answers'),
-    ]);
 });

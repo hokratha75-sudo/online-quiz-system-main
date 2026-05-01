@@ -151,7 +151,7 @@
                             <div class="flex items-center justify-end gap-1.5 opacity-70 group-hover:opacity-100 transition-opacity">
                                 <button type="button" 
                                         onclick="editRecord({{ $item->id }}, '{{ addslashes($item->name) }}', '{{ $item->code ?? '' }}', '{{ $item->department_id ?? '' }}', '{{ $item->major_id ?? '' }}')" 
-                                        class="w-8 h-8 rounded-lg border border-slate-100 text-slate-400 hover:text-indigo-600 hover:border-indigo-100 hover:bg-indigo-50 transition-all flex items-center justify-center shadow-sm" title="Edit">
+                                        class="btn btn-sm btn-outline-secondary rounded-lg shadow-sm" title="Edit">
                                     <i class="fas fa-edit text-[13px]"></i>
                                 </button>
                                 <input type="checkbox" class="row-checkbox w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500 cursor-pointer shadow-sm ms-2" value="{{ $item->id }}" data-name="{{ $item->name }}">
@@ -199,21 +199,21 @@
                 <div class="space-y-5">
                     <div class="grid grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Major Code <span class="text-rose-500">*</span></label>
+                            <label class="form-label font-semibold text-slate-700">Major Code <span class="text-rose-500">*</span></label>
                             <input type="text" name="code" id="majorCode" required placeholder="e.g. CS-01" 
-                                   class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 shadow-sm uppercase">
+                                   class="form-control uppercase">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Major Name <span class="text-rose-500">*</span></label>
+                            <label class="form-label font-semibold text-slate-700">Major Name <span class="text-rose-500">*</span></label>
                             <input type="text" name="name" id="majorName" required placeholder="e.g. Computer Science" 
-                                   class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 shadow-sm">
+                                   class="form-control">
                         </div>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Department Alignment <span class="text-rose-500">*</span></label>
+                        <label class="form-label font-semibold text-slate-700">Department Alignment <span class="text-rose-500">*</span></label>
                         <select name="department_id" id="majorDept" required 
-                                class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm appearance-none cursor-pointer">
+                                class="form-select cursor-pointer">
                             <option value="">-- Select Department --</option>
                             @foreach($departments as $d)
                                 <option value="{{ $d->id }}">{{ $d->department_name }}</option>
@@ -223,8 +223,8 @@
                 </div>
                 
                 <div class="mt-8 flex items-center justify-end gap-3 pt-5 border-t border-slate-100">
-                    <button type="button" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80 px-5 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" id="majorBtnSubmit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 shadow-sm">Save Major</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="majorBtnSubmit" class="btn btn-primary">Save Major</button>
                 </div>
             </form>
         </div>
@@ -249,21 +249,21 @@
                 <div class="space-y-5">
                     <div class="grid grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Class Code <span class="text-rose-500">*</span></label>
+                            <label class="form-label font-semibold text-slate-700">Class Code <span class="text-rose-500">*</span></label>
                             <input type="text" name="code" id="classCode" required placeholder="e.g. M1" 
-                                   class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 shadow-sm uppercase">
+                                   class="form-control uppercase">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Class Name <span class="text-rose-500">*</span></label>
+                            <label class="form-label font-semibold text-slate-700">Class Name <span class="text-rose-500">*</span></label>
                             <input type="text" name="name" id="className" required placeholder="e.g. Morning Class" 
-                                   class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 shadow-sm">
+                                   class="form-control">
                         </div>
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Specialization Core <span class="text-rose-500">*</span></label>
+                        <label class="form-label font-semibold text-slate-700">Specialization Core <span class="text-rose-500">*</span></label>
                         <select name="major_id" id="classMajor" required 
-                                class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm appearance-none cursor-pointer">
+                                class="form-select cursor-pointer">
                             <option value="">-- Select Major --</option>
                             @foreach($majors_all as $m)
                                 <option value="{{ $m->id }}">{{ $m->name }}</option>
@@ -273,8 +273,8 @@
                 </div>
                 
                 <div class="mt-8 flex items-center justify-end gap-3 pt-5 border-t border-slate-100">
-                    <button type="button" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80 px-5 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" id="classBtnSubmit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 shadow-sm">Save Class</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="classBtnSubmit" class="btn btn-primary">Save Class</button>
                 </div>
             </form>
         </div>

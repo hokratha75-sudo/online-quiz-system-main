@@ -338,6 +338,11 @@ class QuizController extends Controller
     {
         if (!auth()->user()->isAdmin() && !auth()->user()->isTeacher()) abort(403);
 
+        // Security Patch: Ensure the teacher owns the quiz this attempt belongs to
+        if (!auth()->user()->isAdmin() && (int)$attempt->quiz->created_by !== (int)auth()->id()) {
+            abort(403, 'Unauthorized: You can only grade attempts for your own quizzes.');
+        }
+
         $request->validate([
             'manual_score' => 'required|numeric|min:0|max:100',
             'teacher_feedback' => 'nullable|string',
@@ -630,7 +635,7 @@ class QuizController extends Controller
         $dashboardTitle = 'Calendar';
 
         // Fetch events: Published quizzes with deadlines
-        $events = \App\Models\Quiz::where('status', 'published')
+        $quizEvents = \App\Models\Quiz::where('status', 'published')
             ->whereNotNull('opened_at')
             ->get()
             ->map(function($quiz) use ($user) {
@@ -642,19 +647,74 @@ class QuizController extends Controller
                 }
 
                 return [
+                    'id' => 'quiz_' . $quiz->id,
                     'title' => $quiz->title,
                     'start' => $quiz->opened_at->toIso8601String(),
                     'end' => $quiz->closed_at ? $quiz->closed_at->toIso8601String() : $quiz->opened_at->addHours(1)->toIso8601String(),
                     'url' => route('students.quizzes.show', $quiz->id),
                     'extendedProps' => [
                         'status' => $isCompleted ? 'completed' : 'active',
+                        'type' => 'quiz'
                     ],
                     'backgroundColor' => $isCompleted ? '#10b981' : '#6366f1',
                     'borderColor' => $isCompleted ? '#059669' : '#4f46e5',
                 ];
             });
 
+        // Fetch Custom Planner Events
+        $plannerEvents = \App\Models\PlannerEvent::where('user_id', $user->id)
+            ->get()
+            ->map(function($event) {
+                return [
+                    'id' => $event->id,
+                    'title' => $event->title,
+                    'start' => $event->start->toIso8601String(),
+                    'end' => $event->end ? $event->end->toIso8601String() : null,
+                    'allDay' => (bool)$event->is_all_day,
+                    'backgroundColor' => $event->background_color,
+                    'borderColor' => $event->border_color,
+                    'extendedProps' => [
+                        'type' => 'planner_event'
+                    ]
+                ];
+            });
+
+        $events = $quizEvents->concat($plannerEvents);
+
         return view('admin.quizzes.planner', compact('events', 'userRole', 'dashboardTitle'));
+    }
+
+    public function storePlannerEvent(Request $request)
+    {
+        $event = \App\Models\PlannerEvent::create([
+            'user_id' => auth()->id(),
+            'title' => $request->title,
+            'start' => $request->start,
+            'end' => $request->end,
+            'background_color' => $request->background_color,
+            'border_color' => $request->border_color,
+            'is_all_day' => $request->boolean('is_all_day'),
+        ]);
+
+        return response()->json(['success' => true, 'id' => $event->id]);
+    }
+
+    public function updatePlannerEvent(Request $request)
+    {
+        $event = \App\Models\PlannerEvent::where('user_id', auth()->id())->findOrFail($request->id);
+        $event->update([
+            'start' => $request->start,
+            'end' => $request->end,
+            'is_all_day' => $request->boolean('is_all_day'),
+        ]);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function destroyPlannerEvent($id)
+    {
+        \App\Models\PlannerEvent::where('user_id', auth()->id())->where('id', $id)->delete();
+        return response()->json(['success' => true]);
     }
 
     public function bulkDelete(Request $request)

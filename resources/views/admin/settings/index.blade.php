@@ -2,13 +2,13 @@
 
 @section('content')
 <div class="max-w-6xl mx-auto p-6 md:p-8 space-y-8 font-inter">
-    <div class="flex items-center gap-6 mb-2">
-        <div class="flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-600 text-white shadow-xl shadow-indigo-600/20">
-            <i class="fas fa-microchip text-xl"></i>
+    <div class="flex items-center gap-6 mb-8">
+        <div class="flex items-center justify-center w-16 h-16 rounded-[20px] bg-indigo-600 text-white shadow-2xl shadow-indigo-600/30">
+            <i class="fas fa-gear text-2xl"></i>
         </div>
         <div>
-            <h1 class="text-2xl font-bold tracking-tight text-slate-900 uppercase">School Framework</h1>
-            <p class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mt-1">Configure global app preferences</p>
+            <h1 class="text-[28px] font-bold tracking-tight text-slate-900 leading-none">School Framework</h1>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2">Manage global application architecture</p>
         </div>
     </div>
 
@@ -66,17 +66,23 @@
         
         <div class="relative z-10">
             <!-- Tabs Nav -->
-            <div class="border-b border-slate-50 px-6 md:px-8 pt-6 flex gap-10">
-                <button @click="tab = 'general'" :class="tab === 'general' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-400 hover:text-slate-900 hover:border-slate-200'" class="pb-4 px-2 border-b-2 font-bold text-[11px] uppercase tracking-widest transition-all">
-                    <i class="fas fa-globe mr-1.5"></i> General Settings
-                </button>
-                <button @click="tab = 'quiz'" :class="tab === 'quiz' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-400 hover:text-slate-900 hover:border-slate-200'" class="pb-4 px-2 border-b-2 font-bold text-[11px] uppercase tracking-widest transition-all">
-                    <i class="fas fa-clipboard-list mr-1.5"></i> Quiz Rules
-                </button>
-                <button @click="tab = 'security'" :class="tab === 'security' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-slate-400 hover:text-slate-900 hover:border-slate-200'" class="pb-4 px-2 border-b-2 font-bold text-[11px] uppercase tracking-widest transition-all">
-                    <i class="fas fa-shield-alt mr-1.5"></i> Exam Security
-                </button>
-            </div>
+            <ul class="nav nav-tabs px-8 pt-6 border-bottom-0 bg-slate-50/50" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button @click="tab = 'general'" :class="tab === 'general' ? 'active bg-white text-indigo-600 border-bottom-0' : 'text-slate-500 hover:text-slate-700'" class="nav-link border-top-0 border-start-0 border-end-0 py-3 px-5 font-bold text-[11px] uppercase tracking-widest rounded-t-xl transition-colors">
+                        <i class="fas fa-compass mr-2"></i> General
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button @click="tab = 'quiz'" :class="tab === 'quiz' ? 'active bg-white text-indigo-600 border-bottom-0' : 'text-slate-500 hover:text-slate-700'" class="nav-link border-top-0 border-start-0 border-end-0 py-3 px-5 font-bold text-[11px] uppercase tracking-widest rounded-t-xl transition-colors">
+                        <i class="fas fa-file-lines mr-2"></i> Quiz Rules
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button @click="tab = 'security'" :class="tab === 'security' ? 'active bg-white text-indigo-600 border-bottom-0' : 'text-slate-500 hover:text-slate-700'" class="nav-link border-top-0 border-start-0 border-end-0 py-3 px-5 font-bold text-[11px] uppercase tracking-widest rounded-t-xl transition-colors">
+                        <i class="fas fa-shield-halved mr-2"></i> Security
+                    </button>
+                </li>
+            </ul>
 
             <!-- Tab Content Area -->
             <div class="p-6 md:p-8 bg-white">
@@ -88,14 +94,14 @@
                         <input type="hidden" name="_tab" value="general">
 
                         <!-- Maintenance Mode -->
-                        <div class="bg-slate-50/50 border border-slate-100 rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-md hover:border-slate-200/60">
-                            <div class="flex items-center gap-4 mb-6">
-                                <div class="w-10 h-10 rounded-xl bg-red-500/10 text-red-600 flex items-center justify-center shrink-0 border border-red-500/20">
-                                    <i class="fas fa-tools"></i>
+                        <div class="bg-slate-50/30 border border-slate-100 rounded-[32px] p-8 md:p-10 transition-all duration-300">
+                            <div class="flex items-center gap-5 mb-10">
+                                <div class="w-12 h-12 rounded-[18px] bg-rose-500 text-white flex items-center justify-center shrink-0 shadow-lg shadow-rose-500/20">
+                                    <i class="fas fa-hourglass-half"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-base font-semibold tracking-tight text-slate-900">System Rest Time</h3>
-                                    <p class="text-xs text-slate-500 mt-0.5">Pause student activities for maintenance</p>
+                                    <h3 class="text-xl font-bold tracking-tight text-slate-900">System Rest Time</h3>
+                                    <p class="text-sm font-medium text-slate-400 mt-1">Pause student activities for maintenance</p>
                                 </div>
                             </div>
 
@@ -125,35 +131,35 @@
                                                  this.loading = false;
                                              }
                                          }
-                                     }" class="flex items-center justify-between bg-white border border-slate-200 p-5 rounded-2xl hover:border-slate-300 transition-all duration-300 hover:shadow-sm">
-                                         <div class="flex items-center gap-4">
-                                             <div :class="enabled ? 'bg-red-500/10 text-red-600' : 'bg-slate-100 text-slate-400'" class="w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-300">
-                                                 <i class="fas fa-tools"></i>
+                                     }" class="flex items-center justify-between bg-white border border-slate-100 p-8 rounded-[24px] shadow-sm">
+                                         <div class="flex items-center gap-6">
+                                             <div :class="enabled ? 'bg-rose-500 text-white' : 'bg-slate-100 text-slate-400'" class="w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300">
+                                                 <i class="fas fa-power-off text-lg"></i>
                                              </div>
                                              <div>
-                                                 <h4 class="text-sm font-semibold text-slate-900">Enable Maintenance Mode</h4>
-                                                 <p class="text-xs text-slate-500 mt-1">When active, students will see a maintenance page. Admins bypass this.</p>
+                                                 <h4 class="text-base font-bold text-slate-900">Enable Maintenance Mode</h4>
+                                                 <p class="text-sm font-medium text-slate-400 mt-1">When active, students will see a maintenance page. Admins bypass this.</p>
                                              </div>
                                          </div>
-                                         <div class="flex items-center gap-3">
-                                             <div x-show="loading" class="animate-spin text-red-500 text-[10px]">
+                                         <div class="flex items-center gap-5">
+                                             <div x-show="loading" class="animate-spin text-rose-500">
                                                  <i class="fas fa-circle-notch"></i>
                                              </div>
                                              <button 
-                                             type="button"
-                                             @click="enabled = !enabled; toggle()"
-                                             :class="enabled ? 'bg-red-500' : 'bg-slate-200'"
-                                             class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:ring-offset-2"
-                                             role="switch"
-                                             aria-label="Maintenance Mode"
-                                             :aria-checked="enabled.toString()"
-                                         >
-                                             <span 
-                                                 aria-hidden="true"
-                                                 :class="enabled ? 'translate-x-5' : 'translate-x-0'"
-                                                 class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-300 ease-in-out"
-                                             ></span>
-                                         </button>
+                                                 type="button"
+                                                 @click="enabled = !enabled; toggle()"
+                                                 :class="enabled ? 'bg-indigo-600' : 'bg-slate-300'"
+                                                 class="relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600/20"
+                                                 role="switch"
+                                                 aria-label="Maintenance Mode"
+                                                 :aria-checked="enabled.toString()"
+                                             >
+                                                 <span 
+                                                     aria-hidden="true"
+                                                     :class="enabled ? 'translate-x-5' : 'translate-x-0'"
+                                                     class="pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-xl ring-0 transition duration-300 ease-in-out"
+                                                 ></span>
+                                             </button>
                                          </div>
                                      </div>
                         </div>
@@ -174,14 +180,14 @@
                         <input type="hidden" name="_tab" value="quiz">
 
                         <!-- Default Quiz Params -->
-                        <div class="bg-slate-50/50 border border-slate-100 rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-md hover:border-slate-200/60">
-                            <div class="flex items-center gap-4 mb-6">
-                                <div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-600 flex items-center justify-center shrink-0 border border-indigo-500/20">
-                                    <i class="fas fa-cog"></i>
+                        <div class="bg-slate-50/30 border border-slate-100 rounded-[32px] p-8 md:p-10 transition-all duration-300">
+                            <div class="flex items-center gap-5 mb-10">
+                                <div class="w-12 h-12 rounded-[18px] bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-indigo-600/20">
+                                    <i class="fas fa-sliders"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-base font-semibold tracking-tight text-slate-900">Quick Start Defaults</h3>
-                                    <p class="text-xs text-slate-500 mt-0.5">Pre-set values for new quizzes</p>
+                                    <h3 class="text-xl font-bold tracking-tight text-slate-900">Quick Start Defaults</h3>
+                                    <p class="text-sm font-medium text-slate-400 mt-1">Pre-set values for new quizzes</p>
                                 </div>
                             </div>
                             
@@ -210,14 +216,14 @@
                         </div>
 
                         <!-- Display Logic -->
-                        <div class="bg-slate-50/50 border border-slate-100 rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-md hover:border-slate-200/60">
-                            <div class="flex items-center gap-4 mb-6">
-                                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-500/20">
-                                    <i class="fas fa-random"></i>
+                        <div class="bg-slate-50/30 border border-slate-100 rounded-[32px] p-8 md:p-10 transition-all duration-300">
+                            <div class="flex items-center gap-5 mb-10">
+                                <div class="w-12 h-12 rounded-[18px] bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/20">
+                                    <i class="fas fa-shuffle"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-base font-semibold tracking-tight text-slate-900">Question Delivery</h3>
-                                    <p class="text-xs text-slate-500 mt-0.5">Control how students see and interact with questions</p>
+                                    <h3 class="text-xl font-bold tracking-tight text-slate-900">Question Delivery</h3>
+                                    <p class="text-sm font-medium text-slate-400 mt-1">Control how students see and interact with questions</p>
                                 </div>
                             </div>
 
@@ -308,14 +314,14 @@
                         @csrf
                         <input type="hidden" name="_tab" value="security">
 
-                        <div class="bg-slate-50/50 border border-slate-100 rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-md hover:border-slate-200/60">
-                            <div class="flex items-center gap-4 mb-6">
-                                <div class="w-10 h-10 rounded-xl bg-red-500/10 text-red-600 flex items-center justify-center shrink-0 border border-red-500/20">
-                                    <i class="fas fa-user-shield"></i>
+                        <div class="bg-slate-50/30 border border-slate-100 rounded-[32px] p-8 md:p-10 transition-all duration-300">
+                            <div class="flex items-center gap-5 mb-10">
+                                <div class="w-12 h-12 rounded-[18px] bg-rose-500 text-white flex items-center justify-center shrink-0 shadow-lg shadow-rose-500/20">
+                                    <i class="fas fa-shield-check"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-base font-semibold tracking-tight text-slate-900">Exam Safety & Fairness</h3>
-                                    <p class="text-xs text-slate-500 mt-0.5">Encourage academic honesty during attempts</p>
+                                    <h3 class="text-xl font-bold tracking-tight text-slate-900">Exam Safety & Fairness</h3>
+                                    <p class="text-sm font-medium text-slate-400 mt-1">Encourage academic honesty during attempts</p>
                                 </div>
                             </div>
 

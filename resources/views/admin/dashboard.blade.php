@@ -4,20 +4,20 @@
 <div class="max-w-[1400px] mx-auto px-6 py-4 md:px-10 lg:py-6 font-inter text-slate-900">
 
     <!-- Header Section: High-Density Authority -->
-    <header class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+    <header class="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-10">
         <div>
-                                                                        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight leading-none" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Dashboard Overview</h1>
-                                    <p class="text-[10px] font-bold text-indigo-600 mt-2 uppercase tracking-[0.2em] leading-none opacity-80">Logged In As: {{ strtoupper($username) }} • Active Session</p>
+            <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight leading-none" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Dashboard Overview</h1>
+            <p class="text-[10px] font-bold text-indigo-600 mt-3 uppercase tracking-[0.2em] leading-none opacity-80">Logged In As: {{ strtoupper($username) }} • Active Session</p>
         </div>
         @if($userRole === 'admin' || $userRole === 'teacher')
-        <div class="flex items-center gap-3">
-            <a href="{{ route('quizzes.create') ?? '#' }}" class="no-underline bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2 shadow-lg shadow-indigo-600/20 active:scale-[0.98] group">
-                <i class="fas fa-plus text-[10px] group-hover:rotate-90 transition-transform duration-300"></i>
-                                                <span>Create New Quiz</span>
+        <div class="flex items-center gap-4">
+            <a href="{{ route('quizzes.create') ?? '#' }}" class="no-underline bg-indigo-600 hover:bg-indigo-700 text-white px-7 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-3 shadow-xl shadow-indigo-600/20 active:scale-[0.98] group uppercase tracking-widest">
+                <i class="fas fa-plus group-hover:rotate-90 transition-transform duration-300"></i>
+                <span>Create New Quiz</span>
             </a>
             @if($userRole === 'admin')
-            <a href="{{ route('admin.settings.index') }}" class="w-[52px] h-[52px] bg-white hover:bg-slate-50 text-slate-400 hover:text-indigo-600 border border-slate-100 rounded-2xl flex items-center justify-center transition-all shadow-sm active:scale-95 group" title="System Settings">
-                <i class="fas fa-cog text-lg group-hover:rotate-90 transition-transform duration-500"></i>
+            <a href="{{ route('admin.settings.index') }}" class="w-12 h-12 bg-white hover:bg-slate-50 text-slate-400 hover:text-indigo-600 border border-slate-100 rounded-2xl flex items-center justify-center transition-all shadow-sm active:scale-95 group" title="System Settings">
+                <i class="fas fa-gear text-lg group-hover:rotate-90 transition-transform duration-500"></i>
             </a>
             @endif
         </div>
@@ -26,60 +26,65 @@
 
     @if ($userRole === 'admin')
         <!-- Admin Metrics Matrix -->
-        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-12" aria-label="Operational Metrics">
-            <div class="bg-white rounded-[28px] p-8 border border-slate-50 shadow-sm hover:shadow-md transition-all group">
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-12" aria-label="Operational Metrics">
+            <div class="card bg-white rounded-[32px] border-0 shadow-sm hover:shadow-xl transition-all group overflow-hidden">
+                <div class="card-body p-8">
                 <div class="flex justify-between items-center mb-6">
-                                                            <span class="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">Total Students</span>
-                    <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm">
-                        <i class="fas fa-user-graduate text-sm"></i>
+                    <span class="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">Total Students</span>
+                    <div class="w-12 h-12 rounded-[18px] bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm">
+                        <i class="fas fa-user-graduate text-lg"></i>
                     </div>
                 </div>
                 <h3 class="text-4xl font-bold tracking-tighter text-slate-950 tabular-nums leading-none">{{ number_format($totalUsers) }}</h3>
-                                                <div class="mt-2 text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none">Registered Accounts</div>
+                </div>
             </div>
 
-            <div class="bg-white rounded-[28px] p-8 border border-slate-50 shadow-sm hover:shadow-md transition-all group">
+            <div class="card bg-white rounded-[32px] border-0 shadow-sm hover:shadow-xl transition-all group overflow-hidden">
+                <div class="card-body p-8">
                 <div class="flex justify-between items-center mb-6">
-                                                            <span class="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Total Teachers</span>
-                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm">
-                        <i class="fas fa-chalkboard-teacher text-sm"></i>
+                    <span class="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Total Teachers</span>
+                    <div class="w-12 h-12 rounded-[18px] bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm">
+                        <i class="fas fa-chalkboard-user text-lg"></i>
                     </div>
                 </div>
                 <h3 class="text-4xl font-bold tracking-tighter text-slate-950 tabular-nums leading-none">{{ number_format($totalTeachers) }}</h3>
-                                                <div class="mt-2 text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none">Active Instructors</div>
+                </div>
             </div>
 
-            <div class="bg-white rounded-[28px] p-8 border border-slate-50 shadow-sm hover:shadow-md transition-all group">
+            <div class="card bg-white rounded-[32px] border-0 shadow-sm hover:shadow-xl transition-all group overflow-hidden">
+                <div class="card-body p-8">
                 <div class="flex justify-between items-center mb-6">
-                                                            <span class="text-sm font-semibold text-slate-600">Total Quizzes</span>
-                    <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center group-hover:bg-amber-500 group-hover:text-white transition-all shadow-sm">
-                        <i class="fas fa-layer-group text-sm"></i>
+                    <span class="text-[10px] font-bold text-amber-500 uppercase tracking-widest">Total Quizzes</span>
+                    <div class="w-12 h-12 rounded-[18px] bg-amber-50 text-amber-500 flex items-center justify-center group-hover:bg-amber-500 group-hover:text-white transition-all shadow-sm">
+                        <i class="fas fa-layer-group text-lg"></i>
                     </div>
                 </div>
-                <h3 class="text-4xl font-bold tracking-tight text-slate-900 tabular-nums leading-none">{{ number_format($totalQuizzes) }}</h3>
-                                                <div class="mt-2 text-xs font-medium text-slate-400">Learning Modules</div>
+                <h3 class="text-4xl font-bold tracking-tighter text-slate-950 tabular-nums leading-none">{{ number_format($totalQuizzes) }}</h3>
+                </div>
             </div>
 
-            <div class="bg-white rounded-[28px] p-8 border border-slate-50 shadow-sm hover:shadow-md transition-all group">
+            <div class="card bg-white rounded-[32px] border-0 shadow-sm hover:shadow-xl transition-all group overflow-hidden">
+                <div class="card-body p-8">
                 <div class="flex justify-between items-center mb-6">
-                                                            <span class="text-sm font-semibold text-slate-600">Departments</span>
-                    <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center group-hover:bg-rose-600 group-hover:text-white transition-all shadow-sm">
-                        <i class="fas fa-building text-sm"></i>
+                    <span class="text-[10px] font-bold text-rose-500 uppercase tracking-widest">Departments</span>
+                    <div class="w-12 h-12 rounded-[18px] bg-rose-50 text-rose-600 flex items-center justify-center group-hover:bg-rose-600 group-hover:text-white transition-all shadow-sm">
+                        <i class="fas fa-building text-lg"></i>
                     </div>
                 </div>
-                <h3 class="text-4xl font-bold tracking-tight text-slate-900 tabular-nums leading-none">{{ number_format($totalDepartments) }}</h3>
-                                                <div class="mt-2 text-xs font-medium text-slate-400">Academic Divisions</div>
+                <h3 class="text-4xl font-bold tracking-tighter text-slate-950 tabular-nums leading-none">{{ number_format($totalDepartments) }}</h3>
+                </div>
             </div>
 
-            <div class="bg-white rounded-[28px] p-8 border border-slate-50 shadow-sm hover:shadow-md transition-all group">
+            <div class="card bg-white rounded-[32px] border-0 shadow-sm hover:shadow-xl transition-all group overflow-hidden">
+                <div class="card-body p-8">
                 <div class="flex justify-between items-center mb-6">
-                                                            <span class="text-sm font-semibold text-slate-600">Resource Library</span>
-                    <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">
-                        <i class="fas fa-database text-sm"></i>
+                    <span class="text-[10px] font-bold text-blue-500 uppercase tracking-widest">Resource Library</span>
+                    <div class="w-12 h-12 rounded-[18px] bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">
+                        <i class="fas fa-database text-lg"></i>
                     </div>
                 </div>
-                <h3 class="text-4xl font-bold tracking-tight text-slate-900 tabular-nums leading-none">{{ number_format($totalBank) }}</h3>
-                                                <div class="mt-2 text-xs font-medium text-slate-400">Reusable Questions</div>
+                <h3 class="text-4xl font-bold tracking-tighter text-slate-950 tabular-nums leading-none">{{ number_format($totalBank) }}</h3>
+                </div>
             </div>
         </section>
 
@@ -95,11 +100,16 @@
                     </div>
                 </div>
                 <div class="w-full relative h-[300px]">
-                    @if(empty($weeklyActivity['labels']))
+                    @php
+                        $hasActivity = false;
+                        if (!empty($weeklyActivity['attempts'])) {
+                            foreach($weeklyActivity['attempts'] as $val) if ($val > 0) $hasActivity = true;
+                        }
+                    @endphp
+                    @if(empty($weeklyActivity['labels']) || !$hasActivity)
                     <div class="absolute inset-0 flex items-center justify-center text-xs font-semibold text-slate-400">No activity recorded yet.</div>
-                    @else
-                    <canvas id="activityChart"></canvas>
                     @endif
+                    <canvas id="activityChart" class="{{ !$hasActivity ? 'opacity-30' : '' }}"></canvas>
                 </div>
             </article>
 
@@ -128,14 +138,14 @@
                     <div class="mt-8 grid grid-cols-2 gap-4">
                         <div class="text-center">
                             <div class="flex items-center justify-center gap-2 mb-1">
-                                <span class="w-2.5 h-2.5 rounded-full bg-sky-300"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
                                 <span class="text-[15px] font-bold text-slate-900 tabular-nums">{{ number_format($studentGenderStats['Male'] ?? 0) }}</span>
                             </div>
                             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Boys</p>
                         </div>
                         <div class="text-center border-l border-slate-50">
                             <div class="flex items-center justify-center gap-2 mb-1">
-                                <span class="w-2.5 h-2.5 rounded-full bg-amber-300"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
                                 <span class="text-[15px] font-bold text-slate-900 tabular-nums">{{ number_format($studentGenderStats['Female'] ?? 0) }}</span>
                             </div>
                             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Girls</p>
@@ -143,14 +153,19 @@
                     </div>
                 </article>
 
-                <!-- Recently Added Quizzes (Moved down) -->
                 <aside class="bg-white rounded-[32px] p-8 border border-slate-50 shadow-sm">
                     <h3 class="text-sm font-bold text-slate-900 mb-6" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Latest Content</h3>
                     <div class="space-y-4">
                         @foreach(array_slice($recentQuizzes, 0, 3) as $quiz)
-                        <div class="flex items-center gap-3 group cursor-pointer" onclick="window.location='{{ route('quizzes.show', $quiz['id'] ?? 0) }}'">
-                            <div class="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-indigo-600 group-hover:text-white transition-all">
-                                <i class="fas fa-layer-group text-[12px]"></i>
+                        <div class="flex items-center gap-4 group cursor-pointer" onclick="window.location='{{ route('quizzes.show', $quiz['id'] ?? 0) }}'">
+                            <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-indigo-600 group-hover:text-white transition-all overflow-hidden">
+                                @if(!empty($quiz['thumbnail']))
+                                    <img src="{{ asset('storage/' . $quiz['thumbnail']) }}" alt="{{ $quiz['title'] }}" class="w-full h-full object-cover">
+                                @elseif(!empty($quiz['image']))
+                                    <img src="{{ asset('storage/' . $quiz['image']) }}" alt="{{ $quiz['title'] }}" class="w-full h-full object-cover">
+                                @else
+                                    <span class="text-sm font-bold uppercase">{{ substr($quiz['title'] ?? 'Q', 0, 1) }}</span>
+                                @endif
                             </div>
                             <div class="min-w-0">
                                 <h4 class="text-xs font-bold text-slate-900 truncate tracking-tight">{{ $quiz['title'] ?? 'Untitled' }}</h4>
@@ -250,8 +265,8 @@
                                 <div class="text-xs font-medium text-slate-500">{{ !empty($attempt['completed_at']) ? \Carbon\Carbon::parse($attempt['completed_at'])->format('M d, Y') : 'N/A' }}</div>
                             </td>
                             <td class="text-right py-4">
-                                <a href="{{ route('quizzes.result', $attempt['id'] ?? 0) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 text-slate-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50 transition-all active:scale-95 shadow-sm" title="Review">
-                                    <i class="fas fa-arrow-right text-[13px]"></i>
+                                <a href="{{ route('quizzes.result', $attempt['id'] ?? 0) }}" class="btn btn-sm btn-outline-secondary rounded-xl shadow-sm" title="Review">
+                                    <i class="fas fa-arrow-right text-sm"></i>
                                 </a>
                             </td>
                         </tr>
@@ -284,7 +299,7 @@
                                     <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{{ $quiz->subject?->subject_name ?? 'Module' }}</span>
                                     <div class="w-1 h-1 rounded-full bg-slate-200"></div>
                                     <div class="flex items-center gap-2 text-[10px] font-bold text-slate-500">
-                                        <i class="far fa-calendar-alt text-indigo-500"></i>
+                                        <i class="fas fa-calendar-alt text-indigo-500"></i>
                                         <span>Available Now</span>
                                     </div>
                                 </div>
@@ -301,7 +316,7 @@
                                     </div>
                                     <div class="flex items-center gap-2 text-slate-400">
                                         <div class="w-7 h-7 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-500">
-                                            <i class="far fa-clock text-[10px]"></i>
+                                            <i class="fas fa-clock text-[10px]"></i>
                                         </div>
                                         <span class="text-[11px] font-black text-slate-600 tracking-tight">{{ $quiz->time_limit ?? 30 }}m</span>
                                     </div>
@@ -405,8 +420,9 @@
                 scales: {
                     y: { 
                         beginAtZero: true, 
+                        suggestedMax: 5,
                         grid: { borderDash: [5, 5], color: '#f1f5f9', drawBorder: false },
-                        ticks: { font: { size: 10, weight: 'bold' }, padding: 10 }
+                        ticks: { font: { size: 10, weight: 'bold' }, padding: 10, stepSize: 1 }
                     },
                     x: { 
                         grid: { display: false },
@@ -428,18 +444,26 @@
                             {{ $studentGenderStats['Male'] ?? 0 }}, 
                             {{ $studentGenderStats['Female'] ?? 0 }}
                         ],
-                        backgroundColor: ['#7dd3fc', '#fcd34d'],
-                        hoverBackgroundColor: ['#38bdf8', '#fbbf24'],
-                        borderWidth: 0,
-                        weight: 0.5
+                        backgroundColor: ['#3b82f6', '#eab308'],
+                        hoverBackgroundColor: ['#2563eb', '#ca8a04'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff',
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    cutout: '80%',
+                    cutout: '75%',
                     plugins: {
-                        legend: { display: false },
+                        legend: { 
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20,
+                                font: { family: "'Inter', sans-serif", size: 11, weight: 'bold' }
+                            }
+                        },
                         tooltip: {
                             callbacks: {
                                 label: function(context) {

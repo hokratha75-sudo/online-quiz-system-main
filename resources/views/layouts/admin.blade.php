@@ -48,71 +48,38 @@
 
     @yield('styles')
 
-    <!-- Legacy Style Overrides to keep non-refactored pages from breaking completely -->
     <style>
-                /* Global Moodle-style Typography */
-        h1, h2, h3, h4, h5, h6, .card-title-custom, .font-heading {
-            font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;
-            font-weight: 600 !important;
-        }
-        body {
-            font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;
-            font-weight: 400;
-            color: #333333;
-        }
+        /* === Clean Standard UI System (Requested) === */
+        .card-standard { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03); }
+        .card-header-standard { background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 20px 28px; }
+        .card-header-standard h3 { font-size: 16px; font-weight: 700; color: #0f172a; margin: 0; letter-spacing: -0.01em; }
         
-        .page-wrap { padding: 30px; flex: 1; }
-        .card-custom { background: #ffffff !important; border-radius: 20px !important; border: none !important; box-shadow: 0 10px 30px rgba(0,0,0,0.03) !important; padding: 20px !important; }
-        .card-header-inner { border-bottom: 1px solid #f3f4f6 !important; padding: 10px 0 20px 0 !important; margin-bottom: 20px !important; }
-        .card-title-custom { font-size: 18px !important; font-weight: 600 !important; color: #111827 !important; border: none !important; }
-        .btn-blue, .btn-primary { background: #4f46e5 !important; color: white !important; border: none !important; border-radius: 8px !important; padding: 8px 16px !important; font-weight: 500 !important; box-shadow: 0 2px 4px rgba(91, 108, 249, 0.2) !important; transition: all 0.2s !important; }
-        .btn-pink, .btn-secondary { background: white !important; color: #111827 !important; border: 1px solid #f3f4f6 !important; border-radius: 8px !important; padding: 8px 16px !important; font-weight: 500 !important; }
-        .table-custom { width: 100% !important; margin-bottom: 0 !important; border-collapse: separate !important; border-spacing: 0 !important; }
-        .table-custom th { border: none !important; border-bottom: 1px solid #f3f4f6 !important; padding: 14px 20px !important; color: #6b7280 !important; font-weight: 600 !important; font-size: 12px !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; background: white !important; }
-        .table-custom td { padding: 16px 20px !important; vertical-align: middle !important; border: none !important; border-bottom: 1px solid #f3f4f6 !important; color: #111827 !important; font-size: 14px !important; font-weight: 500 !important; }
-        
-        /* Fix ugly default button styling caused by missing Tailwind Preflight */
-        button {
-            background-color: transparent;
-            background-image: none;
-            cursor: pointer;
-            border: none;
-            padding: 0;
-            line-height: inherit;
-            color: inherit;
-        }
-        button:focus { outline: none; }
-        
-        /* Simplified Sidebar Styles */
-        .sidebar-item {
-            transition: all 0.2s ease;
-            text-decoration: none !important;
-            font-weight: 600 !important;
-            font-family: 'Open Sans', sans-serif !important;
-        }
-        .sidebar-item:hover {
-            background: rgba(79, 70, 229, 0.05);
-            color: #6366f1 !important;
-        }
-        .sidebar-item-active {
-            background: rgba(91, 79, 207, 0.1) !important;
-            color: white !important;
-            border-left: 2px solid #5b4fcf;
-            border-radius: 0 !important;
-        }
-        .sidebar-item-active i {
-            color: #5b4fcf !important;
-        }
-        .sidebar-item * { text-decoration: none !important; }
+        .table-standard { width: 100%; border-collapse: collapse; border-top: 1px solid #e2e8f0; }
+        .table-standard th { background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 14px 20px; text-align: left; font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .table-standard td { border-bottom: 1px solid #f1f5f9; padding: 16px 20px; font-size: 13px; color: #334155; vertical-align: middle; }
+        .table-standard tr:last-child td { border-bottom: none; }
+        .table-standard tr:hover { background: #f8fafc; }
 
-        /* Glassmorphism for Dashboard Panels */
-        .glass-panel { 
-            background: rgba(255, 255, 255, 0.65) !important; 
-            backdrop-filter: blur(16px) !important; 
-            -webkit-backdrop-filter: blur(16px) !important; 
-            border: 1px solid rgba(255, 255, 255, 0.5) !important; 
-            box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.03) !important;
-        }
+        /* Sidebar Active State */
+        .sidebar-item-active { background: #4f46e5 !important; color: #ffffff !important; box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.2) !important; }
+        .sidebar-item-active i { color: #ffffff !important; }
+        .sidebar-item-active div { background: rgba(255, 255, 255, 0.2) !important; box-shadow: none !important; }
+
+        /* Progress Bars */
+        .progress-clean { height: 8px; background: #f1f5f9; border-radius: 9999px; overflow: hidden; }
+        .progress-bar-clean { height: 100%; border-radius: 9999px; }
+        
+        /* Badges/Labels */
+        .label-standard { padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; color: white; display: inline-block; line-height: 1; letter-spacing: 0.05em; text-transform: uppercase; }
+        .label-red { background: #ef4444; }
+        .label-yellow { background: #f59e0b; }
+        .label-blue { background: #3b82f6; }
+        .label-green { background: #10b981; }
+
+        .pagination-clean { display: flex; gap: 6px; }
+        .pagination-clean a, .pagination-clean span { border: 1px solid #e2e8f0; padding: 8px 14px; font-size: 12px; font-weight: 700; border-radius: 12px; background: white; color: #64748b; text-decoration: none; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+        .pagination-clean a:hover { border-color: #cbd5e1; color: #0f172a; background: #f8fafc; }
+        .pagination-clean .active { background: #4f46e5; color: #ffffff; border-color: #4f46e5; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2); }
     </style>
 </head>
 <!-- === ចាប់ផ្ដើមរចនាសម្ព័ន្ធ Layout === -->
@@ -169,15 +136,15 @@
     </button>
     
     <!-- ផ្នែក Logo និងបរិយាយឈ្មោះប្រព័ន្ធ (Brand) -->
-    <div class="px-6 pt-7 pb-6 flex items-center gap-3">
+    <div class="px-6 pt-8 pb-6 flex items-center gap-3">
         <!-- រូបតំណាង (Icon) -->
-        <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0 border border-indigo-400/50">
-            <i class="fas fa-graduation-cap text-white text-[13px]"></i>
+        <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-600/20 shrink-0 border border-indigo-400/20">
+            <i class="fas fa-graduation-cap text-white text-base"></i>
         </div>
         <div>
             <h1 class="text-white font-bold tracking-tight text-lg leading-none truncate max-w-[150px]">Quiz System</h1>
-            <span class="text-xs font-semibold text-indigo-400 mt-1 block">
-                @if($role === 1) Admin Panel @elseif($role === 2) Teacher Hub @else Student Home @endif
+            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1.5 block">
+                @if($role === 1) Administrative @elseif($role === 2) Instructor @else Student Portal @endif
             </span>
         </div>
     </div>
@@ -186,67 +153,87 @@
 
     <div class="flex-1 overflow-y-auto px-3 space-y-1.5 custom-scrollbar pb-6">
         <!-- Dashboard menu -->
-        <div class="space-y-1 mt-4">
+        <div class="space-y-1 mt-6">
             <a href="{{ $role === 3 ? route('students.dashboard') : route('dashboard') }}" 
-               class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('dashboard') || request()->routeIs('students.dashboard') ? 'sidebar-item-active' : 'text-slate-400' }}">
-                <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('dashboard') || request()->routeIs('students.dashboard') ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
-                    <i class="fas fa-home text-[12px]"></i>
+               class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('dashboard') || request()->routeIs('students.dashboard') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('dashboard') || request()->routeIs('students.dashboard') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
+                    <i class="fas fa-chart-bar text-[16px]"></i>
                 </div>
-                                                <span class="text-sm font-bold tracking-tight">Dashboard</span>
+                <span class="text-sm font-bold tracking-tight">Dashboard</span>
             </a>
             @if($role === 1 || $role === 2)
             <a href="{{ route('planner') }}" 
-               class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('planner') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
-                <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('planner') ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
-                    <i class="fas fa-calendar-day text-[12px]"></i>
+               class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('planner') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('planner') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
+                    <i class="fas fa-calendar text-[16px]"></i>
                 </div>
-                                                        <span class="text-sm tracking-tight">Calendar</span>
+                <span class="text-sm font-bold tracking-tight">Calendar</span>
             </a>
             @endif
         </div>
 
         @if($role === 1)
         <!-- System Administration -->
-        <div class="pt-2">
-            <div class="px-4 mb-2 flex items-center justify-between">
-                <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Administration</h2>
-                <div class="h-px bg-slate-800 flex-grow ml-4"></div>
+        <div class="pt-4">
+            <div class="px-4 mb-3 flex items-center justify-between">
+                <h2 class="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em]">Administration</h2>
+                <div class="h-px bg-slate-800/50 flex-grow ml-4"></div>
             </div>
             <div class="space-y-1">
                 <a href="{{ route('admin.users.index') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('admin.users.*') ? 'sidebar-item-active' : 'text-slate-400' }}">
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.users.*') ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
-                        <i class="fas fa-users text-[12px]"></i>
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.users.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.users.*') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
+                        <i class="fas fa-user-group text-[16px]"></i>
                     </div>
-                                                            <span class="text-sm font-bold tracking-tight text-inherit">Users</span>
+                    <span class="text-sm font-bold tracking-tight">Users</span>
                 </a>
                 
-                <div x-data="{ expanded: {{ $departmentMenuOpen ? 'true' : 'false' }} }">
-                    <button @click="expanded = !expanded" 
-                            class="sidebar-item w-full group flex items-center gap-4 px-4 py-2 rounded-xl transition-all duration-300 {{ $departmentMenuOpen ? 'text-white' : 'text-slate-400 font-bold' }}">
-                        <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ $departmentMenuOpen ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
-                            <i class="fas fa-building text-[12px]"></i>
-                        </div>
-                                                                        <span class="text-sm tracking-tight flex-1 text-left">Academic</span>
-                        <i class="fas fa-chevron-down text-[10px] opacity-40 transition-transform duration-300" :class="expanded ? 'rotate-180' : ''"></i>
-                    </button>
-                    <div x-show="expanded" x-collapse>
-                        <div class="pl-4 pr-3 py-1 space-y-0.5 mt-1 border-l border-slate-700 ml-[36px]">
-                                                                                    <a href="{{ route('admin.departments.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.departments.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Departments</a>
-                                                                                    <a href="{{ route('admin.majors.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.majors.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Majors</a>
-                                                                                    <a href="{{ route('admin.classes.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.classes.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Classes</a>
-                                                                                    <a href="{{ route('admin.subjects.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.subjects.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Subjects</a>
-                                                                                    <a href="{{ route('admin.enrollments.index') }}" class="block px-3 py-1.5 text-xs transition-colors rounded-lg no-underline {{ request()->routeIs('admin.enrollments.*') ? 'text-white font-medium bg-indigo-500/20 shadow-sm' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">Enrollments</a>
-                        </div>
+                <a href="{{ route('admin.departments.index') }}" 
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.departments.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.departments.*') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
+                        <i class="fas fa-building text-[16px]"></i>
                     </div>
-                </div>
+                    <span class="text-sm font-bold tracking-tight">Departments</span>
+                </a>
+                
+                <a href="{{ route('admin.majors.index') }}" 
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.majors.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.majors.*') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
+                        <i class="fas fa-graduation-cap text-[16px]"></i>
+                    </div>
+                    <span class="text-sm font-bold tracking-tight">Majors</span>
+                </a>
+                
+                <a href="{{ route('admin.classes.index') }}" 
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.classes.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.classes.*') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
+                        <i class="fas fa-chalkboard-user text-[16px]"></i>
+                    </div>
+                    <span class="text-sm font-bold tracking-tight">Classes</span>
+                </a>
+                
+                <a href="{{ route('admin.subjects.index') }}" 
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.subjects.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.subjects.*') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
+                        <i class="fas fa-book text-[16px]"></i>
+                    </div>
+                    <span class="text-sm font-bold tracking-tight">Subjects</span>
+                </a>
+                
+                <a href="{{ route('admin.enrollments.index') }}" 
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.enrollments.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.enrollments.*') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
+                        <i class="fas fa-users-viewfinder text-[16px]"></i>
+                    </div>
+                    <span class="text-sm font-bold tracking-tight">Enrollments</span>
+                </a>
 
                 <a href="{{ route('admin.settings.index') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('admin.settings.*') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.settings.*') ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
-                        <i class="fas fa-sliders-h text-[12px]"></i>
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.settings.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.settings.*') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
+                        <i class="fas fa-gear text-[16px]"></i>
                     </div>
-                                                            <span class="text-sm tracking-tight">Settings</span>
+                    <span class="text-sm font-bold tracking-tight">Settings</span>
                 </a>
             </div>
         </div>
@@ -254,46 +241,46 @@
 
         @if($role === 1 || $role === 2)
         <!-- Assessment Management -->
-        <div class="pt-2">
-            <div class="px-4 mb-2 flex items-center justify-between">
-                <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Assessment Hub</h2>
-                <div class="h-px bg-slate-800 flex-grow ml-4"></div>
+        <div class="pt-4">
+            <div class="px-4 mb-3 flex items-center justify-between">
+                <h2 class="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em]">Assessment Hub</h2>
+                <div class="h-px bg-slate-800/50 flex-grow ml-4"></div>
             </div>
             <div class="space-y-1">
                 <a href="{{ route('quizzes.index') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('quizzes.*') && !request()->routeIs('quizzes.reports') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('quizzes.*') && !request()->routeIs('quizzes.reports') ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
-                        <i class="fas fa-book-open text-[12px]"></i>
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('quizzes.*') && !request()->routeIs('quizzes.reports') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('quizzes.*') && !request()->routeIs('quizzes.reports') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
+                        <i class="fas fa-file-lines text-[16px]"></i>
                     </div>
-                                                            <span class="text-sm tracking-tight">Quizzes</span>
+                    <span class="text-sm font-bold tracking-tight">Quizzes</span>
                 </a>
                 <a href="{{ route('courses.index') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('courses.index') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('courses.index') ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
-                        <i class="fas fa-chalkboard text-[12px]"></i>
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('courses.index') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('courses.index') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
+                        <i class="fas fa-rectangle-list text-[16px]"></i>
                     </div>
-                                                            <span class="text-sm tracking-tight">Courses</span>
+                    <span class="text-sm font-bold tracking-tight">Courses</span>
                 </a>
                 <a href="{{ route('questions.bank') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('questions.bank') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('questions.bank') ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
-                        <i class="fas fa-database text-[12px]"></i>
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('questions.bank') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('questions.bank') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
+                        <i class="fas fa-folder-open text-[16px]"></i>
                     </div>
-                                                            <span class="text-sm tracking-tight">Question Bank</span>
+                    <span class="text-sm font-bold tracking-tight">Question Bank</span>
                 </a>
                 <a href="{{ route('quizzes.reports') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('quizzes.reports') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('quizzes.reports') ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
-                        <i class="fas fa-chart-pie text-[12px]"></i>
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('quizzes.reports') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('quizzes.reports') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
+                        <i class="fas fa-chart-pie text-[16px]"></i>
                     </div>
-                                                            <span class="text-sm tracking-tight">Reports</span>
+                    <span class="text-sm font-bold tracking-tight">Reports</span>
                 </a>
                 <a href="{{ route('leaderboard') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-2 rounded-xl {{ request()->routeIs('leaderboard') ? 'sidebar-item-active text-indigo-400' : 'text-slate-400 font-bold' }}">
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('leaderboard') ? 'bg-yellow-500 text-white shadow-lg shadow-yellow-500/20' : 'bg-slate-800/50 group-hover:bg-indigo-500/20 group-hover:text-indigo-400' }}">
-                        <i class="fas fa-crown text-[12px]"></i>
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('leaderboard') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('leaderboard') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
+                        <i class="fas fa-star text-[16px]"></i>
                     </div>
-                                                            <span class="text-sm tracking-tight">Leaderboard</span>
+                    <span class="text-sm font-bold tracking-tight">Leaderboard</span>
                 </a>
             </div>
         </div>
