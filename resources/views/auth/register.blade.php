@@ -71,13 +71,12 @@
         <div class="mb-8 text-center">
             <div class="flex items-center justify-center gap-3 mb-6">
                 <div class="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
-                    <i class="far fa-graduation-cap text-white text-2xl"></i>
+                    <i class="fas fa-graduation-cap text-white text-2xl"></i>
                 </div>
                 <span class="text-slate-800 font-bold text-2xl tracking-tight">Quiz System</span>
             </div>
             
-            <h2 class="text-xl font-semibold text-slate-800 mb-1 text-left">Adventure starts here</h2>
-            <p class="text-slate-500 text-sm text-left">Make your app management easy and fun!</p>
+            <h2 class="text-xl font-semibold text-slate-800 mb-6 text-left">Create New Account</h2>
         </div>
 
         @if($errors->any())
