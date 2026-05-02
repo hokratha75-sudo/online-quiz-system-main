@@ -10,7 +10,7 @@ class UsersTableSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('users')->insert([
+        DB::table('users')->insertOrIgnore([
             [
                 'username' => 'admin',
                 'password_hash' => Hash::make('admin123'),

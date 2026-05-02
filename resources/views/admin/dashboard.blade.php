@@ -11,12 +11,12 @@
         </div>
         @if($userRole === 'admin' || $userRole === 'teacher')
         <div class="flex items-center gap-4">
-            <a href="{{ route('quizzes.create') ?? '#' }}" class="no-underline bg-indigo-600 hover:bg-indigo-700 text-white px-7 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-3 shadow-xl shadow-indigo-600/20 active:scale-[0.98] group uppercase tracking-widest">
+            <a href="{{ route('quizzes.create') ?? '#' }}" class="no-underline bg-indigo-600 hover:bg-indigo-700 text-white px-7 py-3 rounded-lg text-xs font-bold transition-all flex items-center gap-3 shadow-xl shadow-indigo-600/20 active:scale-[0.98] group uppercase tracking-widest">
                 <i class="fas fa-plus group-hover:rotate-90 transition-transform duration-300"></i>
                 <span>Create New Quiz</span>
             </a>
             @if($userRole === 'admin')
-            <a href="{{ route('admin.settings.index') }}" class="w-12 h-12 bg-white hover:bg-slate-50 text-slate-400 hover:text-indigo-600 border border-slate-100 rounded-2xl flex items-center justify-center transition-all shadow-sm active:scale-95 group" title="System Settings">
+            <a href="{{ route('admin.settings.index') }}" class="w-12 h-12 bg-white hover:bg-slate-50 text-slate-400 hover:text-indigo-600 border border-slate-100 rounded-lg flex items-center justify-center transition-all shadow-sm active:scale-95 group" title="System Settings">
                 <i class="fas fa-gear text-lg group-hover:rotate-90 transition-transform duration-500"></i>
             </a>
             @endif
@@ -27,23 +27,23 @@
     @if ($userRole === 'admin')
         <!-- Admin Metrics Matrix -->
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-12" aria-label="Operational Metrics">
-            <div class="card bg-white rounded-[32px] border-0 shadow-sm hover:shadow-xl transition-all group overflow-hidden">
-                <div class="card-body p-8">
-                <div class="flex justify-between items-center mb-6">
-                    <span class="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">Total Students</span>
-                    <div class="w-12 h-12 rounded-[18px] bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm">
-                        <i class="fas fa-user-graduate text-lg"></i>
+            <div class="card bg-white rounded-2xl border-0 shadow-sm hover:shadow-xl transition-all group overflow-hidden h-30">
+                <div class="card-body p-3">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">Total Students</span>
+                        <div class="w-12 h-12 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600  group-hover:text-white transition-all shadow-sm">
+                            <i class="fas fa-user-graduate text-lg"></i>
+                        </div>
                     </div>
-                </div>
-                <h3 class="text-4xl font-bold tracking-tighter text-slate-950 tabular-nums leading-none">{{ number_format($totalUsers) }}</h3>
+                    <h3 class="text-4xl font-bold tracking-tighter text-slate-950 tabular-nums leading-none">{{ number_format($totalUsers) }}</h3>
                 </div>
             </div>
 
-            <div class="card bg-white rounded-[32px] border-0 shadow-sm hover:shadow-xl transition-all group overflow-hidden">
-                <div class="card-body p-8">
+            <div class="card bg-white rounded-2xl border-0 shadow-sm hover:shadow-xl transition-all group overflow-hidden">
+                <div class="card-body">
                 <div class="flex justify-between items-center mb-6">
                     <span class="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Total Teachers</span>
-                    <div class="w-12 h-12 rounded-[18px] bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm">
+                    <div class="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-sm">
                         <i class="fas fa-chalkboard-user text-lg"></i>
                     </div>
                 </div>
@@ -51,11 +51,11 @@
                 </div>
             </div>
 
-            <div class="card bg-white rounded-[32px] border-0 shadow-sm hover:shadow-xl transition-all group overflow-hidden">
-                <div class="card-body p-8">
+            <div class="card bg-white rounded-2xl border-0 shadow-sm hover:shadow-xl transition-all group overflow-hidden">
+                <div class="card-body">
                 <div class="flex justify-between items-center mb-6">
                     <span class="text-[10px] font-bold text-amber-500 uppercase tracking-widest">Total Quizzes</span>
-                    <div class="w-12 h-12 rounded-[18px] bg-amber-50 text-amber-500 flex items-center justify-center group-hover:bg-amber-500 group-hover:text-white transition-all shadow-sm">
+                    <div class="w-12 h-12 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center group-hover:bg-amber-500 group-hover:text-white transition-all shadow-sm">
                         <i class="fas fa-layer-group text-lg"></i>
                     </div>
                 </div>
@@ -63,11 +63,11 @@
                 </div>
             </div>
 
-            <div class="card bg-white rounded-[32px] border-0 shadow-sm hover:shadow-xl transition-all group overflow-hidden">
-                <div class="card-body p-8">
+            <div class="card bg-white rounded-2xl border-0 shadow-sm hover:shadow-xl transition-all group overflow-hidden">
+                <div class="card-body">
                 <div class="flex justify-between items-center mb-6">
                     <span class="text-[10px] font-bold text-rose-500 uppercase tracking-widest">Departments</span>
-                    <div class="w-12 h-12 rounded-[18px] bg-rose-50 text-rose-600 flex items-center justify-center group-hover:bg-rose-600 group-hover:text-white transition-all shadow-sm">
+                    <div class="w-12 h-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center group-hover:bg-rose-600 group-hover:text-white transition-all shadow-sm">
                         <i class="fas fa-building text-lg"></i>
                     </div>
                 </div>
@@ -75,11 +75,11 @@
                 </div>
             </div>
 
-            <div class="card bg-white rounded-[32px] border-0 shadow-sm hover:shadow-xl transition-all group overflow-hidden">
-                <div class="card-body p-8">
+            <div class="card bg-white rounded-2xl border-0 shadow-sm hover:shadow-xl transition-all group overflow-hidden">
+                <div class="card-body">
                 <div class="flex justify-between items-center mb-6">
                     <span class="text-[10px] font-bold text-blue-500 uppercase tracking-widest">Resource Library</span>
-                    <div class="w-12 h-12 rounded-[18px] bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">
+                    <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">
                         <i class="fas fa-database text-lg"></i>
                     </div>
                 </div>
@@ -91,12 +91,12 @@
         <!-- Admin Analytical Context -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
             <!-- Global Activity Analytics -->
-            <article class="lg:col-span-2 bg-white rounded-[32px] p-8 border border-slate-50 shadow-sm">
+            <article class="lg:col-span-2 bg-white rounded-2xl p-6 border border-slate-50 shadow-sm">
                 <div class="flex justify-between items-center mb-8">
-                                                                                                                        <h3 class="text-sm font-bold text-slate-900" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Weekly Platform Activity</h3>
+                    <h3 class="text-sm font-bold text-slate-900" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Weekly Platform Activity</h3>
                     <div class="flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                                                        <span class="text-xs font-semibold text-slate-500">Live Updates</span>
+                        <span class="text-xs font-semibold text-slate-500">Live Updates</span>
                     </div>
                 </div>
                 <div class="w-full relative h-[300px]">
@@ -116,10 +116,10 @@
             <!-- Right Column: Student Distribution & Attendance -->
             <div class="space-y-8">
                 <!-- Students Distribution -->
-                <article class="bg-white rounded-[32px] p-8 border border-slate-50 shadow-sm relative overflow-hidden">
+                <article class="bg-white rounded-2xl p-6 border border-slate-50 shadow-sm relative overflow-hidden">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-sm font-bold text-slate-900" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Students</h3>
-                        <button class="text-slate-300 hover:text-slate-500"><i class="fas fa-ellipsis-h"></i></button>
+                        <button class="text-slate-300 hover:text-slate-500 border-none bg-transparent"><i class="fas fa-ellipsis-h"></i></button>
                     </div>
                     
                     <div class="relative flex justify-center py-4">
@@ -153,7 +153,7 @@
                     </div>
                 </article>
 
-                <aside class="bg-white rounded-[32px] p-8 border border-slate-50 shadow-sm">
+                <aside class="bg-white rounded-2xl p-8 border border-slate-50 shadow-sm">
                     <h3 class="text-sm font-bold text-slate-900 mb-6" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Latest Content</h3>
                     <div class="space-y-4">
                         @foreach(array_slice($recentQuizzes, 0, 3) as $quiz)

@@ -139,33 +139,43 @@
 <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm z-40 md:hidden" style="display: none;"></div>
 
 <!-- Sidebar Layout -->
-<nav x-cloak class="w-[280px] md:w-[260px] shrink-0 bg-neutral-900 border-r border-neutral-800 flex flex-col h-screen fixed inset-y-0 left-0 transform transition-transform duration-300 ease-in-out md:translate-x-0 md:sticky md:top-0 z-50" x-bind:class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" aria-label="sidebar navigation">
+<nav x-cloak class="w-[280px] md:w-[260px] shrink-0 bg-neutral-800 flex flex-col h-screen fixed inset-y-0 left-0 transform transition-transform duration-300 ease-in-out md:translate-x-0 md:sticky md:top-0 z-50" x-bind:class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" aria-label="sidebar navigation">
     <!-- Close button for mobile inside sidebar -->
     <button @click="sidebarOpen = false" class="md:hidden absolute top-6 right-5 w-8 h-8 rounded-lg bg-slate-800 text-slate-400 flex items-center justify-center hover:text-white transition-colors">
         <i class="fas fa-times"></i>
     </button>
     
     <!-- ផ្នែក Logo និងបរិយាយឈ្មោះប្រព័ន្ធ (Brand) -->
-    <div class="px-6 pt-8 pb-6 flex items-center gap-3">
-        <!-- រូបតំណាង (Icon) -->
-        <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-600/20 shrink-0 border border-indigo-400/20">
+    <div class="w-full h-16 flex items-center px-4 gap-3 !border-b !border-white">
+
+        <!-- Icon -->
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 
+                flex items-center justify-center 
+                shadow-md shadow-indigo-600/20 shrink-0">
             <i class="fas fa-graduation-cap text-white text-base"></i>
         </div>
-        <div>
-            <h1 class="text-white font-bold tracking-tight text-lg leading-none truncate max-w-[150px]">Quiz System</h1>
-            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1.5 block">
-                @if($role === 1) Administrative @elseif($role === 2) Instructor @else Student Portal @endif
+
+        <!-- Text -->
+        <div class="min-w-0 mr-6">
+            <h1 class="text-white font-semibold tracking-tight text-base truncate">Quiz System</h1>
+
+            <span class="text-[10px] font-medium text-slate-400 uppercase tracking-wider mt-1 block">
+                @if($role === 1) Administrative 
+                @elseif($role === 2) Instructor 
+                @else Student Portal 
+                @endif
             </span>
         </div>
+
     </div>
 
 
 
-    <div class="flex-1 overflow-y-auto px-3 space-y-1.5 custom-scrollbar pb-6">
+    <div class="flex-1 overflow-y-auto space-y-1.5 custom-scrollbar pb-6">
         <!-- Dashboard menu -->
         <div class="space-y-1 mt-6">
             <a href="{{ $role === 3 ? route('students.dashboard') : route('dashboard') }}" 
-               class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('dashboard') || request()->routeIs('students.dashboard') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+               class="sidebar-item group flex items-center gap-4 px-4 py-2.5 transition-all {{ request()->routeIs('dashboard') || request()->routeIs('students.dashboard') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('dashboard') || request()->routeIs('students.dashboard') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
                     <i class="fas fa-chart-bar text-[16px]"></i>
                 </div>
@@ -173,7 +183,7 @@
             </a>
             @if($role === 1 || $role === 2)
             <a href="{{ route('planner') }}" 
-               class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('planner') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+               class="sidebar-item group flex items-center gap-4 px-4 py-2.5 transition-all {{ request()->routeIs('planner') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('planner') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
                     <i class="fas fa-calendar text-[16px]"></i>
                 </div>
@@ -191,7 +201,7 @@
             </div>
             <div class="space-y-1">
                 <a href="{{ route('admin.users.index') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.users.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 transition-all {{ request()->routeIs('admin.users.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.users.*') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
                         <i class="fas fa-user-group text-[16px]"></i>
                     </div>
@@ -199,7 +209,7 @@
                 </a>
                 
                 <a href="{{ route('admin.departments.index') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.departments.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 transition-all {{ request()->routeIs('admin.departments.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.departments.*') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
                         <i class="fas fa-building text-[16px]"></i>
                     </div>
@@ -207,7 +217,7 @@
                 </a>
                 
                 <a href="{{ route('admin.majors.index') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.majors.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 transition-all {{ request()->routeIs('admin.majors.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.majors.*') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
                         <i class="fas fa-graduation-cap text-[16px]"></i>
                     </div>
@@ -215,7 +225,7 @@
                 </a>
                 
                 <a href="{{ route('admin.classes.index') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.classes.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 transition-all {{ request()->routeIs('admin.classes.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.classes.*') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
                         <i class="fas fa-chalkboard-user text-[16px]"></i>
                     </div>
@@ -223,7 +233,7 @@
                 </a>
                 
                 <a href="{{ route('admin.subjects.index') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.subjects.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 transition-all {{ request()->routeIs('admin.subjects.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.subjects.*') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
                         <i class="fas fa-book text-[16px]"></i>
                     </div>
@@ -231,7 +241,7 @@
                 </a>
                 
                 <a href="{{ route('admin.enrollments.index') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.enrollments.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 transition-all {{ request()->routeIs('admin.enrollments.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.enrollments.*') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
                         <i class="fas fa-users-viewfinder text-[16px]"></i>
                     </div>
@@ -239,7 +249,7 @@
                 </a>
 
                 <a href="{{ route('admin.settings.index') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.settings.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 transition-all {{ request()->routeIs('admin.settings.*') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.settings.*') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
                         <i class="fas fa-gear text-[16px]"></i>
                     </div>
@@ -338,33 +348,54 @@
     </div>
 
     <!-- User Profile Footer -->
-    <div class="p-4 mt-auto border-t border-neutral-800/50 bg-neutral-900">
-        <div class="flex items-center justify-between w-full">
-            <div class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity" onclick="window.location='{{ route('profile.edit') }}'">
-                <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
-                    @if($authUser && $authUser->profile_photo)
-                        <img src="{{ asset('storage/' . $authUser->profile_photo) }}" alt="Avatar" class="w-full h-full object-cover rounded-full">
-                    @else
-                        {{ substr($authUser?->username ?? 'R', 0, 1) }}
-                    @endif
-                </div>
-                <div>
-                    <p class="text-[14px] font-bold text-white leading-none mb-1">{{ $authUser->username ?? 'User' }}</p>
-                    <div class="flex items-center gap-1.5">
-                        <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
-                        <p class="text-[11px] font-medium text-slate-500">Online</p>
-                    </div>
-                </div>
+    <div class="p-4 mt-auto border-t border-neutral-800/50 bg-neutral-800">
+
+    <div class="flex items-center justify-between">
+
+        <!-- Profile -->
+        <div class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+             onclick="window.location='{{ route('profile.edit') }}'">
+
+            <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-lg overflow-hidden">
+                @if($authUser && $authUser->profile_photo)
+                    <img src="{{ asset('storage/' . $authUser->profile_photo) }}"
+                         alt="Avatar"
+                         class="w-full h-full object-cover">
+                @else
+                    {{ substr($authUser?->username ?? 'R', 0, 1) }}
+                @endif
             </div>
-            
-            <form action="{{ route('logout') }}" method="POST" class="m-0">
-                @csrf
-                <button type="submit" class="px-3 py-1.5 rounded-lg border border-slate-700/50 text-slate-500 hover:text-white hover:border-slate-500 transition-all text-xs font-medium">
-                    Logout
-                </button>
-            </form>
-        </div>
+
+            <!-- User Info -->
+            <div class="relative">
+    <p class="text-sm font-semibold text-white">
+        {{ $authUser->username ?? 'User' }}
+    </p>
+
+    <!-- Status (grouped properly) -->
+    <div class="flex items-center gap-1 absolute top-6 right-0">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-xs text-slate-400">Online</span>
     </div>
+</div>
+
+        </div>
+
+        <!-- Logout -->
+        
+        <form action="{{ route('logout') }}" method="POST" class="my-2">
+            @csrf
+            <button
+                type="submit"
+                class="px-3 py-1.5 text-white bg-neutral-800 rounded-lg border border-red-500
+                       hover:bg-red-500 hover:text-white transition-all duration-200
+                       text-xs font-medium">
+                Logout
+            </button>
+        </form>
+    </div>
+
+</div>
 </nav>
 @endunless
 
@@ -374,7 +405,7 @@
     
 @unless($hideTopbar ?? ($hideSidebar ?? false))
     <!-- របារផ្នែកខាងលើ (Topbar) ប្រើ Glassmorphism Style -->
-    <header class="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-neutral-200 bg-white px-6 py-2 md:px-10">
+    <header class="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-neutral-200 bg-slate-100 px-6 py-2 md:px-10">
         <div class="flex items-center gap-4">
             <h2 class="text-lg font-semibold text-slate-800 tracking-tight flex items-center gap-2">
                 @yield('topbar-title', 'Dashboard')
@@ -396,13 +427,13 @@
                     setTimeout(() => { toast.classList.add('translate-y-10', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 6000);
                 }
             }" @new-notification.window="addNotification($event.detail)" class="relative">
-                <button @click="open = !open" @click.away="open = false" class="relative w-10 h-10 rounded-xl bg-slate-100/50 hover:bg-slate-200/50 text-slate-500 hover:text-slate-800 transition-colors flex items-center justify-center">
-                    <i class="fas fa-bell"></i>
+                <button @click="open = !open" @click.away="open = false" class="relative w-10 h-10 border-none rounded-full  bg-slate-100/50 hover:bg-slate-200/90 text-slate-500 hover:text-slate-800 transition-colors flex items-center justify-center">
+                    <i class="fas fa-bell text-xl"></i>
                     <span x-show="unreadCount > 0" x-cloak style="display: none;" class="absolute top-2 right-2.5 w-2 h-2 rounded-full bg-red-500 ring-2 ring-white"></span>
                 </button>
 
-                <div x-show="open" x-transition.opacity.scale.95 style="display: none;" class="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden z-50">
-                    <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+                <div x-show="open" x-transition.opacity.scale.95 style="display: none;" class="absolute right-0 mt-3 w-80 bg-white rounded shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden z-50">
+                    <div class="p-3 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
                                                                         <h3 class="text-sm font-semibold tracking-tight text-slate-800">Notifications</h3>
                                                                         <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-600"><span x-text="unreadCount"></span> new</span>
                     </div>
@@ -426,11 +457,11 @@
                             @endforeach
                             <form action="{{ route('notifications.markAllRead') }}" method="POST" class="p-2 border-t border-slate-100 text-center">
                                 @csrf
-                                                                                                <button type="submit" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 p-2">Mark all as read</button>
+                                <button type="submit" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 p-2">Mark all as read</button>
                             </form>
                         @else
                             <div class="p-8 text-center">
-                                <i class="fas fa-bell-slash text-slate-300 text-2xl mb-3"></i>
+                                <i class="fas fa-bell-slash text-slate-300 text-xl mb-3"></i>
                                                                                                 <p class="text-sm text-slate-500 font-medium tracking-tight">You're caught up!</p>
                             </div>
                         @endif
@@ -439,11 +470,18 @@
             </div>
 
             <!-- Profile Info -->
-            <button type="button" onclick="window.location='{{ route('profile.edit') }}'" class="flex items-center gap-2 rounded-md bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-900 hover:bg-neutral-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-colors" aria-haspopup="true">
+            <button 
+                type="button" 
+                onclick="window.location='{{ route('profile.edit') }}'"
+                class="group flex items-center gap-3 border-none bg-transparent 
+                text-sm font-semibold text-gray-600 
+                hover:scale-[1.02] transition-all duration-200 ease-in-out"
+            >
+                <!-- Icon -->
+                <i class="fas fa-user-circle text-2xl opacity-90 group-hover:rotate-6 transition"></i>
+
+                <!-- Username -->
                 <span>{{ $authUser->username ?? 'Profile' }}</span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" class="size-4" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
-                </svg>
             </button>
         </div>
     </header>
@@ -467,10 +505,10 @@
 
 <style>
     /* Custom Scrollbar for sleek aesthetic */
-    .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar { width: 7px; height: 5px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.3); border-radius: 10px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.5); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #4f46e5; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
     [x-cloak] { display: none !important; }
 </style>
 
@@ -567,4 +605,5 @@
 @yield('scripts')
 @stack('scripts')
 </body>
+    
 </html>

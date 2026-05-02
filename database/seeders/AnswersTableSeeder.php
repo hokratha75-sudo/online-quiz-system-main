@@ -4,12 +4,15 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+
 class AnswersTableSeeder extends Seeder
 {
     public function run()
     {
-        $q1 = DB::table('questions')->where('question_text', 'What is 2 + 2?')->first();
-        $q2 = DB::table('questions')->where('question_text', 'What is 5 x 3?')->first();
+        $questionColumn = Schema::hasColumn('questions', 'question_text') ? 'question_text' : 'content';
+        $q1 = DB::table('questions')->where($questionColumn, 'What is 2 + 2?')->first();
+        $q2 = DB::table('questions')->where($questionColumn, 'What is 5 x 3?')->first();
 
         DB::table('answers')->insert([
             // Question 1: 2+2
