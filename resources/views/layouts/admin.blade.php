@@ -495,7 +495,7 @@
 
     <!-- Main Content Footer Copyright -->
     <footer class="w-full bg-white border-t border-slate-200 h-10 mt-auto flex items-center shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] sticky bottom-0 z-40">
-        <div class="max-w-[1400px] mx-auto w-full px-3 md:px-10 flex items-center">
+        <div class="max-w-[1400px] mx-auto w-full px-3 md:px-10 flex items-center justify-center">
             <p class="text-[10px] font-medium text-slate-500 translate-y-[8px]">
                 <strong>Copyright</strong> &copy; {{ date('Y') }} <strong><a href="#" class="text-indigo-600 hover:text-indigo-800 transition-colors">{{ \App\Models\Setting::get('site_name', 'Online Quiz System') }}</a></strong>. All rights reserved.
             </p>

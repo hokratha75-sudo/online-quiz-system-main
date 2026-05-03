@@ -14,33 +14,44 @@
 
     <div class="grid grid-cols-12 gap-6">
         <!-- Left Sidebar -->
-        <div class="col-span-12 lg:col-span-3 space-y-6">
+        <div class="col-span-12 lg:col-span-3 space-y-5">
             <!-- Draggable Events Card -->
-            <div class="bg-white rounded shadow-sm border border-slate-200">
-                <div class="p-3 border-b border-slate-200">
-                    <h3 class="text-md font-normal">Draggable Events</h3>
-                </div>
-                <div class="p-3" id="external-events">
-                    <div class="fc-event bg-red-600 text-white border-0 mb-2 p-2 rounded cursor-pointer text-sm font-semibold shadow-sm" data-class="bg-red-600">Final Exam</div>
-                    <div class="fc-event bg-orange-500 text-white border-0 mb-2 p-2 rounded cursor-pointer text-sm font-semibold shadow-sm" data-class="bg-orange-500">Quiz Deadline</div>
-                    <div class="fc-event bg-yellow-500 text-white border-0 mb-2 p-2 rounded cursor-pointer text-sm font-semibold shadow-sm" data-class="bg-yellow-500">Midterm Quiz</div>
-                    <div class="fc-event bg-blue-500 text-white border-0 mb-2 p-2 rounded cursor-pointer text-sm font-semibold shadow-sm" data-class="bg-blue-500">Class Assessment</div>
-                    <div class="fc-event bg-emerald-500 text-white border-0 mb-2 p-2 rounded cursor-pointer text-sm font-semibold shadow-sm" data-class="bg-emerald-500">Practice Test</div>
-                    <div class="fc-event bg-indigo-600 text-white border-0 mb-2 p-2 rounded cursor-pointer text-sm font-semibold shadow-sm" data-class="bg-indigo-600">Result Release</div>
-                    <div class="fc-event bg-teal-500 text-white border-0 mb-2 p-2 rounded cursor-pointer text-sm font-semibold shadow-sm" data-class="bg-teal-500">Student Review</div>
-                    <div class="mt-4 flex items-center">
-                        <input type="checkbox" id="drop-remove" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                        <label for="drop-remove" class="ml-2 text-sm text-slate-600">remove after drop</label>
-                    </div>
-                </div>
-            </div>
+            <div class="bg-white rounded shadow-sm border border-slate-200 w-full h-[71vh] flex flex-col">
 
+    <!-- Header -->
+    <div class="p-3 border-b border-slate-200 sticky top-0 bg-slate-50 z-10">
+        <h3 class="text-md font-normal">Draggable Events</h3>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="p-3 flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar" id="external-events">
+        <div class="fc-event bg-red-600 text-white mb-2 p-2 rounded cursor-pointer text-sm font-semibold shadow-sm" data-class="bg-red-600">Final Exam</div>
+        <div class="fc-event bg-orange-500 text-white mb-2 p-2 rounded cursor-pointer text-sm font-semibold shadow-sm" data-class="bg-orange-500">Quiz Deadline</div>
+        <div class="fc-event bg-yellow-500 text-white mb-2 p-2 rounded cursor-pointer text-sm font-semibold shadow-sm" data-class="bg-yellow-500">Midterm Quiz</div>
+        <div class="fc-event bg-blue-500 text-white mb-2 p-2 rounded cursor-pointer text-sm font-semibold shadow-sm" data-class="bg-blue-500">Class Assessment</div>
+        <div class="fc-event bg-emerald-500 text-white mb-2 p-2 rounded cursor-pointer text-sm font-semibold shadow-sm" data-class="bg-emerald-500">Practice Test</div>
+        <div class="fc-event bg-indigo-600 text-white mb-2 p-2 rounded cursor-pointer text-sm font-semibold shadow-sm" data-class="bg-indigo-600">Result Release</div>
+        <div class="fc-event bg-teal-500 text-white mb-2 p-2 rounded cursor-pointer text-sm font-semibold shadow-sm" data-class="bg-teal-500">Student Review</div>
+    </div>
+
+    <!-- Footer -->
+    <div class="p-3 border-t border-slate-200 bg-slate-50">
+        <div class="flex items-center">
+            <input type="checkbox" id="drop-remove"
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+            <label for="drop-remove" class="ml-2 text-sm text-slate-600">
+                remove after drop
+            </label>
+        </div>
+    </div>
+
+</div>
             <!-- Create Event Card -->
-            <div class="bg-white rounded shadow-sm border border-slate-200">
-                <div class="p-3 border-b border-slate-200">
+            <div class="bg-white rounded shadow-sm border border-slate-200 p-3 w-full h-[26%]">
+                <div class=" border-b border-slate-200">
                     <h3 class="text-md font-normal">Create Event</h3>
                 </div>
-                <div class="p-3">
+                <div class="py-3">
                     <div class="flex flex-wrap gap-2 mb-4" id="color-chooser">
                         <div class="w-8 h-8 rounded bg-blue-500 cursor-pointer shadow-sm hover:opacity-80 transition-opacity" data-color="#3b82f6"></div>
                         <div class="w-8 h-8 rounded bg-yellow-500 cursor-pointer shadow-sm hover:opacity-80 transition-opacity" data-color="#f59e0b"></div>
@@ -48,9 +59,23 @@
                         <div class="w-8 h-8 rounded bg-red-500 cursor-pointer shadow-sm hover:opacity-80 transition-opacity" data-color="#ef4444"></div>
                         <div class="w-8 h-8 rounded bg-slate-500 cursor-pointer shadow-sm hover:opacity-80 transition-opacity" data-color="#64748b"></div>
                     </div>
-                    <div class="flex">
-                        <input type="text" id="new-event" class="flex-grow border border-slate-300 rounded-l px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Event Title">
-                        <button type="button" id="add-new-event" class="bg-blue-500 text-white px-4 py-2 rounded-r text-sm font-semibold hover:bg-blue-600 transition-colors">Add</button>
+                    <div class="flex w-full overflow-hidden h-full">
+    
+                        <input 
+                            type="text"
+                            id="new-event"
+                            class="flex-1 px-2 py-2 text-sm outline-none rounded-l border border-gray-100"
+                            placeholder="Event Title"
+                        >
+
+                        <button 
+                            type="button"
+                            id="add-new-event"
+                            class="px-4 py-2 text-sm font-semibold text-white bg-blue-500 hover:bg-blue-600 transition border-none rounded-r"
+                        >
+                            Add
+                        </button>
+
                     </div>
                 </div>
             </div>
@@ -71,31 +96,13 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/bootstrap5@5.11.3/main.global.min.js"></script>
 
-    /* ── Events ── */
-    .fc-daygrid-event {
-        border-radius: 3px !important;
-        margin-top: 2px !important;
-        margin-bottom: 0px !important;
-        padding: 1px 4px !important;
-        font-size: 12px !important;
-    }
-
-    /* All Day Events (bars) */
-    .fc-v-event {
-        border: 1px solid rgba(0,0,0,.05) !important;
-    }
-
-    /* Spacing between text and box edge */
-    .fc-event-main {
-        padding-left: 4px !important;
-        padding-right: 4px !important;
-    }
-
-    /* ── Sidebar Draggables ── */
-    #external-events .fc-event {
-        cursor: move;
-        margin: 5px 0;
-    }
+<style>
+    /* Custom Scrollbar for sleek aesthetic */
+    .custom-scrollbar::-webkit-scrollbar { width: 7px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #4f46e5; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
+    [x-cloak] { display: none !important; }
 </style>
 
 <script>

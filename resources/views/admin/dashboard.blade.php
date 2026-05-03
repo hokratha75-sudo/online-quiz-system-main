@@ -230,7 +230,7 @@
         
         <!-- Teacher Management Node -->
         <article class="bg-white rounded-[32px] p-10 border border-slate-50 shadow-sm overflow-hidden mb-12">
-                                                                        <h3 class="text-sm font-bold text-slate-900 mb-8" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Recent Student Submissions</h3>
+            <h3 class="text-sm font-bold text-slate-900 mb-8" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Recent Student Submissions</h3>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse whitespace-nowrap">
                     <thead>
