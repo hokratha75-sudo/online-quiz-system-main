@@ -3,290 +3,293 @@
 @section('topbar-title', 'User Management')
 
 @section('content')
-<div class="max-w-[1400px] mx-auto p-6 md:p-10 font-inter text-slate-900 bg-slate-50/30 min-h-screen">
+<div class="max-w-[1600px] mx-auto p-5 md:p-8 font-sans text-slate-800 bg-gradient-to-br from-slate-50 via-white to-slate-100/50 min-h-screen">
 
+    {{-- Success Toast --}}
     @if(session('success'))
-    <!-- Toast Notification -->
-    <div id="toast-success" class="fixed top-6 right-6 z-[100] flex items-center w-full max-w-sm p-4 text-slate-600 bg-white rounded-[16px] shadow-2xl shadow-emerald-500/10 border border-emerald-100 transform transition-all duration-300 translate-y-0 opacity-100" role="alert">
-        <div class="inline-flex items-center justify-center shrink-0 w-10 h-10 text-emerald-500 bg-emerald-50 rounded-xl border border-emerald-100">
-            <i class="fas fa-check text-lg"></i>
+    <div id="toast-success" class="fixed top-6 right-6 z-[100] flex items-center w-full max-w-sm p-3.5 bg-white rounded-2xl shadow-2xl shadow-emerald-500/20 border border-emerald-100 transform transition-all duration-300 translate-y-0 opacity-100 backdrop-blur-sm" role="alert">
+        <div class="inline-flex items-center justify-center shrink-0 w-9 h-9 text-emerald-600 bg-emerald-50 rounded-xl">
+            <i class="fas fa-check-circle text-base"></i>
         </div>
-        <div class="ms-4 text-sm font-bold tracking-wide">{{ session('success') }}</div>
-        <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white text-slate-400 hover:text-rose-500 rounded-lg p-1.5 hover:bg-rose-50 inline-flex items-center justify-center h-8 w-8 transition-colors" onclick="this.closest('#toast-success').remove()" aria-label="Close">
-            <i class="fas fa-xmark text-lg"></i>
+        <div class="ml-3 text-sm font-semibold tracking-tight text-slate-700">{{ session('success') }}</div>
+        <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-white text-slate-400 hover:text-rose-500 rounded-lg p-1.5 hover:bg-rose-50 transition-colors" onclick="this.closest('#toast-success').remove()">
+            <i class="fas fa-times text-sm"></i>
         </button>
     </div>
     <script>
         setTimeout(() => {
-            const toast = document.getElementById('toast-success');
-            if (toast) {
-                toast.classList.remove('translate-y-0', 'opacity-100');
-                toast.classList.add('-translate-y-4', 'opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }
-        }, 4000);
+            let toast = document.getElementById('toast-success');
+            if(toast) toast.remove();
+        }, 4500);
     </script>
     @endif
 
-    <!-- Top Actions & Filters -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-        <!-- Role Filter Tabs -->
-        <div class="flex flex-wrap items-center gap-3">
+    {{-- Header: Tabs + Create Button --}}
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5 mb-8">
+        <div class="flex flex-wrap gap-2.5">
             <a href="{{ route('admin.users.index', ['search' => $search]) }}" 
-               class="no-underline px-5 py-2.5 rounded-[16px] text-[11px] font-bold uppercase tracking-widest transition-all {{ empty($roleName) ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20 border border-indigo-600' : 'bg-white text-slate-500 hover:bg-slate-50 border border-slate-200' }}">
-                All Users <span class="ml-2 px-2 py-1 rounded-lg text-[10px] {{ empty($roleName) ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500' }}">{{ $counts['total'] ?? 0 }}</span>
+               class="no-underline group relative px-3 py-2.5 rounded-full text-[11px] font-black uppercase tracking-wider transition-all duration-300 {{ empty($roleName) ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30' : 'bg-white/70 backdrop-blur-sm text-slate-600 hover:bg-white hover:shadow-md border border-slate-200/80' }}">
+                <span>All Users</span>
+                <span class="ml-2 px-2 py-1 rounded-full text-[10px] {{ empty($roleName) ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600' }}">{{ $counts['total'] ?? 0 }}</span>
             </a>
             <a href="{{ route('admin.users.index', ['role' => 'admin', 'search' => $search]) }}" 
-               class="no-underline px-5 py-2.5 rounded-[16px] text-[11px] font-bold uppercase tracking-widest transition-all {{ $roleName === 'admin' ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20 border border-rose-500' : 'bg-white text-slate-500 hover:bg-slate-50 border border-slate-200' }}">
-                Admins <span class="ml-2 px-2 py-1 rounded-lg text-[10px] {{ $roleName === 'admin' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500' }}">{{ $counts['admin'] ?? 0 }}</span>
+               class="no-underline group relative px-3 py-2.5 rounded-full text-[11px] font-black uppercase tracking-wider transition-all duration-300 {{ $roleName === 'admin' ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/30' : 'bg-white/70 backdrop-blur-sm text-slate-600 hover:bg-white hover:shadow-md border border-slate-200/80' }}">
+                Admins <span class="ml-2 px-2 py-1 rounded-full text-[10px] {{ $roleName === 'admin' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600' }}">{{ $counts['admin'] ?? 0 }}</span>
             </a>
             <a href="{{ route('admin.users.index', ['role' => 'teacher', 'search' => $search]) }}" 
-               class="no-underline px-5 py-2.5 rounded-[16px] text-[11px] font-bold uppercase tracking-widest transition-all {{ $roleName === 'teacher' ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20 border border-blue-500' : 'bg-white text-slate-500 hover:bg-slate-50 border border-slate-200' }}">
-                Teachers <span class="ml-2 px-2 py-1 rounded-lg text-[10px] {{ $roleName === 'teacher' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500' }}">{{ $counts['teacher'] ?? 0 }}</span>
+               class="no-underline group relative px-3 py-2.5 rounded-full text-[11px] font-black uppercase tracking-wider transition-all duration-300 {{ $roleName === 'teacher' ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/30' : 'bg-white/70 backdrop-blur-sm text-slate-600 hover:bg-white hover:shadow-md border border-slate-200/80' }}">
+                Teachers <span class="ml-2 px-2 py-1 rounded-full text-[10px] {{ $roleName === 'teacher' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600' }}">{{ $counts['teacher'] ?? 0 }}</span>
             </a>
             <a href="{{ route('admin.users.index', ['role' => 'student', 'search' => $search]) }}" 
-               class="no-underline px-5 py-2.5 rounded-[16px] text-[11px] font-bold uppercase tracking-widest transition-all {{ $roleName === 'student' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 border border-emerald-500' : 'bg-white text-slate-500 hover:bg-slate-50 border border-slate-200' }}">
-                Students <span class="ml-2 px-2 py-1 rounded-lg text-[10px] {{ $roleName === 'student' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500' }}">{{ $counts['student'] ?? 0 }}</span>
+               class="no-underline group relative px-3 py-2.5 rounded-full text-[11px] font-black uppercase tracking-wider transition-all duration-300 {{ $roleName === 'student' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30' : 'bg-white/70 backdrop-blur-sm text-slate-600 hover:bg-white hover:shadow-md border border-slate-200/80' }}">
+                Students <span class="ml-2 px-2 py-1 rounded-full text-[10px] {{ $roleName === 'student' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600' }}">{{ $counts['student'] ?? 0 }}</span>
             </a>
         </div>
         
-        <!-- Create Button -->
-        <button type="button" data-bs-toggle="modal" data-bs-target="#createUserModal" class="shrink-0 bg-indigo-600 hover:bg-indigo-700 text-white px-7 py-3 rounded-[16px] text-[11px] font-bold transition-all flex items-center gap-3 shadow-xl shadow-indigo-600/20 active:scale-[0.98] uppercase tracking-widest">
-            <i class="fas fa-plus"></i> Create User
+        <button type="button" data-bs-toggle="modal" data-bs-target="#createUserModal" class="group inline-flex items-center gap-2 border-none bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white px-6 py-2.5 rounded-lg text-[11px] font-black transition-all duration-200 shadow-lg shadow-indigo-500/20 active:scale-95 uppercase tracking-wider">
+            <i class="fas fa-plus-circle text-sm group-hover:rotate-90 transition-transform duration-300"></i>
+            Create User
         </button>
     </div>
 
-    <!-- Data Table Card (Standard Clean Style) -->
-    <div class="card shadow-sm border-0 rounded-[24px]">
-        <div class="card-header bg-white border-bottom-0 pt-4 pb-3 flex items-center justify-between">
+    {{-- Main Card --}}
+    <div class="bg-white/70 backdrop-blur-sm rounded-xl shadow-xl border border-white/50 overflow-hidden transition-all duration-300">
+        {{-- Table Header with Search --}}
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-3 border-b border-slate-100">
             <div class="flex items-center gap-3">
-                <h3 class="text-sm font-bold text-slate-900">Member Directory</h3>
-                <span class="px-2.5 py-0.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-[10px] font-black uppercase tabular-nums tracking-widest">{{ $users->total() }} total</span>
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white flex items-center justify-center shadow-md">
+                    <i class="fas fa-users text-xs"></i>
+                </div>
+                <h3 class="text-sm font-black text-slate-800 tracking-tight mt-2">Member Directory</h3>
+                <span class="px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-600 text-[10px] font-black border border-indigo-100">{{ $users->total() }} total</span>
             </div>
-            <!-- Bootstrap Search Input Group -->
-            <form action="{{ route('admin.users.index') }}" method="GET" class="w-full sm:w-80">
+            
+            <form action="{{ route('admin.users.index') }}" method="GET" id="searchForm" class="w-full sm:w-80">
                 @if($roleName)
                     <input type="hidden" name="role" value="{{ $roleName }}">
                 @endif
-                <div class="input-group shadow-sm rounded-[20px] overflow-hidden">
-                    <span class="input-group-text bg-white border-end-0 text-slate-400 ps-4">
-                        <i class="fas fa-search"></i>
-                    </span>
-                    <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="SEARCH COMMUNITY..." 
-                           class="form-control border-start-0 text-[10px] font-bold text-slate-700 placeholder-slate-300 uppercase tracking-widest py-3 px-0 shadow-none focus:ring-0">
+                <div class="relative group">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs group-focus-within:text-indigo-500 transition-colors"></i>
+                    <input type="text" name="search" id="searchInput" value="{{ $search ?? '' }}" 
+                           class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium placeholder:text-slate-300 focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none" 
+                           placeholder="Search by name or email..." autocomplete="off">
                 </div>
             </form>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="table table-hover table-borderless align-middle mb-0">
-                <thead class="table-light text-slate-500 text-xs uppercase tracking-widest">
-                    <tr>
-                        <th class="ps-4 py-3" style="width: 60px;">#</th>
-                        <th class="py-3">User Identity</th>
-                        <th class="py-3">Contact Email</th>
-                        <th class="py-3" style="width: 150px;">Role Type</th>
-                        <th class="py-3" style="width: 180px;">Registration Date</th>
-                        <th class="pe-4 py-3 text-center" style="width: 120px;">Management</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($users as $index => $user)
-                    <tr>
-                        <td>
-                            <span class="font-bold text-slate-400">{{ $users->firstItem() + $index }}.</span>
-                        </td>
-                        <td>
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-[10px] font-black border border-indigo-500/30 uppercase">
-                                    @if($user->profile_photo)
-                                        <img src="{{ asset('storage/' . $user->profile_photo) }}" alt="Avatar" class="w-full h-full object-cover rounded-lg">
-                                    @else
-                                        {{ substr($user->username ?? 'U', 0, 1) }}
+        {{-- Scrollable Table Body --}}
+        <div class="overflow-x-auto custom-scrollbar">
+            <div class="max-h-[520px] overflow-y-auto">
+                <table class="min-w-full divide-y divide-slate-100">
+                    <thead class="bg-slate-100/80 sticky top-0 z-10 shadow-sm">
+                        <tr>
+                            <th class="pl-6 pr-3 py-3 text-left text-[10px] font-black uppercase tracking-wider text-slate-400">#</th>
+                            <th class="px-3 py-3 text-left text-[10px] font-black uppercase tracking-wider text-slate-400">User Identity</th>
+                            <th class="px-3 py-3 text-left text-[10px] font-black uppercase tracking-wider text-slate-400">Contact</th>
+                            <th class="px-3 py-3 text-left text-[10px] font-black uppercase tracking-wider text-slate-400">Role</th>
+                            <th class="px-3 py-3 text-left text-[10px] font-black uppercase tracking-wider text-slate-400">Joined</th>
+                            <th class="pr-6 py-3 text-center text-[10px] font-black uppercase tracking-wider text-slate-400">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-50">
+                        @forelse($users as $index => $user)
+                        <tr class="hover:bg-gradient-to-r hover:from-indigo-50/30 hover:to-transparent transition-all duration-200 group">
+                            <td class="pl-6 pr-3 py-3">
+                                <span class="text-xs font-bold text-slate-300">{{ $users->firstItem() + $index }}</span>
+                            </td>
+                            <td class="px-3 py-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white flex items-center justify-center text-sm font-black shadow-md shadow-indigo-200">
+                                        @if($user->profile_photo)
+                                            <img src="{{ asset('storage/' . $user->profile_photo) }}" class="w-full h-full object-cover rounded-xl">
+                                        @else
+                                            {{ substr($user->username ?? 'U', 0, 1) }}
+                                        @endif
+                                    </div>
+                                    <span class="text-sm font-bold text-slate-800">{{ $user->username }}</span>
+                                </div>
+                            </td>
+                            <td class="px-3 py-3">
+                                <span class="text-xs text-slate-500 font-mono">{{ $user->email ?? '--' }}</span>
+                            </td>
+                            <td class="px-3 py-3">
+                                @php $r = strtolower($user->role->role_name ?? 'student'); @endphp
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm
+                                    {{ $r == 'admin' ? 'bg-rose-100 text-rose-700 border border-rose-200' : ($r == 'teacher' ? 'bg-sky-100 text-sky-700 border border-sky-200' : 'bg-emerald-100 text-emerald-700 border border-emerald-200') }}">
+                                    <i class="fas {{ $r == 'admin' ? 'fa-shield-alt' : ($r == 'teacher' ? 'fa-chalkboard-user' : 'fa-graduation-cap') }} mr-1.5 text-[9px]"></i>
+                                    {{ strtoupper($r) }}
+                                </span>
+                            </td>
+                            <td class="px-3 py-3">
+                                <span class="text-xs font-semibold text-slate-500">{{ optional($user->created_at)->format('M d, Y') }}</span>
+                            </td>
+                            <td class="pr-6 py-3 text-center">
+                                <div class="flex items-center justify-center gap-2">
+                                    <a href="{{ route('admin.users.edit', $user->id) }}" class="w-8 h-8 flex items-center justify-center rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-600 hover:bg-indigo-100 hover:text-indigo-700 transition-all" title="Edit">
+                                        <i class="fas fa-pen text-xs"></i>
+                                    </a>
+                                    @if($user->id !== auth()->id())
+                                    <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('⚠️ Permanently delete this user?')">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="w-8 h-8 flex items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 transition-all" title="Delete">
+                                            <i class="fas fa-trash-alt text-xs"></i>
+                                        </button>
+                                    </form>
                                     @endif
                                 </div>
-                                <span class="text-[13px] font-bold text-slate-900">{{ $user->username }}</span>
-                            </div>
-                        </td>
-                        <td>
-                            <span class="text-[12px] font-medium text-slate-500">{{ $user->email ?? '--' }}</span>
-                        </td>
-                        <td>
-                            @php
-                                $roleName = strtolower($user->role->role_name ?? 'student');
-                            @endphp
-                            @if($roleName == 'admin')
-                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2 text-[10px] tracking-widest">{{ strtoupper($roleName) }}</span>
-                            @elseif(in_array($roleName, ['teacher', 'instructor']))
-                                <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 text-[10px] tracking-widest">{{ strtoupper($roleName) }}</span>
-                            @else
-                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2 text-[10px] tracking-widest">{{ strtoupper($roleName) }}</span>
-                            @endif
-                        </td>
-                        <td>
-                            <span class="text-[12px] font-bold text-slate-600">{{ optional($user->created_at)->format('M d, Y') }}</span>
-                        </td>
-                        <td class="pe-4 text-center">
-                            <div class="flex items-center justify-center gap-2">
-                                <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-outline-secondary rounded-xl" data-bs-toggle="tooltip" title="Edit">
-                                    <i class="fas fa-pen-to-square"></i>
-                                </a>
-                                @if($user->id !== auth()->id())
-                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline" onsubmit="return confirm('Permanently remove this member?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-xl ms-1" data-bs-toggle="tooltip" title="Delete">
-                                        <i class="fas fa-trash-can"></i>
-                                    </button>
-                                </form>
-                                @endif
-                            </div>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6" class="py-16 text-center text-slate-400 font-medium uppercase tracking-widest text-xs">No community members found.</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-
-        <div class="px-6 py-4 border-t border-slate-200 flex items-center justify-between">
-            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
-                MEMBERS {{ $users->firstItem() ?? 0 }} - {{ $users->lastItem() ?? 0 }} OF {{ $users->total() }}
-            </p>
-            <div class="pagination-clean">
-                {{ $users->withQueryString()->links('pagination::bootstrap-5') }}
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="6" class="px-6 py-16 text-center">
+                                <div class="flex flex-col items-center gap-3">
+                                    <div class="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-300">
+                                        <i class="fas fa-user-slash text-2xl"></i>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">No members found</span>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
+
+        {{-- Pagination --}}
+        @if($users->hasPages())
+        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/40" id="paginationContainer">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                    Showing {{ $users->firstItem() ?? 0 }} to {{ $users->lastItem() ?? 0 }} of {{ $users->total() }} results
+                </div>
+                <div class="flex gap-1.5">
+                    @if ($users->onFirstPage())
+                        <span class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-300 text-xs font-bold cursor-not-allowed shadow-sm"><i class="fas fa-chevron-left mr-1 text-[9px]"></i> Prev</span>
+                    @else
+                        <a href="{{ $users->previousPageUrl() }}" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 text-xs font-bold transition-all shadow-sm"><i class="fas fa-chevron-left mr-1 text-[9px]"></i> Prev</a>
+                    @endif
+
+                    @foreach ($users->getUrlRange(1, $users->lastPage()) as $page => $url)
+                        @if ($page == $users->currentPage())
+                            <span class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-bold shadow-md shadow-indigo-200">{{ $page }}</span>
+                        @else
+                            <a href="{{ $url }}" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 text-xs font-bold transition-all">{{ $page }}</a>
+                        @endif
+                    @endforeach
+
+                    @if ($users->hasMorePages())
+                        <a href="{{ $users->nextPageUrl() }}" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 text-xs font-bold transition-all shadow-sm">Next <i class="fas fa-chevron-right ml-1 text-[9px]"></i></a>
+                    @else
+                        <span class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-300 text-xs font-bold cursor-not-allowed shadow-sm">Next <i class="fas fa-chevron-right ml-1 text-[9px]"></i></span>
+                    @endif
+                </div>
+            </div>
+        </div>
+        @else
+            @if($users->total() > 0)
+            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/40">
+                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider text-center">
+                    Total {{ $users->total() }} member(s)
+                </div>
+            </div>
+            @endif
+        @endif
     </div>
 </div>
 
-
-<!-- Create User Modal -->
+{{-- ============================================================ --}}
+{{-- RESIZABLE + DRAGGABLE MODAL (WITH modal-content FIX)        --}}
+{{-- ============================================================ --}}
 <div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" id="createUserModalDialog" style="max-width: 750px;">
-        <div class="modal-content border-0 shadow-2xl bg-white rounded-2xl overflow-hidden">
-            <div class="modal-header px-8 py-6 flex items-center justify-between border-b border-slate-100 bg-slate-50/50" id="createUserModalHeader">
-                <h5 class="text-xl font-bold text-slate-900 tracking-tight" id="createUserModalLabel"><i class="fas fa-user-plus text-indigo-200 mr-2"></i> Create a new user</h5>
-                <button type="button" class="text-slate-400 hover:text-slate-600 transition-colors" data-bs-dismiss="modal">
-                    <i class="fas fa-xmark text-xl"></i>
+    <div class="modal-dialog modal-dialog-centered" id="createUserModalDialog" style="max-width: 880px;">
+        <div class="modal-content border-0 shadow-2xl overflow-hidden bg-white/95 backdrop-blur-md">
+            {{-- Modal Header with drag handle --}}
+            <div class="relative px-7 py-3 bg-gradient-to-r from-[#5f60ef] to-[#9a4ce7] border-b border-slate-100 flex items-center justify-between cursor-grab active:cursor-grabbing" id="createUserModalHeader">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-indigo-100 text-indigo-600 flex items-center justify-center rounded-full">
+                        <i class="fas fa-user-plus text-sm"></i>
+                    </div>
+                    <h5 class="text-lg font-black text-white tracking-tight mt-2" id="createUserModalLabel">New Member Registration</h5>
+                </div>
+                <button type="button" class="group relative w-10 h-10 rounded-full bg-blue-50 border border-pink-200 text-pink-400 hover:bg-blue-100 hover:text-pink-500 hover:scale-110 active:scale-95 transition-all duration-200 ease-out focus:outline-none shadow-sm hover:shadow-pink-200/50" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times text-sm group-hover:rotate-90 transition-transform duration-200"></i>
                 </button>
             </div>
-            <div class="modal-body p-8">
-                <form id="createUserForm" action="{{ route('admin.users.store') }}" method="POST" enctype="multipart/form-data">
+
+            <div class="modal-body p-0">
+                <form id="createUserForm" action="{{ route('admin.users.store') }}" method="POST" enctype="multipart/form-data" class="divide-y divide-slate-100">
                     @csrf
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        
-                        <!-- Column 1: Authentication & Access -->
-                        <div class="space-y-6">
-                            <h6 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-2">Authentication & Access</h6>
-                            
-                            <div class="space-y-4">
+                    <div class="p-7 grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {{-- LEFT COLUMN: Authentication --}}
+                        <div class="space-y-5">
+                            <div class="flex items-center gap-2 border-b border-slate-100 pb-2">
+                                <i class="fas fa-key text-indigo-400 text-xs"></i>
+                                <h6 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Access Credentials</h6>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Username <span class="text-rose-400">*</span></label>
+                                <input type="text" name="username" value="{{ old('username') }}" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Email <span class="text-rose-400">*</span></label>
+                                <input type="email" name="email" value="{{ old('email') }}" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 mb-1.5">System Role</label>
+                                <select name="role_id" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none cursor-pointer">
+                                    @foreach($roles as $role)
+                                        <option value="{{ $role->id }}">{{ ucfirst($role->role_name) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-2">Username</label>
-                                    <input type="text" name="username" value="{{ old('username') }}" required
-                                           class="form-control px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-indigo-600 transition-all shadow-none"
-                                           placeholder="Enter username">
+                                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Password <span class="text-rose-400">*</span></label>
+                                    <input type="password" name="password" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-2">Email</label>
-                                    <input type="email" name="email" value="{{ old('email') }}" required
-                                           class="form-control px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-indigo-600 transition-all shadow-none"
-                                           placeholder="user@example.com">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-2">System Role</label>
-                                    <select name="role_id" class="form-select px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-indigo-600 transition-all shadow-none cursor-pointer">
-                                        @foreach($roles as $role)
-                                            <option value="{{ $role->id }}">{{ ucfirst($role->role_name) }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-600 mb-2">Password</label>
-                                        <input type="password" name="password" required
-                                               class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-indigo-600 transition-all outline-none"
-                                               placeholder="••••••••">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-600 mb-2">Confirm</label>
-                                        <input type="password" name="password_confirmation" required
-                                               class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-indigo-600 transition-all outline-none"
-                                               placeholder="••••••••">
-                                    </div>
+                                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Confirm</label>
+                                    <input type="password" name="password_confirmation" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none">
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Column 2: Personal Information -->
-                        <div class="space-y-6">
-                            <h6 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-2">Personal Profile</h6>
-                            
-                            <div class="space-y-4">
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-600 mb-2">First Name</label>
-                                        <input type="text" name="first_name" value="{{ old('first_name') }}" required
-                                               class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-indigo-600 transition-all outline-none"
-                                               placeholder="Hok">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-600 mb-2">Last Name</label>
-                                        <input type="text" name="last_name" value="{{ old('last_name') }}" required
-                                               class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-indigo-600 transition-all outline-none"
-                                               placeholder="Ratha">
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-600 mb-2">Phone</label>
-                                        <input type="text" name="phone" value="{{ old('phone') }}"
-                                               class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-indigo-600 transition-all outline-none"
-                                               placeholder="+855 00 000">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-600 mb-2">Date of Birth</label>
-                                        <input type="date" name="birthday" value="{{ old('birthday') }}"
-                                               class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-indigo-600 transition-all outline-none">
+                        {{-- RIGHT COLUMN: Personal Info + Avatar --}}
+                        <div class="space-y-5">
+                            <div class="flex items-center gap-2 border-b border-slate-100 pb-2">
+                                <i class="fas fa-id-card text-indigo-400 text-xs"></i>
+                                <h6 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Personal Profile</h6>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">First name</label><input type="text" name="first_name" value="{{ old('first_name') }}" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none"></div>
+                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">Last name</label><input type="text" name="last_name" value="{{ old('last_name') }}" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none"></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">Phone</label><input type="text" name="phone" value="{{ old('phone') }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none"></div>
+                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">Birthday</label><input type="date" name="birthday" value="{{ old('birthday') }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none"></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">Address</label><input type="text" name="address" value="{{ old('address') }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none"></div>
+                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">Sex</label><select name="sex" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none"><option>Male</option><option>Female</option></select></div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Profile Photo</label>
+                                <div class="relative group cursor-pointer">
+                                    <input type="file" name="profile_photo" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" id="photoInput">
+                                    <div class="w-full px-4 py-3 border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center gap-3 group-hover:border-indigo-400 group-hover:bg-indigo-50/30 transition-all bg-slate-50/30" id="photoPreviewArea">
+                                        <i class="fas fa-cloud-upload-alt text-slate-400 group-hover:text-indigo-500"></i>
+                                        <span class="text-xs font-medium text-slate-500" id="uploadLabel">Click to upload avatar</span>
                                     </div>
                                 </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-600 mb-2">Address</label>
-                                        <input type="text" name="address" value="{{ old('address') }}"
-                                               class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-indigo-600 transition-all outline-none"
-                                               placeholder="City, Country">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-600 mb-2">Sex</label>
-                                        <select name="sex" class="form-select px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:bg-white focus:border-indigo-600 transition-all shadow-none cursor-pointer">
-                                            <option value="Male">Male</option>
-                                            <option value="Female">Female</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-2">Upload photo</label>
-                                    <div class="relative group cursor-pointer">
-                                        <input type="file" name="profile_photo" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" id="photoInput">
-                                        <div class="w-full px-4 py-4 border-2 border-dashed border-slate-300 rounded-xl flex items-center justify-center gap-3 group-hover:border-indigo-600 transition-colors bg-slate-50/50" id="photoPreview">
-                                            <i class="fas fa-cloud-arrow-up text-xl text-slate-400 group-hover:text-indigo-600 transition-colors"></i>
-                                            <span class="text-xs font-medium text-slate-500" id="uploadLabel">Click to upload photo</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                <div id="imagePreview" class="mt-2 hidden"><img src="" class="w-10 h-10 rounded-lg object-cover shadow-sm"></div>
                             </div>
                         </div>
-
                     </div>
 
-                    <div class="mt-12">
-                        <button type="submit" class="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-sm transition-all shadow-xl shadow-indigo-600/20 active:scale-[0.99] uppercase tracking-widest">
-                            Create User
+                    <div class="px-7 py-3 bg-slate-100 flex justify-end">
+                        <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-indigo-500/20 active:scale-95 flex items-center justify-center gap-2">
+                            <i class="fas fa-save text-xs"></i> Create User
                         </button>
                     </div>
                 </form>
@@ -295,165 +298,222 @@
     </div>
 </div>
 
-<!-- Modal Script Initialization -->
-@if($errors->any())
+{{-- JavaScript: Live Search, Image Preview, Modal Drag/Resize --}}
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var myModal = new bootstrap.Modal(document.getElementById('createUserModal'), {
-            keyboard: false
-        });
-        myModal.show();
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Live AJAX Search ---
+        const searchInput = document.getElementById('searchInput');
+        const searchForm = document.getElementById('searchForm');
+        const tableBody = document.querySelector('table tbody');
+        const paginationWrap = document.getElementById('paginationContainer');
+        const searchEndpoint = '{{ route('admin.users.search') }}';
+        
+        if(searchInput && tableBody) {
+            if(searchForm) searchForm.addEventListener('submit', e => e.preventDefault());
+            let debounceTimer;
+            const fetchResults = (query) => {
+                let roleParam = '';
+                const roleHidden = searchForm ? searchForm.querySelector('input[name="role"]') : null;
+                if(roleHidden) roleParam = `&role=${encodeURIComponent(roleHidden.value)}`;
+                fetch(`${searchEndpoint}?q=${encodeURIComponent(query)}${roleParam}`, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(res => res.json())
+                .then(json => {
+                    const users = json.data || [];
+                    if(users.length === 0) {
+                        tableBody.innerHTML = `<tr><td colspan="6" class="px-6 py-16 text-center text-slate-400 text-xs font-bold">✨ No members match your search ✨</td></tr>`;
+                        if(paginationWrap) paginationWrap.style.display = 'none';
+                    } else {
+                        let rows = '';
+                        users.forEach((u, idx) => {
+                            let roleLower = (u.role || 'student').toLowerCase();
+                            let badge = roleLower === 'admin' ? `<span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase bg-rose-100 text-rose-700"><i class="fas fa-shield-alt mr-1"></i> ADMIN</span>` : 
+                                        (roleLower === 'teacher' ? `<span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase bg-sky-100 text-sky-700"><i class="fas fa-chalkboard-user mr-1"></i> TEACHER</span>` :
+                                        `<span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase bg-emerald-100 text-emerald-700"><i class="fas fa-graduation-cap mr-1"></i> STUDENT</span>`);
+                            rows += `<tr class="hover:bg-gradient-to-r hover:from-indigo-50/30 transition-all">
+                                        <td class="pl-6 pr-3 py-5"><span class="text-xs font-bold text-slate-300">${idx+1}</span></td>
+                                        <td class="px-3 py-5"><div class="flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm font-black shadow">${(u.username || 'U').charAt(0).toUpperCase()}</div><span class="text-sm font-bold text-slate-800">${escapeHtml(u.username)}</span></div></td>
+                                        <td class="px-3 py-5"><span class="text-xs text-slate-500">${escapeHtml(u.email || '--')}</span></td>
+                                        <td class="px-3 py-5">${badge}</td>
+                                        <td class="px-3 py-5"><span class="text-xs font-semibold text-slate-500">${u.created_at || ''}</span></td>
+                                        <td class="pr-6 py-5 text-center"><div class="flex justify-center gap-2"><a href="/admin/users/${u.id}/edit" class="w-8 h-8 flex items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-indigo-600"><i class="fas fa-pen-simple"></i></a></div></td>
+                                     </tr>`;
+                        });
+                        tableBody.innerHTML = rows;
+                        if(paginationWrap) paginationWrap.style.display = 'none';
+                    }
+                }).catch(err => console.warn(err));
+            };
+            searchInput.addEventListener('input', function() {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => fetchResults(this.value.trim()), 280);
+            });
+        }
+
+        // --- Image Preview in Modal ---
+        const photoInput = document.getElementById('photoInput');
+        const previewDiv = document.getElementById('imagePreview');
+        if(photoInput) {
+            photoInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if(file) {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        if(previewDiv) {
+                            previewDiv.innerHTML = `<img src="${ev.target.result}" class="w-10 h-10 rounded-lg object-cover shadow-sm border border-indigo-200">`;
+                            previewDiv.classList.remove('hidden');
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function escapeHtml(str) {
+            return String(str || '').replace(/[&<>]/g, function(m) {
+                if(m === '&') return '&amp;';
+                if(m === '<') return '&lt;';
+                if(m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // --- Show modal if validation errors exist ---
+        @if($errors->any())
+            new bootstrap.Modal(document.getElementById('createUserModal')).show();
+        @endif
     });
-</script>
-@endif
 
+    // --- DRAG & RESIZE MODAL (independent) ---
+    (function() {
+        const modal = document.getElementById('createUserModal');
+        const dialog = document.getElementById('createUserModalDialog');
+        const content = dialog ? dialog.querySelector('.modal-content') : null;
+        const header = document.getElementById('createUserModalHeader');
+        if(!dialog || !content || !header) return;
 
-<script>
-(function () {
-    const modal   = document.getElementById('createUserModal');
-    const dialog  = document.getElementById('createUserModalDialog');
-    const content = dialog ? dialog.querySelector('.modal-content') : null;
-    const header  = document.getElementById('createUserModalHeader');
-
-    if (!dialog || !content || !header) return;
-
-    // ── Add resize handles ──────────────────────────────────────────────
-    const edges = ['n','s','e','w','ne','nw','se','sw'];
-    const cursors = { n:'n-resize', s:'s-resize', e:'e-resize', w:'w-resize',
-                      ne:'ne-resize', nw:'nw-resize', se:'se-resize', sw:'sw-resize' };
-
-    edges.forEach(dir => {
-        const h = document.createElement('div');
-        h.dataset.dir = dir;
-        h.style.cssText = `position:absolute;z-index:10;`;
-        const isN = dir.includes('n'), isS = dir.includes('s'),
-              isE = dir.includes('e'), isW = dir.includes('w');
-        const corner = (isN||isS) && (isE||isW);
-        h.style.cursor = cursors[dir];
-        if (corner) {
-            h.style.width  = '14px';
-            h.style.height = '14px';
-            h.style.top    = isN ? '0' : 'auto';
-            h.style.bottom = isS ? '0' : 'auto';
-            h.style.left   = isW ? '0' : 'auto';
-            h.style.right  = isE ? '0' : 'auto';
-        } else {
-            if (dir === 'n' || dir === 's') {
-                h.style.left   = '14px';
-                h.style.right  = '14px';
-                h.style.height = '6px';
-                h.style.top    = dir === 'n' ? '0' : 'auto';
-                h.style.bottom = dir === 's' ? '0' : 'auto';
+        const edges = ['n','s','e','w','ne','nw','se','sw'];
+        const cursors = { n:'n-resize', s:'s-resize', e:'e-resize', w:'w-resize', ne:'ne-resize', nw:'nw-resize', se:'se-resize', sw:'sw-resize' };
+        
+        edges.forEach(dir => {
+            const grip = document.createElement('div');
+            grip.dataset.dir = dir;
+            grip.style.position = 'absolute';
+            grip.style.zIndex = '15';
+            let isN = dir.includes('n'), isS = dir.includes('s'), isE = dir.includes('e'), isW = dir.includes('w');
+            if((isN||isS) && (isE||isW)) {
+                grip.style.width = '12px'; grip.style.height = '12px';
+                if(isN) grip.style.top = '0';
+                if(isS) grip.style.bottom = '0';
+                if(isW) grip.style.left = '0';
+                if(isE) grip.style.right = '0';
+            } else if(isN || isS) {
+                grip.style.left = '14px'; grip.style.right = '14px'; grip.style.height = '5px';
+                if(isN) grip.style.top = '0';
+                else grip.style.bottom = '0';
             } else {
-                h.style.top    = '14px';
-                h.style.bottom = '14px';
-                h.style.width  = '6px';
-                h.style.left   = dir === 'w' ? '0' : 'auto';
-                h.style.right  = dir === 'e' ? '0' : 'auto';
+                grip.style.top = '14px'; grip.style.bottom = '14px'; grip.style.width = '5px';
+                if(isW) grip.style.left = '0';
+                else grip.style.right = '0';
             }
-        }
-        content.appendChild(h);
-    });
+            grip.style.cursor = cursors[dir];
+            content.appendChild(grip);
+        });
 
-    // ── Shared state ────────────────────────────────────────────────────
-    let mode = null; // 'drag' | resize dir
-    let startX, startY, origLeft, origTop, origW, origH;
-
-    const MIN_W = 500, MIN_H = 350;
-
-    function fixedRect() {
-        const r = dialog.getBoundingClientRect();
-        dialog.style.position = 'fixed';
-        dialog.style.margin   = '0';
-        dialog.style.left     = r.left + 'px';
-        dialog.style.top      = r.top  + 'px';
-        dialog.style.width    = r.width + 'px';
-        content.style.height  = r.height + 'px';
-        return r;
-    }
-
-    // ── Drag (header) ───────────────────────────────────────────────────
-    header.addEventListener('mousedown', e => {
-        if (e.target.closest('button')) return;
-        mode = 'drag';
-        header.style.cursor = 'grabbing';
-        const r = fixedRect();
-        startX = e.clientX; startY = e.clientY;
-        origLeft = r.left;  origTop  = r.top;
-        e.preventDefault();
-    });
-
-    // ── Resize handles ───────────────────────────────────────────────────
-    content.addEventListener('mousedown', e => {
-        const handle = e.target.closest('[data-dir]');
-        if (!handle) return;
-        mode = handle.dataset.dir;
-        const r = fixedRect();
-        startX = e.clientX; startY = e.clientY;
-        origLeft = r.left;  origTop = r.top;
-        origW = r.width;    origH  = r.height;
-        e.preventDefault();
-    });
-
-    // ── Move / Resize ────────────────────────────────────────────────────
-    document.addEventListener('mousemove', e => {
-        if (!mode) return;
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-
-        if (mode === 'drag') {
-            let nextL = origLeft + dx;
-            let nextT = origTop + dy;
-            
-            // Boundary checks for drag
-            nextL = Math.max(0, Math.min(vw - dialog.offsetWidth, nextL));
-            nextT = Math.max(0, Math.min(vh - dialog.offsetHeight, nextT));
-
-            dialog.style.left = nextL + 'px';
-            dialog.style.top  = nextT + 'px';
-            return;
+        let mode = null, startX, startY, origL, origT, origW, origH;
+        const MIN_W = 520, MIN_H = 500;
+        
+        function fixRect() {
+            const rect = dialog.getBoundingClientRect();
+            dialog.style.position = 'fixed';
+            dialog.style.margin = '0';
+            dialog.style.left = rect.left + 'px';
+            dialog.style.top = rect.top + 'px';
+            dialog.style.width = rect.width + 'px';
+            content.style.height = rect.height + 'px';
+            return rect;
         }
 
-        let newL = origLeft, newT = origTop, newW = origW, newH = origH;
+        header.addEventListener('mousedown', e => {
+            if(e.target.closest('button')) return;
+            mode = 'drag';
+            header.style.cursor = 'grabbing';
+            const r = fixRect();
+            startX = e.clientX; startY = e.clientY;
+            origL = r.left; origT = r.top;
+            e.preventDefault();
+        });
 
-        if (mode.includes('e')) newW = Math.max(MIN_W, Math.min(vw - origLeft, origW + dx));
-        if (mode.includes('s')) newH = Math.max(MIN_H, Math.min(vh - origTop, origH + dy));
-        if (mode.includes('w')) { 
-            newW = Math.max(MIN_W, Math.min(origLeft + origW, origW - dx)); 
-            newL = origLeft + origW - newW; 
-        }
-        if (mode.includes('n')) { 
-            newH = Math.max(MIN_H, Math.min(origTop + origH, origH - dy)); 
-            newT = origTop + origH - newH; 
-        }
+        content.addEventListener('mousedown', e => {
+            const handle = e.target.closest('[data-dir]');
+            if(!handle) return;
+            mode = handle.dataset.dir;
+            const r = fixRect();
+            startX = e.clientX; startY = e.clientY;
+            origL = r.left; origT = r.top;
+            origW = r.width; origH = r.height;
+            e.preventDefault();
+        });
 
-        dialog.style.left    = newL + 'px';
-        dialog.style.top     = newT + 'px';
-        dialog.style.width   = newW + 'px';
-        content.style.height = newH + 'px';
-        content.style.display = 'flex';
-        content.style.flexDirection = 'column';
-    });
+        document.addEventListener('mousemove', e => {
+            if(!mode) return;
+            let dx = e.clientX - startX, dy = e.clientY - startY;
+            let vw = window.innerWidth, vh = window.innerHeight;
+            if(mode === 'drag') {
+                let nl = Math.min(vw - dialog.offsetWidth, Math.max(0, origL + dx));
+                let nt = Math.min(vh - dialog.offsetHeight, Math.max(0, origT + dy));
+                dialog.style.left = nl + 'px'; dialog.style.top = nt + 'px';
+                return;
+            }
+            let newL = origL, newT = origT, newW = origW, newH = origH;
+            if(mode.includes('e')) newW = Math.max(MIN_W, Math.min(vw - origL, origW + dx));
+            if(mode.includes('s')) newH = Math.max(MIN_H, Math.min(vh - origT, origH + dy));
+            if(mode.includes('w')) { newW = Math.max(MIN_W, Math.min(origL+origW, origW - dx)); newL = origL + origW - newW; }
+            if(mode.includes('n')) { newH = Math.max(MIN_H, Math.min(origT+origH, origH - dy)); newT = origT + origH - newH; }
+            dialog.style.left = newL + 'px'; dialog.style.top = newT + 'px';
+            dialog.style.width = newW + 'px'; content.style.height = newH + 'px';
+        });
 
-    // ── Release ──────────────────────────────────────────────────────────
-    document.addEventListener('mouseup', () => {
-        if (mode === 'drag') header.style.cursor = 'grab';
-        mode = null;
-    });
+        document.addEventListener('mouseup', () => {
+            if(mode === 'drag') header.style.cursor = 'grab';
+            mode = null;
+        });
 
-    // ── Reset on open ────────────────────────────────────────────────────
-    modal.addEventListener('show.bs.modal', () => {
-        dialog.style.position = '';
-        dialog.style.left     = '';
-        dialog.style.top      = '';
-        dialog.style.width    = '';
-        dialog.style.margin   = 'auto';
-        content.style.height  = '';
-    });
-})();
+        modal.addEventListener('show.bs.modal', () => {
+            dialog.style.position = '';
+            dialog.style.left = '';
+            dialog.style.top = '';
+            dialog.style.width = '';
+            dialog.style.margin = 'auto';
+            content.style.height = '';
+        });
+    })();
 </script>
 
+<style>
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+    /* Ensure modal content stays within bounds */
+    .modal-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        pointer-events: auto;
+        background-clip: padding-box;
+        outline: 0;
+    }
+</style>
 @endsection

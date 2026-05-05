@@ -80,17 +80,17 @@ Route::get('cleanup-duplicates', function () {
                 foreach ($uniqueColumns as $col) {
                     $query->where($col, $duplicate->$col);
                 }
-                
+
                 $ids = $query->orderBy('id')->pluck('id')->toArray();
                 $keepId = array_shift($ids);
-                
+
                 if (!empty($ids)) {
                     $deletedCount += Illuminate\Support\Facades\DB::table($table)->whereIn('id', $ids)->delete();
                 }
             }
             $results[] = "Table <b>$table</b>: Deleted $deletedCount duplicates.";
         }
-        
+
         // Handle User Email duplicates separately (as it can be null)
         $dupEmails = Illuminate\Support\Facades\DB::table('users')->whereNotNull('email')->select('email')->groupBy('email')->havingRaw('COUNT(*) > 1')->get();
         $emailDeleted = 0;
@@ -145,10 +145,11 @@ Route::middleware(['auth'])->group(function () {
     // --- ADMIN ONLY (Role 1) ---
     Route::middleware(['role:1'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('users/search', [UserController::class, 'search'])->name('users.search');
         Route::resource('users', UserController::class)->except(['show']);
         Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
         Route::post('settings', [SettingsController::class, 'update'])->name('settings.update');
-        
+
         // Hierarchy & Academic Management
         Route::get('departments/export', [DepartmentController::class, 'export'])->name('departments.export');
         Route::post('departments/bulk-delete', [DepartmentController::class, 'bulkDelete'])->name('departments.bulkDelete');
@@ -158,14 +159,14 @@ Route::middleware(['auth'])->group(function () {
         Route::post('majors/bulk-delete', [MajorController::class, 'bulkDelete'])->name('majors.bulkDelete');
         Route::get('majors/hierarchy', [MajorController::class, 'hierarchy'])->name('majors.hierarchy');
         Route::resource('majors', MajorController::class)->except(['create', 'edit']);
-        
+
         Route::post('classes/bulk-delete', [ClassModelController::class, 'bulkDelete'])->name('classes.bulkDelete');
         Route::resource('classes', ClassModelController::class)->except(['create', 'edit']);
 
         Route::get('subjects/export', [SubjectController::class, 'export'])->name('subjects.export');
         Route::post('subjects/bulk-delete', [SubjectController::class, 'bulkDelete'])->name('subjects.bulkDelete');
         Route::resource('subjects', SubjectController::class)->except(['create', 'edit']);
-        
+
         // Enrollments
         Route::get('enrollments', [ClassEnrollmentController::class, 'index'])->name('enrollments.index');
         Route::get('enrollments/{department}/manage', [ClassEnrollmentController::class, 'manage'])->name('enrollments.manage');
@@ -211,9 +212,8 @@ Route::middleware(['auth'])->group(function () {
 
     // Notifications Mark as Read
     Route::post('/notifications/mark-as-read/{id}', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
-    Route::post('/notifications/mark-all-read', function() {
+    Route::post('/notifications/mark-all-read', function () {
         Auth::user()->unreadNotifications->markAsRead();
         return back();
     })->name('notifications.markAllRead');
-
 });

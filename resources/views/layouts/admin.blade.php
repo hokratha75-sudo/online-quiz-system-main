@@ -405,7 +405,7 @@
     
 @unless($hideTopbar ?? ($hideSidebar ?? false))
     <!-- របារផ្នែកខាងលើ (Topbar) ប្រើ Glassmorphism Style -->
-    <header class="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-neutral-200 bg-slate-100 px-6 py-2 md:px-10">
+    <header class="sticky md:sticky md:top-0 top-20 z-40 flex h-16 items-center justify-between border-b border-neutral-200 bg-slate-100 px-6 py-2 md:px-10">
         <div class="flex items-center gap-4">
             <h2 class="text-lg font-semibold text-slate-800 tracking-tight flex items-center gap-2">
                 @yield('topbar-title', 'Dashboard')

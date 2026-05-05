@@ -18,14 +18,14 @@ class UserController extends Controller
     {
         $search = $request->get('search');
         $roleName = $request->get('role');
-        
+
         $users = User::with('role')
             ->where('status', 'active')
             ->orderBy('id')
             ->when($search, function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('username', 'like', "%{$search}%")
-                      ->orWhere('email', 'like', "%{$search}%");
+                        ->orWhere('email', 'like', "%{$search}%");
                 });
             })
             ->when($roleName, function ($query) use ($roleName) {
@@ -34,7 +34,7 @@ class UserController extends Controller
                 });
             })
             ->paginate(10);
-        
+
         // Optimized: Single query for all role counts
         $roleCounts = DB::table('users')
             ->join('roles', 'users.role_id', '=', 'roles.id')
@@ -59,6 +59,41 @@ class UserController extends Controller
         $roles = Role::all();
 
         return view('admin.users.index', compact('users', 'search', 'roleName', 'counts', 'dashboardTitle', 'userRole', 'roles'));
+    }
+
+    // AJAX live search for users (returns JSON)
+    public function search(Request $request)
+    {
+        $q = $request->get('q') ?? $request->get('search') ?? '';
+        $roleName = $request->get('role');
+
+        $users = User::with('role')
+            ->where('status', 'active')
+            ->when($q, function ($query) use ($q) {
+                $query->where(function ($q2) use ($q) {
+                    $q2->where('username', 'like', "%{$q}%")
+                        ->orWhere('email', 'like', "%{$q}%");
+                });
+            })
+            ->when($roleName, function ($query) use ($roleName) {
+                $query->whereHas('role', function ($q) use ($roleName) {
+                    $q->where('role_name', $roleName);
+                });
+            })
+            ->orderBy('id')
+            ->limit(50)
+            ->get()
+            ->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'username' => $user->username,
+                    'email' => $user->email,
+                    'role' => optional($user->role)->role_name,
+                    'created_at' => optional($user->created_at)->format('M d, Y'),
+                ];
+            });
+
+        return response()->json(['data' => $users]);
     }
 
     public function create(Request $request)
@@ -150,7 +185,7 @@ class UserController extends Controller
 
         // We set status to inactive instead of permanent deletion to preserve records
         $user->update(['status' => 'inactive']);
-        
+
         return redirect()->route('admin.users.index')->with('success', 'User account has been deactivated.');
     }
 }
