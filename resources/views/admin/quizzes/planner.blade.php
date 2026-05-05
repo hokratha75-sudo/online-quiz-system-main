@@ -16,10 +16,10 @@
         <!-- Left Sidebar -->
         <div class="col-span-12 lg:col-span-3 space-y-5">
             <!-- Draggable Events Card -->
-            <div class="bg-white rounded shadow-sm border border-slate-200 w-full h-[71vh] flex flex-col">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 w-full h-[71vh] flex flex-col">
 
     <!-- Header -->
-    <div class="p-3 border-b border-slate-200 sticky top-0 bg-slate-50 z-10">
+    <div class="p-3 border-b border-slate-200 sticky top-0 bg-slate-50 z-10 rounded-t-2xl">
         <h3 class="text-md font-normal">Draggable Events</h3>
     </div>
 
@@ -35,7 +35,7 @@
     </div>
 
     <!-- Footer -->
-    <div class="p-3 border-t border-slate-200 bg-slate-50">
+    <div class="p-3 border-t border-slate-200 bg-slate-50 rounded-b-2xl">
         <div class="flex items-center">
             <input type="checkbox" id="drop-remove"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
@@ -47,7 +47,7 @@
 
 </div>
             <!-- Create Event Card -->
-            <div class="bg-white rounded shadow-sm border border-slate-200 p-3 w-full h-[26%]">
+            <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-3 w-full h-[26%]">
                 <div class=" border-b border-slate-200">
                     <h3 class="text-md font-normal">Create Event</h3>
                 </div>
@@ -83,7 +83,7 @@
 
         <!-- Main Calendar -->
         <div class="col-span-12 lg:col-span-9">
-            <div class="bg-white rounded shadow-sm border border-slate-200 p-4">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
                 <div id="calendar"></div>
             </div>
         </div>

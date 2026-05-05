@@ -8,17 +8,17 @@
     <!-- Header Section -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
-            <h1 class="text-3xl font-bold text-slate-900 tracking-tight leading-none">Departments Management</h1>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight leading-none">Departments Management</h1>
             <p class="text-sm font-medium text-slate-400 mt-2">Manage administrative departments and institutional faculties.</p>
         </div>
         <div class="flex items-center justify-end gap-3">
-            <button onclick="window.location.reload()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-[16px] text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm">
+            <button onclick="window.location.reload()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm">
                 <i class="fas fa-sync-alt text-slate-400"></i> Refresh
             </button>
-            <a href="{{ route('admin.departments.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-[16px] text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm">
+            <a href="{{ route('admin.departments.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm no-underline">
                 <i class="fas fa-file-excel text-emerald-500"></i> Export
             </a>
-            <button data-bs-toggle="modal" data-bs-target="#addDeptModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-[16px] text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg shadow-indigo-600/20 active:scale-[0.98]">
+            <button data-bs-toggle="modal" data-bs-target="#addDeptModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg shadow-indigo-600/20 active:scale-[0.98] border-none">
                 <i class="fas fa-plus text-white/80"></i> New Department
             </button>
         </div>
@@ -67,11 +67,11 @@
         <div class="p-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
             <div class="flex items-center gap-3">
                 <h3 class="text-xs font-bold text-slate-900 tracking-widest uppercase">Active Departments</h3>
-                <span class="px-2.5 py-1 rounded-md bg-white border border-slate-100 text-indigo-600 text-[10px] font-bold tracking-widest uppercase shadow-sm tabular-nums">{{ $departments->total() }} Records</span>
+                <span class="px-2.5 py-1 rounded-full bg-white border border-slate-100 text-indigo-600 text-[10px] font-bold tracking-widest uppercase shadow-sm tabular-nums">{{ $departments->total() }} Records</span>
             </div>
             
             <div class="flex items-center gap-3 w-full sm:w-auto">
-                <button class="bg-white hover:bg-rose-50 text-rose-600 border border-slate-100 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm" onclick="deleteSelected()">
+                <button class="bg-white hover:bg-rose-200 text-rose-600 border border-slate-100 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm" onclick="deleteSelected()">
                     <i class="fas fa-trash-alt text-[10px]"></i> Delete Selected
                 </button>
                 <div class="relative w-full sm:w-64">
@@ -83,7 +83,7 @@
         </div>
 
         <!-- Table Content -->
-        <div class="overflow-x-auto">
+        <div class="overflow-x-hidden">
             <table class="w-full text-left border-collapse" id="deptTable">
                 <thead>
                     <tr class="bg-slate-50/50 border-b border-slate-200/70">
@@ -95,7 +95,9 @@
                         <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Majors</th>
                         <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Classes</th>
                         <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Subjects</th>
-                        <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+                        <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-right sticky right-0 bg-white z-10">
+                            Actions
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 bg-white">
@@ -135,10 +137,10 @@
                         </td>
                         <td class="px-5 py-4 text-right">
                             <div class="flex items-center justify-end gap-1.5 transition-opacity opacity-70 group-hover:opacity-100">
-                                <button onclick="editSingleRow(this)" data-id="{{ $dept->id }}" data-name="{{ $dept->department_name }}" data-code="{{ $dept->code }}" data-description="{{ $dept->description }}" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors tooltip-trigger" title="Edit">
+                                <button onclick="editSingleRow(this)" data-id="{{ $dept->id }}" data-name="{{ $dept->department_name }}" data-code="{{ $dept->code }}" data-description="{{ $dept->description }}" class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-indigo-600 hover:bg-indigo-700 transition-colors tooltip-trigger border-none" title="Edit">
                                     <i class="far fa-edit text-[13px]"></i>
                                 </button>
-                                <button type="button" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors btn-delete" 
+                                <button type="button" class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-rose-700 hover:bg-rose-700 transition-colors btn-delete border-none" 
                                     title="Delete" 
                                     data-id="{{ $dept->id }}" 
                                     data-title="{{ $dept->department_name }}">
@@ -196,40 +198,41 @@
 <!-- Add/Edit Department Modal -->
 <div class="modal fade" id="addDeptModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-[32px] border-0 shadow-2xl overflow-hidden">
-            <div class="bg-indigo-600 px-8 py-6 flex items-center justify-between">
+        <div class="modal-content rounded-xl border-0 shadow-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-[#5f60ef] to-[#9a4ce7] px-6 py-4 flex items-center justify-between">
                 <h5 class="text-xl font-bold text-white tracking-tight flex items-center gap-3" id="modalTitle">
-                    <i class="fas fa-building text-indigo-200"></i> Add Department
+                    <i class="fas fa-building text-white text-sm"></i>
+                    <span class="text-lg">Add Department</span>
                 </h5>
-                <button type="button" class="text-indigo-200 hover:text-white transition-colors" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="fas fa-times"></i>
+                <button type="button" class="group relative w-10 h-10 rounded-full bg-blue-50 border border-pink-200 text-pink-400 hover:bg-blue-100 hover:text-pink-500 hover:scale-110 active:scale-95 transition-all duration-200 ease-out focus:outline-none shadow-sm hover:shadow-pink-200/50" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times text-sm"></i>
                 </button>
             </div>
-            <form action="{{ route('admin.departments.store') }}" method="POST" id="deptForm" class="p-6">
+            <form action="{{ route('admin.departments.store') }}" method="POST" id="deptForm">
                 @csrf
                 <input type="hidden" name="_method" value="POST" id="formMethod">
                 
-                <div class="space-y-5">
+                <div class="space-y-5 p-6">
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Department Name <span class="text-rose-500">*</span></label>
                         <input type="text" name="department_name" id="deptName" required placeholder="e.g. Faculty of Science"
-                               class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 shadow-sm">
+                               class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded text-sm shadow-sm text-slate-900 outline-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 placeholder:text-slate-400">
                     </div>
                     
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Code <span class="text-slate-400 font-normal">(Optional)</span></label>
                         <input type="text" name="code" id="deptCode" placeholder="e.g. DPT001"
-                               class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 shadow-sm">
+                               class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded text-sm shadow-sm text-slate-900 outline-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 placeholder:text-slate-400">
                     </div>
                     
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Description <span class="text-slate-400 font-normal">(Optional)</span></label>
                         <textarea name="description" id="deptDescription" rows="3" placeholder="Brief summary of the department..."
-                                  class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400 shadow-sm resize-none"></textarea>
+                                  class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded text-sm shadow-sm text-slate-900 outline-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 placeholder:text-slate-400"></textarea>
                     </div>
                 </div>
                 
-                <div class="mt-8 flex items-center justify-end gap-3 pt-5 border-t border-slate-100">
+                <div class=" flex items-center justify-end gap-3 border-t border-slate-100 bg-slate-100 p-6">
                     <button type="button" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80 px-5 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm" data-bs-dismiss="modal">Close</button>
                     <button type="submit" id="btnSubmit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 shadow-sm">Save Department</button>
                 </div>

@@ -46,14 +46,14 @@
             </a>
         </div>
         
-        <button type="button" data-bs-toggle="modal" data-bs-target="#createUserModal" class="group inline-flex items-center gap-2 border-none bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white px-6 py-2.5 rounded-lg text-[11px] font-black transition-all duration-200 shadow-lg shadow-indigo-500/20 active:scale-95 uppercase tracking-wider">
+        <button type="button" data-bs-toggle="modal" data-bs-target="#createUserModal" class="group inline-flex items-center gap-2 border-none bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white px-10 py-2.5 rounded-lg text-[11px] font-black transition-all duration-200 shadow-lg shadow-indigo-500/20 active:scale-95 uppercase tracking-wider">
             <i class="fas fa-plus-circle text-sm group-hover:rotate-90 transition-transform duration-300"></i>
             Create User
         </button>
     </div>
 
     {{-- Main Card --}}
-    <div class="bg-white/70 backdrop-blur-sm rounded-xl shadow-xl border border-white/50 overflow-hidden transition-all duration-300">
+    <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 overflow-hidden transition-all duration-300">
         {{-- Table Header with Search --}}
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-3 border-b border-slate-100">
             <div class="flex items-center gap-3">
@@ -207,8 +207,8 @@
             {{-- Modal Header with drag handle --}}
             <div class="relative px-7 py-3 bg-gradient-to-r from-[#5f60ef] to-[#9a4ce7] border-b border-slate-100 flex items-center justify-between cursor-grab active:cursor-grabbing" id="createUserModalHeader">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 bg-indigo-100 text-indigo-600 flex items-center justify-center rounded-full">
-                        <i class="fas fa-user-plus text-sm"></i>
+                    <div class="flex items-center justify-center">
+                        <i class="fas fa-user-plus text-sm text-white"></i>
                     </div>
                     <h5 class="text-lg font-black text-white tracking-tight mt-2" id="createUserModalLabel">New Member Registration</h5>
                 </div>
@@ -224,33 +224,41 @@
                         {{-- LEFT COLUMN: Authentication --}}
                         <div class="space-y-5">
                             <div class="flex items-center gap-2 border-b border-slate-100 pb-2">
-                                <i class="fas fa-key text-indigo-400 text-xs"></i>
-                                <h6 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Access Credentials</h6>
+                                <i class="fas fa-key text-indigo-400 text-sm"></i>
+                                <h6 class="text-[15px] font-black text-slate-400 uppercase tracking-widest mt-2">Access Credentials</h6>
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-600 mb-1.5">Username <span class="text-rose-400">*</span></label>
-                                <input type="text" name="username" value="{{ old('username') }}" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
+                                <input placeholder="Enter Username" type="text" name="username" value="{{ old('username') }}" required class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-600 mb-1.5">Email <span class="text-rose-400">*</span></label>
-                                <input type="email" name="email" value="{{ old('email') }}" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
+                                <input placeholder="Enter Email" type="email" name="email" value="{{ old('email') }}" required class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
                             </div>
-                            <div>
+                            <div class="relative w-full">
                                 <label class="block text-xs font-bold text-slate-600 mb-1.5">System Role</label>
-                                <select name="role_id" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none cursor-pointer">
+                                <select name="role_id"
+                                    class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none cursor-pointer appearance-none">
+        
                                     @foreach($roles as $role)
                                         <option value="{{ $role->id }}">{{ ucfirst($role->role_name) }}</option>
                                     @endforeach
+
                                 </select>
+
+                                <!-- Arrow icon -->
+                                <div class="pointer-events-none absolute top-5 inset-y-0 right-3 flex items-center text-slate-400">
+                                    <i class="fas fa-chevron-down text-sm"></i>
+                                </div>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
                                     <label class="block text-xs font-bold text-slate-600 mb-1.5">Password <span class="text-rose-400">*</span></label>
-                                    <input type="password" name="password" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none">
+                                    <input placeholder="Enter password" type="password" name="password" required class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-600 mb-1.5">Confirm</label>
-                                    <input type="password" name="password_confirmation" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none">
+                                    <input placeholder="Confirm password" type="password" name="password_confirmation" required class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none">
                                 </div>
                             </div>
                         </div>
@@ -258,26 +266,57 @@
                         {{-- RIGHT COLUMN: Personal Info + Avatar --}}
                         <div class="space-y-5">
                             <div class="flex items-center gap-2 border-b border-slate-100 pb-2">
-                                <i class="fas fa-id-card text-indigo-400 text-xs"></i>
-                                <h6 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Personal Profile</h6>
+                                <i class="fas fa-id-card text-indigo-400 text-sm"></i>
+                                <h6 class="text-[15px] font-black text-slate-400 uppercase tracking-widest mt-2">Personal Profile</h6>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
-                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">First name</label><input type="text" name="first_name" value="{{ old('first_name') }}" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none"></div>
-                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">Last name</label><input type="text" name="last_name" value="{{ old('last_name') }}" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none"></div>
+                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">First Name</label>
+                                    <input placeholder="Enter FirstName" type="text" name="first_name" value="{{ old('first_name') }}" required class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none">
+                                </div>
+                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">Last Name</label>
+                                    <input placeholder="Enter Last Name" type="text" name="last_name" value="{{ old('last_name') }}" required class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none">
+                                </div>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
-                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">Phone</label><input type="text" name="phone" value="{{ old('phone') }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none"></div>
-                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">Birthday</label><input type="date" name="birthday" value="{{ old('birthday') }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none"></div>
+                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">Phone</label>
+                                    <input placeholder="Enter Phone Number" type="text" name="phone" value="{{ old('phone') }}" class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none">
+                                </div>
+                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">Birthday</label>
+                                    <input type="date" name="birthday" value="{{ old('birthday') }}" class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none">
+                                </div>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
-                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">Address</label><input type="text" name="address" value="{{ old('address') }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none"></div>
-                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">Sex</label><select name="sex" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none"><option>Male</option><option>Female</option></select></div>
+                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">Address</label>
+                                    <input placeholder="Enter Address" type="text" name="address" value="{{ old('address') }}" class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-600 mb-1.5">
+                                        Sex
+                                    </label>
+
+                                    <div class="relative">
+                                        <select name="sex"
+                                            class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm 
+                                                   focus:bg-white focus:border-indigo-400 transition-all outline-none 
+                                                   appearance-none cursor-pointer">
+                                            <option value="other">Other</option>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                    
+                                        </select>
+                                    
+                                        <!-- Arrow icon -->
+                                        <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-400">
+                                            <i class="fas fa-chevron-down text-sm"></i>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-600 mb-1.5">Profile Photo</label>
                                 <div class="relative group cursor-pointer">
                                     <input type="file" name="profile_photo" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" id="photoInput">
-                                    <div class="w-full px-4 py-3 border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center gap-3 group-hover:border-indigo-400 group-hover:bg-indigo-50/30 transition-all bg-slate-50/30" id="photoPreviewArea">
+                                    <div class="w-full px-4 py-3 border-2 border-dashed border-slate-200 rounded flex items-center justify-center gap-3 group-hover:border-indigo-400 group-hover:bg-indigo-50/30 transition-all bg-slate-50/30" id="photoPreviewArea">
                                         <i class="fas fa-cloud-upload-alt text-slate-400 group-hover:text-indigo-500"></i>
                                         <span class="text-xs font-medium text-slate-500" id="uploadLabel">Click to upload avatar</span>
                                     </div>

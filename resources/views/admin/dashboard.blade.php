@@ -6,7 +6,7 @@
     <!-- Header Section: High-Density Authority -->
     <header class="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-10">
         <div>
-            <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight leading-none" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Dashboard Overview</h1>
+            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight leading-none" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Dashboard Overview</h1>
             <p class="text-[10px] font-bold text-indigo-600 mt-3 uppercase tracking-[0.2em] leading-none opacity-80">Logged In As: {{ strtoupper($username) }} • Active Session</p>
         </div>
         @if($userRole === 'admin' || $userRole === 'teacher')
