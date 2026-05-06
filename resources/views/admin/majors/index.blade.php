@@ -1,6 +1,14 @@
 @extends('layouts.admin')
 
 @section('content')
+<style>
+    
+    /* Custom Scrollbar for sleek aesthetic */
+    .custom-scrollbar::-webkit-scrollbar { width: 7px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #4f46e5; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
+</style>
 <div class="max-w-[1400px] mx-auto p-8 md:p-10 font-inter text-slate-900">
 
     <!-- Header Section -->
@@ -11,14 +19,14 @@
             <p class="text-[14px] font-medium text-slate-500 mt-1.5">Manage administrative {{ $tab }} and institutional faculties.</p>
         </div>
         <div class="flex items-center gap-3">
-            <button onclick="window.location.reload()" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md border border-neutral-300 bg-transparent px-4 py-2 text-sm font-medium tracking-wide text-neutral-600 transition hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:border-neutral-700 dark:text-neutral-300 dark:focus-visible:outline-white">
+            <button onclick="window.location.reload()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm">
                 <i class="fas fa-sync-alt"></i> Refresh
             </button>
-            <a href="{{ route('admin.majors.export', ['tab' => $tab]) }}" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md border border-neutral-300 bg-transparent px-4 py-2 text-sm font-medium tracking-wide text-neutral-600 transition hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:border-neutral-700 dark:text-neutral-300 dark:focus-visible:outline-white">
+            <a href="{{ route('admin.majors.export', ['tab' => $tab]) }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm no-underline">
                 <i class="fas fa-file-excel text-emerald-500"></i> Export
             </a>
             @if($tab == 'majors')
-                <button data-bs-toggle="modal" data-bs-target="#addMajorModal" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium tracking-wide text-white transition hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                <button data-bs-toggle="modal" data-bs-target="#addMajorModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg shadow-indigo-600/20 active:scale-[0.98] border-none">
                     <i class="fas fa-plus text-xs text-indigo-200"></i> New Major
                 </button>
             @elseif($tab == 'classes')
@@ -60,7 +68,7 @@
             </div>
             
             <div class="flex items-center gap-3 w-full sm:w-auto">
-                <button onclick="deleteSelected()" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-medium tracking-wide text-rose-600 transition-colors hover:bg-rose-100 hover:border-rose-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600">
+                <button onclick="deleteSelected()" class="bg-white hover:bg-rose-200 text-rose-600 border border-slate-100 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm">
                     <i class="fas fa-trash-alt text-[10px]"></i> Remove Selected
                 </button>
                 <div class="relative w-full sm:w-64">
@@ -68,7 +76,7 @@
                         <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/>
                     </svg>
                     <input type="text" id="tableSearch" placeholder="Search indices..." 
-                           class="w-full rounded-md border border-neutral-300 bg-white py-2 pl-10 pr-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-75" />
+                           class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold text-slate-900 uppercase tracking-widest focus:outline-none focus:border-indigo-500 transition-all shadow-sm" />
                 </div>
             </div>
         </div>
@@ -181,44 +189,45 @@
 <!-- Structural Modals -->
 <div class="modal fade" id="addMajorModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-[32px] border-0 shadow-2xl overflow-hidden">
-            <div class="bg-indigo-600 px-8 py-6 flex items-center justify-between">
+        <div class="modal-content rounded-xl border-0 shadow-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-[#5f60ef] to-[#9a4ce7] px-6 py-4 flex items-center justify-between">
                 <h5 class="text-xl font-bold text-white tracking-tight flex items-center gap-3" id="majorModalTitle">
-                    <i class="fas fa-bookmark text-indigo-200"></i> Add Major
+                    <i class="fas fa-bookmark text-white text-sm"></i>
+                    <span class="text-lg">Add Major</span>
                 </h5>
-                <button type="button" class="text-indigo-200 hover:text-white transition-colors" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="fas fa-times"></i>
+                <button type="button" class="group relative w-10 h-10 rounded-full bg-blue-50 border border-pink-200 text-pink-400 hover:bg-blue-100 hover:text-pink-500 hover:scale-110 active:scale-95 transition-all duration-200 ease-out focus:outline-none shadow-sm hover:shadow-pink-200/50" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times text-sm group-hover:rotate-90 transition-transform duration-200"></i>
                 </button>
             </div>
             <form action="{{ route('admin.majors.store') }}" method="POST" id="majorForm" class="p-6">
                 @csrf
                 <input type="hidden" name="_method" value="POST" id="majorFormMethod">
                 
-                <div class="space-y-5">
-                    <div class="grid grid-cols-2 gap-5">
+                    <div class="grid grid-cols-1 gap-3">
                         <div>
                             <label class="form-label font-semibold text-slate-700">Major Code <span class="text-rose-500">*</span></label>
                             <input type="text" name="code" id="majorCode" required placeholder="e.g. CS-01" 
-                                   class="form-control uppercase">
+                                   class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none uppercase">
                         </div>
                         <div>
                             <label class="form-label font-semibold text-slate-700">Major Name <span class="text-rose-500">*</span></label>
                             <input type="text" name="name" id="majorName" required placeholder="e.g. Computer Science" 
-                                   class="form-control">
+                                   class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
+                        </div>
+                        <div class="relative">
+                            <label class="form-label font-semibold text-slate-700">Department Alignment <span class="text-rose-500">*</span></label>
+                            <select name="department_id" id="majorDept" required 
+                                    class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none appearance-none cursor-pointer">
+                                <option value="">-- Select Department --</option>
+                                @foreach($departments as $d)
+                                    <option value="{{ $d->id }}">{{ $d->department_name }}</option>
+                                @endforeach
+                            </select>
+                            <div class="pointer-events-none absolute top-8 inset-y-0 right-3 flex items-center text-slate-400">
+                                <i class="fas fa-chevron-down text-sm"></i>
+                            </div>
                         </div>
                     </div>
-                    
-                    <div>
-                        <label class="form-label font-semibold text-slate-700">Department Alignment <span class="text-rose-500">*</span></label>
-                        <select name="department_id" id="majorDept" required 
-                                class="form-select cursor-pointer">
-                            <option value="">-- Select Department --</option>
-                            @foreach($departments as $d)
-                                <option value="{{ $d->id }}">{{ $d->department_name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
                 
                 <div class="mt-8 flex items-center justify-end gap-3 pt-5 border-t border-slate-100">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
@@ -231,8 +240,8 @@
 
 <div class="modal fade" id="addClassModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-[32px] border-0 shadow-2xl overflow-hidden">
-            <div class="bg-indigo-600 px-8 py-6 flex items-center justify-between">
+        <div class="modal-content rounded-xl border-0 shadow-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-[#5f60ef] to-[#9a4ce7] px-6 py-4 flex items-center justify-between">
                 <h5 class="text-xl font-bold text-white tracking-tight flex items-center gap-3" id="classModalTitle">
                     <i class="fas fa-layer-group text-indigo-200"></i> Add Class
                 </h5>

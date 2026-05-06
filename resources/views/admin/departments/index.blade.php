@@ -140,7 +140,7 @@
                                 <button onclick="editSingleRow(this)" data-id="{{ $dept->id }}" data-name="{{ $dept->department_name }}" data-code="{{ $dept->code }}" data-description="{{ $dept->description }}" class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-indigo-600 hover:bg-indigo-700 transition-colors tooltip-trigger border-none" title="Edit">
                                     <i class="far fa-edit text-[13px]"></i>
                                 </button>
-                                <button type="button" class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-rose-700 hover:bg-rose-700 transition-colors btn-delete border-none" 
+                                <button type="button" class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-rose-700 hover:bg-rose-700 transition-colors btn-delete border-none+" 
                                     title="Delete" 
                                     data-id="{{ $dept->id }}" 
                                     data-title="{{ $dept->department_name }}">
@@ -192,6 +192,14 @@
 .custom-pagination nav p { display: none; }
 .custom-pagination nav .relative.inline-flex { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); border-radius: 0.5rem; }
 </style>
+<style>
+    
+    /* Custom Scrollbar for sleek aesthetic */
+    .custom-scrollbar::-webkit-scrollbar { width: 7px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #4f46e5; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
+</style>
     </div>
 </div>
 
@@ -205,7 +213,7 @@
                     <span class="text-lg">Add Department</span>
                 </h5>
                 <button type="button" class="group relative w-10 h-10 rounded-full bg-blue-50 border border-pink-200 text-pink-400 hover:bg-blue-100 hover:text-pink-500 hover:scale-110 active:scale-95 transition-all duration-200 ease-out focus:outline-none shadow-sm hover:shadow-pink-200/50" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="fas fa-times text-sm"></i>
+                    <i class="fas fa-times text-sm group-hover:rotate-90 transition-transform duration-200"></i>
                 </button>
             </div>
             <form action="{{ route('admin.departments.store') }}" method="POST" id="deptForm">
@@ -216,25 +224,25 @@
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Department Name <span class="text-rose-500">*</span></label>
                         <input type="text" name="department_name" id="deptName" required placeholder="e.g. Faculty of Science"
-                               class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded text-sm shadow-sm text-slate-900 outline-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 placeholder:text-slate-400">
+                               class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
                     </div>
                     
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Code <span class="text-slate-400 font-normal">(Optional)</span></label>
                         <input type="text" name="code" id="deptCode" placeholder="e.g. DPT001"
-                               class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded text-sm shadow-sm text-slate-900 outline-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 placeholder:text-slate-400">
+                               class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none uppercase">
                     </div>
                     
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Description <span class="text-slate-400 font-normal">(Optional)</span></label>
                         <textarea name="description" id="deptDescription" rows="3" placeholder="Brief summary of the department..."
-                                  class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded text-sm shadow-sm text-slate-900 outline-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 placeholder:text-slate-400"></textarea>
+                                  class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none"></textarea>
                     </div>
                 </div>
                 
                 <div class=" flex items-center justify-end gap-3 border-t border-slate-100 bg-slate-100 p-6">
                     <button type="button" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80 px-5 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" id="btnSubmit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 shadow-sm">Save Department</button>
+                    <button type="submit" id="btnSubmit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 shadow-sm border-none">Save Department</button>
                 </div>
             </form>
         </div>

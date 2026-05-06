@@ -139,7 +139,15 @@
 <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm z-40 md:hidden" style="display: none;"></div>
 
 <!-- Sidebar Layout -->
-<nav x-cloak class="w-[280px] md:w-[260px] shrink-0 bg-neutral-800 flex flex-col h-screen fixed inset-y-0 left-0 transform transition-transform duration-300 ease-in-out md:translate-x-0 md:sticky md:top-0 z-50" x-bind:class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" aria-label="sidebar navigation">
+<nav 
+    class="w-[280px] md:w-[260px] shrink-0 bg-neutral-800 flex flex-col h-screen 
+           fixed inset-y-0 left-0 z-50
+           transform transition-transform duration-300 ease-in-out
+           md:translate-x-0 md:sticky md:top-0"
+
+    :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'"
+    aria-label="sidebar navigation"
+>
     <!-- Close button for mobile inside sidebar -->
     <button @click="sidebarOpen = false" class="md:hidden absolute top-6 right-5 w-8 h-8 rounded-lg bg-slate-800 text-slate-400 flex items-center justify-center hover:text-white transition-colors">
         <i class="fas fa-times"></i>
@@ -434,7 +442,7 @@
 
                 <div x-show="open" x-transition.opacity.scale.95 style="display: none;" class="absolute right-0 mt-3 w-80 bg-white rounded shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden z-50">
                     <div class="p-3 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
-                                                                        <h3 class="text-sm font-semibold tracking-tight text-slate-800">Notifications</h3>
+                    <h3 class="text-sm font-semibold tracking-tight text-slate-800">Notifications</h3>
                                                                         <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-600"><span x-text="unreadCount"></span> new</span>
                     </div>
                     
@@ -502,15 +510,6 @@
         </div>
     </footer>
 </main>
-
-<style>
-    /* Custom Scrollbar for sleek aesthetic */
-    .custom-scrollbar::-webkit-scrollbar { width: 7px; height: 5px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #4f46e5; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
-    [x-cloak] { display: none !important; }
-</style>
 
 <!-- Legacy scripts for Bootstrap widgets -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

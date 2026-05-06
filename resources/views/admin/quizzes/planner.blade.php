@@ -1,6 +1,14 @@
 @extends('layouts.admin')
 
 @section('content')
+<style>
+    
+    /* Custom Scrollbar for sleek aesthetic */
+    .custom-scrollbar::-webkit-scrollbar { width: 7px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #4f46e5; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
+</style>
 <div class="container-fluid mx-auto p-4 font-sans text-slate-700">
     <!-- Breadcrumb Header -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 px-2">

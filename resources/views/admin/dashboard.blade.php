@@ -1,6 +1,14 @@
 @extends('layouts.admin')
 
 @section('content')
+<style>
+    
+    /* Custom Scrollbar for sleek aesthetic */
+    .custom-scrollbar::-webkit-scrollbar { width: 7px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #4f46e5; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
+</style>
 <div class="max-w-[1400px] mx-auto px-6 py-4 md:px-10 lg:py-6 font-inter text-slate-900">
 
     <!-- Header Section: High-Density Authority -->

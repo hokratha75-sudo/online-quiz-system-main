@@ -3,6 +3,13 @@
 @section('topbar-title', 'User Management')
 
 @section('content')
+<style>
+    /* Custom Scrollbar for sleek aesthetic */
+    .custom-scrollbar::-webkit-scrollbar { width: 7px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #4f46e5; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
+</style>
 <div class="max-w-[1600px] mx-auto p-5 md:p-8 font-sans text-slate-800 bg-gradient-to-br from-slate-50 via-white to-slate-100/50 min-h-screen">
 
     {{-- Success Toast --}}
@@ -228,17 +235,17 @@
                                 <h6 class="text-[15px] font-black text-slate-400 uppercase tracking-widest mt-2">Access Credentials</h6>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Username <span class="text-rose-400">*</span></label>
+                                <label class="block text-sm font-bold text-slate-600 mb-1.5">Username <span class="text-rose-400">*</span></label>
                                 <input placeholder="Enter Username" type="text" name="username" value="{{ old('username') }}" required class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Email <span class="text-rose-400">*</span></label>
+                                <label class="block text-sm font-bold text-slate-600 mb-1.5">Email <span class="text-rose-400">*</span></label>
                                 <input placeholder="Enter Email" type="email" name="email" value="{{ old('email') }}" required class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
                             </div>
                             <div class="relative w-full">
-                                <label class="block text-xs font-bold text-slate-600 mb-1.5">System Role</label>
+                                <label class="block text-sm font-bold text-slate-600 mb-1.5">System Role</label>
                                 <select name="role_id"
-                                    class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none cursor-pointer appearance-none">
+                                    class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none appearance-none">
         
                                     @foreach($roles as $role)
                                         <option value="{{ $role->id }}">{{ ucfirst($role->role_name) }}</option>
@@ -253,12 +260,12 @@
                             </div>
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Password <span class="text-rose-400">*</span></label>
-                                    <input placeholder="Enter password" type="password" name="password" required class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none">
+                                    <label class="block text-sm font-bold text-slate-600 mb-1.5">Password <span class="text-rose-400">*</span></label>
+                                    <input placeholder="Enter password" type="password" name="password" required class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-600 mb-1.5">Confirm</label>
-                                    <input placeholder="Confirm password" type="password" name="password_confirmation" required class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none">
+                                    <label class="block text-sm font-bold text-slate-600 mb-1.5">Confirm</label>
+                                    <input placeholder="Confirm password" type="password" name="password_confirmation" required class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
                                 </div>
                             </div>
                         </div>
@@ -270,35 +277,33 @@
                                 <h6 class="text-[15px] font-black text-slate-400 uppercase tracking-widest mt-2">Personal Profile</h6>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
-                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">First Name</label>
-                                    <input placeholder="Enter FirstName" type="text" name="first_name" value="{{ old('first_name') }}" required class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none">
+                                <div><label class="block text-sm font-bold text-slate-600 mb-1.5">First Name</label>
+                                    <input placeholder="Enter FirstName" type="text" name="first_name" value="{{ old('first_name') }}" required class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
                                 </div>
-                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">Last Name</label>
-                                    <input placeholder="Enter Last Name" type="text" name="last_name" value="{{ old('last_name') }}" required class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none">
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-3">
-                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">Phone</label>
-                                    <input placeholder="Enter Phone Number" type="text" name="phone" value="{{ old('phone') }}" class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none">
-                                </div>
-                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">Birthday</label>
-                                    <input type="date" name="birthday" value="{{ old('birthday') }}" class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none">
+                                <div><label class="block text-sm font-bold text-slate-600 mb-1.5">Last Name</label>
+                                    <input placeholder="Enter Last Name" type="text" name="last_name" value="{{ old('last_name') }}" required class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
-                                <div><label class="block text-xs font-bold text-slate-600 mb-1.5">Address</label>
-                                    <input placeholder="Enter Address" type="text" name="address" value="{{ old('address') }}" class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 transition-all outline-none">
+                                <div><label class="block text-sm font-bold text-slate-600 mb-1.5">Phone</label>
+                                    <input placeholder="Enter Phone Number" type="text" name="phone" value="{{ old('phone') }}" class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
+                                </div>
+                                <div><label class="block text-sm font-bold text-slate-600 mb-1.5">Birthday</label>
+                                    <input type="date" name="birthday" value="{{ old('birthday') }}" class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div><label class="block text-sm font-bold text-slate-600 mb-1.5">Address</label>
+                                    <input placeholder="Enter Address" type="text" name="address" value="{{ old('address') }}" class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-600 mb-1.5">
+                                    <label class="block text-sm font-bold text-slate-600 mb-1.5">
                                         Sex
                                     </label>
 
                                     <div class="relative">
                                         <select name="sex"
-                                            class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm 
-                                                   focus:bg-white focus:border-indigo-400 transition-all outline-none 
-                                                   appearance-none cursor-pointer">
+                                            class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none appearance-none">
                                             <option value="other">Other</option>
                                             <option value="male">Male</option>
                                             <option value="female">Female</option>
@@ -313,7 +318,7 @@
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1.5">Profile Photo</label>
+                                <label class="block text-sm font-bold text-slate-600 mb-1.5">Profile Photo</label>
                                 <div class="relative group cursor-pointer">
                                     <input type="file" name="profile_photo" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" id="photoInput">
                                     <div class="w-full px-4 py-3 border-2 border-dashed border-slate-200 rounded flex items-center justify-center gap-3 group-hover:border-indigo-400 group-hover:bg-indigo-50/30 transition-all bg-slate-50/30" id="photoPreviewArea">
@@ -326,8 +331,9 @@
                         </div>
                     </div>
 
-                    <div class="px-7 py-3 bg-slate-100 flex justify-end">
-                        <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-indigo-500/20 active:scale-95 flex items-center justify-center gap-2">
+                    <div class="flex items-center justify-end gap-3 border-t border-slate-100 bg-slate-100 p-6">
+                        <button type="button" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80 px-5 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="w-full sm:w-auto bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-700 hover:to-indigo-600 text-white px-6 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-indigo-500/20 active:scale-95 flex items-center justify-center gap-2 border-none">
                             <i class="fas fa-save text-xs"></i> Create User
                         </button>
                     </div>
@@ -527,32 +533,4 @@
         });
     })();
 </script>
-
-<style>
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 5px;
-        height: 5px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 10px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 10px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8;
-    }
-    /* Ensure modal content stays within bounds */
-    .modal-content {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        pointer-events: auto;
-        background-clip: padding-box;
-        outline: 0;
-    }
-</style>
 @endsection
