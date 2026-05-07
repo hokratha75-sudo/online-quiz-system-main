@@ -7,7 +7,7 @@
             <i class="fas fa-gear text-2xl"></i>
         </div>
         <div>
-            <h1 class="text-[28px] font-bold tracking-tight text-slate-900 leading-none">School Framework</h1>
+            <h1 class="text-[28px] font-bold tracking-tight text-slate-900 leading-none">Manage Setting</h1>
             <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2">Manage global application architecture</p>
         </div>
     </div>
@@ -61,21 +61,21 @@
     @endif
 
     <!-- Main Settings Card -->
-    <div x-data="{ tab: '{{ old('_tab', request('_tab', 'general')) }}' }" class="bg-white rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden relative">
+    <div x-data="{ tab: '{{ old('_tab', request('_tab', 'general')) }}' }" class="bg-white rounded-lg shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden relative">
         <div class="absolute inset-0 bg-gradient-to-b from-slate-50/50 to-white pointer-events-none"></div>
         
         <div class="relative z-10">
             <!-- Tabs Nav -->
             <!-- Tabs Nav -->
-            <div class="w-full border-b border-neutral-300 dark:border-neutral-700 bg-neutral-50/50 pt-4 px-6">
+            <div class="w-full border-b border-neutral-300 dark:border-neutral-500 bg-neutral-50/50 pt-3 px-3">
                 <div class="flex gap-2 overflow-x-auto">
-                    <button @click="tab = 'general'" :class="tab === 'general' ? 'border-b-2 border-black text-black font-bold dark:border-white dark:text-white' : 'text-neutral-600 font-medium hover:border-b-2 hover:border-neutral-300 hover:text-neutral-900 dark:text-neutral-300 dark:hover:border-neutral-700 dark:hover:text-white'" class="h-min px-4 py-2 text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:focus-visible:outline-white" role="tab" :aria-selected="tab === 'general'" :tabindex="tab === 'general' ? '0' : '-1'">
+                    <button @click="tab = 'general'" :class="tab === 'general' ? 'border-b-1 border-black text-black font-bold dark:border-white dark:text-white' : 'text-neutral-600 font-medium hover:border-b-1 hover:border-neutral-300 hover:text-neutral-900 dark:text-neutral-300 dark:hover:border-neutral-700 dark:hover:text-white'" class="h-min px-2 py-1 text-sm transition-colors focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-black dark:focus-visible:outline-white" role="tab" :aria-selected="tab === 'general'" :tabindex="tab === 'general' ? '0' : '-1'">
                         <i class="fas fa-compass mr-2"></i> General
                     </button>
-                    <button @click="tab = 'quiz'" :class="tab === 'quiz' ? 'border-b-2 border-black text-black font-bold dark:border-white dark:text-white' : 'text-neutral-600 font-medium hover:border-b-2 hover:border-neutral-300 hover:text-neutral-900 dark:text-neutral-300 dark:hover:border-neutral-700 dark:hover:text-white'" class="h-min px-4 py-2 text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:focus-visible:outline-white" role="tab" :aria-selected="tab === 'quiz'" :tabindex="tab === 'quiz' ? '0' : '-1'">
+                    <button @click="tab = 'quiz'" :class="tab === 'quiz' ? 'border-b-1 border-black text-black font-bold dark:border-white dark:text-white' : 'text-neutral-600 font-medium hover:border-b-1 hover:border-neutral-300 hover:text-neutral-900 dark:text-neutral-300 dark:hover:border-neutral-700 dark:hover:text-white'" class="h-min px-2 py-1 text-sm transition-colors focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-black dark:focus-visible:outline-white" role="tab" :aria-selected="tab === 'quiz'" :tabindex="tab === 'quiz' ? '0' : '-1'">
                         <i class="fas fa-file-lines mr-2"></i> Quiz Rules
                     </button>
-                    <button @click="tab = 'security'" :class="tab === 'security' ? 'border-b-2 border-black text-black font-bold dark:border-white dark:text-white' : 'text-neutral-600 font-medium hover:border-b-2 hover:border-neutral-300 hover:text-neutral-900 dark:text-neutral-300 dark:hover:border-neutral-700 dark:hover:text-white'" class="h-min px-4 py-2 text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:focus-visible:outline-white" role="tab" :aria-selected="tab === 'security'" :tabindex="tab === 'security' ? '0' : '-1'">
+                    <button @click="tab = 'security'" :class="tab === 'security' ? 'border-b-1 border-black text-black font-bold dark:border-white dark:text-white' : 'text-neutral-600 font-medium hover:border-b-1 hover:border-neutral-300 hover:text-neutral-900 dark:text-neutral-300 dark:hover:border-neutral-700 dark:hover:text-white'" class="h-min px-2 py-1 text-sm transition-colors focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-black dark:focus-visible:outline-white" role="tab" :aria-selected="tab === 'security'" :tabindex="tab === 'security' ? '0' : '-1'">
                         <i class="fas fa-shield-halved mr-2"></i> Security
                     </button>
                 </div>
@@ -91,7 +91,7 @@
                         <input type="hidden" name="_tab" value="general">
 
                         <!-- Maintenance Mode -->
-                        <div class="bg-slate-50/30 border border-slate-100 rounded-[32px] p-8 md:p-10 transition-all duration-300">
+                        <div class="bg-slate-50/30 border border-slate-100 rounded-lg p-8 md:p-10 transition-all duration-300">
                             <div class="flex items-center gap-5 mb-10">
                                 <div class="w-12 h-12 rounded-[18px] bg-rose-500 text-white flex items-center justify-center shrink-0 shadow-lg shadow-rose-500/20">
                                     <i class="fas fa-hourglass-half"></i>
@@ -128,9 +128,9 @@
                                                  this.loading = false;
                                              }
                                          }
-                                     }" class="flex items-center justify-between bg-white border border-slate-100 p-8 rounded-[24px] shadow-sm">
+                                     }" class="flex items-center justify-between bg-white border border-slate-100 p-8 rounded-lg shadow-sm">
                                          <div class="flex items-center gap-6">
-                                             <div :class="enabled ? 'bg-rose-500 text-white' : 'bg-slate-100 text-slate-400'" class="w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300">
+                                             <div :class="enabled ? 'bg-rose-500 text-white' : 'bg-slate-100 text-slate-400'" class="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300">
                                                  <i class="fas fa-power-off text-lg"></i>
                                              </div>
                                              <div>
@@ -155,7 +155,7 @@
                         <!-- Sticky Footer Actions -->
                         <div class="sticky bottom-0 -mx-6 md:-mx-8 px-6 md:px-8 py-6 bg-white/80 backdrop-blur-md border-t border-slate-50 flex justify-end z-20 mt-8">
                             <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-10 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all shadow-xl shadow-indigo-600/20 flex items-center gap-3 hover:scale-[1.02] active:scale-[0.98]">
-                                <i class="fas fa-check-circle text-white/50"></i> Save Preferences
+                                <i class="fas fa-check-circle text-white/50"></i> Save 
                             </button>
                         </div>
                     </form>
@@ -168,14 +168,14 @@
                         <input type="hidden" name="_tab" value="quiz">
 
                         <!-- Default Quiz Params -->
-                        <div class="bg-slate-50/30 border border-slate-100 rounded-[32px] p-8 md:p-10 transition-all duration-300">
+                        <div class="bg-slate-50/30 border border-slate-100 rounded-[10px] p-10 md:p-15 transition-all duration-300">
                             <div class="flex items-center gap-5 mb-10">
-                                <div class="w-12 h-12 rounded-[18px] bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-indigo-600/20">
+                                <div class="w-12 h-12 rounded-[10px] bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-indigo-600/20">
                                     <i class="fas fa-sliders"></i>
                                 </div>
                                 <div>
                                     <h3 class="text-xl font-bold tracking-tight text-slate-900">Quick Start Defaults</h3>
-                                    <p class="text-sm font-medium text-slate-400 mt-1">Pre-set values for new quizzes</p>
+                                    <p class="text-sm font-medium text-slate-400 mt-1">Setup values for new quizzes</p>
                                 </div>
                             </div>
                             
@@ -183,21 +183,21 @@
                                 <div class="space-y-2">
                                     <label class="block text-xs font-semibold tracking-wide text-slate-600 uppercase">Default Time Limit</label>
                                     <div class="relative flex items-center">
-                                        <input type="number" name="default_time_limit" value="{{ old('default_time_limit', $settings['default_time_limit'] ?? 30) }}" min="1" max="300" class="w-full pr-16 pl-4 py-3 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 outline-none text-sm text-slate-800 font-medium">
+                                        <input type="number" name="default_time_limit" value="{{ old('default_time_limit', $settings['default_time_limit'] ?? 30) }}" min="1" max="300" class="w-full pr-12 pl-3 py-2.5 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 outline-none text-sm text-slate-800 font-medium">
                                         <span class="absolute right-4 text-xs font-semibold text-slate-400">MINS</span>
                                     </div>
                                 </div>
                                 <div class="space-y-2">
-                                    <label class="block text-xs font-semibold tracking-wide text-slate-600 uppercase">Pass Threshold</label>
+                                    <label class="block text-xs font-semibold tracking-wide text-slate-600 uppercase">Pass Grading</label>
                                     <div class="relative flex items-center">
-                                        <input type="number" name="default_pass_percentage" value="{{ old('default_pass_percentage', $settings['default_pass_percentage'] ?? 60) }}" min="1" max="100" class="w-full pr-12 pl-4 py-3 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 outline-none text-sm text-slate-800 font-medium">
+                                        <input type="number" name="default_pass_percentage" value="{{ old('default_pass_percentage', $settings['default_pass_percentage'] ?? 60) }}" min="1" max="100" class="w-full pr-12 pl-3 py-2.5 rounded-lg border border-slate-200 bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 outline-none text-sm text-slate-800 font-medium">
                                         <span class="absolute right-4 text-xs font-semibold text-slate-400">%</span>
                                     </div>
                                 </div>
                                 <div class="space-y-2">
                                     <label class="block text-xs font-semibold tracking-wide text-slate-600 uppercase">Max Attempts</label>
                                     <div class="relative flex items-center">
-                                        <input type="number" name="max_attempts" value="{{ old('max_attempts', $settings['max_attempts'] ?? 1) }}" min="1" max="99" class="w-full pl-4 py-3 rounded-xl border border-slate-200 bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 outline-none text-sm text-slate-800 font-medium">
+                                        <input type="number" name="max_attempts" value="{{ old('max_attempts', $settings['max_attempts'] ?? 1) }}" min="1" max="99" class="w-full pl-3 py-2.5 rounded-lg border border-slate-200 bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-300 outline-none text-sm text-slate-800 font-medium">
                                     </div>
                                 </div>
                             </div>
