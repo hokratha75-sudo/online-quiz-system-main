@@ -33,7 +33,7 @@ class SubjectController extends Controller
         $subjects = $query->latest()->paginate(10);
         $departments = Department::whereNotNull('code')->orderBy('department_name')->get();
         $majors = Major::orderBy('name')->get();
-        $classes = ClassModel::orderBy('name')->get();
+        $classes = ClassModel::with('major')->orderBy('name')->get();
         
         return view('admin.subjects.index', compact('subjects', 'departments', 'majors', 'classes'));
     }

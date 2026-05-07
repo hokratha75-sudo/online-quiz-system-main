@@ -63,10 +63,14 @@
                                 Assigned Classes 
                                 <span class="text-xs font-normal text-slate-400">(Hold Ctrl/Cmd to select multiple)</span>
                             </label>
-                            <select name="classes[]" multiple
+                            <select name="classes[]" multiple id="classSelect"
                                     class="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm h-32 custom-scrollbar">
                                 @foreach($classes as $class)
-                                    <option value="{{ $class->id }}" class="py-1.5 px-3 rounded-md mb-1 hover:bg-slate-50 cursor-pointer">{{ $class->name }}</option>
+                                    <option value="{{ $class->id }}" 
+                                            data-major="{{ $class->major_id }}" 
+                                            data-department="{{ optional($class->major)->department_id ?? '' }}"
+                                            style="display: none;"
+                                            class="py-1.5 px-3 rounded-md mb-1 hover:bg-slate-50 cursor-pointer">{{ $class->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -96,9 +100,36 @@ function updateMajors(deptId, selectedMajorId = null) {
         opt.style.display = (optDept == deptId || !deptId) ? '' : 'none';
     });
     if (selectedMajorId) majorSelect.value = selectedMajorId;
+    updateClasses(deptId, majorSelect.value);
+}
+
+function updateClasses(deptId, majorId) {
+    const classSelect = document.getElementById('classSelect');
+    if(!classSelect) return;
+
+    Array.from(classSelect.options).forEach(opt => {
+        if (!opt.value) return;
+        const optMajor = opt.getAttribute('data-major');
+        const optDept = opt.getAttribute('data-department');
+        
+        let show = false;
+        if (majorId) {
+            show = (optMajor == majorId);
+        } else if (deptId) {
+            show = (optDept == deptId);
+        }
+        
+        opt.style.display = show ? '' : 'none';
+        if (!show) opt.selected = false;
+    });
 }
 
 document.getElementById('departmentSelect')?.addEventListener('change', function() {
     updateMajors(this.value);
+});
+
+document.getElementById('majorSelect')?.addEventListener('change', function() {
+    const deptId = document.getElementById('departmentSelect').value;
+    updateClasses(deptId, this.value);
 });
 </script>

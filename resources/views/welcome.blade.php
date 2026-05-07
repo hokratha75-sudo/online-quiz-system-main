@@ -58,13 +58,6 @@
 <body class="font-sans bg-white text-slate-900 selection:bg-indigo-500 selection:text-white overflow-x-hidden" 
       x-data="{ mobileMenu: false, scrolled: false }" @scroll.window="scrolled = window.pageYOffset > 20">
 
-    <!-- Update Badge (Floating Top-Right) -->
-    <div class="fixed top-24 right-6 z-[60] hidden lg:block">
-        <a href="#" class="inline-flex items-center gap-2 bg-emerald-500/90 text-white px-4 py-1.5 rounded-full text-xs font-bold backdrop-blur-md shadow-lg shadow-emerald-500/20 border border-emerald-400/30 hover:scale-105 transition-all">
-            <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-            🎉 Now with AI Question Generator
-        </a>
-    </div>
 
     <!-- Navigation Header -->
     <header class="fixed top-0 left-0 right-0 z-[100] transition-all duration-300" 

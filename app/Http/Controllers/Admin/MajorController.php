@@ -24,21 +24,20 @@ class MajorController extends Controller
         $dashboardTitle = 'Department Management';
 
         $counts = [
-            'departments' => \App\Models\Department::whereNotNull('code')->count(),
+            'departments' => \App\Models\Department::count(),
             'majors' => \App\Models\Major::count(),
-            'classes' => \App\Models\ClassModel::whereHas('major.department', fn ($q) => $q->whereNotNull('code'))->count(),
-            'subjects' => \App\Models\Subject::whereHas('major.department', fn ($q) => $q->whereNotNull('code'))->count(),
+            'classes' => \App\Models\ClassModel::count(),
+            'subjects' => \App\Models\Subject::count(),
         ];
 
         // Data for Modals (dropdowns)
-        $departments = \App\Models\Department::whereNotNull('code')->orderBy('department_name')->get();
-        $majors_all = \App\Models\Major::whereHas('department', fn ($q) => $q->whereNotNull('code'))->orderBy('name')->get();
+        $departments = \App\Models\Department::orderBy('department_name')->get();
+        $majors_all = \App\Models\Major::has('department')->orderBy('name')->get();
 
         $items = null;
         switch ($tab) {
             case 'majors':
                 $query = \App\Models\Major::with('department')
-                    ->whereHas('department', fn ($q) => $q->whereNotNull('code'))
                     ->withCount(['classes', 'subjects']);
                 if ($search) {
                     $query->where(function ($q) use ($search) {
@@ -49,7 +48,6 @@ class MajorController extends Controller
                 break;
             case 'classes':
                 $query = \App\Models\ClassModel::with('major.department')
-                    ->whereHas('major.department', fn ($q) => $q->whereNotNull('code'))
                     ->withCount(['students', 'subjects']);
                 if ($search) {
                     $query->where(function ($q) use ($search) {
@@ -60,7 +58,6 @@ class MajorController extends Controller
                 break;
             case 'subjects':
                 $query = \App\Models\Subject::with('major.department')
-                    ->whereHas('major.department', fn ($q) => $q->whereNotNull('code'))
                     ->withCount(['classes', 'quizzes']);
                 if ($search) {
                     $query->where(function ($q) use ($search) {
@@ -71,7 +68,7 @@ class MajorController extends Controller
                 $items = $query->latest()->paginate(10);
                 break;
             default: // departments
-                $query = \App\Models\Department::whereNotNull('code')->withCount(['majors', 'classes', 'subjects']);
+                $query = \App\Models\Department::withCount(['majors', 'classes', 'subjects']);
                 if ($search) {
                     $query->where(function ($q) use ($search) {
                         $q->where('department_name', 'LIKE', "%{$search}%")
