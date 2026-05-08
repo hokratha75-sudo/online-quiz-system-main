@@ -49,14 +49,14 @@
                 <p class="text-[11px] font-medium text-slate-500">{{ session('success') }}</p>
             </div>
         </div>
-        <button type="button" class="text-slate-400 hover:text-slate-600 px-2" onclick="this.parentElement.style.display='none'">
-            <i class="fas fa-times text-xs"></i>
+        <button type="button" class="group relative w-10 h-10 rounded-full bg-blue-50 border border-pink-200 text-pink-400 hover:bg-blue-100 hover:text-pink-500 hover:scale-110 active:scale-95 transition-all duration-200 ease-out focus:outline-none shadow-sm hover:shadow-pink-200/50" onclick="this.parentElement.style.display='none'">
+            <i class="fas fa-times text-sm group-hover:rotate-90 transition-transform duration-200"></i>
         </button>
     </div>
     @endif
 
     <!-- Data Table Card -->
-    <div class="w-full overflow-hidden rounded-md border border-neutral-300 dark:border-neutral-700 mb-8">
+    <div class="w-full overflow-hidden rounded-2xl border border-neutral-300 dark:border-neutral-700 mb-8">
         
         <!-- Toolbar -->
         <div class="p-4 border-b border-neutral-200 flex flex-col md:flex-row items-center justify-between gap-4 bg-neutral-50 text-neutral-900">
@@ -76,7 +76,7 @@
                         <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/>
                     </svg>
                     <input type="text" id="tableSearch" placeholder="Search indices..." 
-                           class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold text-slate-900 uppercase tracking-widest focus:outline-none focus:border-indigo-500 transition-all shadow-sm" />
+                           class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium placeholder:text-slate-300 focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none" />
                 </div>
             </div>
         </div>
@@ -103,7 +103,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-neutral-200">
+                <tbody class="divide-y divide-neutral-200" id="tableBody">
                     @forelse($items as $item)
                     <tr class="table-row hover:bg-neutral-100 transition-colors border-b border-neutral-100 group">
                         <td class="p-4 text-center">{{ $loop->iteration + ($items->currentPage() - 1) * $items->perPage() }}</td>
@@ -154,21 +154,48 @@
                         @endif
                         
                         <td class="p-4 text-right">
-                            <div class="flex items-center justify-end gap-2">
+                            <div class="flex items-center justify-end gap-4">
                                 <button type="button" 
-                                        onclick="editRecord({{ $item->id }}, '{{ addslashes($item->name) }}', '{{ $item->code ?? '' }}', '{{ $item->department_id ?? '' }}', '{{ $item->major_id ?? '' }}')" 
-                                        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md px-2 py-2 text-sm font-medium tracking-wide text-neutral-600 transition hover:bg-neutral-100 hover:text-neutral-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" title="Edit">
-                                    <i class="fas fa-edit"></i>
+                                        onclick='editRecord(
+    {{ $item->id }},
+    @json($item->name),
+    @json($item->code ?? ""),
+    @json($item->department_id ?? ""),
+    @json($item->major_id ?? "")
+)'
+                                        class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-indigo-600 hover:bg-indigo-700 transition-colors tooltip-trigger border-none" title="Edit">
+                                    <i class="fas fa-edit text-[13px]"></i>
                                 </button>
                                 <input type="checkbox" class="row-checkbox h-4 w-4 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-600" value="{{ $item->id }}" data-name="{{ $item->name }}">
                             </div>
                         </td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="7" class="py-24 text-center uppercase text-[10px] font-bold text-slate-300 tracking-widest">Zero nodes detected</td>
+                    <tr id="emptyStateRow">
+                        <td colspan="100%" class="py-16 text-center">
+                            <div class="flex flex-col items-center">
+                                <i class="fas fa-inbox text-4xl text-slate-300 mb-3"></i>
+                                <h3 class="text-sm font-semibold text-slate-600">
+                                    No {{ $tab }} found
+                                </h3>
+                                <p class="text-xs text-slate-400 mt-1">
+                                    Try adding a new record.
+                                </p>
+                            </div>
+                        </td>
                     </tr>
                     @endforelse
+
+                    <!-- Hidden row shown only when search returns zero results -->
+                    <tr id="noSearchResultsRow" style="display: none;">
+                        <td colspan="100%" class="py-16 text-center">
+                            <div class="flex flex-col items-center">
+                                <i class="fas fa-search text-4xl text-slate-300 mb-3"></i>
+                                <h3 class="text-sm font-semibold text-slate-600">No matching {{ $tab }}</h3>
+                                <p class="text-xs text-slate-400 mt-1">Try a different keyword or clear your search.</p>
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -199,11 +226,11 @@
                     <i class="fas fa-times text-sm group-hover:rotate-90 transition-transform duration-200"></i>
                 </button>
             </div>
-            <form action="{{ route('admin.majors.store') }}" method="POST" id="majorForm" class="p-6">
+            <form action="{{ route('admin.majors.store') }}" method="POST" id="majorForm" class="divide-y divide-slate-100">
                 @csrf
                 <input type="hidden" name="_method" value="POST" id="majorFormMethod">
                 
-                    <div class="grid grid-cols-1 gap-3">
+                    <div class="grid grid-cols-1 gap-3 p-6">
                         <div>
                             <label class="form-label font-semibold text-slate-700">Major Code <span class="text-rose-500">*</span></label>
                             <input type="text" name="code" id="majorCode" required placeholder="e.g. CS-01" 
@@ -229,9 +256,9 @@
                         </div>
                     </div>
                 
-                <div class="mt-8 flex items-center justify-end gap-3 pt-5 border-t border-slate-100">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" id="majorBtnSubmit" class="btn btn-primary">Save Major</button>
+                <div class=" flex items-center justify-end gap-3 border-t border-slate-100 bg-slate-100 p-6">
+                    <button type="button" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80 px-5 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="majorBtnSubmit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 shadow-sm border-none">Save Major</button>
                 </div>
             </form>
         </div>
@@ -299,18 +326,54 @@
 <script>
     const currentTab = '{{ $tab }}';
 
-    // Search Vector
+    // Improved Search Vector with "no results" handling
     document.getElementById('tableSearch').addEventListener('keyup', function() {
-        const query = this.value.toLowerCase();
-        document.querySelectorAll('#dataTable tbody .table-row').forEach(row => {
-            row.style.display = row.innerText.toLowerCase().includes(query) ? '' : 'none';
+        const query = this.value.toLowerCase().trim();
+        const rows = document.querySelectorAll('#tableBody .table-row');
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+            if (!query) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                const text = row.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            }
         });
+
+        const noResultsRow = document.getElementById('noSearchResultsRow');
+        const emptyStateRow = document.getElementById('emptyStateRow');
+
+        // If there are no rows at all (initial empty state)
+        if (rows.length === 0) {
+            if (noResultsRow) noResultsRow.style.display = 'none';
+            return;
+        }
+
+        if (visibleCount === 0) {
+            if (noResultsRow) noResultsRow.style.display = '';
+            if (emptyStateRow) emptyStateRow.style.display = 'none';
+        } else {
+            if (noResultsRow) noResultsRow.style.display = 'none';
+            if (emptyStateRow && rows.length === 0) emptyStateRow.style.display = '';
+        }
     });
 
-    // Selection Core
+    // Selection Core – only visible rows
     document.getElementById('selectAll').addEventListener('change', function() {
         const state = this.checked;
-        document.querySelectorAll('.row-checkbox').forEach(cb => { cb.checked = state; });
+        document.querySelectorAll('.row-checkbox').forEach(cb => {
+            const row = cb.closest('.table-row');
+            if (row && row.style.display !== 'none') {
+                cb.checked = state;
+            }
+        });
     });
 
     // Data Removal Logic

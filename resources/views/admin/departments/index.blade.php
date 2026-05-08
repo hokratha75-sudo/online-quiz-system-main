@@ -36,8 +36,8 @@
                 <p class="text-[11px] font-medium text-slate-500">{{ session('success') }}</p>
             </div>
         </div>
-        <button type="button" class="text-slate-400 hover:text-slate-600 px-2" onclick="this.parentElement.style.display='none'">
-            <i class="fas fa-times text-xs"></i>
+        <button type="button" class="group relative w-10 h-10 rounded-full bg-blue-50 border border-pink-200 text-pink-400 hover:bg-blue-100 hover:text-pink-500 hover:scale-110 active:scale-95 transition-all duration-200 ease-out focus:outline-none shadow-sm hover:shadow-pink-200/50" onclick="this.parentElement.style.display='none'">
+            <i class="fas fa-times text-sm group-hover:rotate-90 transition-transform duration-200"></i>
         </button>
     </div>
     @endif
@@ -54,8 +54,8 @@
                 <p class="text-[11px] font-medium text-slate-500">{{ $errors->first() }}</p>
             </div>
         </div>
-        <button type="button" class="text-slate-400 hover:text-slate-600 px-2" onclick="this.parentElement.style.display='none'">
-            <i class="fas fa-times text-xs"></i>
+        <button type="button" class="group relative w-10 h-10 rounded-full bg-blue-50 border border-pink-200 text-pink-400 hover:bg-blue-100 hover:text-pink-500 hover:scale-110 active:scale-95 transition-all duration-200 ease-out focus:outline-none shadow-sm hover:shadow-pink-200/50" onclick="this.parentElement.style.display='none'">
+            <i class="fas fa-times text-sm group-hover:rotate-90 transition-transform duration-200"></i>
         </button>
     </div>
     @endif
@@ -77,7 +77,7 @@
                 <div class="relative w-full sm:w-64">
                     <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-indigo-600 text-[10px]"></i>
                     <input type="text" id="tableSearch" placeholder="Search indices..." 
-                           class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold text-slate-900 uppercase tracking-widest focus:outline-none focus:border-indigo-500 transition-all shadow-sm">
+                           class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium placeholder:text-slate-300 focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
                 </div>
             </div>
         </div>
@@ -90,27 +90,27 @@
                         <th class="px-5 py-4 w-12 text-center">
                             <input type="checkbox" id="selectAll" class="w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500 cursor-pointer transition-colors shadow-sm">
                         </th>
-                        <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-left w-24">Code</th>
-                        <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-left">Department Details</th>
-                        <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Majors</th>
-                        <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Classes</th>
-                        <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Subjects</th>
-                        <th class="px-5 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-right sticky right-0 bg-white z-10">
+                        <th class=" text-[11px] font-bold text-slate-500 uppercase tracking-wider text-left w-40">Code</th>
+                        <th class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-left">Department Details</th>
+                        <th class=" text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Majors</th>
+                        <th class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Classes</th>
+                        <th class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Subjects</th>
+                        <th class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center sticky  bg-white z-10">
                             Actions
                         </th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 bg-white">
+                <tbody class="divide-y divide-slate-100 bg-white" id="tableBody">
                     @forelse($departments as $dept)
                     <tr class="table-row hover:bg-slate-50/50 transition-colors group">
                         <td class="px-5 py-4 text-center">
                             <input type="checkbox" class="row-checkbox w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500 cursor-pointer shadow-sm transition-colors" value="{{ $dept->id }}" data-name="{{ $dept->department_name }}" data-code="{{ $dept->code }}" data-description="{{ $dept->description }}">
                         </td>
-                        <td class="px-5 py-4">
+                        <td class="px-2 py-4">
                             <span class="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700 tracking-wide">{{ $dept->code ?? 'DPT-' . str_pad($dept->id, 3, '0', STR_PAD_LEFT) }}</span>
                         </td>
-                        <td class="px-5 py-4">
-                            <a href="{{ route('admin.departments.show', $dept->id) }}" class="flex items-center gap-3.5 transition-all group-hover:translate-x-1">
+                        <td class="px-2 py-4">
+                            <a href="{{ route('admin.departments.show', $dept->id) }}" class="flex items-center gap-3.5 transition-all group-hover:translate-x-1 no-underline">
                                 <div class="w-10 h-10 rounded-xl bg-indigo-50/80 text-indigo-600 flex items-center justify-center shrink-0 border border-indigo-100/50 shadow-sm">
                                     <i class="fas fa-building text-sm"></i>
                                 </div>
@@ -150,7 +150,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr>
+                    <tr id="emptyStateRow">
                         <td colspan="7">
                             <div class="p-12 text-center flex flex-col items-center">
                                 <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
@@ -162,6 +162,19 @@
                         </td>
                     </tr>
                     @endforelse
+
+                    <!-- Hidden row shown only when search returns zero results -->
+                    <tr id="noSearchResultsRow" style="display: none;">
+                        <td colspan="7">
+                            <div class="p-12 text-center flex flex-col items-center">
+                                <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+                                    <i class="fas fa-search text-2xl text-slate-300"></i>
+                                </div>
+                                <h3 class="text-base font-semibold text-slate-800 tracking-tight">No Matching Departments</h3>
+                                <p class="text-sm text-slate-500 mt-1 max-w-sm">Try a different keyword or clear your search.</p>
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -216,7 +229,7 @@
                     <i class="fas fa-times text-sm group-hover:rotate-90 transition-transform duration-200"></i>
                 </button>
             </div>
-            <form action="{{ route('admin.departments.store') }}" method="POST" id="deptForm">
+            <form action="{{ route('admin.departments.store') }}" method="POST" id="deptForm" class="divide-y divide-slate-100">
                 @csrf
                 <input type="hidden" name="_method" value="POST" id="formMethod">
                 
@@ -259,21 +272,48 @@
 
 @section('scripts')
 <script>
-    // Live Search functionality
+    // Live Search functionality with "no results" handling
     document.getElementById('tableSearch').addEventListener('keyup', function() {
-        let query = this.value.toLowerCase();
-        let rows = document.querySelectorAll('#deptTable tbody .table-row');
+        let query = this.value.toLowerCase().trim();
+        let rows = document.querySelectorAll('#tableBody .table-row');
+        let visibleCount = 0;
+
         rows.forEach(row => {
             let text = row.innerText.toLowerCase();
-            row.style.display = text.includes(query) ? '' : 'none';
+            if (text.includes(query)) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
         });
+
+        let noResultsRow = document.getElementById('noSearchResultsRow');
+        let emptyStateRow = document.getElementById('emptyStateRow');
+
+        // If there are no department rows at all (initial empty state)
+        if (rows.length === 0) {
+            if (noResultsRow) noResultsRow.style.display = 'none';
+            return;
+        }
+
+        if (visibleCount === 0) {
+            if (noResultsRow) noResultsRow.style.display = '';
+            if (emptyStateRow) emptyStateRow.style.display = 'none';
+        } else {
+            if (noResultsRow) noResultsRow.style.display = 'none';
+            if (emptyStateRow && rows.length === 0) emptyStateRow.style.display = '';
+        }
     });
 
-    // Select all functionality
+    // Select all – only visible rows
     document.getElementById('selectAll').addEventListener('change', function() {
         let checked = this.checked;
         document.querySelectorAll('.row-checkbox').forEach(cb => {
-            cb.checked = checked;
+            let row = cb.closest('.table-row');
+            if (row && row.style.display !== 'none') {
+                cb.checked = checked;
+            }
         });
     });
 

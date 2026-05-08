@@ -365,7 +365,7 @@
                 .then(json => {
                     const users = json.data || [];
                     if(users.length === 0) {
-                        tableBody.innerHTML = `<tr><td colspan="6" class="px-6 py-16 text-center text-slate-400 text-xs font-bold">✨ No members match your search ✨</td></tr>`;
+                        tableBody.innerHTML = `<tr><td colspan="6" class="px-6 py-16 text-center text-slate-400 text-xs font-bold"> No members match your search </td></tr>`;
                         if(paginationWrap) paginationWrap.style.display = 'none';
                     } else {
                         let rows = '';
