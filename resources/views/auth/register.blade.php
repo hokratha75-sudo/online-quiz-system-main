@@ -64,12 +64,12 @@
         }
     </style>
 </head>
-<body class="font-sans min-h-screen flex items-center justify-center p-6">
+<body class="font-sans min-h-screen flex items-center justify-center p-4 overflow-y-hidden">
 
-    <div class="w-full max-w-[500px] bg-white rounded-[24px] shadow-[0_4px_24px_0_rgba(34,41,47,0.1)] p-8 md:p-10 max-h-[95vh] overflow-y-auto custom-scrollbar">
+    <div class="w-full max-w-[1000px] bg-white rounded-[24px] shadow-[0_4px_24px_0_rgba(34,41,47,0.1)] p-8 max-h-[95vh] overflow-y-auto custom-scrollbar">
         
-        <div class="mb-8 text-center">
-            <div class="flex items-center justify-center gap-3 mb-6">
+        <div class="mb-6 text-center">
+            <div class="flex items-center justify-center gap-3 mb-2">
                 <div class="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
                     <i class="fas fa-graduation-cap text-white text-2xl"></i>
                 </div>
@@ -97,13 +97,13 @@
                 <div>
                     <label for="first_name" class="block text-xs font-semibold text-label uppercase tracking-wider mb-2">First Name</label>
                     <input type="text" id="first_name" name="first_name" required 
-                           class="w-full h-14 bg-white border border-input text-slate-800 text-sm rounded-xl px-5 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
+                           class="w-full h-12 bg-white border border-input text-slate-800 text-sm rounded-xl px-4 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
                            placeholder="Hok" value="{{ old('first_name') }}">
                 </div>
                 <div>
                     <label for="last_name" class="block text-xs font-semibold text-label uppercase tracking-wider mb-2">Last Name</label>
                     <input type="text" id="last_name" name="last_name" required 
-                           class="w-full h-14 bg-white border border-input text-slate-800 text-sm rounded-xl px-5 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
+                           class="w-full h-12 bg-white border border-input text-slate-800 text-sm rounded-xl px-4 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
                            placeholder="Ratha" value="{{ old('last_name') }}">
                 </div>
             </div>
@@ -111,38 +111,39 @@
             <div>
                 <label for="username" class="block text-xs font-semibold text-label uppercase tracking-wider mb-2">Username</label>
                 <input type="text" id="username" name="username" required 
-                       class="w-full h-14 bg-white border border-input text-slate-800 text-sm rounded-xl px-5 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
+                       class="w-full h-12 bg-white border border-input text-slate-800 text-sm rounded-xl px-4 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
                        placeholder="hokratha" value="{{ old('username') }}">
             </div>
 
             <div>
                 <label for="email" class="block text-xs font-semibold text-label uppercase tracking-wider mb-2">Email</label>
                 <input type="email" id="email" name="email" required 
-                       class="w-full h-14 bg-white border border-input text-slate-800 text-sm rounded-xl px-5 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
+                       class="w-full h-12 bg-white border border-input text-slate-800 text-sm rounded-xl px-4 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
                        placeholder="hokratha@example.com" value="{{ old('email') }}">
             </div>
-
-            <div x-data="{ show: false }">
-                <label for="password" class="block text-xs font-semibold text-label uppercase tracking-wider mb-2">Password</label>
-                <div class="relative">
-                    <input :type="show ? 'text' : 'password'" id="password" name="password" required 
-                           class="w-full h-14 bg-white border border-input text-slate-800 text-sm rounded-xl px-5 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
-                           placeholder="············">
-                    <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 transition-colors">
-                        <i class="far" :class="show ? 'fa-eye-slash' : 'fa-eye'"></i>
-                    </button>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div x-data="{ show: false }">
+                    <label for="password" class="block text-xs font-semibold text-label uppercase tracking-wider mb-2">Password</label>
+                    <div class="relative">
+                        <input :type="show ? 'text' : 'password'" id="password" name="password" required 
+                               class="w-full h-12 bg-white border border-input text-slate-800 text-sm rounded-xl px-4 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
+                               placeholder="············">
+                        <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 transition-colors">
+                            <i class="far" :class="show ? 'fa-eye-slash' : 'fa-eye'"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
-
-            <div x-data="{ show: false }">
-                <label for="password_confirmation" class="block text-xs font-semibold text-label uppercase tracking-wider mb-2">Confirm Password</label>
-                <div class="relative">
-                    <input :type="show ? 'text' : 'password'" id="password_confirmation" name="password_confirmation" required 
-                           class="w-full h-14 bg-white border border-input text-slate-800 text-sm rounded-xl px-5 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
-                           placeholder="············">
-                    <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 transition-colors">
-                        <i class="far" :class="show ? 'fa-eye-slash' : 'fa-eye'"></i>
-                    </button>
+    
+                <div x-data="{ show: false }">
+                    <label for="password_confirmation" class="block text-xs font-semibold text-label uppercase tracking-wider mb-2">Confirm Password</label>
+                    <div class="relative">
+                        <input :type="show ? 'text' : 'password'" id="password_confirmation" name="password_confirmation" required 
+                               class="w-full h-12 bg-white border border-input text-slate-800 text-sm rounded-xl px-4 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
+                               placeholder="············">
+                        <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 transition-colors">
+                            <i class="far" :class="show ? 'fa-eye-slash' : 'fa-eye'"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
             
@@ -154,12 +155,12 @@
             </div>
 
             <div class="pt-2">
-                <button type="submit" class="w-full h-14 flex items-center justify-center border border-transparent text-sm font-bold rounded-2xl text-white bg-primary hover:bg-primary-dark transition-all shadow-xl shadow-primary/20 active:scale-[0.99] uppercase tracking-widest">
+                <button type="submit" class="w-full h-12 flex items-center justify-center border border-transparent text-sm font-bold rounded-lg text-white bg-primary hover:bg-primary-dark transition-all shadow-xl shadow-primary/20 active:scale-[0.99] uppercase tracking-widest">
                     Sign up
                 </button>
             </div>
             
-            <div class="pt-4 text-center">
+            <div class="pt-2 text-center">
                 <p class="text-sm text-slate-600">
                     Already have an account? <a href="{{ route('login') }}" class="text-primary font-semibold hover:underline">Sign in instead</a>
                 </p>

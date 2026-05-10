@@ -365,7 +365,17 @@
                 .then(json => {
                     const users = json.data || [];
                     if(users.length === 0) {
-                        tableBody.innerHTML = `<tr><td colspan="6" class="px-6 py-16 text-center text-slate-400 text-xs font-bold"> No members match your search </td></tr>`;
+                        tableBody.innerHTML = `<tr id="emptyStateRow">
+                        <td colspan="7">
+                            <div class="p-12 text-center flex flex-col items-center">
+                                <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+                                    <i class="fas fa-search text-2xl text-slate-300"></i>
+                                </div>
+                                <h3 class="text-base font-semibold text-slate-800 tracking-tight">No Users Found</h3>
+                                <p class="text-sm text-slate-500 mt-1 max-w-sm">There are currently no users. Click "New User" to get started.</p>
+                            </div>
+                        </td>
+                    </tr>`;
                         if(paginationWrap) paginationWrap.style.display = 'none';
                     } else {
                         let rows = '';

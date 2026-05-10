@@ -85,7 +85,7 @@
                     <a href="{{ url('/dashboard') }}" class="h-11 px-6 bg-indigo-600 text-white rounded-xl text-sm font-bold flex items-center shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 hover:shadow-indigo-600/40 transition-all active:scale-95">Dashboard</a>
                 @else
                     <a href="{{ route('login') }}" class="hidden sm:block text-sm font-bold hover:text-indigo-600 transition-colors" :class="scrolled ? 'text-slate-600' : 'text-white/90'">Log In</a>
-                    <a href="{{ route('register') }}" class="h-11 px-6 bg-white text-slate-900 rounded-xl text-sm font-bold flex items-center shadow-lg shadow-black/5 hover:bg-indigo-50 hover:shadow-xl transition-all active:scale-95" :class="scrolled ? 'bg-indigo-600 !text-white' : ''">Start Free Trial</a>
+                    <a href="{{ route('register') }}" class="h-11 px-6 bg-indigo-500 text-white text-slate-900 rounded-lg text-sm font-bold flex items-center shadow-lg shadow-black/5 hover:bg-indigo-600 hover:shadow-xl transition-all active:scale-95" :class="scrolled ? 'bg-indigo-600 !text-white' : ''">Start Free Trial</a>
                 @endif
                 <!-- Mobile Toggle -->
                 <button @click="mobileMenu = !mobileMenu" class="md:hidden w-10 h-10 flex items-center justify-center text-xl" :class="scrolled ? 'text-slate-900' : 'text-white'">
@@ -102,7 +102,7 @@
             <a @click="mobileMenu = false" href="#how-it-works" class="text-2xl font-bold text-white">How it Works</a>
             <a @click="mobileMenu = false" href="#pricing" class="text-2xl font-bold text-white">Pricing</a>
             <a @click="mobileMenu = false" href="{{ route('login') }}" class="text-2xl font-bold text-white">Log In</a>
-            <a @click="mobileMenu = false" href="{{ route('register') }}" class="h-14 px-10 bg-indigo-600 text-white rounded-2xl text-lg font-bold flex items-center">Start Free Trial</a>
+            <a @click="mobileMenu = false" href="{{ route('register') }}" class="h-10 px-10 bg-indigo-600 text-white rounded-2xl text-lg font-bold flex items-center">Start Free Trial</a>
         </div>
     </div>
 
@@ -122,10 +122,10 @@
             </p>
 
             <div class="flex flex-col sm:flex-row items-center justify-center gap-5 px-4">
-                <a href="{{ route('register') }}" class="w-full sm:w-auto h-16 px-10 bg-white text-slate-950 rounded-2xl font-extrabold text-base flex items-center justify-center gap-3 shadow-2xl shadow-indigo-500/10 hover:bg-indigo-50 hover:scale-105 transition-all active:scale-[0.98]">
+                <a href="{{ route('register') }}" class="w-full sm:w-auto h-12 px-8 bg-indigo-500 text-white rounded-lg font-extrabold text-base flex items-center justify-center gap-3 shadow-2xl shadow-indigo-500/10 hover:bg-indigo-600 hover:scale-105 transition-all active:scale-[0.98]">
                     Start Free Trial <i class="fas fa-arrow-right text-sm"></i>
                 </a>
-                <a href="{{ route('login') }}" class="w-full sm:w-auto h-16 px-10 border-2 border-white/20 bg-white/5 text-white rounded-2xl font-extrabold text-base flex items-center justify-center gap-3 backdrop-blur-md hover:bg-white/10 hover:border-white transition-all active:scale-[0.98]">
+                <a href="{{ route('login') }}" class="w-full sm:w-auto h-12 px-8 border-2 border-white/20 bg-white/5 text-white rounded-lg font-extrabold text-base flex items-center justify-center gap-3 backdrop-blur-md hover:bg-white/10 hover:border-indigo-500 transition-all active:scale-[0.98] hover:scale-105">
                     Log In <i class="far fa-user text-sm"></i>
                 </a>
             </div>
@@ -335,8 +335,8 @@
                 <h3 class="text-4xl md:text-6xl font-display font-extrabold text-white tracking-tight mb-8">Ready to revolutionize<br>your assessments?</h3>
                 <p class="text-indigo-100/60 text-lg md:text-xl max-w-2xl mx-auto mb-14">Join 500+ institutions today. No credit card required to get started.</p>
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-5">
-                    <a href="{{ route('register') }}" class="h-16 px-12 bg-indigo-600 text-white rounded-2xl font-bold text-lg shadow-xl shadow-indigo-600/20 hover:bg-indigo-700 transition-all active:scale-95">Start Free Trial</a>
-                    <a href="#" class="h-16 px-12 border-2 border-white/20 text-white rounded-2xl font-bold text-lg hover:bg-white/5 transition-all">Talk to Sales</a>
+                    <a href="{{ route('register') }}" class="w-full sm:w-auto h-12 px-8 bg-indigo-500 text-white rounded-lg font-extrabold text-base flex items-center justify-center gap-3 shadow-2xl shadow-indigo-500/10 hover:bg-indigo-600 hover:scale-105 transition-all active:scale-[0.98]">Start Free Trial</a>
+                    <a href="#" class="w-full sm:w-auto h-12 px-8 border-2 border-white/20 bg-white/5 text-white rounded-lg font-extrabold text-base flex items-center justify-center gap-3 backdrop-blur-md hover:bg-white/10 hover:border-indigo-500 transition-all active:scale-[0.98] hover:scale-105">Talk to Sales</a>
                 </div>
             </div>
         </div>

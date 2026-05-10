@@ -69,6 +69,11 @@
                 <span class="text-slate-800 font-bold text-2xl tracking-tight">Quiz System</span>
             </div>
             
+<<<<<<< HEAD
+=======
+            {{-- <h2 class="text-xl font-semibold text-slate-800 mb-1 text-left">Welcome Back</h2>
+            <p class="text-slate-500 text-sm text-left">sign-in to your account</p> --}}
+>>>>>>> 6089867a3f19b0c41093f00b6b3e4670e3b57f97
         </div>
 
         @if($errors->any())
@@ -86,7 +91,7 @@
             <div>
                 <label for="username" class="block text-xs font-semibold text-label uppercase tracking-wider mb-2">Email or Username</label>
                 <input type="text" id="username" name="username" required 
-                       class="w-full h-14 bg-white border border-input text-slate-800 text-sm rounded-xl px-5 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
+                       class="w-full h-12 bg-white border border-input text-slate-800 text-sm rounded-xl px-4 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
                        placeholder="Enter your email or username"
                        value="{{ old('username') }}">
             </div>
@@ -97,7 +102,7 @@
                 </div>
                 <div class="relative">
                     <input :type="show ? 'text' : 'password'" id="password" name="password" required 
-                           class="w-full h-14 bg-white border border-input text-slate-800 text-sm rounded-xl px-5 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
+                           class="w-full h-12 bg-white border border-input text-slate-800 text-sm rounded-xl px-4 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
                            placeholder="············">
                     <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 transition-colors">
                         <i class="far" :class="show ? 'fa-eye-slash' : 'fa-eye'"></i>
@@ -114,8 +119,8 @@
                 </label>
             </div>
 
-            <div class="pt-2">
-                <button type="submit" class="w-full h-14 flex items-center justify-center border border-transparent text-sm font-bold rounded-2xl text-white bg-primary hover:bg-primary-dark transition-all shadow-xl shadow-primary/20 active:scale-[0.99] uppercase tracking-widest">
+            <div class="pt-1">
+                <button type="submit" class="w-full h-12 flex items-center justify-center border border-transparent text-sm font-bold rounded-lg text-white bg-primary hover:bg-primary-dark transition-all shadow-xl shadow-primary/20 active:scale-[0.99] uppercase tracking-widest">
                     Login
                 </button>
             </div>
