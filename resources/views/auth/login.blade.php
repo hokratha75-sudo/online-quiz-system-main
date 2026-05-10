@@ -69,11 +69,6 @@
                 <span class="text-slate-800 font-bold text-2xl tracking-tight">Quiz System</span>
             </div>
             
-<<<<<<< HEAD
-=======
-            {{-- <h2 class="text-xl font-semibold text-slate-800 mb-1 text-left">Welcome Back</h2>
-            <p class="text-slate-500 text-sm text-left">sign-in to your account</p> --}}
->>>>>>> 6089867a3f19b0c41093f00b6b3e4670e3b57f97
         </div>
 
         @if($errors->any())
