@@ -59,7 +59,7 @@
     <div class="w-full overflow-hidden rounded-2xl border border-neutral-300 dark:border-neutral-700 mb-8">
         
         <!-- Toolbar -->
-        <div class="p-4 border-b border-neutral-200 flex flex-col md:flex-row items-center justify-between gap-4 bg-neutral-50 text-neutral-900">
+        <div class="p-4 border-b border-neutral-200 flex flex-col md:flex-row items-center justify-between gap-4 bg-white text-neutral-900">
             <div class="flex items-center gap-4">
                 <h3 class="text-xs font-bold tracking-widest uppercase">Active {{ ucfirst($tab) }}</h3>
                 <span class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
@@ -103,7 +103,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-neutral-200" id="tableBody">
+                <tbody class="divide-y divide-neutral-100 bg-white" id="tableBody">
                     @forelse($items as $item)
                     <tr class="table-row hover:bg-neutral-100 transition-colors border-b border-neutral-100 group">
                         <td class="p-4 text-center">{{ $loop->iteration + ($items->currentPage() - 1) * $items->perPage() }}</td>
@@ -122,14 +122,14 @@
                                 <div class="text-neutral-900">{{ $item->department->department_name ?? 'SYSTEM UNIT' }}</div>
                             </td>
                             <td class="p-4 text-center">
-                                <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ ($item->classes_count ?? 0) > 0 ? 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-700/10' : 'bg-neutral-100 text-neutral-600' }}">
+                                <span class="inline-flex items-center justify-center min-w-[32px] px-2 py-1 rounded-md text-xs font-bold {{ ($item->classes_count ?? 0) > 0 ? 'bg-sky-50 text-sky-700 border border-sky-200 shadow-sm' : 'bg-slate-50 text-slate-500 border border-slate-200' }}">
                                     {{ $item->classes_count ?? 0 }}
                                 </span>
                             </td>
                             <td class="p-4 text-center">
-                                <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ ($item->subjects_count ?? 0) > 0 ? 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-700/10' : 'bg-neutral-100 text-neutral-600' }}">
+                                <span class="inline-flex items-center justify-center min-w-[32px] px-2 py-1 rounded-md text-xs font-bold {{ ($item->subjects_count ?? 0) > 0 ? 'bg-sky-50 text-sky-700 border border-sky-200 shadow-sm' : 'bg-slate-50 text-slate-500 border border-slate-200' }}">
                                     {{ $item->subjects_count ?? 0 }}
-                                </span>
+                                </span> 
                             </td>
                         @elseif($tab == 'classes')
                             <td class="p-4">
@@ -157,12 +157,12 @@
                             <div class="flex items-center justify-end gap-4">
                                 <button type="button" 
                                         onclick='editRecord(
-    {{ $item->id }},
-    @json($item->name),
-    @json($item->code ?? ""),
-    @json($item->department_id ?? ""),
-    @json($item->major_id ?? "")
-)'
+                                        {{ $item->id }},
+                                        @json($item->name),
+                                        @json($item->code ?? ""),
+                                        @json($item->department_id ?? ""),
+                                        @json($item->major_id ?? "")
+                                    )'
                                         class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-indigo-600 hover:bg-indigo-700 transition-colors tooltip-trigger border-none" title="Edit">
                                     <i class="fas fa-edit text-[13px]"></i>
                                 </button>
@@ -172,15 +172,13 @@
                     </tr>
                     @empty
                     <tr id="emptyStateRow">
-                        <td colspan="100%" class="py-16 text-center">
-                            <div class="flex flex-col items-center">
-                                <i class="fas fa-inbox text-4xl text-slate-300 mb-3"></i>
-                                <h3 class="text-sm font-semibold text-slate-600">
-                                    No {{ $tab }} found
-                                </h3>
-                                <p class="text-xs text-slate-400 mt-1">
-                                    Try adding a new record.
-                                </p>
+                        <td colspan="7">
+                            <div class="p-12 text-center flex flex-col items-center">
+                                <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+                                    <i class="fas fa-building text-2xl text-slate-300"></i>
+                                </div>
+                                <h3 class="text-base font-semibold text-slate-800 tracking-tight">No Majors Found</h3>
+                                <p class="text-sm text-slate-500 mt-1 max-w-sm">There are currently no majors. Click "New Major" to get started.</p>
                             </div>
                         </td>
                     </tr>
@@ -201,7 +199,7 @@
         </div>
 
         <!-- Pagination -->
-        <div class="px-8 py-5 border-t border-slate-50 bg-slate-50/20 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="p-4 border-t border-slate-50 bg-slate-500/20 flex flex-col md:flex-row items-center justify-between gap-4">
             <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
                 Cluster Range: {{ $items->firstItem() ?? 0 }} - {{ $items->lastItem() ?? 0 }} of {{ $items->total() }} Nodes
             </span>
