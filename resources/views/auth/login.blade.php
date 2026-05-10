@@ -69,8 +69,6 @@
                 <span class="text-slate-800 font-bold text-2xl tracking-tight">Quiz System</span>
             </div>
             
-            <h2 class="text-xl font-semibold text-slate-800 mb-1 text-left">Welcome Back</h2>
-            <p class="text-slate-500 text-sm text-left">sign-in to your account</p>
         </div>
 
         @if($errors->any())
@@ -96,7 +94,6 @@
             <div x-data="{ show: false }">
                 <div class="flex justify-between items-center mb-2">
                     <label for="password" class="block text-xs font-semibold text-label uppercase tracking-wider">Password</label>
-                    <a href="{{ route('password.request') }}" class="text-xs font-medium text-primary hover:underline">Forgot Password?</a>
                 </div>
                 <div class="relative">
                     <input :type="show ? 'text' : 'password'" id="password" name="password" required 
@@ -112,6 +109,8 @@
                 <label class="flex items-center gap-2 cursor-pointer group">
                     <input type="checkbox" name="remember" class="w-4 h-4 rounded border-input text-primary focus:ring-primary/20 cursor-pointer">
                     <span class="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">Remember Me</span>
+                    <a href="{{ route('password.request') }}" class="text-xs font-medium text-primary hover:underline ">Forgot Password?</a>
+
                 </label>
             </div>
 
@@ -120,13 +119,6 @@
                     Login
                 </button>
             </div>
-            
-            <div class="pt-4 text-center">
-                <p class="text-sm text-slate-600">
-                    New on our platform? <a href="{{ route('register') }}" class="text-primary font-semibold hover:underline">Create an account</a>
-                </p>
-            </div>
-
         </form>
     </div>
 

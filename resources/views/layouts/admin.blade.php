@@ -486,7 +486,15 @@
                 hover:scale-[1.02] transition-all duration-200 ease-in-out"
             >
                 <!-- Icon -->
-                <i class="fas fa-user-circle text-2xl opacity-90 group-hover:rotate-6 transition"></i>
+                <div class="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-lg overflow-hidden">
+                    @if($authUser && $authUser->profile_photo)
+                        <img src="{{ asset('storage/' . $authUser->profile_photo) }}"
+                            alt="Avatar"
+                            class="w-full h-full object-cover">
+                    @else
+                        {{ substr($authUser?->username ?? 'R', 0, 1) }}
+                    @endif
+                </div>
 
                 <!-- Username -->
                 <span>{{ $authUser->username ?? 'Profile' }}</span>

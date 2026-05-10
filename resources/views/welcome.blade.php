@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" class="scroll-smooth">
 <head>
     <meta charset="utf-8">
@@ -370,4 +370,4 @@
     </footer>
 
 </body>
-</html>
+</html> --}}
