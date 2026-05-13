@@ -105,15 +105,29 @@
                 </div>
             </div>
             
-            <div class="flex items-center pt-1">
-                <label class="flex items-center gap-2 cursor-pointer group">
-                    <input type="checkbox" name="remember" class="w-4 h-4 rounded border-input text-primary focus:ring-primary/20 cursor-pointer">
-                    <span class="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">Remember Me</span>
-                    <a href="{{ route('password.request') }}" class="text-xs font-medium text-primary hover:underline ">Forgot Password?</a>
+            <div class="flex items-center justify-between gap-4">
+    
+            <!-- Remember Me -->
+            <label class="flex items-center gap-3 cursor-pointer group select-none">
+                <input 
+                    type="checkbox" 
+                    name="remember"
+                    class="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all cursor-pointer"
+                >
 
-                </label>
-            </div>
+                <span class="text-sm font-medium text-slate-600 group-hover:text-slate-900 transition-colors">
+                    Remember Me
+                </span>
+            </label>
 
+            <!-- Forgot Password -->
+            <a href="{{ route('password.request') }}"
+            class="text-sm font-semibold text-indigo-600 hover:text-indigo-700 hover:underline transition-all duration-200">
+                Forgot Password?
+            </a>
+
+        </div>
+                
             <div class="pt-1">
                 <button type="submit" class="w-full h-12 flex items-center justify-center border border-transparent text-sm font-bold rounded-lg text-white bg-primary hover:bg-primary-dark transition-all shadow-xl shadow-primary/20 active:scale-[0.99] uppercase tracking-widest">
                     Login

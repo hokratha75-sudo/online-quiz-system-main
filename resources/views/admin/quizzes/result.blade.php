@@ -121,12 +121,33 @@
                 </div>
                 @endif
 
+                <!-- Answer Review Section -->
+                <div class="mb-10 p-8 bg-slate-50 rounded-[32px] border border-slate-200">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-indigo-600 text-white rounded-xl flex items-center justify-center shadow-md">
+                                <i class="fas fa-eye text-sm"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900">Review Your Answers</h3>
+                                <p class="text-xs text-slate-500 font-medium mt-0.5">Check your responses and see correct answers</p>
+                            </div>
+                        </div>
+                        <button type="button" onclick="document.getElementById('answerReviewModal').classList.remove('hidden')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-all">
+                            <i class="fas fa-magnifying-glass mr-2"></i> Review Answers
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Action Footer: Compact Buttons -->
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                                         <a href="{{ $isStudent ? route('students.dashboard') : route('quizzes.index') }}" class="h-14 px-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all shadow-xl shadow-indigo-600/20">
                         <i class="fas fa-home"></i> Return to Dashboard
                     </a>
-                                        <a href="{{ $isStudent ? route('students.quizzes.take', $attempt->quiz_id) : route('quizzes.take', $attempt->quiz_id) }}" class="h-14 px-10 bg-white border border-slate-200 text-slate-500 hover:border-slate-800 hover:text-slate-900 rounded-2xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all">
+                                        <button type="button" onclick="document.getElementById('answerReviewModal').classList.remove('hidden')" class="h-14 px-10 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all shadow-xl shadow-amber-500/20">
+                        <i class="fas fa-magnifying-glass"></i> Check Answers
+                    </button>
+                                        <a href="{{ $isStudent ? route('students.quizzes.take', $attempt->quiz_id) : route('quizzes.take', $attempt->quiz_id) }}" class="h-14 px-10 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all shadow-xl shadow-emerald-600/20">
                         <i class="fas fa-rotate-right"></i> {{ $isStudent ? 'Retake Quiz' : 'Try Again' }}
                     </a>
                 </div>
@@ -230,4 +251,144 @@
         </div>
     @endif
 </div>
+
+<!-- Answer Review Modal -->
+<div id="answerReviewModal" class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-[40px] shadow-2xl max-w-4xl w-full my-8">
+        <!-- Modal Header -->
+        <div class="sticky top-0 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white p-8 rounded-t-[40px] flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-magnifying-glass text-lg"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold">Answer Review</h2>
+                    <p class="text-white/80 text-sm font-medium mt-1">Check your responses and compare with correct answers</p>
+                </div>
+            </div>
+            <button type="button" onclick="document.getElementById('answerReviewModal').classList.add('hidden')" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center transition-all">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Modal Content -->
+        <div class="p-8 space-y-6 max-h-[70vh] overflow-y-auto">
+            @php
+                $attemptAnswers = $attempt->attemptAnswers ?? collect();
+            @endphp
+
+            @forelse($attempt->quiz->questions as $index => $question)
+                @php
+                    $studentAnswer = $attemptAnswers->where('question_id', $question->id)->first();
+                    $isCorrect = $studentAnswer?->is_correct ?? false;
+                @endphp
+                <div class="p-6 bg-slate-50 rounded-[28px] border {{ $isCorrect ? 'border-emerald-200 bg-emerald-50' : 'border-rose-200 bg-rose-50' }} transition-all">
+                    <!-- Question Header -->
+                    <div class="flex items-start justify-between gap-4 mb-6">
+                        <div class="flex-grow">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold {{ $isCorrect ? 'bg-emerald-200 text-emerald-700' : 'bg-rose-200 text-rose-700' }}">
+                                    @if($isCorrect)
+                                        <i class="fas fa-check-circle"></i> Correct
+                                    @else
+                                        <i class="fas fa-times-circle"></i> Incorrect
+                                    @endif
+                                </span>
+                                <span class="text-xs font-bold text-slate-500 bg-white px-2 py-1 rounded-lg">{{ $question->points ?? 10 }} pts</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 leading-relaxed">Question {{ $index + 1 }}: {!! $question->content !!}</h3>
+                        </div>
+                    </div>
+
+                    @if($question->type === 'multiple_choice')
+                        <!-- Multiple Choice Options -->
+                        <div class="space-y-3">
+                            @foreach($question->answers as $option)
+                                @php
+                                    $isSelected = $studentAnswer && $studentAnswer->answer_id == $option->id;
+                                    $isCorrectOption = $option->is_correct;
+                                @endphp
+                                <div class="flex items-start gap-4 p-4 rounded-lg border-2 transition-all {{ 
+                                    $isSelected && $isCorrectOption ? 'border-emerald-500 bg-emerald-50' :
+                                    ($isSelected && !$isCorrectOption ? 'border-rose-500 bg-rose-50' :
+                                    ($isCorrectOption && !$isSelected ? 'border-emerald-300 bg-emerald-50/50' : 'border-slate-200 bg-white opacity-50'))
+                                }}">
+                                    <div class="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm shrink-0 {{ 
+                                        $isSelected && $isCorrectOption ? 'bg-emerald-500 text-white' :
+                                        ($isSelected && !$isCorrectOption ? 'bg-rose-500 text-white' :
+                                        ($isCorrectOption ? 'bg-emerald-300 text-white' : 'bg-slate-200 text-slate-400'))
+                                    }}">
+                                        @if($isSelected && $isCorrectOption)
+                                            <i class="fas fa-check"></i>
+                                        @elseif($isSelected && !$isCorrectOption)
+                                            <i class="fas fa-times"></i>
+                                        @elseif($isCorrectOption)
+                                            <i class="fas fa-star"></i>
+                                        @else
+                                            {{ chr(65 + $loop->index) }}
+                                        @endif
+                                    </div>
+                                    <div class="flex-grow">
+                                        <p class="font-bold text-slate-900">{{ $option->answer_text }}</p>
+                                        @if($isCorrectOption && !($isSelected && $isCorrectOption))
+                                            <p class="text-xs text-emerald-600 font-semibold mt-1">✓ Correct Answer</p>
+                                        @endif
+                                        @if($isSelected && !$isCorrectOption)
+                                            <p class="text-xs text-rose-600 font-semibold mt-1">✗ Your selection</p>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                    @elseif($question->type === 'short_answer')
+                        <!-- Short Answer -->
+                        <div class="space-y-3">
+                            <div class="p-4 rounded-lg bg-white border-2 border-slate-200">
+                                <p class="text-xs font-bold text-slate-500 uppercase mb-2">Your Answer:</p>
+                                <p class="text-slate-900 font-medium">{{ $studentAnswer?->short_text ?? 'No answer provided' }}</p>
+                            </div>
+                            @if($studentAnswer?->teacher_feedback)
+                                <div class="p-4 rounded-lg bg-indigo-50 border-2 border-indigo-200">
+                                    <p class="text-xs font-bold text-indigo-600 uppercase mb-2">Teacher Feedback:</p>
+                                    <p class="text-indigo-900 font-medium text-sm">{{ $studentAnswer->teacher_feedback }}</p>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
+
+                    @if($studentAnswer?->points_awarded)
+                        <div class="mt-4 pt-4 border-t border-slate-200 flex justify-between items-center">
+                            <span class="text-xs font-bold text-slate-600">Points Awarded:</span>
+                            <span class="text-lg font-bold {{ $isCorrect ? 'text-emerald-600' : 'text-rose-600' }}">{{ $studentAnswer->points_awarded }}/{{ $question->points ?? 10 }}</span>
+                        </div>
+                    @endif
+                </div>
+            @empty
+                <div class="text-center py-12">
+                    <i class="fas fa-inbox text-4xl text-slate-300 mb-3"></i>
+                    <p class="text-slate-500 font-medium">No questions to review</p>
+                </div>
+            @endforelse
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="sticky bottom-0 bg-slate-50 border-t border-slate-200 p-8 rounded-b-[40px] flex gap-4">
+            <button type="button" onclick="document.getElementById('answerReviewModal').classList.add('hidden')" class="flex-1 h-12 px-6 bg-slate-200 hover:bg-slate-300 text-slate-900 rounded-xl font-bold text-sm transition-all">
+                <i class="fas fa-times mr-2"></i> Close
+            </button>
+            <a href="{{ $isStudent ? route('students.quizzes.take', $attempt->quiz_id) : route('quizzes.take', $attempt->quiz_id) }}" class="flex-1 h-12 px-6 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2">
+                <i class="fas fa-rotate-right"></i> Retake Quiz
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Click outside to close modal -->
+<script>
+    document.getElementById('answerReviewModal').addEventListener('click', function(e) {
+        if(e.target === this) this.classList.add('hidden');
+    });
+</script>
+
 @endsection

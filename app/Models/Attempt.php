@@ -39,4 +39,9 @@ class Attempt extends Model
     {
         return $this->hasOne(Result::class);
     }
+
+    public function attemptAnswers()
+    {
+        return $this->hasMany(AttemptAnswer::class);
+    }
 }

@@ -181,18 +181,23 @@ class QuizController extends Controller
 
         $quiz->load('questions.answers');
         
-        // Prevent duplicate fresh attempts on refresh
-        $attempt = \App\Models\Attempt::firstOrCreate(
-            [
+        // For retakes: Find existing in-progress attempt or create a new one
+        $attempt = \App\Models\Attempt::where([
+            'user_id' => auth()->id(),
+            'quiz_id' => $quiz->id,
+            'status' => 'in_progress'
+        ])->first();
+
+        // If no in-progress attempt, create a new one (either first time or retake)
+        if (!$attempt) {
+            $attempt = \App\Models\Attempt::create([
                 'user_id' => auth()->id(),
                 'quiz_id' => $quiz->id,
-                'status' => 'in_progress'
-            ],
-            [
+                'status' => 'in_progress',
                 'started_at' => now(),
                 'violations' => 0
-            ]
-        );
+            ]);
+        }
 
         // Architect Spec: Seeded Shuffle Logic (Step 2 - Full Option)
         if ($quiz->shuffle_questions) {
@@ -323,7 +328,7 @@ class QuizController extends Controller
             abort(403);
         }
 
-        $attempt->load(['quiz.subject', 'result', 'quiz.questions.answers']);
+        $attempt->load(['quiz.subject', 'result', 'quiz.questions.answers', 'attemptAnswers']);
         
         $attemptAnswers = \App\Models\AttemptAnswer::where('attempt_id', $attempt->id)
             ->get()->keyBy('question_id');
@@ -538,6 +543,7 @@ class QuizController extends Controller
         $userRole = $user->isAdmin() ? 'admin' : ($user->isTeacher() ? 'teacher' : 'student');
         $dashboardTitle = 'Leaderboard';
         $subjectId = request('subject_id');
+        $perPage = 5;
 
         // Fetch subjects for filtering
         if ((int)$user->role_id === 3) {
@@ -564,7 +570,7 @@ class QuizController extends Controller
                         ->pluck('user_id');
 
                     $key = "{$subject->subject_name} ({$class->name})";
-                    $rankingsBySubject[$key] = $this->getRankingsForStudents($studentIds, $subject->id);
+                    $rankingsBySubject[$key] = $this->getRankingsForStudents($studentIds, $subject->id, $perPage);
                 }
             }
 
@@ -578,19 +584,21 @@ class QuizController extends Controller
                 ->where('class_subject.subject_id', $subjectId)
                 ->where('class_user.role', 'student')
                 ->pluck('user_id');
-            $rankings = $this->getRankingsForStudents($studentIds, $subjectId);
+            $rankings = $this->getRankingsForStudents($studentIds, $subjectId, $perPage);
         } else {
-            $rankings = $this->getRankingsForStudents(\App\Models\User::where('role_id', 3)->pluck('id'));
+            $rankings = $this->getRankingsForStudents(\App\Models\User::where('role_id', 3)->pluck('id'), null, $perPage);
         }
 
         return view('admin.quizzes.leaderboard', compact('rankings', 'userRole', 'dashboardTitle', 'filterSubjects'));
     }
 
-    private function getRankingsForStudents($studentIds, $subjectId = null)
+    private function getRankingsForStudents($studentIds, $subjectId = null, $perPage = 5)
     {
-        if (empty($studentIds) || count($studentIds) == 0) return collect([]);
+        if (empty($studentIds) || count($studentIds) == 0) {
+            return new \Illuminate\Pagination\Paginator([], $perPage, 1);
+        }
 
-        return \App\Models\User::whereIn('id', $studentIds)
+        $rankings = \App\Models\User::whereIn('id', $studentIds)
             ->with(['results' => function($query) use ($subjectId) {
                 $query->where('is_published', true);
                 if ($subjectId) {
@@ -618,8 +626,22 @@ class QuizController extends Controller
                 ];
             })
             ->sortByDesc('avg_score')
-            ->values()
-            ->take(10);
+            ->values();
+        
+        // Paginate the collection
+        $page = \Illuminate\Pagination\Paginator::resolveCurrentPage();
+        $items = $rankings->slice(($page - 1) * $perPage, $perPage)->values();
+        
+        return new \Illuminate\Pagination\LengthAwarePaginator(
+            $items,
+            $rankings->count(),
+            $perPage,
+            $page,
+            [
+                'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(),
+                'query' => request()->query(),
+            ]
+        );
     }
 
     /**
