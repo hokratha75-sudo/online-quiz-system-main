@@ -60,6 +60,21 @@ class UserController extends Controller
 
         return view('admin.users.index', compact('users', 'search', 'roleName', 'counts', 'dashboardTitle', 'userRole', 'roles'));
     }
+    public function bulkDelete(Request $request)
+{
+    $request->validate([
+        'ids' => 'required|array'
+    ]);
+
+    $ids = $request->ids;
+
+    User::whereIn('id', $ids)
+        ->where('id', '!=', auth()->id())
+        ->update(['status' => 'inactive']);
+
+    return redirect()->route('admin.users.index')
+        ->with('success', 'Selected users deleted successfully.');
+}
 
     // AJAX live search for users (returns JSON)
     public function search(Request $request)

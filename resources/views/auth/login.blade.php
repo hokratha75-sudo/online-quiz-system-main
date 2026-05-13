@@ -104,6 +104,7 @@
                     </button>
                 </div>
             </div>
+
             
             <div class="flex items-center justify-between gap-4">
     
@@ -119,6 +120,13 @@
                     Remember Me
                 </span>
             </label>
+            <div class="flex justify-between items-center gap-2 cursor-pointer group">
+                <div>
+                    <input type="checkbox" name="remember" class="w-4 h-4 rounded border-input text-primary focus:ring-primary/20 cursor-pointer">
+                    <span class="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">Remember Me<span>
+                </div>
+                <a href="{{ route('password.request') }}" class="text-xs font-medium text-primary hover:underline">Forgot Password?</a>
+            </div>
 
             <!-- Forgot Password -->
             <a href="{{ route('password.request') }}"

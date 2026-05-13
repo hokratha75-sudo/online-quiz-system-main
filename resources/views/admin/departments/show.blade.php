@@ -3,6 +3,7 @@
 @section('title', $department->department_name . ' - Department Detail')
 
 @section('content')
+
 <div class="max-w-full mx-auto p-6 md:p-10 font-inter text-slate-900 bg-slate-50/50 min-h-screen">
     
     <!-- Elegant Header Section -->

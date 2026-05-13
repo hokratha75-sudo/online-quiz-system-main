@@ -53,7 +53,8 @@ Route::get('/check-sessions', function () {
         'driver' => config('session.driver'),
     ]);
 });
-
+Route::delete('/admin/users/bulk-delete', [UserController::class, 'bulkDelete'])
+    ->name('admin.users.bulkDelete');
 Route::get('cleanup-duplicates', function () {
     $results = [];
     $tables = [

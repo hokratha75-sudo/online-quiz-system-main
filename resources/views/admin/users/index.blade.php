@@ -10,26 +10,114 @@
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #4f46e5; }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
 </style>
-<div class="max-w-[1600px] mx-auto p-5 md:p-8 font-sans text-slate-800 bg-gradient-to-br from-slate-50 via-white to-slate-100/50 min-h-screen">
+{{-- Success Toast --}}
+@if(session('success'))
+<div id="toast-success"
+     class="fixed top-6 right-6 z-[100] flex items-center w-full max-w-sm p-3.5 bg-white rounded-2xl shadow-2xl shadow-emerald-500/20 border border-emerald-100 overflow-hidden backdrop-blur-sm transition-all duration-500 ease-out">
 
-    {{-- Success Toast --}}
-    @if(session('success'))
-    <div id="toast-success" class="fixed top-6 right-6 z-[100] flex items-center w-full max-w-sm p-3.5 bg-white rounded-2xl shadow-2xl shadow-emerald-500/20 border border-emerald-100 transform transition-all duration-300 translate-y-0 opacity-100 backdrop-blur-sm" role="alert">
-        <div class="inline-flex items-center justify-center shrink-0 w-9 h-9 text-emerald-600 bg-emerald-50 rounded-xl">
-            <i class="fas fa-check-circle text-base"></i>
-        </div>
-        <div class="ml-3 text-sm font-semibold tracking-tight text-slate-700">{{ session('success') }}</div>
-        <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-white text-slate-400 hover:text-rose-500 rounded-lg p-1.5 hover:bg-rose-50 transition-colors" onclick="this.closest('#toast-success').remove()">
-            <i class="fas fa-times text-sm"></i>
-        </button>
+    <div class="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500"></div>
+
+    <div class="inline-flex items-center justify-center shrink-0 w-10 h-10 text-emerald-600 bg-emerald-50 rounded-xl border border-emerald-100 ml-1">
+        <i class="fas fa-check-circle text-base"></i>
     </div>
-    <script>
+
+    <div class="ml-3 flex-1">
+        <h4 class="text-[13px] font-bold text-slate-900 leading-tight">
+            Success
+        </h4>
+
+        <p class="text-[11px] font-medium text-slate-500 mt-0.5">
+            {{ session('success') }}
+        </p>
+    </div>
+
+    <button type="button"
+            class="group relative w-9 h-9 rounded-full bg-emerald-100 border border-slate-200 text-emerald-600 hover:bg-emerald-200 hover:scale-110 focus:outline-none shadow-sm"
+            onclick="closeToastSuccess()">
+
+        <i class="fas fa-times text-xs"></i>
+    </button>
+</div>
+@endif
+
+
+{{-- Error Toast --}}
+@if($errors->any())
+<div id="toast-error"
+     class="fixed top-24 right-6 z-[100] flex items-center w-full max-w-sm p-3.5 bg-white rounded-2xl shadow-2xl shadow-rose-500/20 border border-rose-100 overflow-hidden backdrop-blur-sm transition-all duration-500 ease-out">
+
+    <div class="absolute left-0 top-0 bottom-0 w-1 bg-rose-500"></div>
+
+    <div class="inline-flex items-center justify-center shrink-0 w-10 h-10 text-rose-600 bg-rose-50 rounded-xl border border-rose-100 ml-1">
+        <i class="fas fa-exclamation-triangle text-sm"></i>
+    </div>
+
+    <div class="ml-3 flex-1">
+        <h4 class="text-[13px] font-bold text-slate-900 leading-tight">
+            Action Failed
+        </h4>
+
+        <p class="text-[11px] font-medium text-slate-500 mt-0.5">
+            {{ $errors->first() }}
+        </p>
+    </div>
+
+    <button type="button"
+            class="group relative w-9 h-9 rounded-full bg-rose-100 border border-slate-200 text-rose-600 hover:bg-rose-200 focus:outline-none shadow-sm"
+            onclick="closeToastError()">
+
+        <i class="fas fa-times text-xs"></i>
+    </button>
+</div>
+@endif
+
+
+<script>
+    function hideToast(elementId) {
+        const toast = document.getElementById(elementId);
+
+        if (!toast) return;
+
+        toast.classList.add(
+            'opacity-0',
+            '-translate-y-3',
+            'scale-95'
+        );
+
         setTimeout(() => {
-            let toast = document.getElementById('toast-success');
-            if(toast) toast.remove();
-        }, 4500);
-    </script>
-    @endif
+            toast.remove();
+        }, 500);
+    }
+
+    function closeToastSuccess() {
+        hideToast('toast-success');
+    }
+
+    function closeToastError() {
+        hideToast('toast-error');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const successToast = document.getElementById('toast-success');
+        const errorToast = document.getElementById('toast-error');
+
+        if (successToast) {
+            setTimeout(() => {
+                hideToast('toast-success');
+            }, 5000);
+        }
+
+        if (errorToast) {
+            setTimeout(() => {
+                hideToast('toast-error');
+            }, 5000);
+        }
+    });
+</script>
+<div class="max-w-[1600px] mx-auto p-5 md:p-8 font-sans text-slate-800 bg-gradient-to-br from-slate-50 via-white to-slate-100/50 min-h-[calc(100vh-110px)]">
+
+    
 
     {{-- Header: Tabs + Create Button --}}
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5 mb-8">
@@ -60,7 +148,7 @@
     </div>
 
     {{-- Main Card --}}
-    <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 overflow-hidden transition-all duration-300">
+    <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 overflow-hidden transition-all duration-300 ">
         {{-- Table Header with Search --}}
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-3 border-b border-slate-100">
             <div class="flex items-center gap-3">
@@ -70,23 +158,29 @@
                 <h3 class="text-sm font-black text-slate-800 tracking-tight mt-2">Member Directory</h3>
                 <span class="px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-600 text-[10px] font-black border border-indigo-100">{{ $users->total() }} total</span>
             </div>
-            
-            <form action="{{ route('admin.users.index') }}" method="GET" id="searchForm" class="w-full sm:w-80">
-                @if($roleName)
-                    <input type="hidden" name="role" value="{{ $roleName }}">
-                @endif
-                <div class="relative group">
-                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs group-focus-within:text-indigo-500 transition-colors"></i>
-                    <input type="text" name="search" id="searchInput" value="{{ $search ?? '' }}" 
-                           class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium placeholder:text-slate-300 focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none" 
-                           placeholder="Search by name or email..." autocomplete="off">
-                </div>
-            </form>
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
+
+                <!-- Bulk Delete Button -->
+                    <button class="bg-white hover:bg-rose-200 text-rose-600 border border-slate-100 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm" onclick="deleteSelected()">
+                    <i class="fas fa-trash-alt text-[10px]"></i> Delete Selected
+                </button>
+                <form action="{{ route('admin.users.index') }}" method="GET" id="searchForm" class="w-full sm:w-80">
+                    @if($roleName)
+                        <input type="hidden" name="role" value="{{ $roleName }}">
+                    @endif
+                    <div class="relative group">
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs group-focus-within:text-indigo-500 transition-colors"></i>
+                        <input type="text" name="search" id="searchInput" value="{{ $search ?? '' }}" 
+                               class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium placeholder:text-slate-300 focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none" 
+                               placeholder="Search by name or email..." autocomplete="off">
+                    </div>
+                </form>
+            </div>
         </div>
 
         {{-- Scrollable Table Body --}}
         <div class="overflow-x-auto custom-scrollbar">
-            <div class="max-h-[520px] overflow-y-auto">
+            <div class="h-[calc(100vh-405px)] overflow-y-auto custom-scrollbar">
                 <table class="min-w-full divide-y divide-slate-100">
                     <thead class="bg-slate-100/80 sticky top-0 z-10 shadow-sm">
                         <tr>
@@ -96,6 +190,9 @@
                             <th class="px-3 py-3 text-left text-[10px] font-black uppercase tracking-wider text-slate-400">Role</th>
                             <th class="px-3 py-3 text-left text-[10px] font-black uppercase tracking-wider text-slate-400">Joined</th>
                             <th class="pr-6 py-3 text-center text-[10px] font-black uppercase tracking-wider text-slate-400">Actions</th>
+                            <th class="px-4 py-3 w-12 text-right ">
+                                <input type="checkbox" id="selectAll" class="w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500 cursor-pointer transition-colors shadow-sm">
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-50">
@@ -132,19 +229,30 @@
                             </td>
                             <td class="pr-6 py-3 text-center">
                                 <div class="flex items-center justify-center gap-2">
-                                    <a href="{{ route('admin.users.edit', $user->id) }}" class="w-8 h-8 flex items-center justify-center rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-600 hover:bg-indigo-100 hover:text-indigo-700 transition-all" title="Edit">
-                                        <i class="fas fa-pen text-xs"></i>
+                                    <a href="{{ route('admin.users.edit', $user->id) }}" class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-indigo-600 hover:bg-indigo-700 transition-colors tooltip-trigger border-none" title="Edit">
+                                        <i class="far fa-edit text-[13px]"></i>
                                     </a>
                                     @if($user->id !== auth()->id())
                                     <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('⚠️ Permanently delete this user?')">
                                         @csrf @method('DELETE')
-                                        <button type="submit" class="w-8 h-8 flex items-center justify-center rounded-xl bg-white border border-slate-200 text-slate-500 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 transition-all" title="Delete">
-                                            <i class="fas fa-trash-alt text-xs"></i>
+                                        <button type="submit" class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-rose-700 hover:bg-rose-700 transition-colors btn-delete border-none">
+                                            <i class="far fa-trash-alt text-[13px]"></i>
                                         </button>
                                     </form>
                                     @endif
                                 </div>
                             </td>
+                            <td class="px-4 py-3 text-right">
+                                @php
+                                    $role = strtolower($user->role->role_name ?? '');
+                                @endphp
+
+                                @if($role !== 'admin')
+                                    <input type="checkbox"
+                                           class="row-checkbox w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500 cursor-pointer shadow-sm transition-colors"
+                                            value="{{ $user->id }}">
+                                    @endif
+                                </td>
                         </tr>
                         @empty
                         <tr>
@@ -195,8 +303,8 @@
         </div>
         @else
             @if($users->total() > 0)
-            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/40">
-                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider text-center">
+            <div class="p-4 border-t border-slate-50 bg-slate-100/80 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
                     Total {{ $users->total() }} member(s)
                 </div>
             </div>
@@ -204,7 +312,10 @@
         @endif
     </div>
 </div>
-
+<form id="deleteForm" method="POST" style="display:none;">
+    @csrf
+    @method('DELETE')
+</form>
 {{-- ============================================================ --}}
 {{-- RESIZABLE + DRAGGABLE MODAL (WITH modal-content FIX)        --}}
 {{-- ============================================================ --}}
@@ -219,8 +330,8 @@
                     </div>
                     <h5 class="text-lg font-black text-white tracking-tight mt-2" id="createUserModalLabel">New Member Registration</h5>
                 </div>
-                <button type="button" class="group relative w-10 h-10 rounded-full bg-blue-50 border border-pink-200 text-pink-400 hover:bg-blue-100 hover:text-pink-500 hover:scale-110 active:scale-95 transition-all duration-200 ease-out focus:outline-none shadow-sm hover:shadow-pink-200/50" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="fas fa-times text-sm group-hover:rotate-90 transition-transform duration-200"></i>
+                <button type="button" class="group relative w-10 h-10 rounded-full bg-blue-100 border-none text-red-600 hover:bg-blue-200 focus:outline-none" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times text-sm"></i>
                 </button>
             </div>
 
@@ -345,6 +456,73 @@
 
 {{-- JavaScript: Live Search, Image Preview, Modal Drag/Resize --}}
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+    const selectAll = document.getElementById('selectAll');
+    const checkboxes = document.querySelectorAll('.row-checkbox');
+
+    if (selectAll) {
+        selectAll.addEventListener('change', function () {
+            checkboxes.forEach(cb => {
+                cb.checked = this.checked;
+            });
+        });
+    }
+
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', function () {
+
+            // បើ unchecked មួយ -> selectAll អត់ checked
+            if (!this.checked) {
+                selectAll.checked = false;
+                return;
+            }
+
+            // បើ checked ទាំងអស់ -> selectAll checked
+            const allChecked = Array.from(checkboxes).every(c => c.checked);
+            selectAll.checked = allChecked;
+        });
+    });
+
+});
+    function deleteSelected() {
+
+    let selected = document.querySelectorAll('.row-checkbox:checked');
+
+    if (selected.length === 0) {
+        alert('Please select at least one user.');
+        return;
+    }
+
+    let confirmDelete = confirm(
+        `Are you sure you want to delete ${selected.length} user(s)?`
+    );
+
+    if (!confirmDelete) return;
+
+    let form = document.getElementById('deleteForm');
+
+    // 👉 IMPORTANT: change route to users
+    form.action = '{{ route("admin.users.bulkDelete") }}';
+
+    // reset form content
+    form.innerHTML = `
+        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="_method" value="DELETE">
+    `;
+
+    selected.forEach(function (item) {
+
+        let input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'ids[]';
+        input.value = item.value;
+
+        form.appendChild(input);
+    });
+
+    form.submit();
+}
     document.addEventListener('DOMContentLoaded', function() {
         // --- Live AJAX Search ---
         const searchInput = document.getElementById('searchInput');
@@ -394,14 +572,34 @@
                                      </tr>`;
                         });
                         tableBody.innerHTML = rows;
-                        if(paginationWrap) paginationWrap.style.display = 'none';
+                       if(paginationWrap) paginationWrap.style.display = 'none';
                     }
                 }).catch(err => console.warn(err));
             };
-            searchInput.addEventListener('input', function() {
-                clearTimeout(debounceTimer);
-                debounceTimer = setTimeout(() => fetchResults(this.value.trim()), 280);
-            });
+            searchInput.addEventListener('input', function () {
+
+    clearTimeout(debounceTimer);
+
+    debounceTimer = setTimeout(() => {
+
+        const query = this.value.trim();
+
+        // If empty search -> reload normal pagination
+        if(query === '') {
+
+            if(paginationWrap) {
+                paginationWrap.style.display = 'block';
+            }
+
+            window.location.href = window.location.pathname;
+            return;
+        }
+
+        fetchResults(query);
+
+    }, 280);
+
+});
         }
 
         // --- Image Preview in Modal ---

@@ -1,14 +1,21 @@
 @extends('layouts.admin')
 
 @section('content')
+<style>
+    /* Custom Scrollbar for sleek aesthetic */
+    .custom-scrollbar::-webkit-scrollbar { width: 7px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #4f46e5; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
+</style>
 <div class="max-w-[1600px] mx-auto p-8 font-sans">
     
     <!-- Header Section -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
         <div class="flex items-center gap-4">
             <a href="{{ route('admin.users.index') }}" 
-               class="no-underline w-11 h-11 rounded-xl border border-gray-100 bg-white flex items-center justify-center text-gray-400 hover:bg-indigo-600 hover:text-white transition-all shadow-sm group">
-                <i class="fas fa-arrow-left text-sm group-hover:-translate-x-0.5 transition-transform"></i>
+               class="no-underline w-11 h-11 rounded-xl border border-gray-100 bg-white flex items-center justify-center text-gray-400 hover:bg-indigo-600 transition-all shadow-sm group">
+                <i class="fas fa-arrow-left text-sm"></i>
             </a>
             <div class="mt-3">
                 <h1 class="text-lg font-bold text-gray-900 tracking-tight uppercase">Update Profile</h1>
@@ -181,8 +188,19 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <label class="p-3 border border-gray-100 rounded-2xl bg-white flex items-center gap-5 hover:border-rose-500 transition-all cursor-pointer group shadow-sm">
                         <div class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="is_suspended" id="isSuspended" value="1" class="sr-only peer" {{ $user->is_suspended ? 'checked' : '' }}>
-                            <div class="w-10 h-6 bg-gray-100 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-600"></div>
+                            <input 
+                                type="checkbox"
+                                name="is_suspended"
+                                id="isSuspended"
+                                value="1"
+                                class="sr-only peer"
+                                {{ $user->is_suspended ? 'checked' : '' }}
+                            >
+
+                            <label 
+                                for="isSuspended"
+                                class="relative w-11 h-6 bg-gray-300 rounded-full transition-all duration-300 peer-checked:bg-red-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:w-5 after:h-5 after:bg-white after:rounded-full after:shadow-md after:transition-all after:duration-300 peer-checked:after:translate-x-5">
+                            </label>
                         </div>
                         <div>
                             <h4 class="text-xs font-bold text-gray-900 uppercase tracking-wider group-hover:text-rose-600">Suspend Account</h4>
@@ -192,8 +210,19 @@
                     
                     <label class="p-3 border border-gray-100 rounded-2xl bg-white flex items-center gap-5 hover:border-indigo-500 transition-all cursor-pointer group shadow-sm">
                         <div class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="force_password_change" id="forcePassword" value="1" class="sr-only peer" {{ $user->force_password_change ? 'checked' : '' }}>
-                            <div class="w-10 h-6 bg-gray-100 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                            <input 
+                                type="checkbox"
+                                name="force_password_change"
+                                id="forcePassword"
+                                value="1"
+                                class="sr-only peer"
+                                {{ $user->force_password_change ? 'checked' : '' }}
+                            >
+
+                            <label 
+                                for="forcePassword"
+                                class="relative w-11 h-6 bg-gray-300 rounded-full transition-all duration-300 peer-checked:bg-indigo-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:w-5 after:h-5 after:bg-white after:rounded-full after:shadow-md after:transition-all after:duration-300 peer-checked:after:translate-x-5">
+                            </label>
                         </div>
                         <div>
                             <h4 class="text-xs font-bold text-gray-900 uppercase tracking-wider group-hover:text-indigo-600">Force Password Reset</h4>
@@ -206,7 +235,7 @@
 
         <div class="flex flex-col md:flex-row items-center gap-3 justify-end">
             <a href="{{ route('admin.users.index') }}" class="no-underline w-full md:w-auto px-10 h-12 bg-white border border-gray-100 text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-xl font-bold uppercase tracking-wider text-xs transition-all flex items-center justify-center">Discard</a>
-            <button type="submit" class="w-full md:w-auto px-10 h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold uppercase tracking-wider text-xs transition-all shadow-lg shadow-gray-900/20">Save Changes</button>
+            <button type="submit" class="w-full md:w-auto px-10 h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold uppercase tracking-wider text-xs transition-all shadow-lg shadow-gray-900/20 border-none">Save Changes</button>
         </div>
     </form>
 </div>

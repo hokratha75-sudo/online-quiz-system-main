@@ -9,16 +9,61 @@
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #4f46e5; }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
 </style>
-<div class="max-w-[1400px] mx-auto p-8 md:p-10 font-inter text-slate-900">
-
-    <!-- Header Section -->
-    <!-- Header Section -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 mb-8">
-        <div>
-            <h1 class="text-2xl md:text-[28px] font-bold text-slate-900 tracking-tight">{{ ucfirst($tab) }} Index</h1>
-            <p class="text-[14px] font-medium text-slate-500 mt-1.5">Manage administrative {{ $tab }} and institutional faculties.</p>
+@if(session('success'))
+    <div class="fixed top-4 right-4 z-[9999] success-alert w-[360px] bg-white border border-emerald-100 rounded-2xl p-3.5 flex items-center justify-between shadow-xl overflow-hidden transition-all duration-300">
+        <div class="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500"></div>
+        <div class="flex items-center gap-3.5">
+            <div class="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100/50">
+                <i class="fas fa-check text-emerald-500 text-xs"></i>
+            </div>
+            <div>
+                <h4 class="text-[13px] font-bold text-slate-900 leading-tight">Action Successful</h4>
+                <p class="text-[11px] font-medium text-slate-500">{{ session('success') }}</p>
+            </div>
         </div>
-        <div class="flex items-center gap-3">
+        <button type="button" class="group relative w-10 h-10 rounded-full bg-blue-50 border border-pink-200 text-pink-400 hover:bg-blue-100 hover:text-pink-500 hover:scale-110 active:scale-95 transition-all duration-200 ease-out focus:outline-none shadow-sm hover:shadow-pink-200/50" onclick="this.parentElement.style.display='none'">
+            <i class="fas fa-times text-sm group-hover:rotate-90 transition-transform duration-200"></i>
+        </button>
+    </div>
+    @endif
+    @if($errors->any())
+<div class="fixed top-20 right-4 z-[9999] error-alert w-[360px] bg-white border border-rose-100 rounded-2xl p-3.5 flex items-center justify-between shadow-xl overflow-hidden transition-all duration-300">
+    
+    <div class="absolute left-0 top-0 bottom-0 w-1 bg-rose-500"></div>
+
+    <div class="flex items-center gap-3.5">
+        <div class="w-9 h-9 rounded-full bg-rose-50 flex items-center justify-center shrink-0 border border-rose-100/50">
+            <i class="fas fa-exclamation-triangle text-rose-500 text-xs"></i>
+        </div>
+
+        <div>
+            <h4 class="text-[13px] font-bold text-slate-900 leading-tight">
+                Action Failed
+            </h4>
+
+            <p class="text-[11px] font-medium text-slate-500">
+                {{ $errors->first() }}
+            </p>
+        </div>
+    </div>
+
+    <button
+        type="button"
+        class="group relative w-10 h-10 rounded-full bg-blue-50 border border-pink-200 text-pink-400 hover:bg-blue-100 hover:text-pink-500 hover:scale-110 active:scale-95 transition-all duration-200 ease-out focus:outline-none shadow-sm hover:shadow-pink-200/50"
+        onclick="this.parentElement.remove()"
+    >
+        <i class="fas fa-times text-sm group-hover:rotate-90 transition-transform duration-200"></i>
+    </button>
+</div>
+@endif
+<div class="max-w-[1600px] mx-auto p-4 px-5 md:p-8 font-sans text-slate-800 bg-gradient-to-br from-slate-50 via-white to-slate-100/50 min-h-[calc(100vh-580px)]">
+
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight leading-none">{{ ucfirst($tab) }}</h1>
+            <p  class="text-sm font-medium text-slate-400 mt-2">Manage administrative {{ $tab }} and institutional faculties.</p>
+        </div>
+        <div class="flex items-center justify-end gap-3">
             <button onclick="window.location.reload()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm">
                 <i class="fas fa-sync-alt"></i> Refresh
             </button>
@@ -37,33 +82,15 @@
         </div>
     </div>
 
-    @if(session('success'))
-    <div class="mb-6 bg-white border border-emerald-100 rounded-2xl p-3.5 flex items-center justify-between shadow-sm relative overflow-hidden transition-all duration-300">
-        <div class="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500"></div>
-        <div class="flex items-center gap-3.5">
-            <div class="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100/50">
-                <i class="fas fa-check text-emerald-500 text-xs"></i>
-            </div>
-            <div>
-                <h4 class="text-[13px] font-bold text-slate-900 leading-tight">Action Successful</h4>
-                <p class="text-[11px] font-medium text-slate-500">{{ session('success') }}</p>
-            </div>
-        </div>
-        <button type="button" class="group relative w-10 h-10 rounded-full bg-blue-50 border border-pink-200 text-pink-400 hover:bg-blue-100 hover:text-pink-500 hover:scale-110 active:scale-95 transition-all duration-200 ease-out focus:outline-none shadow-sm hover:shadow-pink-200/50" onclick="this.parentElement.style.display='none'">
-            <i class="fas fa-times text-sm group-hover:rotate-90 transition-transform duration-200"></i>
-        </button>
-    </div>
-    @endif
-
     <!-- Data Table Card -->
-    <div class="w-full overflow-hidden rounded-2xl border border-neutral-300 dark:border-neutral-700 mb-8">
+    <div class="w-full overflow-hidden rounded-2xl border border-neutral-300 dark:border-neutral-700">
         
         <!-- Toolbar -->
         <div class="p-4 border-b border-neutral-200 flex flex-col md:flex-row items-center justify-between gap-4 bg-white text-neutral-900">
             <div class="flex items-center gap-4">
                 <h3 class="text-xs font-bold tracking-widest uppercase">Active {{ ucfirst($tab) }}</h3>
-                <span class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-                    {{ $items->total() }} Nodes Recorded
+                <span class="px-2.5 py-1 rounded-full bg-white border border-slate-100 text-indigo-600 text-[10px] font-bold tracking-widest uppercase shadow-sm tabular-nums">
+                    {{ $items->total() }} Recorded
                 </span>
             </div>
             
@@ -81,26 +108,80 @@
             </div>
         </div>
 
-        <div class="overflow-x-auto min-h-[300px]">
-            <table class="w-full border-collapse text-left text-sm text-neutral-600" id="dataTable">
-                <thead class="border-b border-neutral-200 bg-neutral-50 text-sm text-neutral-900">
-                    <tr>
-                        <th scope="col" class="p-4 w-12 text-center">#</th>
-                        <th scope="col" class="p-4 w-24">Code</th>
-                        @if($tab == 'majors')
-                            <th scope="col" class="p-4">Major Details</th>
-                            <th scope="col" class="p-4">Department</th>
-                            <th scope="col" class="p-4 text-center">Classes</th>
-                            <th scope="col" class="p-4 text-center">Subjects</th>
-                        @elseif($tab == 'classes')
-                            <th scope="col" class="p-4">Class Details</th>
-                            <th scope="col" class="p-4">Major</th>
-                            <th scope="col" class="p-4 text-center">Students</th>
-                            <th scope="col" class="p-4 text-center">Subjects</th>
-                        @endif
-                        <th scope="col" class="p-4 text-right">
-                            <input type="checkbox" id="selectAll" class="h-4 w-4 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-600">
+         <div class="overflow-x-hidden">
+            <div class="h-[calc(100vh-400px)] overflow-y-auto custom-scrollbar">
+            <table class="w-full text-left border-collapse table-fixed" id="deptTable">
+                <thead class="bg-slate-100/80 sticky top-0 z-10 shadow-sm">
+                    <tr class="bg-slate-100">
+
+                        <th scope="col"
+                            class="px-4 py-3 w-14 text-center text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                            #
                         </th>
+                    
+                        <th scope="col"
+                            class="px-4 py-3 w-40 text-left text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                            Code
+                        </th>
+                    
+                        @if($tab == 'majors')
+                    
+                            <th scope="col"
+                                class="px-4 py-3 w-[320px] text-left text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                Major Details
+                            </th>
+                        
+                            <th scope="col"
+                                class="py-3 w-[180px] text-left text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                Department
+                            </th>
+                        
+                            <th scope="col"
+                                class="px-4 py-3 w-[100px] text-center text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                Classes
+                            </th>
+                        
+                            <th scope="col"
+                                class="px-4 py-3 w-[100px] text-center text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                Subjects
+                            </th>
+                        
+                            <th scope="col"
+                                class="px-4 py-3 w-[140px] text-center text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                Actions
+                            </th>
+                        
+                        @elseif($tab == 'classes')
+                        
+                            <th scope="col"
+                                class="px-4 py-3 text-center text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                Class Details
+                            </th>
+                        
+                            <th scope="col"
+                                class="px-4 py-3 text-center text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                Major
+                            </th>
+                        
+                            <th scope="col"
+                                class="px-4 py-3 text-center text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                Students
+                            </th>
+                        
+                            <th scope="col"
+                                class="px-4 py-3 text-center text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                Subjects
+                            </th>
+                        
+                        @endif
+                        
+                        <th scope="col"
+                            class="px-4 py-3 w-16 text-right">
+                            <input type="checkbox"
+                                   id="selectAll"
+                                   class="h-4 w-4 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-600">
+                        </th>
+                    
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-neutral-100 bg-white" id="tableBody">
@@ -113,13 +194,13 @@
                         
                         @if($tab == 'majors')
                             <td class="p-4">
-                                <a href="{{ route('admin.majors.show', $item->id) }}" class="flex items-center gap-2">
+                                <a href="{{ route('admin.majors.show', $item->id) }}" class="flex items-center gap-2 no-underline">
                                     <i class="fas fa-bookmark text-indigo-600"></i>
                                     <span class="font-medium text-neutral-900">{{ $item->name }}</span>
                                 </a>
                             </td>
-                            <td class="p-4">
-                                <div class="text-neutral-900">{{ $item->department->department_name ?? 'SYSTEM UNIT' }}</div>
+                            <td>
+                                <div class="text-neutral-900 text-sm">{{ $item->department->department_name ?? 'SYSTEM UNIT' }}</div>
                             </td>
                             <td class="p-4 text-center">
                                 <span class="inline-flex items-center justify-center min-w-[32px] px-2 py-1 rounded-md text-xs font-bold {{ ($item->classes_count ?? 0) > 0 ? 'bg-sky-50 text-sky-700 border border-sky-200 shadow-sm' : 'bg-slate-50 text-slate-500 border border-slate-200' }}">
@@ -131,6 +212,7 @@
                                     {{ $item->subjects_count ?? 0 }}
                                 </span> 
                             </td>
+                            
                         @elseif($tab == 'classes')
                             <td class="p-4">
                                 <div class="flex items-center gap-2">
@@ -154,7 +236,7 @@
                         @endif
                         
                         <td class="p-4 text-right">
-                            <div class="flex items-center justify-end gap-4">
+                            <div class="flex items-center justify-center gap-1.5 transition-opacity opacity-100 group-hover:opacity-100">
                                 <button type="button" 
                                         onclick='editRecord(
                                         {{ $item->id }},
@@ -166,8 +248,19 @@
                                         class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-indigo-600 hover:bg-indigo-700 transition-colors tooltip-trigger border-none" title="Edit">
                                     <i class="fas fa-edit text-[13px]"></i>
                                 </button>
-                                <input type="checkbox" class="row-checkbox h-4 w-4 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-600" value="{{ $item->id }}" data-name="{{ $item->name }}">
+                                <button 
+                                    type="button"
+                                    class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-rose-700 hover:bg-rose-800 transition-colors btn-delete border-none"
+                                    title="Delete"
+                                    data-id="{{ $item->id }}"
+                                    data-title="{{ $item->name }}"
+                                >
+                                    <i class="far fa-trash-alt text-[13px]"></i>
+                                </button>   
                             </div>
+                        </td>
+                        <td class="p-4 text-right">
+                            <input type="checkbox" class="row-checkbox h-4 w-4 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-600" value="{{ $item->id }}" data-name="{{ $item->name }}">
                         </td>
                     </tr>
                     @empty
@@ -196,21 +289,103 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
-
-        <!-- Pagination -->
-        <div class="p-4 border-t border-slate-50 bg-slate-500/20 flex flex-col md:flex-row items-center justify-between gap-4">
-            <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
-                Cluster Range: {{ $items->firstItem() ?? 0 }} - {{ $items->lastItem() ?? 0 }} of {{ $items->total() }} Nodes
-            </span>
-            <div class="flex justify-center md:justify-end">
-                {{ $items->onEachSide(1)->links() }}
             </div>
         </div>
+
+        <!-- Footer -->
+@if($items->hasPages())
+<div class="px-4 py-3 border-t border-slate-50 bg-slate-100/80 flex flex-col md:flex-row items-center justify-between gap-4">
+
+    <!-- LEFT INFO -->
+    <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
+        Mapping Node:
+        {{ $items->firstItem() ?? 0 }} - {{ $items->lastItem() ?? 0 }}
+        of {{ $items->total() }} Authorized Units
+    </span>
+
+    <!-- RIGHT PAGINATION -->
+    <div class="custom-pagination flex items-center">
+        {{ $items->onEachSide(1)->links('pagination::bootstrap-5') }}
     </div>
 
 </div>
+@else
+<div class="px-4 py-3 border-t border-slate-50 bg-slate-100/80 flex flex-col md:flex-row items-center justify-between gap-4">
 
+    <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
+        Displaying all
+        <span class="font-medium text-slate-700">{{ $items->total() }}</span>
+        entries
+    </span>
+
+</div>
+@endif
+    </div>
+
+</div>
+<style>
+/* layout fix */
+.custom-pagination nav {
+    background: transparent !important;
+}
+
+.custom-pagination nav > div:first-child {
+    display: none;
+}
+
+.custom-pagination nav > div:last-child {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* remove text */
+.custom-pagination nav p {
+    display: none;
+}
+
+/* reset pagination */
+.custom-pagination .pagination {
+    margin: 0 !important;
+}
+
+/* base button */
+.custom-pagination .page-link {
+    padding: 7px 10px !important;
+    font-size: 15px;
+    line-height: 1.2;
+
+    border: 1px solid #e5e7eb !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* hover */
+.custom-pagination .page-link:hover {
+    background: #eef2ff;
+}
+
+/* active */
+.custom-pagination .page-item.active .page-link {
+    background: #4f46e5;
+    color: white
+    border: 1px solid #4f46e5 !important;
+    box-shadow: none !important;
+}
+
+/* click/focus fix (IMPORTANT) */
+.custom-pagination .page-link:focus,
+.custom-pagination .page-link:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* remove bootstrap weird inline wrapper shadow */
+.custom-pagination nav .relative.inline-flex {
+    box-shadow: none !important;
+}
+</style>   
 <!-- Structural Modals -->
 <div class="modal fade" id="addMajorModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -322,6 +497,39 @@
 
 @section('scripts')
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+    // SUCCESS ALERT
+    const successAlert = document.querySelector(".success-alert");
+
+    if (successAlert) {
+        setTimeout(() => {
+            successAlert.style.opacity = "0";
+            successAlert.style.transform = "translateY(-10px)";
+            successAlert.style.transition = "all 0.3s ease";
+
+            setTimeout(() => {
+                successAlert.remove();
+            }, 300);
+        }, 5000);
+    }
+
+    // ERROR ALERT
+    const errorAlert = document.querySelector(".error-alert");
+
+    if (errorAlert) {
+        setTimeout(() => {
+            errorAlert.style.opacity = "0";
+            errorAlert.style.transform = "translateY(-10px)";
+            errorAlert.style.transition = "all 0.3s ease";
+
+            setTimeout(() => {
+                errorAlert.remove();
+            }, 300);
+        }, 5000);
+    }
+
+});
     const currentTab = '{{ $tab }}';
 
     // Improved Search Vector with "no results" handling
@@ -399,6 +607,32 @@
             'Remove Multiple Items?'
         );
     }
+    document.querySelectorAll('.btn-delete').forEach(btn => {
+    btn.addEventListener('click', function () {
+
+        const id = this.dataset.id;
+        const title = this.dataset.title;
+
+        window.premiumConfirm(
+            `Are you sure you want to delete "${title}"?`,
+            function () {
+
+                const form = document.getElementById('deleteForm');
+
+                if (currentTab === 'majors') {
+                    form.action = '/admin/majors/' + id;
+                }
+
+                if (currentTab === 'classes') {
+                    form.action = '/admin/classes/' + id;
+                }
+
+                form.submit();
+            },
+            'Delete Confirmation'
+        );
+    });
+});
 
     // Modal Synchronization Logic
     function editRecord(id, name, code, dept, major) {

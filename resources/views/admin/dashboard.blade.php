@@ -9,10 +9,10 @@
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #4f46e5; }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
 </style>
-<div class="max-w-[1400px] mx-auto px-6 py-4 md:px-10 lg:py-6 font-inter text-slate-900">
+<div class="max-w-[1400px] mx-auto px-6 md:px-10 lg:pt-6 font-inter text-slate-900  custom-scrollbar">
 
     <!-- Header Section: High-Density Authority -->
-    <header class="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-10">
+    <header class="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-6">
         <div>
             <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight leading-none" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Dashboard Overview</h1>
             <p class="text-[10px] font-bold text-indigo-600 mt-3 uppercase tracking-[0.2em] leading-none opacity-80">Logged In As: {{ strtoupper($username) }} • Active Session</p>
@@ -24,7 +24,7 @@
                 <span>Create New Quiz</span>
             </a>
             @if($userRole === 'admin')
-            <a href="{{ route('admin.settings.index') }}" class="w-12 h-12 bg-white hover:bg-slate-50 text-slate-400 hover:text-indigo-600 border border-slate-100 rounded-lg flex items-center justify-center transition-all shadow-sm active:scale-95 group" title="System Settings">
+            <a href="{{ route('admin.settings.index') }}" class="w-12 h-12 bg-white hover:bg-slate-50 text-slate-400 hover:text-indigo-600 border border-slate-100 rounded-lg flex items-center justify-center transition-all shadow-sm active:scale-95 group no-underline" title="System Settings">
                 <i class="fas fa-gear text-lg group-hover:rotate-90 transition-transform duration-500"></i>
             </a>
             @endif

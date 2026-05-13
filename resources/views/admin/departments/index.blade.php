@@ -3,7 +3,42 @@
 @section('topbar-title', 'Departments Management')
 
 @section('content')
-<div class="max-w-[1400px] mx-auto p-8 md:p-10 font-inter">
+@if(session('success'))
+    <div class="fixed top-4 right-4 z-[9999] success-alert w-[360px] bg-white border border-emerald-100 rounded-2xl p-3.5 flex items-center justify-between shadow-xl overflow-hidden transition-all duration-300">
+        <div class="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500"></div>
+        <div class="flex items-center gap-3.5">
+            <div class="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100/50">
+                <i class="fas fa-check text-emerald-500 text-xs"></i>
+            </div>
+            <div>
+                <h4 class="text-[13px] font-bold text-slate-900 leading-tight">Action Successful</h4>
+                <p class="text-[11px] font-medium text-slate-500">{{ session('success') }}</p>
+            </div>
+        </div>
+        <button type="button" class="group relative w-10 h-10 rounded-full bg-green-100 border border-green-600 border border-green-500 text-green-600 hover:bg-green-200 focus:outline-none" onclick="this.parentElement.style.display='none'">
+            <i class="fas fa-times text-sm "></i>
+        </button>
+    </div>
+    @endif
+
+    @if($errors->any())
+    <div class="fixed top-4 right-4 z-[9999] error-alert w-[360px] bg-white border border-rose-100 rounded-2xl p-3.5 flex items-center justify-between shadow-xl overflow-hidden transition-all duration-300">
+        <div class="absolute left-0 top-0 bottom-0 w-1 bg-rose-500"></div>
+        <div class="flex items-center gap-3.5">
+            <div class="w-9 h-9 rounded-full bg-rose-50 flex items-center justify-center shrink-0 border border-rose-100/50">
+                <i class="fas fa-exclamation-triangle text-rose-500 text-xs"></i>
+            </div>
+            <div>
+                <h4 class="text-[13px] font-bold text-slate-900 leading-tight">Action Failed</h4>
+                <p class="text-[11px] font-medium text-slate-500">{{ $errors->first() }}</p>
+            </div>
+        </div>
+        <button type="button" class="group relative w-10 h-10 rounded-full bg-red-100 border border-red-500 text-red-600 hover:bg-red-200  focus:outline-none " onclick="this.parentElement.style.display='none'">
+            <i class="fas fa-times text-sm"></i>
+        </button>
+    </div>
+    @endif
+<div class="max-w-[1600px] py-4 px-5 md:p-8 font-sans text-slate-800 bg-gradient-to-br from-slate-50 via-white to-slate-100/50 min-h-[calc(100vh-530px)]">
 
     <!-- Header Section -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
@@ -24,41 +59,7 @@
         </div>
     </div>
 
-    @if(session('success'))
-    <div class="mb-6 bg-white border border-emerald-100 rounded-2xl p-3.5 flex items-center justify-between shadow-sm relative overflow-hidden transition-all duration-300">
-        <div class="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500"></div>
-        <div class="flex items-center gap-3.5">
-            <div class="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100/50">
-                <i class="fas fa-check text-emerald-500 text-xs"></i>
-            </div>
-            <div>
-                <h4 class="text-[13px] font-bold text-slate-900 leading-tight">Action Successful</h4>
-                <p class="text-[11px] font-medium text-slate-500">{{ session('success') }}</p>
-            </div>
-        </div>
-        <button type="button" class="group relative w-10 h-10 rounded-full bg-blue-50 border border-pink-200 text-pink-400 hover:bg-blue-100 hover:text-pink-500 hover:scale-110 active:scale-95 transition-all duration-200 ease-out focus:outline-none shadow-sm hover:shadow-pink-200/50" onclick="this.parentElement.style.display='none'">
-            <i class="fas fa-times text-sm group-hover:rotate-90 transition-transform duration-200"></i>
-        </button>
-    </div>
-    @endif
-
-    @if($errors->any())
-    <div class="mb-6 bg-white border border-rose-100 rounded-2xl p-3.5 flex items-center justify-between shadow-sm relative overflow-hidden transition-all duration-300">
-        <div class="absolute left-0 top-0 bottom-0 w-1 bg-rose-500"></div>
-        <div class="flex items-center gap-3.5">
-            <div class="w-9 h-9 rounded-full bg-rose-50 flex items-center justify-center shrink-0 border border-rose-100/50">
-                <i class="fas fa-exclamation-triangle text-rose-500 text-xs"></i>
-            </div>
-            <div>
-                <h4 class="text-[13px] font-bold text-slate-900 leading-tight">Action Failed</h4>
-                <p class="text-[11px] font-medium text-slate-500">{{ $errors->first() }}</p>
-            </div>
-        </div>
-        <button type="button" class="group relative w-10 h-10 rounded-full bg-blue-50 border border-pink-200 text-pink-400 hover:bg-blue-100 hover:text-pink-500 hover:scale-110 active:scale-95 transition-all duration-200 ease-out focus:outline-none shadow-sm hover:shadow-pink-200/50" onclick="this.parentElement.style.display='none'">
-            <i class="fas fa-times text-sm group-hover:rotate-90 transition-transform duration-200"></i>
-        </button>
-    </div>
-    @endif
+    
 
     <!-- Data Table Card -->
     <div class="bg-white rounded-[20px] border border-slate-100/70 shadow-[0_2px_5px_rgba(0,0,0,0.02)] flex flex-col overflow-hidden">
@@ -84,27 +85,29 @@
 
         <!-- Table Content -->
         <div class="overflow-x-hidden">
+            <div class="h-[calc(100vh-400px)]  overflow-y-auto custom-scrollbar">
             <table class="w-full text-left border-collapse" id="deptTable">
                 <thead>
-                    <tr class="bg-slate-50/50 border-b border-slate-200/70">
-                        <th class="px-5 py-4 w-12 text-center">
-                            <input type="checkbox" id="selectAll" class="w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500 cursor-pointer transition-colors shadow-sm">
-                        </th>
-                        <th class=" text-[11px] font-bold text-slate-500 uppercase tracking-wider text-left w-40">Code</th>
-                        <th class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-left">Department Details</th>
-                        <th class=" text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Majors</th>
+                    <tr class="bg-slate-100 sticky top-0 z-10 shadow-sm">
+                        <th scope="col" class="p-3 w-12 text-center">#</th>
+                        <th class="text-[11px] font-bold text-slate-500 uppercase tracking-wider pl-3 w-40">Code</th>
+                        <th class="text-[11px] font-bold text-slate-500 uppercase tracking-wider pl-3">Department Details</th>
+                        <th class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Majors</th>
                         <th class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Classes</th>
                         <th class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">Subjects</th>
-                        <th class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center sticky  bg-white z-10">
+                        <th class="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center sticky z-10">
                             Actions
+                        </th>
+                        <th class="px-4 py-3 w-12 text-right ">
+                            <input type="checkbox" id="selectAll" class="w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500 cursor-pointer transition-colors shadow-sm">
                         </th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 bg-white" id="tableBody">
                     @forelse($departments as $dept)
                     <tr class="table-row hover:bg-slate-50/50 transition-colors group">
-                        <td class="px-5 py-4 text-center">
-                            <input type="checkbox" class="row-checkbox w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500 cursor-pointer shadow-sm transition-colors" value="{{ $dept->id }}" data-name="{{ $dept->department_name }}" data-code="{{ $dept->code }}" data-description="{{ $dept->description }}">
+                        <td class="p-4 text-center">
+                            {{ $loop->iteration + ($departments->currentPage() - 1) * $departments->perPage() }}
                         </td>
                         <td class="px-2 py-4">
                             <span class="inline-flex items-center px-2 py-1 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700 tracking-wide">{{ $dept->code ?? 'DPT-' . str_pad($dept->id, 3, '0', STR_PAD_LEFT) }}</span>
@@ -136,18 +139,21 @@
                             </span>
                         </td>
                         <td class="px-5 py-4 text-right">
-                            <div class="flex items-center justify-end gap-1.5 transition-opacity opacity-70 group-hover:opacity-100">
+                            <div class="flex items-center justify-end gap-1.5 transition-opacity opacity-100 group-hover:opacity-100">
                                 <button onclick="editSingleRow(this)" data-id="{{ $dept->id }}" data-name="{{ $dept->department_name }}" data-code="{{ $dept->code }}" data-description="{{ $dept->description }}" class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-indigo-600 hover:bg-indigo-700 transition-colors tooltip-trigger border-none" title="Edit">
                                     <i class="far fa-edit text-[13px]"></i>
                                 </button>
-                                <button type="button" class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-rose-700 hover:bg-rose-700 transition-colors btn-delete border-none+" 
-                                    title="Delete" 
-                                    data-id="{{ $dept->id }}" 
-                                    data-title="{{ $dept->department_name }}">
-                                    <i class="far fa-trash-alt text-[13px]"></i>
-                                </button>
-                            </div>
-                        </td>
+                                <button type="button" class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-rose-700 hover:bg-rose-700 transition-colors btn-delete border-none" 
+                                title="Delete" 
+                                data-id="{{ $dept->id }}" 
+                                data-title="{{ $dept->department_name }}">
+                                <i class="far fa-trash-alt text-[13px]"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td class="p-4 text-right">
+                        <input type="checkbox" class="row-checkbox w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500 cursor-pointer shadow-sm transition-colors" value="{{ $dept->id }}">
+                    </td>
                     </tr>
                     @empty
                     <tr id="emptyStateRow">
@@ -177,34 +183,90 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
 
         <!-- Footer -->
         @if($departments->hasPages())
-        <div class="px-8 py-5 border-t border-slate-50 bg-slate-50/30 flex items-center justify-between">
-            <span class="text-[9px] font-black text-indigo-600 uppercase tracking-widest tabular-nums italic italic">
+        <div class="px-4 py-3    border-t border-slate-50 bg-slate-100/80 flex flex-col md:flex-row items-center justify-between gap-4">
+            <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
                 Mapping Node: {{ $departments->firstItem() ?? 0 }} - {{ $departments->lastItem() ?? 0 }} of {{ $departments->total() }} Authorized Units
             </span>
-            <div class="flex justify-end custom-pagination">
-                {{ $departments->withQueryString()->links() }}
+            <div class="custom-pagination flex items-center">
+                {{ $departments->links('pagination::bootstrap-5') }}
             </div>
         </div>
         @else
-        <div class="px-6 py-3 border-t border-slate-100 bg-slate-50/30 flex justify-between">
-            <span class="text-sm text-slate-500">
+        <div class="p-4 border-t border-slate-50 bg-slate-100/80 flex flex-col md:flex-row items-center justify-between gap-4">
+            <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums ">
                 Displaying all <span class="font-medium text-slate-700">{{ $departments->total() }}</span> entries
             </span>
         </div>
         @endif
         
 <style>
-/* Clean Custom Pagination styles to fix default Tailwind pagination UI issues */
-.custom-pagination nav > div:first-child { display: none; }
-.custom-pagination nav > div:last-child { display: flex; justify-content: flex-end; }
-.custom-pagination nav { background: transparent !important; }
-.custom-pagination nav p { display: none; }
-.custom-pagination nav .relative.inline-flex { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); border-radius: 0.5rem; }
-</style>
+/* layout fix */
+.custom-pagination nav {
+    background: transparent !important;
+}
+
+.custom-pagination nav > div:first-child {
+    display: none;
+}
+
+.custom-pagination nav > div:last-child {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* remove text */
+.custom-pagination nav p {
+    display: none;
+}
+
+/* reset pagination */
+.custom-pagination .pagination {
+    margin: 0 !important;
+}
+
+/* base button */
+.custom-pagination .page-link {
+    padding: 7px 10px !important;
+    font-size: 15px;
+    line-height: 1.2;
+
+    border: 1px solid #e5e7eb !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* hover */
+.custom-pagination .page-link:hover {
+    background: #eef2ff;
+}
+
+/* active */
+.custom-pagination .page-item.active .page-link {
+    background: #4f46e5;
+    color: white;
+    border: 1px solid #4f46e5 !important;
+    box-shadow: none !important;
+}
+
+/* click/focus fix (IMPORTANT) */
+.custom-pagination .page-link:focus,
+.custom-pagination .page-link:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* remove bootstrap weird inline wrapper shadow */
+.custom-pagination nav .relative.inline-flex {
+    box-shadow: none !important;
+}
+</style>    
 <style>
     
     /* Custom Scrollbar for sleek aesthetic */
@@ -271,7 +333,40 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+    // SUCCESS ALERT
+    const successAlert = document.querySelector(".success-alert");
+
+    if (successAlert) {
+        setTimeout(() => {
+            successAlert.classList.add("opacity-0", "translate-x-5");
+
+            setTimeout(() => {
+                successAlert.remove();
+            }, 300);
+
+        }, 5000);
+    }
+
+    // ERROR ALERT
+    const errorAlert = document.querySelector(".error-alert");
+
+    if (errorAlert) {
+        setTimeout(() => {
+            errorAlert.classList.add("opacity-0", "translate-x-5");
+
+            setTimeout(() => {
+                errorAlert.remove();
+            }, 300);
+
+        }, 5000);
+    }
+
+});
     // Live Search functionality with "no results" handling
     document.getElementById('tableSearch').addEventListener('keyup', function() {
         let query = this.value.toLowerCase().trim();
@@ -318,32 +413,43 @@
     });
 
     // Bulk Delete
-    function deleteSelected() {
-        let selected = document.querySelectorAll('.row-checkbox:checked');
-        if (selected.length === 0) {
-            alert('Please select at least one department to delete.');
-            return;
-        }
+function deleteSelected() {
 
-        window.premiumConfirm(
-            '<span class="font-bold text-slate-700">You are about to delete ' + selected.length + ' department(s).</span><br>All associated majors and classes may be affected. This action cannot be undone.', 
-            function() {
-                let form = document.getElementById('deleteForm');
-                form.action = '{{ route("admin.departments.bulkDelete") }}';
-                form.innerHTML = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
-                selected.forEach(function(item) {
-                    let input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = 'ids[]';
-                    input.value = item.value;
-                    form.appendChild(input);
-                });
-                form.submit();
-            },
-            'Delete Multiple Departments?'
-        );
+    let selected = document.querySelectorAll('.row-checkbox:checked');
+
+    if (selected.length === 0) {
+        alert('Please select at least one department.');
+        return;
     }
 
+    let confirmDelete = confirm(
+        `Are you sure you want to delete ${selected.length} department(s)?`
+    );
+
+    if (confirmDelete) {
+
+        let form = document.getElementById('deleteForm');
+
+        form.action = '{{ route("admin.departments.bulkDelete") }}';
+
+        form.innerHTML = `
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        `;
+
+        selected.forEach(function(item) {
+
+            let input = document.createElement('input');
+
+            input.type = 'hidden';
+            input.name = 'ids[]';
+            input.value = item.value;
+
+            form.appendChild(input);
+        });
+
+        form.submit();
+    }
+}
     function editSingleRow(btn) {
         let id = btn.getAttribute('data-id');
         let name = btn.getAttribute('data-name');
@@ -376,35 +482,45 @@
 
     // Single Delete Custom Event Listener
     document.addEventListener('click', function(e) {
-        if (e.target.closest('.btn-delete')) {
-            const btn = e.target.closest('.btn-delete');
-            const id = btn.dataset.id;
-            const title = btn.dataset.title;
 
-            window.premiumConfirm(
-                'You are about to delete <strong class="text-slate-800">"' + title + '"</strong>.<br>Are you sure? This action cannot be undone.', 
-                function() {
-                    const form = document.getElementById('deleteForm');
-                    form.action = '/admin/departments/' + id;
-                    form.innerHTML = '';
-                    
-                    const csrf = document.createElement('input');
-                    csrf.type = 'hidden';
-                    csrf.name = '_token';
-                    csrf.value = '{{ csrf_token() }}';
-                    form.appendChild(csrf);
+    if (e.target.closest('.btn-delete')) {
 
-                    const method = document.createElement('input');
-                    method.type = 'hidden';
-                    method.name = '_method';
-                    method.value = 'DELETE';
-                    form.appendChild(method);
+        const btn = e.target.closest('.btn-delete');
 
-                    form.submit();
-                },
-                'Delete Department?'
-            );
+        const id = btn.dataset.id;
+        const title = btn.dataset.title;
+
+        const confirmDelete = confirm(
+            `Are you sure you want to delete "${title}" ?`
+        );
+
+        if (confirmDelete) {
+
+            const form = document.getElementById('deleteForm');
+
+            form.action = '/admin/departments/' + id;
+
+            form.innerHTML = '';
+
+            const csrf = document.createElement('input');
+
+            csrf.type = 'hidden';
+            csrf.name = '_token';
+            csrf.value = '{{ csrf_token() }}';
+
+            form.appendChild(csrf);
+
+            const method = document.createElement('input');
+
+            method.type = 'hidden';
+            method.name = '_method';
+            method.value = 'DELETE';
+
+            form.appendChild(method);
+
+            form.submit();
         }
-    });
+    }
+});
 </script>
 @endsection
