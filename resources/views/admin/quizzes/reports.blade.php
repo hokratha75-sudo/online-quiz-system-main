@@ -1,4 +1,5 @@
 @extends('layouts.admin')
+@section('topbar-title', 'Report Management')
 
 @section('content')
 <div class="max-w-[1400px] mx-auto p-6 md:p-10 font-inter text-slate-900 bg-slate-50/30 min-h-screen">
@@ -9,7 +10,7 @@
             <div class="flex justify-between items-start mb-4">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Total Students</span>
                 <div class="w-9 h-9 rounded-xl bg-slate-50 text-slate-400 flex items-center justify-center border border-slate-200 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                    <i class="far fa-user-graduate text-xs"></i>
+                    <i class="fas fa-user-graduate text-xs"></i>
                 </div>
             </div>
             <h3 class="text-3xl font-bold text-slate-900 tabular-nums">{{ number_format($totalStudents) }}</h3>
@@ -22,7 +23,7 @@
             <div class="flex justify-between items-start mb-4">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Avg Score</span>
                 <div class="w-9 h-9 rounded-xl bg-slate-50 text-slate-400 flex items-center justify-center border border-slate-200 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                    <i class="far fa-chart-line text-xs"></i>
+                    <i class="fas fa-chart-line text-xs"></i>
                 </div>
             </div>
             <h3 class="text-3xl font-bold text-slate-900 tabular-nums">{{ round($avgScore, 1) }}%</h3>
@@ -35,7 +36,7 @@
             <div class="flex justify-between items-start mb-4">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Pass Rate</span>
                 <div class="w-9 h-9 rounded-xl bg-slate-50 text-slate-400 flex items-center justify-center border border-slate-200 group-hover:bg-rose-600 group-hover:text-white transition-colors">
-                    <i class="far fa-check-double text-xs"></i>
+                    <i class="fas fa-check-double text-xs"></i>
                 </div>
             </div>
             <h3 class="text-3xl font-bold text-slate-900 tabular-nums">{{ $passRate }}%</h3>
@@ -63,7 +64,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
         <div class="card-standard p-6">
             <h6 class="text-[11px] font-bold text-slate-900 mb-6 flex items-center gap-2 uppercase tracking-widest">
-                <i class="far fa-chart-bar text-indigo-500"></i> Grade Distribution
+                <i class="fas fa-chart-bar text-indigo-500"></i> Grade Distribution
             </h6>
             <div class="relative h-[220px]">
                 <canvas id="scoreChart"></canvas>
@@ -72,7 +73,7 @@
         
         <div class="card-standard p-6">
             <h6 class="text-[11px] font-bold text-slate-900 mb-6 flex items-center gap-2 uppercase tracking-widest">
-                <i class="far fa-graduation-cap text-indigo-500"></i> Subject Analytics
+                <i class="fas fa-graduation-cap text-indigo-500"></i> Subject Analytics
             </h6>
             <div class="relative h-[220px]">
                 <canvas id="subjectChart"></canvas>
@@ -81,7 +82,7 @@
 
         <div class="card-standard p-6 text-center">
             <h6 class="text-[11px] font-bold text-slate-900 mb-6 flex items-center gap-2 justify-center uppercase tracking-widest">
-                <i class="far fa-chart-pie text-indigo-500"></i> Success Ratio
+                <i class="fas fa-chart-pie text-indigo-500"></i> Success Ratio
             </h6>
             <div class="relative h-[180px]">
                 <canvas id="passFailChart"></canvas>
@@ -100,10 +101,17 @@
             <div class="flex items-center gap-3">
                 <button onclick="window.print()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-6 py-2.5 rounded-2xl text-[11px] font-bold transition-all flex items-center gap-2 shadow-sm uppercase tracking-widest">
                     <i class="fas fa-print text-slate-400"></i> Print
+<<<<<<< HEAD
                 </button>
                 <button type="button" @click="$dispatch('open-export-modal')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-2xl text-[11px] font-bold transition-all flex items-center gap-2 shadow-xl shadow-indigo-600/20 active:scale-[0.98] uppercase tracking-widest">
                     <i class="fas fa-file-export"></i> Export
                 </button>
+=======
+                </button>
+                <a href="{{ request()->fullUrlWithQuery(['export' => 'csv']) }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-2xl text-[11px] font-bold transition-all flex items-center gap-2 shadow-xl shadow-indigo-600/20 active:scale-[0.98] uppercase tracking-widest">
+                    <i class="fas fa-file-csv"></i> Export
+                </a>
+>>>>>>> b005832 (Standardize pagination styling across all views)
             </div>
         </div>
         <div class="overflow-x-auto">
@@ -160,7 +168,7 @@
                             </td>
                             <td class="text-center">
                                 <a href="{{ route('quizzes.result', $result->attempt_id) }}" class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all shadow-sm">
-                                    <i class="far fa-chevron-right text-[10px]"></i>
+                                    <i class="fas fa-chevron-right text-[10px]"></i>
                                 </a>
                             </td>
                         </tr>
@@ -171,11 +179,22 @@
             </table>
         </div>
         @if($results->hasPages())
-        <div class="px-6 py-4 border-t border-slate-200 flex justify-end">
-            <div class="pagination-clean">
-                {{ $results->links() }}
+        <div class="px-4 py-3 border-t border-slate-50 bg-slate-100/80 flex flex-col md:flex-row items-center justify-between gap-4">
+            <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
+                Showing: {{ $results->firstItem() ?? 0 }} - {{ $results->lastItem() ?? 0 }} of {{ $results->total() }} Records
+            </span>
+            <div class="custom-pagination flex items-center">
+                {{ $results->links('pagination::bootstrap-5') }}
             </div>
         </div>
+        @else
+            @if($results->total() > 0)
+            <div class="p-4 border-t border-slate-50 bg-slate-100/80 flex flex-col md:flex-row items-center justify-between gap-4">
+                <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
+                    Displaying all <span class="font-medium text-slate-700">{{ $results->total() }}</span> records
+                </span>
+            </div>
+            @endif
         @endif
     </div>
 
@@ -189,7 +208,7 @@
 
 <style>
     @media print {
-        .sidebar, .topbar, form, button, .pagination, .no-print { display: none !important; }
+        .sidebar, .topbar, form, button, .pagination, .no-print, .custom-pagination { display: none !important; }
         .page-content { margin: 0 !important; padding: 0 !important; }
         .card { box-shadow: none !important; border: 1px solid #eee !important; }
     }

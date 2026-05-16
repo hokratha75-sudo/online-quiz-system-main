@@ -115,7 +115,7 @@
         }
     });
 </script>
-<div class="max-w-[1600px] mx-auto p-5 md:p-8 font-sans text-slate-800 bg-gradient-to-br from-slate-50 via-white to-slate-100/50 min-h-[calc(100vh-110px)]">
+<div class="max-w-[1600px] mx-auto pt-5 pb-0 px-5 md:pt-8 md:pb-2 md:px-8 font-sans text-slate-800 bg-gradient-to-br from-slate-50 via-white to-slate-100/50 h-[calc(100vh-140px)] overflow-hidden flex flex-col">
 
     
 
@@ -148,7 +148,7 @@
     </div>
 
     {{-- Main Card --}}
-    <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 overflow-hidden transition-all duration-300 ">
+    <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 overflow-hidden transition-all duration-300 flex-1 flex flex-col">
         {{-- Table Header with Search --}}
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-3 border-b border-slate-100">
             <div class="flex items-center gap-3">
@@ -179,8 +179,8 @@
         </div>
 
         {{-- Scrollable Table Body --}}
-        <div class="overflow-x-auto custom-scrollbar">
-            <div class="h-[calc(100vh-405px)] overflow-y-auto custom-scrollbar">
+        <div class="overflow-x-auto custom-scrollbar flex-1 flex flex-col overflow-hidden">
+            <div class="flex-1 overflow-y-auto custom-scrollbar">
                 <table class="min-w-full divide-y divide-slate-100">
                     <thead class="bg-slate-100/80 sticky top-0 z-10 shadow-sm">
                         <tr>
@@ -233,12 +233,13 @@
                                         <i class="far fa-edit text-[13px]"></i>
                                     </a>
                                     @if($user->id !== auth()->id())
-                                    <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('⚠️ Permanently delete this user?')">
-                                        @csrf @method('DELETE')
-                                        <button type="submit" class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-rose-700 hover:bg-rose-700 transition-colors btn-delete border-none">
-                                            <i class="far fa-trash-alt text-[13px]"></i>
-                                        </button>
-                                    </form>
+                                    <button type="button"
+                                        class="w-8 h-8 rounded-lg flex items-center justify-center text-white bg-rose-700 hover:bg-rose-700 transition-colors btn-delete-user border-none"
+                                        data-id="{{ $user->id }}"
+                                        data-title="{{ $user->username }}"
+                                        title="Delete">
+                                        <i class="far fa-trash-alt text-[13px]"></i>
+                                    </button>
                                     @endif
                                 </div>
                             </td>
@@ -273,45 +274,24 @@
 
         {{-- Pagination --}}
         @if($users->hasPages())
-        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/40" id="paginationContainer">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                    Showing {{ $users->firstItem() ?? 0 }} to {{ $users->lastItem() ?? 0 }} of {{ $users->total() }} results
-                </div>
-                <div class="flex gap-1.5">
-                    @if ($users->onFirstPage())
-                        <span class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-300 text-xs font-bold cursor-not-allowed shadow-sm"><i class="fas fa-chevron-left mr-1 text-[9px]"></i> Prev</span>
-                    @else
-                        <a href="{{ $users->previousPageUrl() }}" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 text-xs font-bold transition-all shadow-sm"><i class="fas fa-chevron-left mr-1 text-[9px]"></i> Prev</a>
-                    @endif
-
-                    @foreach ($users->getUrlRange(1, $users->lastPage()) as $page => $url)
-                        @if ($page == $users->currentPage())
-                            <span class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-bold shadow-md shadow-indigo-200">{{ $page }}</span>
-                        @else
-                            <a href="{{ $url }}" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 text-xs font-bold transition-all">{{ $page }}</a>
-                        @endif
-                    @endforeach
-
-                    @if ($users->hasMorePages())
-                        <a href="{{ $users->nextPageUrl() }}" class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 text-xs font-bold transition-all shadow-sm">Next <i class="fas fa-chevron-right ml-1 text-[9px]"></i></a>
-                    @else
-                        <span class="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-300 text-xs font-bold cursor-not-allowed shadow-sm">Next <i class="fas fa-chevron-right ml-1 text-[9px]"></i></span>
-                    @endif
-                </div>
+        <div class="px-4 py-3 border-t border-slate-50 bg-slate-100/80 flex flex-col md:flex-row items-center justify-between gap-4" id="paginationContainer">
+            <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
+                Showing: {{ $users->firstItem() ?? 0 }} - {{ $users->lastItem() ?? 0 }} of {{ $users->total() }} Users
+            </span>
+            <div class="custom-pagination flex items-center">
+                {{ $users->links('pagination::bootstrap-5') }}
             </div>
         </div>
         @else
-            @if($users->total() > 0)
-            <div class="p-4 border-t border-slate-50 bg-slate-100/80 flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
-                    Total {{ $users->total() }} member(s)
-                </div>
-            </div>
-            @endif
+        <div class="p-4 border-t border-slate-50 bg-slate-100/80 flex flex-col md:flex-row items-center justify-between gap-4">
+            <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums ">
+                Displaying all <span class="font-medium text-slate-700">{{ $users->total() }}</span> users
+            </span>
+        </div>
         @endif
     </div>
 </div>
+
 <form id="deleteForm" method="POST" style="display:none;">
     @csrf
     @method('DELETE')
@@ -415,9 +395,9 @@
                                     <div class="relative">
                                         <select name="sex"
                                             class="w-full px-2 py-2.5 bg-slate-50 border border-slate-200 rounded text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none appearance-none">
-                                            <option value="other">Other</option>
-                                            <option value="male">Male</option>
-                                            <option value="female">Female</option>
+                                            <option value="">Not Disclosed</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
                                     
                                         </select>
                                     
@@ -523,6 +503,39 @@
 
     form.submit();
 }
+
+    // Single User Delete
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.btn-delete-user')) {
+            const btn = e.target.closest('.btn-delete-user');
+            const id = btn.dataset.id;
+            const title = btn.dataset.title;
+
+            const confirmDelete = confirm(
+                `Are you sure you want to delete "${title}" ?`
+            );
+
+            if (confirmDelete) {
+                const form = document.getElementById('deleteForm');
+                form.action = '/admin/users/' + id;
+                form.innerHTML = '';
+
+                const csrf = document.createElement('input');
+                csrf.type = 'hidden';
+                csrf.name = '_token';
+                csrf.value = '{{ csrf_token() }}';
+                form.appendChild(csrf);
+
+                const method = document.createElement('input');
+                method.type = 'hidden';
+                method.name = '_method';
+                method.value = 'DELETE';
+                form.appendChild(method);
+
+                form.submit();
+            }
+        }
+    });
     document.addEventListener('DOMContentLoaded', function() {
         // --- Live AJAX Search ---
         const searchInput = document.getElementById('searchInput');

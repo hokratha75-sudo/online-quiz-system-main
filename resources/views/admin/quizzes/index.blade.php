@@ -210,98 +210,24 @@
         </div>
         
         <!-- Footer -->
-@if($quizzes->hasPages())
-<div class="px-4 py-3 border-t border-slate-100 bg-slate-50 flex flex-col md:flex-row items-center justify-between gap-4">
-
-    <span class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
-        Showing
-        {{ $quizzes->firstItem() ?? 0 }}
-        -
-        {{ $quizzes->lastItem() ?? 0 }}
-        of
-        {{ $quizzes->total() }}
-        Assessments
-    </span>
-
-    <div class="custom-pagination flex items-center">
-        {{ $quizzes->links('pagination::bootstrap-5') }}
-    </div>
-
-</div>
-@else
-<div class="px-4 py-3 border-t border-slate-100 bg-slate-50 flex items-center justify-between">
-
-    <span class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">
-        Displaying all
-        {{ $quizzes->count() }}
-        Assessments
-    </span>
-
-</div>
-@endif
-<style>
-/* layout fix */
-.custom-pagination nav {
-    background: transparent !important;
-}
-
-.custom-pagination nav > div:first-child {
-    display: none;
-}
-
-.custom-pagination nav > div:last-child {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-}
-
-/* remove text */
-.custom-pagination nav p {
-    display: none;
-}
-
-/* reset pagination */
-.custom-pagination .pagination {
-    margin: 0 !important;
-}
-
-/* base button */
-.custom-pagination .page-link {
-    padding: 7px 10px !important;
-    font-size: 15px;
-    line-height: 1.2;
-
-    border: 1px solid #e5e7eb !important;
-
-    box-shadow: none !important;
-    outline: none !important;
-}
-
-/* hover */
-.custom-pagination .page-link:hover {
-    background: #eef2ff;
-}
-
-/* active */
-.custom-pagination .page-item.active .page-link {
-    background: #4f46e5;
-    color: white;
-    border: 1px solid #4f46e5 !important;
-    box-shadow: none !important;
-}
-
-/* click/focus fix (IMPORTANT) */
-.custom-pagination .page-link:focus,
-.custom-pagination .page-link:focus-visible {
-    outline: none !important;
-    box-shadow: none !important;
-}
-
-/* remove bootstrap weird inline wrapper shadow */
-.custom-pagination nav .relative.inline-flex {
-    box-shadow: none !important;
-}
-</style>    
+        @if($quizzes->hasPages())
+        <div class="px-4 py-3 border-t border-slate-50 bg-slate-100/80 flex flex-col md:flex-row items-center justify-between gap-4">
+            <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
+                Showing: {{ $quizzes->firstItem() ?? 0 }} - {{ $quizzes->lastItem() ?? 0 }} of {{ $quizzes->total() }} Assessments
+            </span>
+            <div class="custom-pagination flex items-center">
+                {{ $quizzes->links('pagination::bootstrap-5') }}
+            </div>
+        </div>
+        @else
+            @if($quizzes->total() > 0)
+            <div class="p-4 border-t border-slate-50 bg-slate-100/80 flex flex-col md:flex-row items-center justify-between gap-4">
+                <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
+                    Displaying all <span class="font-medium text-slate-700">{{ $quizzes->total() }}</span> assessments
+                </span>
+            </div>
+            @endif
+        @endif
     </div>
 </div>
 

@@ -134,9 +134,24 @@
     @endforelse
 </div>
 
-<div class="mt-8">
-    {{ $subjects->links() }}
-</div>
+        @if($subjects->hasPages())
+        <div class="mt-8 px-4 py-3 border border-slate-200 rounded-2xl bg-white flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
+            <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
+                Showing: {{ $subjects->firstItem() ?? 0 }} - {{ $subjects->lastItem() ?? 0 }} of {{ $subjects->total() }} Courses
+            </span>
+            <div class="custom-pagination flex items-center">
+                {{ $subjects->links('pagination::bootstrap-5') }}
+            </div>
+        </div>
+        @else
+            @if($subjects->total() > 0)
+            <div class="mt-8 p-4 border border-slate-200 rounded-2xl bg-white flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
+                <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
+                    Displaying all <span class="font-medium text-slate-700">{{ $subjects->total() }}</span> courses
+                </span>
+            </div>
+            @endif
+        @endif
 
 <style>
     .btn-light-square {

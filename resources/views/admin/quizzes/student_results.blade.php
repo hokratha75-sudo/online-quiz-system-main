@@ -250,9 +250,22 @@
             </table>
         </div>
         @if($results->hasPages())
-        <div class="px-8 py-6 border-t border-slate-50 bg-slate-50/30">
-            {{ $results->links() }}
+        <div class="px-6 py-4 border-t border-slate-50 bg-slate-50/30 flex flex-col md:flex-row items-center justify-between gap-4">
+            <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
+                Showing: {{ $results->firstItem() ?? 0 }} - {{ $results->lastItem() ?? 0 }} of {{ $results->total() }} Records
+            </span>
+            <div class="custom-pagination flex items-center">
+                {{ $results->links('pagination::bootstrap-5') }}
+            </div>
         </div>
+        @else
+            @if($results->total() > 0)
+            <div class="px-6 py-4 border-t border-slate-50 bg-slate-50/30 flex flex-col md:flex-row items-center justify-between gap-4">
+                <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
+                    Displaying all <span class="font-medium text-slate-700">{{ $results->total() }}</span> records
+                </span>
+            </div>
+            @endif
         @endif
     </div>
 

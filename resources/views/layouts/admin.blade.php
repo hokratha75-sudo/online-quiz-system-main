@@ -82,7 +82,7 @@
         .label-blue { background: #3b82f6; }
         .label-green { background: #10b981; }
 
-        /* Clean Pagination Styles */
+        /* Clean Pagination Styles (Legacy) */
         .pagination-clean .pagination { margin-bottom: 0; gap: 4px; }
         .pagination-clean .page-item .page-link { border-radius: 12px !important; border: none !important; color: #64748b; font-weight: 700; font-size: 12px; padding: 8px 16px; background: transparent; transition: all 0.2s; box-shadow: none !important; }
         .pagination-clean .page-item.active .page-link { background-color: #4f46e5 !important; color: white !important; box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.2) !important; }
@@ -90,6 +90,30 @@
         /* Hide Bootstrap's redundant 'Showing 1 to 10...' text in the pagination wrapper */
         .pagination-clean nav > div.d-none.flex-sm-fill { justify-content: flex-end !important; }
         .pagination-clean nav > div.d-none.flex-sm-fill > div:first-child { display: none !important; }
+
+        /* Custom Global Pagination (Standardized) */
+        .custom-pagination nav { background: transparent !important; }
+        .custom-pagination nav > div:first-child { display: none; }
+        .custom-pagination nav > div:last-child { display: flex; justify-content: flex-end; align-items: center; }
+        .custom-pagination nav p { display: none; }
+        .custom-pagination .pagination { margin: 0 !important; }
+        .custom-pagination .page-link {
+            padding: 7px 10px !important;
+            font-size: 15px;
+            line-height: 1.2;
+            border: 1px solid #e5e7eb !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+        .custom-pagination .page-link:hover { background: #eef2ff; }
+        .custom-pagination .page-item.active .page-link {
+            background-color: #4f46e5 !important;
+            border-color: #4f46e5 !important;
+            color: white !important;
+        }
+        .custom-pagination .page-link:focus,
+        .custom-pagination .page-link:focus-visible { outline: none !important; box-shadow: none !important; }
+        .custom-pagination nav .relative.inline-flex { box-shadow: none !important; }
     </style>
 </head>
 <!-- === ចាប់ផ្ដើមរចនាសម្ព័ន្ធ Layout === -->
