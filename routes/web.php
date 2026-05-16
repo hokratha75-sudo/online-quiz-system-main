@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\StudentReportController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -195,6 +196,11 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/questions/bulk-delete', [QuestionController::class, 'bulkDelete'])->name('questions.bulkDelete');
         Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
         Route::delete('/questions/{question}', [QuestionController::class, 'destroy'])->name('questions.destroy');
+
+        // Student Academic Report Export
+        Route::get('/reports/export/download', [StudentReportController::class, 'exportStudentAcademicReport'])->name('reports.export.download');
+        Route::get('/api/departments/{department}/majors', [StudentReportController::class, 'getMajors']);
+        Route::get('/api/majors/{major}/classes', [StudentReportController::class, 'getClasses']);
     });
 
     // --- STUDENT ONLY (Role 3) ---

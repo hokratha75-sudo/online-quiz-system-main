@@ -17,7 +17,7 @@
                 <span>Refresh</span>
             </button>
             <a href="{{ route('quizzes.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-6 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-3 shadow-sm uppercase tracking-widest">
-                <i class="far fa-file-excel text-emerald-500 text-sm"></i> 
+                <i class="fas fa-file-excel text-emerald-500 text-sm"></i> 
                 <span>Export</span>
             </a>
             <a href="{{ route('quizzes.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-7 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-3 shadow-xl shadow-indigo-600/20 active:scale-[0.98] group uppercase tracking-widest">

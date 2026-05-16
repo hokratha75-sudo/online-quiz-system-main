@@ -99,11 +99,11 @@
             <h3>Student Assessment Logs</h3>
             <div class="flex items-center gap-3">
                 <button onclick="window.print()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-6 py-2.5 rounded-2xl text-[11px] font-bold transition-all flex items-center gap-2 shadow-sm uppercase tracking-widest">
-                    <i class="far fa-print text-slate-400"></i> Print
+                    <i class="fas fa-print text-slate-400"></i> Print
                 </button>
-                <a href="{{ request()->fullUrlWithQuery(['export' => 'csv']) }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-2xl text-[11px] font-bold transition-all flex items-center gap-2 shadow-xl shadow-indigo-600/20 active:scale-[0.98] uppercase tracking-widest">
-                    <i class="far fa-file-csv"></i> Export
-                </a>
+                <button type="button" @click="$dispatch('open-export-modal')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-2xl text-[11px] font-bold transition-all flex items-center gap-2 shadow-xl shadow-indigo-600/20 active:scale-[0.98] uppercase tracking-widest">
+                    <i class="fas fa-file-export"></i> Export
+                </button>
             </div>
         </div>
         <div class="overflow-x-auto">
@@ -288,4 +288,165 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
+<!-- Export Modal (Alpine.js Component) -->
+<div 
+    x-data="studentExportModal()" 
+    x-show="isOpen" 
+    style="display: none;"
+    class="fixed inset-0 z-[100] overflow-y-auto"
+    @open-export-modal.window="isOpen = true"
+>
+    <!-- Backdrop -->
+    <div 
+        x-show="isOpen"
+        x-transition.opacity
+        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" 
+        @click="isOpen = false"
+    ></div>
+
+    <!-- Modal Content -->
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+        <div 
+            x-show="isOpen"
+            x-transition:enter="ease-out duration-300"
+            x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+            x-transition:leave="ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+            x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            class="relative inline-block w-full max-w-lg p-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-2xl border border-slate-100 font-inter z-10"
+        >
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-900">Export Academic Report</h3>
+                    <p class="text-xs text-slate-500 font-medium mt-1">Configure your export parameters</p>
+                </div>
+                <button @click="isOpen = false" class="text-slate-400 hover:text-rose-500 hover:bg-rose-50 w-8 h-8 flex items-center justify-center rounded-xl transition-all">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form action="{{ route('reports.export.download') }}" method="GET" class="space-y-6">
+                <!-- Dropdown 1: Department -->
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-widest mb-2">Department</label>
+                    <select 
+                        name="department_id" 
+                        x-model="departmentId"
+                        @change="fetchMajors()"
+                        class="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-indigo-500 focus:border-indigo-500 block p-3 transition-all outline-none"
+                    >
+                        <option value="">All Departments</option>
+                        @foreach(\App\Models\Department::all() as $dept)
+                            <option value="{{ $dept->id }}">{{ $dept->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Dropdown 2: Major -->
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-widest mb-2">Major</label>
+                    <select 
+                        name="major_id" 
+                        x-model="majorId"
+                        @change="fetchClasses()"
+                        :disabled="!departmentId"
+                        class="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-indigo-500 focus:border-indigo-500 block p-3 transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <option value="">All Majors</option>
+                        <template x-for="major in majors" :key="major.id">
+                            <option :value="major.id" x-text="major.name"></option>
+                        </template>
+                    </select>
+                </div>
+
+                <!-- Dropdown 3: Class -->
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-widest mb-2">Class</label>
+                    <select 
+                        name="class_id" 
+                        :disabled="!majorId"
+                        class="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-xl focus:ring-indigo-500 focus:border-indigo-500 block p-3 transition-all outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <option value="">All Classes</option>
+                        <template x-for="cls in classes" :key="cls.id">
+                            <option :value="cls.id" x-text="cls.name"></option>
+                        </template>
+                    </select>
+                </div>
+
+                <!-- Data Customization Checkboxes -->
+                <div class="pt-4 border-t border-slate-100">
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-widest mb-3">Include Data</label>
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" name="include_scores" value="1" checked class="w-4 h-4 text-indigo-600 bg-slate-50 border-slate-300 rounded focus:ring-indigo-500">
+                            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900 transition-colors">Include Quiz Scores & Averages</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" name="include_status" value="1" checked class="w-4 h-4 text-indigo-600 bg-slate-50 border-slate-300 rounded focus:ring-indigo-500">
+                            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900 transition-colors">Include Overall Passing Status</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" name="include_logs" value="1" class="w-4 h-4 text-indigo-600 bg-slate-50 border-slate-300 rounded focus:ring-indigo-500">
+                            <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900 transition-colors">Include Activity/Attendance Logs</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="flex justify-end gap-3 pt-6 border-t border-slate-100">
+                    <button type="button" @click="isOpen = false" class="px-6 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all uppercase tracking-widest">
+                        Cancel
+                    </button>
+                    <button type="submit" @click="isOpen = false" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shadow-lg shadow-indigo-600/20 active:scale-95 uppercase tracking-widest">
+                        <i class="fas fa-file-export"></i> Download CSV
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function studentExportModal() {
+    return {
+        isOpen: false,
+        departmentId: '',
+        majorId: '',
+        majors: [],
+        classes: [],
+        
+        async fetchMajors() {
+            this.majorId = '';
+            this.classes = [];
+            this.majors = [];
+            
+            if (!this.departmentId) return;
+
+            try {
+                const response = await fetch(`/api/departments/${this.departmentId}/majors`);
+                this.majors = await response.json();
+            } catch (error) {
+                console.error('Error fetching majors:', error);
+            }
+        },
+
+        async fetchClasses() {
+            this.classes = [];
+            
+            if (!this.majorId) return;
+
+            try {
+                const response = await fetch(`/api/majors/${this.majorId}/classes`);
+                this.classes = await response.json();
+            } catch (error) {
+                console.error('Error fetching classes:', error);
+            }
+        }
+    }
+}
+</script>
+
 @endsection
