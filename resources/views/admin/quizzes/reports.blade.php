@@ -101,17 +101,10 @@
             <div class="flex items-center gap-3">
                 <button onclick="window.print()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-6 py-2.5 rounded-2xl text-[11px] font-bold transition-all flex items-center gap-2 shadow-sm uppercase tracking-widest">
                     <i class="fas fa-print text-slate-400"></i> Print
-<<<<<<< HEAD
                 </button>
                 <button type="button" @click="$dispatch('open-export-modal')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-2xl text-[11px] font-bold transition-all flex items-center gap-2 shadow-xl shadow-indigo-600/20 active:scale-[0.98] uppercase tracking-widest">
                     <i class="fas fa-file-export"></i> Export
                 </button>
-=======
-                </button>
-                <a href="{{ request()->fullUrlWithQuery(['export' => 'csv']) }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-2xl text-[11px] font-bold transition-all flex items-center gap-2 shadow-xl shadow-indigo-600/20 active:scale-[0.98] uppercase tracking-widest">
-                    <i class="fas fa-file-csv"></i> Export
-                </a>
->>>>>>> b005832 (Standardize pagination styling across all views)
             </div>
         </div>
         <div class="overflow-x-auto">
