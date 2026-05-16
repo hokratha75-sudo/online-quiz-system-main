@@ -4,11 +4,11 @@
         <div class="modal-content rounded-[28px] border-none shadow-2xl shadow-indigo-900/20 overflow-hidden">
             
             <!-- Header -->
-            <div class="bg-indigo-600 px-6 py-4 text-white relative">
+            <div class="bg-indigo-600 px-6 py-2 text-white relative">
                 <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 blur-3xl rounded-full"></div>
                 <div class="flex items-center justify-between relative z-10">
                     <div>
-                        <h3 class="text-base font-bold tracking-tight" id="newQuestionModalLabel">Add New Question</h3>
+                        <h3 class="text-2xl font-bold tracking-tight" id="newQuestionModalLabel">Add New Question</h3>
                         <p class="text-[11px] font-medium text-indigo-200 mt-0.5">Fill in the details below, then click Save</p>
                     </div>
                     <button type="button" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all flex items-center justify-center outline-none" data-bs-dismiss="modal">
@@ -17,7 +17,7 @@
                 </div>
             </div>
 
-            <div class="px-6 py-5 space-y-4">
+            <div class="px-6 py-2 space-y-2">
                 
                 <!-- Type & Points -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">

@@ -7,6 +7,7 @@
             <div class="card-header bg-white py-3 border-bottom d-flex align-items-center justify-content-between">
                 <div>
                     <h5 class="mb-0 fw-bold text-dark opacity-75">
+                        
                         <i class="fas fa-pencil-alt text-primary me-2"></i>Edit Departemen
                     </h5>
                     <p class="text-muted small mb-0 mt-1">Ubah atau lengkapi informasi departemen ini.</p>

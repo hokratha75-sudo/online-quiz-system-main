@@ -287,8 +287,8 @@
                     <i class="fas fa-building text-white text-sm"></i>
                     <span class="text-lg">Add Department</span>
                 </h5>
-                <button type="button" class="group relative w-10 h-10 rounded-full bg-blue-50 border border-pink-200 text-pink-400 hover:bg-blue-100 hover:text-pink-500 hover:scale-110 active:scale-95 transition-all duration-200 ease-out focus:outline-none shadow-sm hover:shadow-pink-200/50" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="fas fa-times text-sm group-hover:rotate-90 transition-transform duration-200"></i>
+                <button type="button" class="group relative w-10 h-10 rounded-full bg-blue-100 border-none text-red-600 hover:bg-blue-200 focus:outline-none" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times text-sm"></i>
                 </button>
             </div>
             <form action="{{ route('admin.departments.store') }}" method="POST" id="deptForm" class="divide-y divide-slate-100">

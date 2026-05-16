@@ -47,7 +47,7 @@ class QuizController extends Controller
             $query->where('status', $request->status);
         }
 
-        $quizzes = $query->latest()->get();
+        $quizzes = $query->latest()->paginate(10)->withQueryString();
         
         $departments = Department::all();
         $subjects = Subject::all();

@@ -3,10 +3,17 @@
 @section('topbar-title', 'Create Assessment')
 
 @section('content')
-<div class="max-w-[1400px] mx-auto p-6 md:p-10 font-inter bg-slate-50/30 min-h-screen">
+<style>
+    /* Custom Scrollbar for sleek aesthetic */
+    .custom-scrollbar::-webkit-scrollbar { width: 7px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #4f46e5; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
+</style>
+<div class="max-w-[1600px] mx-auto p-6 md:p-10 font-inter bg-slate-50/30 min-h-screen">
     
     <!-- Stepper Navigation -->
-    <div class="flex items-center justify-start gap-12 mb-10 overflow-x-auto pb-4 scrollbar-hide">
+    <div class="flex items-center justify-center max-w-[1500px] mx-auto gap-12 mb-10 overflow-x-auto pb-4 scrollbar-hide">
         <div class="flex items-center gap-3 shrink-0">
             <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow-lg shadow-indigo-200">1</div>
             <span class="text-sm font-semibold text-slate-900 tracking-tight">Configuration</span>
@@ -25,7 +32,7 @@
 
     <!-- Header -->
     <div class="flex items-center gap-5 mb-8">
-        <a href="{{ route('quizzes.index') }}" class="w-10 h-10 rounded-xl border border-slate-200 bg-white flex items-center justify-center text-slate-400 hover:bg-slate-50 transition-all shadow-sm">
+        <a href="{{ route('quizzes.index') }}" class="w-12 h-12 rounded-xl border border-slate-200 bg-white flex items-center justify-center text-slate-400 hover:bg-slate-50 transition-all shadow-sm no-underline">
             <i class="fas fa-arrow-left text-xs"></i>
         </a>
         <div>
@@ -34,7 +41,7 @@
         </div>
     </div>
 
-    <form action="{{ route('quizzes.store') }}" method="POST" class="max-w-4xl pb-32">
+    <form action="{{ route('quizzes.store') }}" method="POST" class="max-w-[1600px] mx-auto pb-32">
         @csrf
         
         <div class="space-y-6">
@@ -51,36 +58,36 @@
                     <div>
                         <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">Quiz title <span class="text-rose-500">*</span></label>
                         <input type="text" name="title" required placeholder="e.g. Midterm Examination"
-                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all placeholder:text-slate-400">
+                               class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none uppercase">
                     </div>
 
                     <div>
                         <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">Description</label>
                         <textarea name="description" rows="4" placeholder="Brief instructions for students..."
-                                  class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all resize-none placeholder:text-slate-400"></textarea>
+                                  class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none uppercase"></textarea>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="relative">
                             <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">Subject <span class="text-rose-500">*</span></label>
                             <select name="subject_id" required 
-                                    class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all appearance-none cursor-pointer">
+                                    class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none uppercase appearance-none">
                                 <option value="">-- Select subject --</option>
                                 @foreach($subjects as $subject)
                                     <option value="{{ $subject->id }}">{{ $subject->subject_name }}</option>
                                 @endforeach
                             </select>
-                            <i class="fas fa-chevron-down absolute right-4 top-[42px] text-[10px] text-slate-400 pointer-events-none"></i>
+                            <i class="fas fa-chevron-down absolute right-4 top-[47px] text-[10px] text-slate-400 pointer-events-none"></i>
                         </div>
 
                         <div class="relative">
                             <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">Status <span class="text-rose-500">*</span></label>
                             <select name="status" required 
-                                    class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all appearance-none cursor-pointer">
+                                    class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none uppercase appearance-none">
                                 <option value="draft">Draft (Hidden)</option>
                                 <option value="published" selected>Published (Active)</option>
                             </select>
-                            <i class="fas fa-chevron-down absolute right-4 top-[42px] text-[10px] text-slate-400 pointer-events-none"></i>
+                            <i class="fas fa-chevron-down absolute right-4 top-[47px] text-[10px] text-slate-400 pointer-events-none"></i>
                         </div>
                     </div>
                 </div>
@@ -101,7 +108,7 @@
                             <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">Time limit <span class="text-rose-500">*</span></label>
                             <div class="relative">
                                 <input type="number" name="time_limit" value="30" required min="1" 
-                                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all">
+                                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none uppercase">
                                 <span class="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-0.5 bg-slate-200/50 rounded-md text-[10px] font-bold text-slate-500 uppercase">min</span>
                             </div>
                         </div>
@@ -110,7 +117,7 @@
                             <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">Pass mark <span class="text-rose-500">*</span></label>
                             <div class="relative">
                                 <input type="number" name="pass_percentage" value="60" required min="0" max="100" 
-                                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all">
+                                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none uppercase">
                                 <span class="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-0.5 bg-slate-200/50 rounded-md text-[10px] font-bold text-slate-500 uppercase">%</span>
                             </div>
                         </div>
@@ -123,7 +130,7 @@
                         </div>
                         <div class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" name="shuffle_questions" id="shuffleCheck" value="1" class="sr-only peer" checked>
-                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                            <div class="w-10 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
                         </div>
                     </div>
                 </div>
@@ -146,12 +153,12 @@
                         <div>
                             <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">Opens at</label>
                             <input type="datetime-local" name="opened_at" value="{{ old('opened_at') }}"
-                                   class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all">
+                                   class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none uppercase">
                         </div>
                         <div>
                             <label class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">Closes at</label>
                             <input type="datetime-local" name="closed_at" value="{{ old('closed_at') }}"
-                                   class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-900 outline-none focus:border-indigo-500 focus:bg-white transition-all">
+                                   class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none uppercase">
                         </div>
                     </div>
                     <div class="flex items-start gap-3 p-4 bg-slate-50 rounded-xl border border-slate-200/50">
@@ -171,7 +178,7 @@
                 You can add questions in the next step.
             </p>
             <div class="flex items-center gap-4 w-full sm:w-auto">
-                <button type="submit" class="w-full sm:w-auto bg-indigo-600 hover:bg-slate-900 text-white px-10 py-3 rounded-xl text-sm font-bold transition-all shadow-lg shadow-indigo-200 flex items-center justify-center gap-3 group {{ $subjects->isEmpty() ? 'opacity-50 cursor-not-allowed' : '' }}" {{ $subjects->isEmpty() ? 'disabled' : '' }}>
+                <button type="submit" class="w-full sm:w-auto bg-indigo-600 hover:bg-slate-900 text-white px-10 py-3 rounded-xl text-sm border-none font-bold transition-all shadow-lg shadow-indigo-200 flex items-center justify-center gap-3 group {{ $subjects->isEmpty() ? 'opacity-50 cursor-not-allowed' : '' }}" {{ $subjects->isEmpty() ? 'disabled' : '' }}>
                     <span>Continue</span>
                     <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
                 </button>

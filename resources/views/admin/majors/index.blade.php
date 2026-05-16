@@ -21,13 +21,13 @@
                 <p class="text-[11px] font-medium text-slate-500">{{ session('success') }}</p>
             </div>
         </div>
-        <button type="button" class="group relative w-10 h-10 rounded-full bg-blue-50 border border-pink-200 text-pink-400 hover:bg-blue-100 hover:text-pink-500 hover:scale-110 active:scale-95 transition-all duration-200 ease-out focus:outline-none shadow-sm hover:shadow-pink-200/50" onclick="this.parentElement.style.display='none'">
+        <button type="button" class="group relative w-10 h-10 rounded-full bg-green-100 border border-green-600 border border-green-500 text-green-600 hover:bg-green-200 focus:outline-none" onclick="this.parentElement.style.display='none'">
             <i class="fas fa-times text-sm group-hover:rotate-90 transition-transform duration-200"></i>
         </button>
     </div>
     @endif
     @if($errors->any())
-<div class="fixed top-20 right-4 z-[9999] error-alert w-[360px] bg-white border border-rose-100 rounded-2xl p-3.5 flex items-center justify-between shadow-xl overflow-hidden transition-all duration-300">
+<div class="fixed top-4 right-4 z-[9999] error-alert w-[360px] bg-white border border-rose-100 rounded-2xl p-3.5 flex items-center justify-between shadow-xl overflow-hidden transition-all duration-300">
     
     <div class="absolute left-0 top-0 bottom-0 w-1 bg-rose-500"></div>
 
@@ -49,7 +49,7 @@
 
     <button
         type="button"
-        class="group relative w-10 h-10 rounded-full bg-blue-50 border border-pink-200 text-pink-400 hover:bg-blue-100 hover:text-pink-500 hover:scale-110 active:scale-95 transition-all duration-200 ease-out focus:outline-none shadow-sm hover:shadow-pink-200/50"
+        class="group relative w-10 h-10 rounded-full bg-red-100 border border-red-500 text-red-600 hover:bg-red-200  focus:outline-none "
         onclick="this.parentElement.remove()"
     >
         <i class="fas fa-times text-sm group-hover:rotate-90 transition-transform duration-200"></i>
@@ -395,8 +395,8 @@
                     <i class="fas fa-bookmark text-white text-sm"></i>
                     <span class="text-lg">Add Major</span>
                 </h5>
-                <button type="button" class="group relative w-10 h-10 rounded-full bg-blue-50 border border-pink-200 text-pink-400 hover:bg-blue-100 hover:text-pink-500 hover:scale-110 active:scale-95 transition-all duration-200 ease-out focus:outline-none shadow-sm hover:shadow-pink-200/50" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="fas fa-times text-sm group-hover:rotate-90 transition-transform duration-200"></i>
+                <button type="button" class="group relative w-10 h-10 rounded-full bg-blue-100 border-none text-red-600 hover:bg-blue-200 focus:outline-none" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times text-sm"></i>
                 </button>
             </div>
             <form action="{{ route('admin.majors.store') }}" method="POST" id="majorForm" class="divide-y divide-slate-100">
@@ -584,79 +584,117 @@
 
     // Data Removal Logic
     function deleteSelected() {
-        const selected = document.querySelectorAll('.row-checkbox:checked');
-        if (!selected.length) return alert('Please select at least one item to remove.');
+    const selected = document.querySelectorAll('.row-checkbox:checked');
 
-        window.premiumConfirm(
-            `Are you sure you want to remove these ${selected.length} items? This will also affect all associated student records and course data.`,
-            function() {
-                const form = document.getElementById('deleteForm');
-                if (currentTab === 'majors') form.action = '{{ route("admin.majors.bulkDelete") }}';
-                if (currentTab === 'classes') form.action = '{{ route("admin.classes.bulkDelete") }}';
-                
-                form.innerHTML = '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
-                selected.forEach(item => {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = 'ids[]';
-                    input.value = item.value;
-                    form.appendChild(input);
-                });
-                form.submit();
-            },
-            'Remove Multiple Items?'
-        );
+    if (!selected.length) {
+        alert('Please select at least one item to remove.');
+        return;
     }
-    document.querySelectorAll('.btn-delete').forEach(btn => {
+
+    const confirmed = confirm(
+        `Are you sure you want to remove these ${selected.length} items? This will also affect all associated student records and course data.`
+    );
+
+    if (confirmed) {
+        const form = document.getElementById('deleteForm');
+
+        if (currentTab === 'majors') {
+            form.action = '{{ route("admin.majors.bulkDelete") }}';
+        }
+
+        if (currentTab === 'classes') {
+            form.action = '{{ route("admin.classes.bulkDelete") }}';
+        }
+
+        form.innerHTML =
+            '<input type="hidden" name="_token" value="{{ csrf_token() }}">';
+
+        selected.forEach(item => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'ids[]';
+            input.value = item.value;
+            form.appendChild(input);
+        });
+
+        form.submit();
+    }
+}
+
+document.querySelectorAll('.btn-delete').forEach(btn => {
     btn.addEventListener('click', function () {
 
         const id = this.dataset.id;
         const title = this.dataset.title;
 
-        window.premiumConfirm(
-            `Are you sure you want to delete "${title}"?`,
-            function () {
-
-                const form = document.getElementById('deleteForm');
-
-                if (currentTab === 'majors') {
-                    form.action = '/admin/majors/' + id;
-                }
-
-                if (currentTab === 'classes') {
-                    form.action = '/admin/classes/' + id;
-                }
-
-                form.submit();
-            },
-            'Delete Confirmation'
+        const confirmed = confirm(
+            `Are you sure you want to delete "${title}"?`
         );
+
+        if (confirmed) {
+
+            const form = document.getElementById('deleteForm');
+
+            if (currentTab === 'majors') {
+                form.action = '/admin/majors/' + id;
+            }
+
+            if (currentTab === 'classes') {
+                form.action = '/admin/classes/' + id;
+            }
+
+            form.submit();
+        }
     });
 });
 
     // Modal Synchronization Logic
     function editRecord(id, name, code, dept, major) {
-        if (currentTab === 'majors') {
-            document.getElementById('majorModalTitle').innerText = 'Edit Major Details';
-            document.getElementById('majorForm').action = '/admin/majors/' + id;
-            document.getElementById('majorFormMethod').value = 'PUT';
-            document.getElementById('majorCode').value = code;
-            document.getElementById('majorName').value = name;
-            document.getElementById('majorDept').value = dept;
-            document.getElementById('majorBtnSubmit').innerText = 'Save Changes';
-            new bootstrap.Modal(document.getElementById('addMajorModal')).show();
-        } 
-        else if (currentTab === 'classes') {
-            document.getElementById('classModalTitle').innerText = 'Edit Class Details';
-            document.getElementById('classForm').action = '/admin/classes/' + id;
-            document.getElementById('classFormMethod').value = 'PUT';
-            document.getElementById('classCode').value = code;
-            document.getElementById('className').value = name;
-            document.getElementById('classMajor').value = major;
-            document.getElementById('classBtnSubmit').innerText = 'Save Changes';
-            new bootstrap.Modal(document.getElementById('addClassModal')).show();
-        }
+
+    if (currentTab === 'majors') {
+
+        document.getElementById('majorModalTitle').innerHTML =
+            '<i class="fas fa-edit text-blue-200"></i> Edit Major Details';
+
+        document.getElementById('majorForm').action =
+            '/admin/majors/' + id;
+
+        document.getElementById('majorFormMethod').value = 'PUT';
+
+        document.getElementById('majorCode').value = code;
+        document.getElementById('majorName').value = name;
+        document.getElementById('majorDept').value = dept;
+
+        document.getElementById('majorBtnSubmit').innerText =
+            'Save Changes';
+
+        new bootstrap.Modal(
+            document.getElementById('addMajorModal')
+        ).show();
     }
+
+    else if (currentTab === 'classes') {
+
+        document.getElementById('classModalTitle').innerHTML =
+            '<i class="fas fa-edit text-blue-200"></i> Edit Class Details';
+
+        document.getElementById('classForm').action =
+            '/admin/classes/' + id;
+
+        document.getElementById('classFormMethod').value = 'PUT';
+
+        document.getElementById('classCode').value = code;
+        document.getElementById('className').value = name;
+        document.getElementById('classMajor').value = major;
+
+        document.getElementById('classBtnSubmit').innerText =
+            'Save Changes';
+
+        new bootstrap.Modal(
+            document.getElementById('addClassModal')
+        ).show();
+    }
+}
 
     // Modal Lifecycle Hooks
     ['addMajorModal', 'addClassModal'].forEach(id => {
