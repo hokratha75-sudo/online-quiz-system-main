@@ -595,7 +595,16 @@ class QuizController extends Controller
     private function getRankingsForStudents($studentIds, $subjectId = null, $perPage = 5)
     {
         if (empty($studentIds) || count($studentIds) == 0) {
-            return new \Illuminate\Pagination\Paginator([], $perPage, 1);
+            return new \Illuminate\Pagination\LengthAwarePaginator(
+                collect([]),
+                0,
+                $perPage,
+                1,
+                [
+                    'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(),
+                    'query' => request()->query(),
+                ]
+            );
         }
 
         $rankings = \App\Models\User::whereIn('id', $studentIds)
