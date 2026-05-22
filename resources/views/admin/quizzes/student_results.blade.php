@@ -1,282 +1,397 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="max-w-[1400px] mx-auto p-6 md:p-8 lg:p-10 font-inter">
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50/60">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 lg:py-10">
 
-    <!-- Dashboard Header & KPI Row -->
-    <div class="flex flex-col lg:flex-row gap-6 mb-10">
-        <!-- Profile Node -->
-        <div class="lg:w-1/3">
-            <div class="bg-indigo-600 rounded-[32px] p-8 text-white shadow-xl shadow-indigo-600/20 relative overflow-hidden h-full group">
-                <div class="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-1000"></div>
-                <div class="relative z-10">
-                    <div class="flex items-center gap-3 mb-6">
-                        @if($streak > 0)
-                            <div class="px-3 py-1 bg-white/20 border border-white/20 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5">
-                                <i class="fas fa-fire text-amber-400"></i> {{ $streak }} DAY STREAK
-                            </div>
-                        @endif
-                        <div class="px-3 py-1 bg-emerald-400/20 border border-emerald-400/20 rounded-full text-xs font-bold tracking-wide flex items-center gap-1.5 text-emerald-100">
-                            <i class="fas fa-shield-check"></i> {{ round($passRate) }}% Pass Rate
-                        </div>
-                    </div>
-                    <h2 class="text-3xl font-bold tracking-tight">Hi, {{ explode(' ', Auth::user()->name ?: Auth::user()->username)[0] }}!</h2>
-                    <p class="mt-2 text-indigo-100/80 text-sm font-medium leading-relaxed">
-                        You have successfully completed <span class="text-white font-bold">{{ $totalQuizzesTaken }} quizzes</span> this semester.
-                    </p>
-                </div>
+        <!-- Welcome Header -->
+        <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight">
+                    Student Dashboard
+                </h1>
+                <p class="text-sm text-slate-500 mt-1 flex items-center gap-2">
+                    <i class="fas fa-calendar-alt text-indigo-400 text-xs"></i>
+                    {{ now()->format('l, F j, Y') }}
+                </p>
             </div>
+            <a href="{{ route('students.dashboard') }}" 
+               class="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-all shadow-md hover:shadow-lg shadow-indigo-200">
+                <i class="fas fa-play-circle text-xs"></i>
+                Start New Quiz
+            </a>
         </div>
 
-        <!-- KPI Framework -->
-        <div class="lg:w-2/3 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <!-- Stats Grid - 4 Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-5 mb-8">
             @php
-                $kpis = [
-                    ['label' => 'Quizzes Taken', 'value' => $totalQuizzesTaken, 'icon' => 'fas fa-layer-group', 'color' => 'indigo'],
-                    ['label' => 'Quizzes Passed', 'value' => $totalPassed, 'icon' => 'fas fa-check-double', 'color' => 'emerald'],
-                    ['label' => 'Average Score', 'value' => round($avgScore).'%', 'icon' => 'fas fa-chart-line', 'color' => 'amber'],
-                    ['label' => 'Highest Score', 'value' => $highestScore.'%', 'icon' => 'fas fa-crown', 'color' => 'violet'],
+                $stats = [
+                    ['label' => 'Total Quizzes', 'value' => $totalQuizzesTaken, 'icon' => 'fas fa-clipboard-list', 'color' => 'indigo', 'trend' => '+12%'],
+                    ['label' => 'Passed', 'value' => $totalPassed, 'icon' => 'fas fa-check-circle', 'color' => 'emerald', 'trend' => '+8%'],
+                    ['label' => 'Average Score', 'value' => round($avgScore).'%', 'icon' => 'fas fa-chart-line', 'color' => 'amber', 'trend' => '+5%'],
+                    ['label' => 'Highest Score', 'value' => $highestScore.'%', 'icon' => 'fas fa-crown', 'color' => 'purple', 'trend' => 'PB!'],
                 ];
             @endphp
-            @foreach($kpis as $kpi)
-            <div class="bg-white rounded-[24px] border border-slate-100 p-6 shadow-sm hover:shadow-md transition-all group flex flex-col justify-between">
-                <div class="w-10 h-10 rounded-xl bg-{{ $kpi['color'] }}-50 text-{{ $kpi['color'] }}-600 flex items-center justify-center border border-{{ $kpi['color'] }}-100 group-hover:bg-{{ $kpi['color'] }}-600 group-hover:text-white transition-colors">
-                    <i class="{{ $kpi['icon'] }} text-sm"></i>
+            @foreach($stats as $stat)
+            <div class="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm hover:shadow-md transition-all duration-200 group">
+                <div class="flex items-start justify-between">
+                    <div class="w-10 h-10 rounded-xl bg-{{ $stat['color'] }}-50 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <i class="{{ $stat['icon'] }} text-{{ $stat['color'] }}-600 text-base"></i>
+                    </div>
+                    <span class="text-[10px] font-bold text-{{ $stat['color'] }}-500 bg-{{ $stat['color'] }}-50 px-2 py-0.5 rounded-full">
+                        {{ $stat['trend'] }}
+                    </span>
                 </div>
-                <div class="mt-6">
-                    <div class="text-3xl font-bold text-slate-900 leading-none tabular-nums">{{ $kpi['value'] }}</div>
-                    <div class="text-xs font-semibold text-slate-500 mt-2">{{ $kpi['label'] }}</div>
+                <div class="mt-4">
+                    <span class="text-2xl md:text-3xl font-bold text-slate-800 tabular-nums">{{ $stat['value'] }}</span>
+                    <p class="text-xs font-medium text-slate-400 mt-1">{{ $stat['label'] }}</p>
                 </div>
             </div>
             @endforeach
         </div>
-    </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
-        <!-- Analytics Visualizer -->
-        <div class="lg:col-span-2">
-            <div class="bg-white rounded-[32px] border border-slate-100 p-8 shadow-sm h-full">
-                <div class="flex justify-between items-center mb-8">
+        <!-- Two Column Analytics Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Performance Chart -->
+            <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
                     <div>
-                        <h3 class="text-base font-bold text-slate-900">Performance Analytics</h3>
-                        <p class="text-sm font-medium text-slate-500 mt-1">Score distribution over time</p>
+                        <h3 class="text-base font-bold text-slate-800">Performance Trend</h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Score progression across all attempts</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-1.5 text-[10px] font-medium text-slate-500 bg-slate-50 px-2.5 py-1 rounded-lg">
+                            <i class="fas fa-chart-simple text-indigo-400"></i>
+                            <span>Last 7 attempts</span>
+                        </div>
+                        @if($passRate >= 70)
+                            <span class="flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg">
+                                <i class="fas fa-arrow-up text-[9px]"></i> {{ round($passRate) }}% Pass
+                            </span>
+                        @endif
                     </div>
                 </div>
-                <div class="h-[280px]">
+                <div class="h-[280px] relative">
                     <canvas id="scoreTrendChart"></canvas>
                 </div>
             </div>
-        </div>
 
-        <!-- Logic Distribution -->
-        <div class="lg:col-span-1">
-            <div class="bg-white rounded-[32px] border border-slate-100 p-8 shadow-sm h-full">
-                <h3 class="text-base font-bold text-slate-900 mb-8">Grade Distribution</h3>
+            <!-- Grade Distribution -->
+            <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-5">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-800">Grade Distribution</h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Performance breakdown</p>
+                    </div>
+                    <div class="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center">
+                        <i class="fas fa-chart-simple text-indigo-500 text-xs"></i>
+                    </div>
+                </div>
                 
-                <div class="space-y-5">
-                    @php
-                        $gradeColors = [
-                            'A+' => '#4f46e5', 'A' => '#6366f1', 'B+' => '#818cf8', 'B' => '#a5b4fc',
-                            'C+' => '#fbbf24', 'C' => '#f59e0b', 'D' => '#ea580c', 'F' => '#ef4444',
-                        ];
-                    @endphp
+                @php
+                    $gradeConfig = [
+                        'A+' => ['color' => '#4f46e5', 'bg' => 'indigo'],
+                        'A' => ['color' => '#6366f1', 'bg' => 'indigo'],
+                        'B+' => ['color' => '#818cf8', 'bg' => 'indigo'],
+                        'B' => ['color' => '#a5b4fc', 'bg' => 'indigo'],
+                        'C+' => ['color' => '#fbbf24', 'bg' => 'amber'],
+                        'C' => ['color' => '#f59e0b', 'bg' => 'amber'],
+                        'D' => ['color' => '#ea580c', 'bg' => 'orange'],
+                        'F' => ['color' => '#ef4444', 'bg' => 'rose'],
+                    ];
+                    $totalGrades = array_sum($gradeDistribution);
+                @endphp
+
+                <div class="space-y-4">
                     @foreach($gradeDistribution as $grade => $count)
-                        <div class="group">
-                            <div class="flex justify-between items-center mb-2">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold text-white shadow-sm" style="background: {{ $gradeColors[$grade] ?? '#cbd5e1' }}">
-                                        {{ $grade }}
-                                    </div>
-                                    <span class="text-sm font-semibold text-slate-700">{{ $count }} Quiz{{ $count != 1 ? 'zes' : '' }}</span>
-                                </div>
-                                <span class="text-[10px] font-bold text-slate-400 tabular-nums uppercase">{{ round(($count / max(1, $totalQuizzesTaken)) * 100) }}%</span>
+                    @php 
+                        $percentage = $totalGrades > 0 ? round(($count / $totalGrades) * 100) : 0;
+                        $config = $gradeConfig[$grade] ?? ['color' => '#cbd5e1', 'bg' => 'slate'];
+                    @endphp
+                    <div class="group">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <div class="flex items-center gap-2.5">
+                                <span class="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold text-white shadow-sm" 
+                                      style="background: {{ $config['color'] }}">
+                                    {{ $grade }}
+                                </span>
+                                <span class="text-sm font-semibold text-slate-700">{{ $count }}</span>
+                                <span class="text-[10px] font-medium text-slate-400">{{ Str::plural('quiz', $count) }}</span>
                             </div>
-                            <div class="h-1.5 w-full bg-slate-50 rounded-full overflow-hidden border border-slate-100/50">
-                                <div class="h-full rounded-full group-hover:opacity-80 transition-opacity" style="width: {{ ($count / max(1, array_sum($gradeDistribution))) * 100 }}%; background: {{ $gradeColors[$grade] ?? '#cbd5e1' }}"></div>
-                            </div>
+                            <span class="text-xs font-bold text-slate-500">{{ $percentage }}%</span>
                         </div>
+                        <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full rounded-full transition-all duration-500 group-hover:opacity-80" 
+                                 style="width: {{ $percentage }}%; background: {{ $config['color'] }}"></div>
+                        </div>
+                    </div>
                     @endforeach
                 </div>
 
+                <!-- Security Notice -->
                 @if($totalViolations > 0)
-                <div class="mt-8 p-5 rounded-2xl bg-rose-50 border border-rose-100 flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-rose-500 shadow-sm border border-rose-100">
-                        <i class="fas fa-exclamation-triangle text-sm"></i>
+                <div class="mt-6 p-3.5 rounded-xl bg-amber-50 border border-amber-100 flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-amber-500 shadow-sm">
+                        <i class="fas fa-shield-heart text-sm"></i>
                     </div>
-                    <div>
-                        <div class="text-[10px] font-bold text-rose-600 uppercase tracking-widest">Security Disruptions</div>
-                        <div class="text-xs font-bold text-rose-800 uppercase tabular-nums mt-1">{{ $totalViolations }} INCIDENTS LOGGED</div>
+                    <div class="flex-1">
+                        <p class="text-[10px] font-bold text-amber-600 uppercase tracking-wide">Academic Integrity</p>
+                        <p class="text-xs font-medium text-amber-700">{{ $totalViolations }} incident{{ $totalViolations !== 1 ? 's' : '' }} flagged</p>
+                    </div>
+                    <i class="fas fa-info-circle text-amber-400 text-xs cursor-help" title="Contact your instructor for details"></i>
+                </div>
+                @else
+                <div class="mt-6 p-3.5 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-emerald-500 shadow-sm">
+                        <i class="fas fa-shield-check text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-wide">Clean Record</p>
+                        <p class="text-xs font-medium text-emerald-700">No integrity violations detected</p>
                     </div>
                 </div>
                 @endif
             </div>
         </div>
-    </div>
 
-    <!-- Per-Subject Analytics Grid -->
-    @if(count($subjectPerformance) > 0)
-    <div class="mb-10">
-        <h3 class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-6 px-2 flex items-center gap-3">
-            <i class="fas fa-layer-group text-indigo-500"></i> Subject Performance Matrix
-        </h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            @foreach($subjectPerformance as $sp)
-            @php
-                $subGrade = 'F';
-                if($sp['avg'] >= 95) $subGrade = 'A+';
-                elseif($sp['avg'] >= 90) $subGrade = 'A';
-                elseif($sp['avg'] >= 85) $subGrade = 'B+';
-                elseif($sp['avg'] >= 80) $subGrade = 'B';
-                elseif($sp['avg'] >= 75) $subGrade = 'C+';
-                elseif($sp['avg'] >= 70) $subGrade = 'C';
-                elseif($sp['avg'] >= 60) $subGrade = 'D';
-
-                $subColor = $gradeColors[$subGrade] ?? '#ef4444';
-            @endphp
-            <div class="bg-white rounded-[24px] border border-slate-100 p-6 flex flex-col justify-between shadow-sm hover:shadow-md hover:border-indigo-100 transition-all group overflow-hidden relative">
-                <!-- BG Glow -->
-                <div class="absolute -right-10 -top-10 w-32 h-32 rounded-full opacity-10 group-hover:opacity-20 transition-opacity blur-2xl" style="background: {{ $subColor }}"></div>
-                
-                <div class="relative z-10 flex justify-between items-start mb-6">
-                    <div>
-                                                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{{ $sp['count'] }} ATTEMPTS</div>
-                        <h4 class="text-sm font-bold text-slate-900 uppercase tracking-tight truncate max-w-[180px]">{{ $sp['name'] }}</h4>
+        <!-- Subject Performance Section -->
+        @if(count($subjectPerformance) > 0)
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-5">
+                <div>
+                    <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fas fa-layer-group text-indigo-500 text-sm"></i>
+                        Subject Performance
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Average scores by subject area</p>
+                </div>
+                <span class="text-[11px] font-medium text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-full">
+                    {{ count($subjectPerformance) }} subjects
+                </span>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                @foreach($subjectPerformance as $sp)
+                @php
+                    // Determine grade and color
+                    $avgScore = $sp['avg'];
+                    if($avgScore >= 95) { $subGrade = 'A+'; $gradeColor = '#4f46e5'; $bgClass = 'indigo'; }
+                    elseif($avgScore >= 90) { $subGrade = 'A'; $gradeColor = '#6366f1'; $bgClass = 'indigo'; }
+                    elseif($avgScore >= 85) { $subGrade = 'B+'; $gradeColor = '#818cf8'; $bgClass = 'indigo'; }
+                    elseif($avgScore >= 80) { $subGrade = 'B'; $gradeColor = '#a5b4fc'; $bgClass = 'indigo'; }
+                    elseif($avgScore >= 75) { $subGrade = 'C+'; $gradeColor = '#fbbf24'; $bgClass = 'amber'; }
+                    elseif($avgScore >= 70) { $subGrade = 'C'; $gradeColor = '#f59e0b'; $bgClass = 'amber'; }
+                    elseif($avgScore >= 60) { $subGrade = 'D'; $gradeColor = '#ea580c'; $bgClass = 'orange'; }
+                    else { $subGrade = 'F'; $gradeColor = '#ef4444'; $bgClass = 'rose'; }
+                @endphp
+                <div class="bg-white rounded-xl border border-slate-100 p-5 hover:shadow-md transition-all duration-200 group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <div class="w-2 h-2 rounded-full" style="background: {{ $gradeColor }}"></div>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">{{ $sp['count'] }} attempts</span>
+                            </div>
+                            <h4 class="text-sm font-bold text-slate-800 truncate">{{ $sp['name'] }}</h4>
+                        </div>
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold text-white shadow-md" style="background: {{ $gradeColor }}">
+                            {{ $subGrade }}
+                        </div>
                     </div>
-                    <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-sm" style="background: {{ $subColor }}">
-                        {{ $subGrade }}
+                    
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <div class="bg-slate-50 rounded-lg p-2.5">
+                            <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wide">Average</p>
+                            <p class="text-lg font-bold text-slate-800 tabular-nums">{{ round($avgScore) }}%</p>
+                        </div>
+                        <div class="bg-{{ $bgClass }}-50/40 rounded-lg p-2.5">
+                            <p class="text-[9px] font-bold text-{{ $bgClass }}-400 uppercase tracking-wide">Highest</p>
+                            <p class="text-lg font-bold text-{{ $bgClass }}-600 tabular-nums">{{ $sp['best'] }}%</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div class="pt-1">
+                        <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full rounded-full transition-all duration-500" 
+                                 style="width: {{ $avgScore }}%; background: {{ $gradeColor }}"></div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="relative z-10 grid grid-cols-2 gap-4">
-                    <div class="bg-slate-50/50 rounded-xl p-3 border border-slate-100/50">
-                                                <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Average Score</div>
-                        <div class="text-base font-bold text-slate-800 tabular-nums leading-none">{{ $sp['avg'] }}%</div>
-                    </div>
-                    <div class="bg-indigo-50/30 rounded-xl p-3 border border-indigo-50">
-                                                <div class="text-[9px] font-bold text-indigo-400 uppercase tracking-widest mb-1">Highest Score</div>
-                        <div class="text-base font-bold text-indigo-700 tabular-nums leading-none">{{ $sp['best'] }}%</div>
-                    </div>
-                </div>
+                @endforeach
             </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
-    <!-- History Core -->
-    <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden">
-        <div class="px-8 py-6 border-b border-slate-50 bg-slate-50/30 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div>
-                                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-widest">Exam History</h3>
-                <p class="text-[10px] font-bold text-indigo-600 mt-1 uppercase tracking-tight">Archive of verified assessment records</p>
-            </div>
-            <a href="{{ route('students.dashboard') }}" class="h-11 px-6 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 transition-all shadow-lg shadow-indigo-600/20">
-                <i class="fas fa-plus text-[8px]"></i> New Quiz Attempt
-            </a>
-        </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="border-b border-slate-50">
-                                                <th class="ps-8 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Quiz / Subject</th>
-                        <th class="px-6 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Status</th>
-                        <th class="px-6 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Score</th>
-                        <th class="px-6 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Grade</th>
-                        <th class="px-6 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Timestamp</th>
-                        <th class="pe-8 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest text-right">Action</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-50">
-                    @forelse($results as $result)
-                    <tr class="hover:bg-slate-50/50 transition-all group">
-                        <td class="ps-8 py-3">
-                            <div class="text-sm font-bold text-slate-900 uppercase tracking-tight group-hover:text-indigo-600 transition-colors">{{ $result->quiz?->title ?? 'Untitled Sync' }}</div>
-                            <div class="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-widest flex items-center gap-1.5">
-                                <i class="fas fa-tag text-[8px]"></i> {{ $result->quiz?->subject?->subject_name ?? 'SYSTEM UNIT' }}
-                            </div>
-                        </td>
-                        <td class="px-6 py-3">
-                                                        @if($result->is_published === false)
-                                <span class="px-3 py-1 bg-amber-50 text-amber-600 border border-amber-100 rounded-md text-[9px] font-bold uppercase tracking-widest">PENDING REVIEW</span>
-                            @elseif($result->passed)
-                                <span class="px-3 py-1 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-md text-[9px] font-bold uppercase tracking-widest">PASSED</span>
-                            @else
-                                <span class="px-3 py-1 bg-rose-50 text-rose-600 border border-rose-100 rounded-md text-[9px] font-bold uppercase tracking-widest">FAILED</span>
-                            @endif
-                        </td>
-                        <td class="px-6 py-3">
-                            <div class="text-lg font-bold tabular-nums {{ $result->passed ? 'text-emerald-500' : 'text-rose-500' }}">
-                                {{ round($result->score) }}%
-                            </div>
-                        </td>
-                        <td class="px-6 py-3">
-                            @php
-                                $g = 'F';
-                                if($result->score >= 95) $g = 'A+';
-                                elseif($result->score >= 90) $g = 'A';
-                                elseif($result->score >= 85) $g = 'B+';
-                                elseif($result->score >= 80) $g = 'B';
-                                elseif($result->score >= 75) $g = 'C+';
-                                elseif($result->score >= 70) $g = 'C';
-                                elseif($result->score >= 60) $g = 'D';
-
-                                $currGradeColor = $gradeColors[$g] ?? '#cbd5e1';
-                            @endphp
-                            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold text-white shadow-sm uppercase" style="background: {{ $currGradeColor }}">
-                                {{ $g }}
-                            </div>
-                        </td>
-                        <td class="px-6 py-3">
-                            <div class="text-xs font-bold text-slate-900 tabular-nums uppercase">{{ $result->completed_at ? $result->completed_at->format('M d, Y') : 'N/A' }}</div>
-                            <div class="text-[10px] font-bold text-slate-400 mt-1 tabular-nums">{{ $result->completed_at ? $result->completed_at->format('h:i A') : '' }}</div>
-                        </td>
-                        <td class="pe-8 py-3 text-right">
-                            <a href="{{ route('students.quizzes.result', $result->attempt_id) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-xl border border-slate-100 text-slate-400 hover:text-indigo-600 hover:border-indigo-100 hover:bg-indigo-50 transition-all shadow-sm">
-                                <i class="fas fa-arrow-right text-[10px]"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6" class="py-24 text-center">
-                            <div class="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100">
-                                <i class="fas fa-clipboard-list text-2xl"></i>
-                            </div>
-                                                        <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest">No Exam Records Found</h5>
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-        @if($results->hasPages())
-        <div class="px-8 py-6 border-t border-slate-50 bg-slate-50/30">
-            {{ $results->links() }}
         </div>
         @endif
-    </div>
 
+        <!-- Assessment History Table -->
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+            <div class="px-6 py-5 border-b border-slate-100 bg-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div>
+                    <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fas fa-scroll text-indigo-500 text-sm"></i>
+                        Assessment History
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Recent quiz attempts and results</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="relative">
+                        <input type="text" placeholder="Search quizzes..." 
+                               class="pl-8 pr-3 py-1.5 text-xs rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:border-indigo-300 focus:ring-1 focus:ring-indigo-200 transition-all w-40 sm:w-48">
+                        <i class="fas fa-search absolute left-2.5 top-2 text-slate-400 text-[11px]"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-slate-50/80 border-b border-slate-100">
+                            <th class="px-6 py-3.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Quiz / Subject</th>
+                            <th class="px-6 py-3.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Score</th>
+                            <th class="px-6 py-3.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Grade</th>
+                            <th class="px-6 py-3.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Completed</th>
+                            <th class="px-6 py-3.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-right">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-50">
+                        @forelse($results as $result)
+                        <tr class="hover:bg-slate-50/40 transition-colors">
+                            <td class="px-6 py-4">
+                                <div class="font-semibold text-slate-800 text-sm">{{ $result->quiz?->title ?? 'Untitled Assessment' }}</div>
+                                <div class="flex items-center gap-1.5 mt-1">
+                                    <i class="fas fa-book text-[8px] text-slate-400"></i>
+                                    <span class="text-[10px] font-medium text-slate-400">{{ $result->quiz?->subject?->subject_name ?? 'General Subject' }}</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                @if($result->is_published === false)
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 text-amber-600 rounded-lg text-[10px] font-bold uppercase tracking-wide border border-amber-100">
+                                        <i class="fas fa-hourglass-half text-[9px]"></i> Pending
+                                    </span>
+                                @elseif($result->passed)
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-bold uppercase tracking-wide border border-emerald-100">
+                                        <i class="fas fa-check-circle text-[9px]"></i> Passed
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-rose-50 text-rose-600 rounded-lg text-[10px] font-bold uppercase tracking-wide border border-rose-100">
+                                        <i class="fas fa-times-circle text-[9px]"></i> Failed
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="text-lg font-bold tabular-nums {{ $result->passed ? 'text-emerald-600' : 'text-rose-500' }}">
+                                    {{ round($result->score) }}%
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                @php
+                                    $score = $result->score;
+                                    if($score >= 95) $letter = 'A+';
+                                    elseif($score >= 90) $letter = 'A';
+                                    elseif($score >= 85) $letter = 'B+';
+                                    elseif($score >= 80) $letter = 'B';
+                                    elseif($score >= 75) $letter = 'C+';
+                                    elseif($score >= 70) $letter = 'C';
+                                    elseif($score >= 60) $letter = 'D';
+                                    else $letter = 'F';
+                                    
+                                    $gradeColors = ['A+' => '#4f46e5', 'A' => '#6366f1', 'B+' => '#818cf8', 'B' => '#a5b4fc', 
+                                                    'C+' => '#fbbf24', 'C' => '#f59e0b', 'D' => '#ea580c', 'F' => '#ef4444'];
+                                    $gradeBg = $gradeColors[$letter] ?? '#cbd5e1';
+                                @endphp
+                                <span class="inline-flex w-8 h-8 rounded-lg items-center justify-center text-[11px] font-bold text-white shadow-sm" 
+                                      style="background: {{ $gradeBg }}">{{ $letter }}</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="text-xs font-medium text-slate-600">{{ $result->completed_at ? $result->completed_at->format('M d, Y') : '—' }}</div>
+                                <div class="text-[9px] font-medium text-slate-400 mt-0.5">{{ $result->completed_at ? $result->completed_at->format('g:i A') : '' }}</div>
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <a href="{{ route('students.quizzes.result', $result->attempt_id) }}" 
+                                   class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 text-slate-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50 transition-all"
+                                   title="View Details">
+                                    <i class="fas fa-chevron-right text-[10px]"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="6" class="px-6 py-16 text-center">
+                                <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-clipboard-list text-slate-300 text-2xl"></i>
+                                </div>
+                                <p class="text-sm font-medium text-slate-500 mb-3">No quiz attempts yet</p>
+                                <a href="{{ route('students.dashboard') }}" 
+                                   class="inline-flex items-center gap-2 px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-all">
+                                    <i class="fas fa-play-circle text-xs"></i>
+                                    Start Your First Quiz
+                                </a>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            
+            @if($results->hasPages())
+            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/30 flex justify-between items-center">
+                <div class="text-xs text-slate-500">
+                    Showing {{ $results->firstItem() ?? 0 }} to {{ $results->lastItem() ?? 0 }} of {{ $results->total() }} results
+                </div>
+                <div class="flex gap-1">
+                    {{ $results->links() }}
+                </div>
+            </div>
+            @endif
+        </div>
+    </div>
 </div>
 
-<!-- Data for Chart -->
+<!-- Hidden Data for Chart -->
 <div id="chart-data" 
      data-labels='@json(array_column($scoreTrend, "label"))' 
-     data-scores='@json(array_column($scoreTrend, "score"))'
-     data-dates='@json(array_column($scoreTrend, "date"))'>
+     data-scores='@json(array_column($scoreTrend, "score"))'>
 </div>
 @endsection
 
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const ctx = document.getElementById('scoreTrendChart').getContext('2d');
-    const dataEl = document.getElementById('chart-data');
-    const labels = JSON.parse(dataEl.dataset.labels);
-    const scores = JSON.parse(dataEl.dataset.scores);
+    const chartCanvas = document.getElementById('scoreTrendChart');
+    if (!chartCanvas) return;
+    
+    const dataElement = document.getElementById('chart-data');
+    let labels = [], scores = [];
+    
+    try {
+        labels = JSON.parse(dataElement.dataset.labels || '[]');
+        scores = JSON.parse(dataElement.dataset.scores || '[]');
+    } catch(e) {
+        console.warn('Failed to parse chart data:', e);
+    }
 
-    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, 'rgba(79, 70, 229, 0.15)');
+    if (labels.length === 0 || scores.length === 0) {
+        // Show empty state
+        const container = chartCanvas.parentElement;
+        container.innerHTML = `
+            <div class="flex flex-col items-center justify-center h-full gap-3">
+                <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center">
+                    <i class="fas fa-chart-line text-slate-300 text-lg"></i>
+                </div>
+                <div class="text-center">
+                    <p class="text-sm font-medium text-slate-500">No data available</p>
+                    <p class="text-xs text-slate-400 mt-1">Complete quizzes to see your progress</p>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    const ctx = chartCanvas.getContext('2d');
+    const gradient = ctx.createLinearGradient(0, 0, 0, 280);
+    gradient.addColorStop(0, 'rgba(79, 70, 229, 0.12)');
+    gradient.addColorStop(0.5, 'rgba(79, 70, 229, 0.04)');
     gradient.addColorStop(1, 'rgba(79, 70, 229, 0)');
 
     new Chart(ctx, {
@@ -284,50 +399,127 @@ document.addEventListener('DOMContentLoaded', function() {
         data: {
             labels: labels,
             datasets: [{
-                label: 'Protocol Performance',
+                label: 'Score',
                 data: scores,
                 borderColor: '#4f46e5',
-                borderWidth: 3,
+                borderWidth: 2.5,
                 backgroundColor: gradient,
                 fill: true,
-                tension: 0.4,
-                pointBackgroundColor: '#fff',
+                tension: 0.35,
+                pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#4f46e5',
-                pointBorderWidth: 3,
-                pointRadius: 5,
-                pointHoverRadius: 7
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 7,
+                pointHoverBackgroundColor: '#4f46e5',
+                pointHoverBorderColor: '#ffffff',
+                pointHoverBorderWidth: 2.5,
+                spanGaps: true
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { display: false },
+                legend: {
+                    display: false
+                },
                 tooltip: {
                     backgroundColor: '#1e293b',
-                    titleColor: '#fff',
-                    bodyColor: '#fff',
-                    bodyFont: { weight: 'bold', size: 10 },
-                    padding: 12,
+                    titleColor: '#f1f5f9',
+                    bodyColor: '#cbd5e1',
+                    bodyFont: { size: 11, weight: '500' },
+                    titleFont: { size: 12, weight: 'bold' },
+                    padding: { top: 8, left: 12, right: 12, bottom: 8 },
                     displayColors: false,
                     callbacks: {
-                                                label: (ctx) => `SCORE: ${ctx.raw}%`
+                        label: (context) => `Score: ${context.raw}%`
                     }
                 }
             },
             scales: {
                 y: {
-                    min: 0, max: 100,
-                    ticks: { color: '#94a3b8', font: { weight: 'bold', size: 10 } },
-                    grid: { color: '#f1f5f9', drawBorder: false }
+                    min: 0,
+                    max: 100,
+                    grid: {
+                        color: '#e2e8f0',
+                        drawBorder: false,
+                        lineWidth: 0.5
+                    },
+                    ticks: {
+                        stepSize: 25,
+                        color: '#94a3b8',
+                        font: { size: 10, weight: '500' },
+                        callback: (value) => `${value}%`
+                    },
+                    title: {
+                        display: false
+                    }
                 },
                 x: {
-                    ticks: { color: '#94a3b8', font: { weight: 'bold', size: 10 } },
-                    grid: { display: false }
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: '#94a3b8',
+                        font: { size: 10, weight: '500' },
+                        maxRotation: 30,
+                        autoSkip: true
+                    }
                 }
+            },
+            elements: {
+                line: {
+                    borderJoin: 'round',
+                    borderCap: 'round'
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
             }
         }
     });
 });
 </script>
+
+<style>
+    /* Custom pagination styling */
+    .pagination {
+        display: flex;
+        gap: 0.25rem;
+    }
+    .pagination .page-item .page-link {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        border-radius: 0.5rem;
+        color: #475569;
+        background: white;
+        border: 1px solid #e2e8f0;
+        transition: all 0.2s;
+    }
+    .pagination .page-item.active .page-link {
+        background: #4f46e5;
+        border-color: #4f46e5;
+        color: white;
+    }
+    .pagination .page-item .page-link:hover {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+    }
+    
+    /* Smooth transitions */
+    .transition-all {
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 200ms;
+    }
+    
+    /* Hide number input spinners */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        opacity: 0;
+    }
+</style>
 @endsection

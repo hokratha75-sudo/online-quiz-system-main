@@ -1,394 +1,751 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="min-h-screen bg-slate-50/50 pb-20 font-sans">
+
+@php
+    // Data extraction with fallbacks
+    $isStudent = auth()->user()->role_id == 3;
+    $result = $attempt->result;
+    $isPublished = $result->is_published ?? false;
+    $finalScore = $result->manual_score ?? $result->score ?? 0;
+    $passed = $result->passed ?? false;
+    $feedback = $result->teacher_feedback ?? null;
     
-    @php 
-        $isStudent = auth()->user()->role_id == 3;
-        $finalScore = $attempt->result->manual_score ?? $attempt->result->score;
-        $passed = $attempt->result->passed;
-    @endphp
+    // Answers data
+    $attemptAnswers = $attempt->attemptAnswers ?? collect();
+    $totalQuestions = $attempt->quiz->questions->count() ?? 0;
+    $correctCount = $attemptAnswers->where('is_correct', true)->count();
+    $incorrectCount = max(0, $totalQuestions - $correctCount);
+    
+    // Time formatting
+    $diff = \Carbon\Carbon::parse($attempt->started_at)->diff($attempt->completed_at);
+    $timeStr = collect([
+        $diff->h > 0 ? "{$diff->h}h" : null,
+        $diff->i > 0 ? "{$diff->i}m" : null,
+        "{$diff->s}s"
+    ])->filter()->implode(' ');
+    
+    // Score percentage (clamped)
+    $scorePercent = round(min(100, max(0, $finalScore)));
+    $passPercent = $attempt->quiz->pass_percentage ?? 70;
+    $violations = $attempt->violations ?? 0;
+    
+    // Quiz title with fallback
+    $quizTitle = $attempt->quiz->title ?? 'Quiz';
+@endphp
 
-    @if(!$attempt->result->is_published && $isStudent)
-        <!-- Immersive Pending Review State: Compact -->
-        <div class="relative overflow-hidden bg-indigo-950 pt-16 pb-28">
-            <div class="max-w-2xl mx-auto px-6 relative z-10 text-center">
-                <div class="w-20 h-20 bg-white/10 text-indigo-200 rounded-[28px] flex items-center justify-center mx-auto mb-8 text-3xl border border-white/5 shadow-2xl animate-pulse">
-                    <i class="fas fa-hourglass-half"></i>
+<style>
+    /* Reset & Base */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    /* Utility Classes */
+    .container-custom {
+        max-width: 1280px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    @media (min-width: 640px) {
+        .container-custom { padding-left: 1.5rem; padding-right: 1.5rem; }
+    }
+    
+    @media (min-width: 1024px) {
+        .container-custom { padding-left: 2rem; padding-right: 2rem; }
+    }
+    
+    /* Animations */
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes scaleIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+    }
+    
+    @keyframes pulse {
+        0%, 100% { opacity: 0.6; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.05); }
+    }
+    
+    .animate-slide-up {
+        animation: slideUp 0.5s ease forwards;
+    }
+    
+    .animate-scale-in {
+        animation: scaleIn 0.2s ease forwards;
+    }
+    
+    .animate-pulse-slow {
+        animation: pulse 2s ease-in-out infinite;
+    }
+    
+    /* Progress Bar */
+    .progress-bar {
+        height: 0.5rem;
+        background: #e5e7eb;
+        border-radius: 9999px;
+        overflow: hidden;
+    }
+    
+    .progress-bar-fill {
+        height: 100%;
+        border-radius: 9999px;
+        transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 0;
+    }
+    
+    /* Cards */
+    .card {
+        background: white;
+        border-radius: 1.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    
+    .card-body {
+        padding: 1.5rem;
+    }
+    
+    @media (min-width: 768px) {
+        .card-body { padding: 2rem; }
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    @media (min-width: 768px) {
+        .stats-grid { grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+    }
+    
+    .stat-card {
+        background: white;
+        padding: 1.25rem;
+        border-radius: 1rem;
+        text-align: center;
+        transition: all 0.2s ease;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Buttons */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        font-size: 0.875rem;
+        border-radius: 0.75rem;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        border: none;
+        text-decoration: none;
+    }
+    
+    .btn-primary {
+        background: #6366f1;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background: #4f46e5;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-secondary {
+        background: #111827;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        background: #1f2937;
+        transform: translateY(-1px);
+    }
+    
+    .btn-success {
+        background: #10b981;
+        color: white;
+    }
+    
+    .btn-success:hover {
+        background: #059669;
+        transform: translateY(-1px);
+    }
+    
+    /* Badges */
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border-radius: 9999px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    
+    .badge-success {
+        background: #d1fae5;
+        color: #065f46;
+    }
+    
+    .badge-error {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+    
+    /* Modal */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+    }
+    
+    .modal-overlay.hidden {
+        display: none;
+    }
+    
+    .modal-container {
+        background: white;
+        border-radius: 1.5rem;
+        width: 100%;
+        max-width: 1200px;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    
+    /* Table */
+    .table-wrapper {
+        overflow-x: auto;
+        flex: 1;
+    }
+    
+    .table {
+        width: 100%;
+        font-size: 0.875rem;
+        border-collapse: collapse;
+    }
+    
+    .table th {
+        text-align: left;
+        padding: 1rem;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #6b7280;
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+        position: sticky;
+        top: 0;
+    }
+    
+    .table td {
+        padding: 1rem;
+        border-bottom: 1px solid #f3f4f6;
+        vertical-align: top;
+    }
+    
+    .table tr:hover {
+        background: #f9fafb;
+    }
+    
+    /* Tabs */
+    .tabs {
+        display: flex;
+        gap: 0.5rem;
+        padding: 0 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+        background: white;
+    }
+    
+    .tab {
+        padding: 0.75rem 1rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #6b7280;
+        cursor: pointer;
+        background: none;
+        border: none;
+        transition: all 0.2s ease;
+    }
+    
+    .tab:hover {
+        color: #6366f1;
+    }
+    
+    .tab.active {
+        color: #6366f1;
+        border-bottom: 2px solid #6366f1;
+    }
+    
+    /* Line clamp */
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    /* Hide scrollbar on modal open */
+    body.modal-open {
+        overflow: hidden;
+    }
+</style>
+
+<div class="container-custom py-8 md:py-12">
+    
+    {{-- PENDING STATE --}}
+    @if(!$isPublished && $isStudent)
+        <div class="min-h-[60vh] flex items-center justify-center">
+            <div class="text-center max-w-md mx-auto">
+                <div class="w-24 h-24 mx-auto mb-6 bg-indigo-100 rounded-2xl flex items-center justify-center animate-pulse-slow">
+                    <svg class="w-10 h-10 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
                 </div>
-                                                                <h1 class="text-3xl font-bold text-white tracking-tight mb-4" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Your Results are Coming Soon</h1>
-                                    Your teacher is currently reviewing your hard work. We'll send you a notification as soon as your final results are ready to view!
-                <div class="mt-12">
-                    <a href="{{ route('students.dashboard') }}" class="inline-flex items-center gap-3 bg-white text-indigo-600 px-8 py-3.5 rounded-2xl font-bold text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-white/5">
-                                                <i class="fas fa-arrow-left"></i> Return to Dashboard
-                    </a>
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Review in Progress</h2>
+                <p class="text-gray-600 mb-6">Your instructor is reviewing your submission. Results will appear here once published.</p>
+                <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-8">
+                    <p class="text-sm text-amber-800">📝 You'll be notified when results are ready</p>
                 </div>
+                <a href="{{ route('students.dashboard') }}" class="btn btn-secondary inline-flex">Back to Dashboard</a>
             </div>
         </div>
+    
+    {{-- RESULTS VIEW --}}
     @else
-        <!-- Header: Achievement Visual - Compact -->
-        <div class="relative overflow-hidden {{ $passed ? 'bg-emerald-600' : 'bg-rose-600' }} pt-16 pb-28 transition-colors duration-700">
-            <!-- Dynamic Background -->
-            <div class="absolute inset-0 opacity-20 pointer-events-none">
-                <div class="absolute top-0 right-0 w-80 h-80 bg-white/20 blur-[80px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
-                <div class="absolute bottom-0 left-0 w-56 h-56 bg-black/20 blur-[60px] rounded-full -translate-x-1/2 translate-y-1/2"></div>
-            </div>
-
-            <div class="max-w-2xl mx-auto px-6 relative z-10 text-center text-white">
-                <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 flex items-center justify-center mx-auto mb-6 text-2xl shadow-xl">
-                    <i class="fas {{ $passed ? 'fa-award text-yellow-300' : 'fa-info-circle text-rose-100' }}"></i>
+        {{-- Hero Section --}}
+        <div class="relative mb-12">
+            <div class="absolute inset-0 bg-gradient-to-br {{ $passed ? 'from-emerald-600 to-teal-700' : 'from-rose-600 to-red-700' }} rounded-3xl"></div>
+            <div class="relative bg-white/10 backdrop-blur-sm rounded-3xl p-8 md:p-12 text-center">
+                <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/20 rounded-full text-white text-sm font-semibold mb-4">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
+                    </svg>
+                    {{ $passed ? 'Achievement Unlocked' : 'Learning Opportunity' }}
                 </div>
-                                                                <h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-2 leading-none" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">
-                    {{ $passed ? 'Congratulations!' : 'Keep Growing!' }}
+                
+                <h1 class="text-3xl md:text-5xl font-bold text-white mb-3">
+                    {{ $passed ? 'Outstanding Work!' : 'Keep Growing!' }}
                 </h1>
-                                <p class="text-white/60 text-[10px] font-bold uppercase tracking-[0.2em]">
-                    {{ $passed ? "You've successfully completed this challenge!" : "Don't give up! Every mistake is a learning opportunity." }}
+                
+                <p class="text-white/80 text-lg max-w-2xl mx-auto">
+                    {{ $passed 
+                        ? "You've successfully completed {$quizTitle} with flying colors!" 
+                        : "Every attempt brings you closer to mastery. Review and try again." 
+                    }}
                 </p>
+                
+                <div class="inline-flex mt-6 px-4 py-2 bg-white/20 rounded-full text-white text-sm">
+                    Completed in {{ $timeStr }}
+                </div>
             </div>
         </div>
-
-        <!-- Result Container: Compact & High Density -->
-        <div class="max-w-4xl mx-auto px-6 -mt-16 relative z-20">
-            <div class="bg-white rounded-[40px] p-8 md:p-12 border border-slate-200/50 shadow-2xl overflow-hidden relative">
-                
-                <!-- Main Score Circle: Compact UI -->
-                <div class="flex flex-col md:flex-row items-center gap-10 border-b border-slate-100 pb-10 mb-10">
-                    <div class="relative w-32 h-32 shrink-0">
-                        <svg class="w-full h-full -rotate-90 filter drop-shadow-sm" viewBox="0 0 100 100">
-                            <circle cx="50" cy="50" r="45" fill="none" stroke="#f1f5f9" stroke-width="10" />
-                            <circle cx="50" cy="50" r="45" fill="none" stroke="{{ $passed ? '#10b981' : '#f43f5e' }}" stroke-width="10" stroke-dasharray="283" stroke-dashoffset="{{ 283 - (283 * $finalScore / 100) }}" stroke-linecap="round" class="transition-all duration-[2000ms] delay-500 ease-out" />
+        
+        {{-- Score Overview Card --}}
+        <div class="card mb-6 animate-slide-up" style="animation-delay: 0s">
+            <div class="card-body">
+                <div class="flex flex-col lg:flex-row items-center gap-8">
+                    {{-- Score Circle --}}
+                    <div class="relative flex-shrink-0">
+                        <svg class="w-40 h-40 transform -rotate-90">
+                            <circle cx="80" cy="80" r="72" fill="none" stroke="#e5e7eb" stroke-width="8" />
+                            <circle cx="80" cy="80" r="72" fill="none" 
+                                    stroke="{{ $passed ? '#10b981' : '#ef4444' }}" 
+                                    stroke-width="8" 
+                                    stroke-linecap="round"
+                                    stroke-dasharray="452.389"
+                                    stroke-dashoffset="452.389"
+                                    id="scoreCircle" />
                         </svg>
                         <div class="absolute inset-0 flex flex-col items-center justify-center">
-                            <span class="text-3xl font-bold text-slate-900 leading-none tabular-nums">{{ round($finalScore) }}<span class="text-xs text-slate-400 ml-0.5">%</span></span>
+                            <span class="text-4xl font-bold text-gray-900">{{ $scorePercent }}</span>
+                            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Score %</span>
                         </div>
                     </div>
-
-                    <div class="flex-grow text-center md:text-left">
-                                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg {{ $passed ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600' }} text-[10px] font-bold uppercase tracking-widest mb-4 border border-current opacity-70">
-                            <i class="fas {{ $passed ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
-                            {{ $passed ? 'Passed' : 'Failed' }}
+                    
+                    {{-- Info --}}
+                    <div class="flex-1 text-center lg:text-left">
+                        <div class="inline-flex mb-3">
+                            <span class="badge {{ $passed ? 'badge-success' : 'badge-error' }}">
+                                @if($passed)
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                    </svg>
+                                    Passed
+                                @else
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                    Failed
+                                @endif
+                            </span>
                         </div>
-                                                                                                <h2 class="text-2xl font-bold text-slate-900 tracking-tight leading-none mb-3" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Performance Overview</h2>
-                                                <p class="text-xs font-medium text-slate-400 leading-relaxed max-w-sm tracking-tight">
-                            Your performance for <strong>{{ $attempt->quiz->title }}</strong> has been recorded in the system.
+                        
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ $quizTitle }}</h2>
+                        <p class="text-gray-600 mb-4">
+                            You answered <strong class="{{ $passed ? 'text-emerald-600' : 'text-rose-600' }}">{{ $correctCount }} out of {{ $totalQuestions }}</strong> questions correctly
                         </p>
+                        
+                        {{-- Progress Bar --}}
+                        <div class="max-w-md mx-auto lg:mx-0">
+                            <div class="flex justify-between text-xs text-gray-500 mb-1">
+                                <span>Your Score</span>
+                                <span>Required: {{ $passPercent }}%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill {{ $passed ? 'bg-emerald-500' : 'bg-rose-500' }}" 
+                                     id="progressFill"
+                                     data-width="{{ $scorePercent }}%"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Stat Grid: Compact Design -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
-                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col items-center hover:bg-white hover:border-indigo-500/20 transition-all shadow-sm">
-                        <i class="far fa-clock text-indigo-600 text-sm mb-3"></i>
-                        @php
-                            $diff = \Carbon\Carbon::parse($attempt->started_at)->diff($attempt->completed_at);
-                            $timeStr = ($diff->i > 0 ? $diff->i . 'm ' : '') . $diff->s . 's';
-                        @endphp
-                                                <span class="text-lg font-bold text-slate-900 tabular-nums">{{ $timeStr }}</span>
-                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Time Taken</span>
-                    </div>
-                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col items-center hover:bg-white hover:border-indigo-500/20 transition-all shadow-sm">
-                        <i class="far fa-calendar text-indigo-600 text-sm mb-3"></i>
-                                                <span class="text-lg font-bold text-slate-900 tabular-nums">{{ $attempt->completed_at->format('d M') }}</span>
-                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Date</span>
-                    </div>
-                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col items-center text-center hover:bg-white hover:border-indigo-500/20 transition-all shadow-sm">
-                        <i class="far fa-shield text-{{ $attempt->violations > 0 ? 'rose' : 'emerald' }}-500 text-sm mb-3"></i>
-                                                <span class="text-lg font-bold {{ $attempt->violations > 0 ? 'text-rose-500' : 'text-emerald-500' }}">{{ $attempt->violations ? $attempt->violations : 'NONE' }}</span>
-                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Focus Alerts</span>
-                    </div>
-                    <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col items-center hover:bg-white hover:border-indigo-500/20 transition-all shadow-sm">
-                        <i class="far fa-star text-indigo-600 text-sm mb-3"></i>
-                                                <span class="text-lg font-bold text-slate-900 tabular-nums">{{ $attempt->quiz->pass_percentage }}%</span>
-                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Required</span>
-                    </div>
+            </div>
+        </div>
+        
+        {{-- Stats Grid --}}
+        <div class="stats-grid mb-6">
+            <div class="stat-card animate-slide-up" style="animation-delay: 0.05s">
+                <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
                 </div>
-
-                @if($attempt->result->teacher_feedback)
-                <!-- Professional Feedback Block: Compact -->
-                <div class="mb-10 p-8 bg-indigo-50 rounded-[32px] border border-indigo-100 relative overflow-hidden group">
-                    <div class="absolute right-0 bottom-0 opacity-5 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-quote-right text-6xl text-indigo-600 -mr-4 -mb-4"></i>
-                    </div>
-                    <div class="flex items-start gap-6 relative z-10">
-                        <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-indigo-600/20">
-                            <i class="fas fa-comment-dots text-sm"></i>
+                <div class="text-3xl font-bold text-emerald-600">{{ $correctCount }}</div>
+                <div class="text-xs font-semibold text-gray-500 uppercase mt-1">Correct Answers</div>
+            </div>
+            
+            <div class="stat-card animate-slide-up" style="animation-delay: 0.1s">
+                <div class="w-12 h-12 bg-rose-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-6 h-6 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </div>
+                <div class="text-3xl font-bold text-rose-600">{{ $incorrectCount }}</div>
+                <div class="text-xs font-semibold text-gray-500 uppercase mt-1">Incorrect Answers</div>
+            </div>
+            
+            <div class="stat-card animate-slide-up" style="animation-delay: 0.15s">
+                <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div class="text-2xl font-bold text-gray-900">{{ $timeStr }}</div>
+                <div class="text-xs font-semibold text-gray-500 uppercase mt-1">Time Taken</div>
+            </div>
+            
+            <div class="stat-card animate-slide-up" style="animation-delay: 0.2s">
+                <div class="w-12 h-12 {{ $violations > 0 ? 'bg-amber-100' : 'bg-emerald-100' }} rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-6 h-6 {{ $violations > 0 ? 'text-amber-600' : 'text-emerald-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <div class="text-3xl font-bold {{ $violations > 0 ? 'text-amber-600' : 'text-emerald-600' }}">{{ $violations }}</div>
+                <div class="text-xs font-semibold text-gray-500 uppercase mt-1">Focus Alerts</div>
+            </div>
+        </div>
+        
+        {{-- Feedback Card --}}
+        @if($feedback)
+            <div class="card mb-6 animate-slide-up" style="animation-delay: 0.25s">
+                <div class="card-body bg-gradient-to-r from-indigo-50 to-purple-50">
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                                </svg>
+                            </div>
                         </div>
                         <div>
-                                                        <div class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-2">Instructor Feedback</div>
-                            <p class="text-slate-700 text-sm font-medium leading-relaxed tracking-tight">"{{ $attempt->result->teacher_feedback }}"</p>
+                            <p class="text-xs font-semibold text-indigo-600 uppercase tracking-wide mb-1">Instructor Feedback</p>
+                            <p class="text-gray-800 leading-relaxed">“{{ e($feedback) }}”</p>
                         </div>
                     </div>
                 </div>
-                @endif
-
-                <!-- Answer Review Section -->
-                <div class="mb-10 p-8 bg-slate-50 rounded-[32px] border border-slate-200">
-                    <div class="flex items-center justify-between mb-6">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-indigo-600 text-white rounded-xl flex items-center justify-center shadow-md">
-                                <i class="fas fa-eye text-sm"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-slate-900">Review Your Answers</h3>
-                                <p class="text-xs text-slate-500 font-medium mt-0.5">Check your responses and see correct answers</p>
-                            </div>
-                        </div>
-                        <button type="button" onclick="document.getElementById('answerReviewModal').classList.remove('hidden')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-all">
-                            <i class="fas fa-magnifying-glass mr-2"></i> Review Answers
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Action Footer: Compact Buttons -->
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                                        <a href="{{ $isStudent ? route('students.dashboard') : route('quizzes.index') }}" class="h-14 px-10 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all shadow-xl shadow-indigo-600/20">
-                        <i class="fas fa-home"></i> Return to Dashboard
+            </div>
+        @endif
+        
+        {{-- Action Buttons --}}
+        <div class="card animate-slide-up" style="animation-delay: 0.3s">
+            <div class="card-body">
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <a href="{{ $isStudent ? route('students.dashboard') : route('quizzes.index') }}" 
+                       class="btn btn-secondary">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                        Dashboard
                     </a>
-                                        <button type="button" onclick="document.getElementById('answerReviewModal').classList.remove('hidden')" class="h-14 px-10 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all shadow-xl shadow-amber-500/20">
-                        <i class="fas fa-magnifying-glass"></i> Check Answers
+                    
+                    <button type="button" onclick="openReviewModal()" class="btn btn-primary">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        Review Answers
                     </button>
-                                        <a href="{{ $isStudent ? route('students.quizzes.take', $attempt->quiz_id) : route('quizzes.take', $attempt->quiz_id) }}" class="h-14 px-10 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all shadow-xl shadow-emerald-600/20">
-                        <i class="fas fa-rotate-right"></i> {{ $isStudent ? 'Retake Quiz' : 'Try Again' }}
+                    
+                    <a href="{{ $isStudent ? route('students.quizzes.take', $attempt->quiz_id) : route('quizzes.take', $attempt->quiz_id) }}" 
+                       class="btn btn-success">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Try Again
                     </a>
                 </div>
             </div>
-
-            @if(in_array(auth()->user()->role_id, [1, 2]))
-            <!-- Teacher Management Portal: Compact Audit -->
-            <div class="mt-12 bg-white rounded-[40px] border border-slate-200/50 shadow-2xl overflow-hidden p-8 md:p-12">
-                <div class="flex items-center gap-5 mb-12 border-b border-slate-50 pb-8">
-                    <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-600/20">
-                        <i class="fas fa-gavel text-sm"></i>
-                    </div>
-                    <div>
-                                                                                                <h3 class="text-xl font-bold text-slate-900" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Review & Feedback</h3>
-                        <p class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mt-1.5">Verify student responses and provide guidance.</p>
-                    </div>
-                </div>
-
-                <div class="space-y-6">
-                    @foreach($attempt->quiz->questions as $index => $q)
-                        @php $ans = isset($attemptAnswers) ? $attemptAnswers->get($q->id) : null; @endphp
-                        <div class="p-8 bg-slate-50 rounded-[32px] border border-slate-100">
-                            <div class="flex flex-col md:flex-row justify-between items-start gap-6 mb-8">
-                                <div class="flex-grow">
-                                                                        <div class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-2 px-2.5 py-1 bg-indigo-50 border border-indigo-100 rounded-md inline-block">Question #{{ $index + 1 }}</div>
-                                    <h4 class="text-lg font-bold text-slate-800 leading-snug tracking-tight">{!! $q->content !!}</h4>
-                                </div>
-                                <div class="shrink-0 flex items-center gap-2.5 px-4 py-2 rounded-xl bg-white border border-slate-100 shadow-sm">
-                                    <i class="fas {{ $q->type === 'short_answer' ? 'fa-pen-nib text-amber-500' : 'fa-list-ul text-indigo-600' }} text-[10px]"></i>
-                                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{{ str_replace('_', ' ', $q->type) }}</span>
-                                </div>
-                            </div>
-
-                            @if($q->type === 'short_answer')
-                                <div class="p-8 bg-white border border-slate-200 rounded-[28px] text-slate-700 font-bold uppercase text-sm leading-relaxed relative shadow-inner">
-                                                                        <div class="absolute -top-3 left-8 px-3 bg-indigo-600 text-[10px] font-bold text-white uppercase tracking-widest rounded-full h-6 flex items-center">Student Answer</div>
-                                    "{{ $ans->short_text ?? 'No answer provided' }}"
-                                </div>
-                            @else
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    @foreach($q->answers as $option)
-                                        @php $isSelected = $ans && $ans->answer_id == $option->id; @endphp
-                                        <div class="flex items-center gap-4 p-5 rounded-2xl border transition-all {{ $isSelected ? ($option->is_correct ? 'bg-emerald-50 border-emerald-500/30' : 'bg-rose-50 border-rose-500/30 ring-2 ring-rose-100') : 'bg-white border-slate-100 opacity-60' }}">
-                                            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold shadow-sm transition-all {{ $isSelected ? ($option->is_correct ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white') : 'bg-slate-50 text-slate-300' }}">
-                                                {{ $option->is_correct ? '✓' : '✗' }}
-                                            </div>
-                                                                                        <span class="text-sm font-bold tracking-tight {{ $isSelected ? 'text-slate-900' : 'text-slate-400' }}">{{ $option->answer_text }}</span>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endif
-                        </div>
-                    @endforeach
-                </div>
-
-                <!-- Grading Logic -->
-                <form action="{{ route('quizzes.grade', $attempt->id) }}" method="POST" class="mt-20 pt-16 border-t border-slate-100">
-                    @csrf
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 bg-indigo-950 rounded-[40px] p-10 md:p-16 text-white shadow-3xl">
-                        <div>
-                                                        <label class="block text-xs font-bold uppercase tracking-[0.2em] text-indigo-300 mb-6 flex items-center gap-3">
-                                <i class="fas fa-sliders-h"></i> Adjusted Score
-                            </label>
-                            <div class="relative">
-                                <input type="number" name="manual_score" value="{{ $attempt->result->manual_score ?? round($attempt->result->score) }}" min="0" max="100" class="w-full bg-white/5 border-2 border-white/10 rounded-[28px] p-8 text-5xl font-bold text-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 outline-none transition-all tabular-nums">
-                                <span class="absolute right-8 top-1/2 -translate-y-1/2 text-white/10 text-5xl font-bold">%</span>
-                            </div>
-                            <div class="mt-6 flex items-center gap-3 px-5 py-3 bg-white/5 rounded-xl border border-white/5">
-                                <i class="fas fa-bolt text-indigo-400 text-xs"></i>
-                                <span class="text-[10px] font-bold text-indigo-200/60 uppercase tracking-widest">Automated System Confidence: {{ round($attempt->result->score) }}%</span>
-                            </div>
-                        </div>
-
-                        <div>
-                                                        <label class="block text-xs font-bold uppercase tracking-[0.2em] text-indigo-300 mb-6 flex items-center gap-3">
-                                <i class="fas fa-file-signature"></i> Instructor Comments
-                            </label>
-                                                        <textarea name="teacher_feedback" rows="5" class="w-full bg-white/5 border-2 border-white/10 rounded-[28px] p-8 text-indigo-50 font-medium tracking-tight focus:border-indigo-500 outline-none transition-all placeholder:text-white/10 text-sm leading-relaxed" placeholder="Enter feedback for the student...">{{ $attempt->result->teacher_feedback }}</textarea>
-                        </div>
-
-                        <div class="lg:col-span-2 mt-8 flex flex-col md:flex-row items-center justify-between gap-10 p-10 bg-white/5 rounded-[40px] border border-white/10">
-                            <label class="flex items-center gap-6 cursor-pointer group">
-                                <div class="relative">
-                                    <input type="checkbox" name="publish" value="1" class="sr-only peer" {{ $attempt->result->is_published ? 'checked' : '' }}>
-                                    <div class="w-16 h-9 bg-white/10 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-7 after:w-7 after:transition-all peer-checked:bg-indigo-500 shadow-inner"></div>
-                                </div>
-                                <div class="flex flex-col">
-                                                                        <span class="text-sm font-bold uppercase tracking-widest text-white group-hover:text-indigo-300 transition-colors">Publish Results</span>
-                                    <span class="text-[10px] font-bold text-indigo-400 mt-1 uppercase tracking-widest opacity-60">Make these results visible to the student.</span>
-                                </div>
-                            </label>
-
-                            <button type="submit" class="w-full md:w-auto h-16 px-14 bg-white text-indigo-950 rounded-2xl font-bold uppercase tracking-[0.2em] shadow-xl hover:scale-105 active:scale-95 transition-all text-[11px]">
-                                                                Save and Finalize
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            @endif
         </div>
     @endif
 </div>
 
-<!-- Answer Review Modal -->
-<div id="answerReviewModal" class="hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-[40px] shadow-2xl max-w-4xl w-full my-8">
-        <!-- Modal Header -->
-        <div class="sticky top-0 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white p-8 rounded-t-[40px] flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                    <i class="fas fa-magnifying-glass text-lg"></i>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-bold">Answer Review</h2>
-                    <p class="text-white/80 text-sm font-medium mt-1">Check your responses and compare with correct answers</p>
-                </div>
+{{-- ANSWER REVIEW MODAL --}}
+<div id="reviewModal" class="modal-overlay hidden">
+    <div class="modal-container">
+        {{-- Header --}}
+        <div class="flex items-center justify-between p-6 border-b border-gray-200">
+            <div>
+                <h3 class="text-xl font-bold text-gray-900">Answer Review</h3>
+                <p class="text-sm text-gray-500 mt-1">{{ $totalQuestions }} questions · {{ $correctCount }} correct · {{ $incorrectCount }} incorrect</p>
             </div>
-            <button type="button" onclick="document.getElementById('answerReviewModal').classList.add('hidden')" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center transition-all">
-                <i class="fas fa-times text-lg"></i>
+            <button onclick="closeReviewModal()" class="text-gray-400 hover:text-gray-600 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
             </button>
         </div>
-
-        <!-- Modal Content -->
-        <div class="p-8 space-y-6 max-h-[70vh] overflow-y-auto">
-            @php
-                $attemptAnswers = $attempt->attemptAnswers ?? collect();
-            @endphp
-
-            @forelse($attempt->quiz->questions as $index => $question)
-                @php
-                    $studentAnswer = $attemptAnswers->where('question_id', $question->id)->first();
-                    $isCorrect = $studentAnswer?->is_correct ?? false;
-                @endphp
-                <div class="p-6 bg-slate-50 rounded-[28px] border {{ $isCorrect ? 'border-emerald-200 bg-emerald-50' : 'border-rose-200 bg-rose-50' }} transition-all">
-                    <!-- Question Header -->
-                    <div class="flex items-start justify-between gap-4 mb-6">
-                        <div class="flex-grow">
-                            <div class="flex items-center gap-2 mb-3">
-                                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold {{ $isCorrect ? 'bg-emerald-200 text-emerald-700' : 'bg-rose-200 text-rose-700' }}">
-                                    @if($isCorrect)
-                                        <i class="fas fa-check-circle"></i> Correct
-                                    @else
-                                        <i class="fas fa-times-circle"></i> Incorrect
-                                    @endif
+        
+        {{-- Tabs --}}
+        <div class="tabs">
+            <button type="button" onclick="filterQuestions('all')" class="tab active" data-filter="all">All ({{ $totalQuestions }})</button>
+            <button type="button" onclick="filterQuestions('correct')" class="tab" data-filter="correct">Correct ({{ $correctCount }})</button>
+            <button type="button" onclick="filterQuestions('incorrect')" class="tab" data-filter="incorrect">Incorrect ({{ $incorrectCount }})</button>
+        </div>
+        
+        {{-- Table --}}
+        <div class="table-wrapper">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 60px">#</th>
+                        <th>Question</th>
+                        <th style="min-width: 200px">Your Answer</th>
+                        <th style="min-width: 200px">Correct Answer</th>
+                        <th style="width: 100px">Result</th>
+                        <th style="width: 80px">Points</th>
+                    </tr>
+                </thead>
+                <tbody id="answersTableBody">
+                    @foreach($attempt->quiz->questions as $index => $question)
+                        @php
+                            $studentAnswer = $attemptAnswers->where('question_id', $question->id)->first();
+                            $isCorrect = $studentAnswer?->is_correct ?? false;
+                            
+                            if ($question->type === 'multiple_choice') {
+                                $studentText = optional($question->answers->where('id', $studentAnswer?->answer_id)->first())->answer_text ?? 'No answer provided';
+                                $correctText = optional($question->answers->where('is_correct', 1)->first())->answer_text ?? 'N/A';
+                            } else {
+                                $studentText = $studentAnswer?->short_text ?: 'No answer provided';
+                                $correctText = $question->correct_answer ?? 'Pending review';
+                            }
+                        @endphp
+                        <tr data-correct="{{ $isCorrect ? 'true' : 'false' }}">
+                            <td class="text-gray-500 font-semibold">{{ $index + 1 }}</td>
+                            <td>
+                                <div class="text-gray-900 font-medium line-clamp-2">{!! nl2br(e($question->content)) !!}</div>
+                                <span class="inline-block mt-1 text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                                    {{ str_replace('_', ' ', $question->type) }}
                                 </span>
-                                <span class="text-xs font-bold text-slate-500 bg-white px-2 py-1 rounded-lg">{{ $question->points ?? 10 }} pts</span>
-                            </div>
-                            <h3 class="text-lg font-bold text-slate-900 leading-relaxed">Question {{ $index + 1 }}: {!! $question->content !!}</h3>
-                        </div>
-                    </div>
-
-                    @if($question->type === 'multiple_choice')
-                        <!-- Multiple Choice Options -->
-                        <div class="space-y-3">
-                            @foreach($question->answers as $option)
-                                @php
-                                    $isSelected = $studentAnswer && $studentAnswer->answer_id == $option->id;
-                                    $isCorrectOption = $option->is_correct;
-                                @endphp
-                                <div class="flex items-start gap-4 p-4 rounded-lg border-2 transition-all {{ 
-                                    $isSelected && $isCorrectOption ? 'border-emerald-500 bg-emerald-50' :
-                                    ($isSelected && !$isCorrectOption ? 'border-rose-500 bg-rose-50' :
-                                    ($isCorrectOption && !$isSelected ? 'border-emerald-300 bg-emerald-50/50' : 'border-slate-200 bg-white opacity-50'))
-                                }}">
-                                    <div class="w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm shrink-0 {{ 
-                                        $isSelected && $isCorrectOption ? 'bg-emerald-500 text-white' :
-                                        ($isSelected && !$isCorrectOption ? 'bg-rose-500 text-white' :
-                                        ($isCorrectOption ? 'bg-emerald-300 text-white' : 'bg-slate-200 text-slate-400'))
-                                    }}">
-                                        @if($isSelected && $isCorrectOption)
-                                            <i class="fas fa-check"></i>
-                                        @elseif($isSelected && !$isCorrectOption)
-                                            <i class="fas fa-times"></i>
-                                        @elseif($isCorrectOption)
-                                            <i class="fas fa-star"></i>
-                                        @else
-                                            {{ chr(65 + $loop->index) }}
-                                        @endif
-                                    </div>
-                                    <div class="flex-grow">
-                                        <p class="font-bold text-slate-900">{{ $option->answer_text }}</p>
-                                        @if($isCorrectOption && !($isSelected && $isCorrectOption))
-                                            <p class="text-xs text-emerald-600 font-semibold mt-1">✓ Correct Answer</p>
-                                        @endif
-                                        @if($isSelected && !$isCorrectOption)
-                                            <p class="text-xs text-rose-600 font-semibold mt-1">✗ Your selection</p>
-                                        @endif
-                                    </div>
+                            </td>
+                            <td>
+                                <div class="p-2 rounded-lg {{ $isCorrect ? 'bg-emerald-50' : 'bg-rose-50' }}">
+                                    <p class="text-sm {{ $isCorrect ? 'text-emerald-800' : 'text-rose-800' }}">{{ nl2br(e($studentText)) }}</p>
                                 </div>
-                            @endforeach
-                        </div>
-
-                    @elseif($question->type === 'short_answer')
-                        <!-- Short Answer -->
-                        <div class="space-y-3">
-                            <div class="p-4 rounded-lg bg-white border-2 border-slate-200">
-                                <p class="text-xs font-bold text-slate-500 uppercase mb-2">Your Answer:</p>
-                                <p class="text-slate-900 font-medium">{{ $studentAnswer?->short_text ?? 'No answer provided' }}</p>
-                            </div>
-                            @if($studentAnswer?->teacher_feedback)
-                                <div class="p-4 rounded-lg bg-indigo-50 border-2 border-indigo-200">
-                                    <p class="text-xs font-bold text-indigo-600 uppercase mb-2">Teacher Feedback:</p>
-                                    <p class="text-indigo-900 font-medium text-sm">{{ $studentAnswer->teacher_feedback }}</p>
+                            </td>
+                            <td>
+                                <div class="p-2 rounded-lg bg-gray-50">
+                                    <p class="text-sm text-gray-700">{{ nl2br(e($correctText)) }}</p>
                                 </div>
-                            @endif
-                        </div>
-                    @endif
-
-                    @if($studentAnswer?->points_awarded)
-                        <div class="mt-4 pt-4 border-t border-slate-200 flex justify-between items-center">
-                            <span class="text-xs font-bold text-slate-600">Points Awarded:</span>
-                            <span class="text-lg font-bold {{ $isCorrect ? 'text-emerald-600' : 'text-rose-600' }}">{{ $studentAnswer->points_awarded }}/{{ $question->points ?? 10 }}</span>
-                        </div>
-                    @endif
-                </div>
-            @empty
-                <div class="text-center py-12">
-                    <i class="fas fa-inbox text-4xl text-slate-300 mb-3"></i>
-                    <p class="text-slate-500 font-medium">No questions to review</p>
-                </div>
-            @endforelse
+                            </td>
+                            <td class="text-center">
+                                @if($isCorrect)
+                                    <span class="inline-flex items-center gap-1 px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded">
+                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                        Correct
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1 px-2 py-1 bg-rose-100 text-rose-700 text-xs font-semibold rounded">
+                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        </svg>
+                                        Wrong
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                <span class="font-bold {{ $isCorrect ? 'text-emerald-600' : 'text-rose-600' }}">
+                                    {{ $studentAnswer?->points_awarded ?? 0 }}
+                                </span>
+                                <span class="text-gray-400 text-sm">/{{ $question->points ?? 10 }}</span>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
-
-        <!-- Modal Footer -->
-        <div class="sticky bottom-0 bg-slate-50 border-t border-slate-200 p-8 rounded-b-[40px] flex gap-4">
-            <button type="button" onclick="document.getElementById('answerReviewModal').classList.add('hidden')" class="flex-1 h-12 px-6 bg-slate-200 hover:bg-slate-300 text-slate-900 rounded-xl font-bold text-sm transition-all">
-                <i class="fas fa-times mr-2"></i> Close
-            </button>
-            <a href="{{ $isStudent ? route('students.quizzes.take', $attempt->quiz_id) : route('quizzes.take', $attempt->quiz_id) }}" class="flex-1 h-12 px-6 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2">
-                <i class="fas fa-rotate-right"></i> Retake Quiz
-            </a>
+        
+        {{-- Footer --}}
+        <div class="p-4 border-t border-gray-200 bg-gray-50 flex justify-between items-center">
+            <span class="text-sm text-gray-600" id="filterLabel">Showing all questions</span>
+            <div class="flex gap-4 text-sm">
+                <span class="flex items-center gap-1 text-emerald-600">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    {{ $correctCount }} correct
+                </span>
+                <span class="flex items-center gap-1 text-rose-600">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                    {{ $incorrectCount }} wrong
+                </span>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Click outside to close modal -->
 <script>
-    document.getElementById('answerReviewModal').addEventListener('click', function(e) {
-        if(e.target === this) this.classList.add('hidden');
-    });
+    (function() {
+        'use strict';
+        
+        // Score circle animation
+        const circle = document.getElementById('scoreCircle');
+        if (circle) {
+            const radius = 72;
+            const circumference = 2 * Math.PI * radius;
+            const score = {{ $scorePercent }};
+            const offset = circumference - (score / 100) * circumference;
+            
+            setTimeout(() => {
+                circle.style.transition = 'stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                circle.style.strokeDashoffset = offset;
+            }, 100);
+        }
+        
+        // Progress bar animation
+        const progressFill = document.getElementById('progressFill');
+        if (progressFill && progressFill.dataset.width) {
+            setTimeout(() => { 
+                progressFill.style.width = progressFill.dataset.width; 
+            }, 200);
+        }
+        
+        // Modal elements
+        const modal = document.getElementById('reviewModal');
+        
+        // Open modal
+        window.openReviewModal = function() {
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            document.body.classList.add('modal-open');
+        };
+        
+        // Close modal
+        window.closeReviewModal = function() {
+            if (!modal) return;
+            modal.classList.add('hidden');
+            document.body.classList.remove('modal-open');
+        };
+        
+        // Close on overlay click
+        if (modal) {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeReviewModal();
+                }
+            });
+        }
+        
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+                closeReviewModal();
+            }
+        });
+        
+        // Filter questions
+        window.filterQuestions = function(type) {
+            const rows = document.querySelectorAll('#answersTableBody tr');
+            let visibleCount = 0;
+            
+            rows.forEach(row => {
+                const isCorrect = row.getAttribute('data-correct') === 'true';
+                let show = false;
+                
+                if (type === 'all') show = true;
+                else if (type === 'correct') show = isCorrect;
+                else if (type === 'incorrect') show = !isCorrect;
+                
+                row.style.display = show ? '' : 'none';
+                if (show) visibleCount++;
+            });
+            
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                const filterType = tab.getAttribute('data-filter');
+                if (filterType === type) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            // Update label
+            const label = document.getElementById('filterLabel');
+            if (label) {
+                if (type === 'all') {
+                    label.textContent = `Showing all ${rows.length} questions`;
+                } else {
+                    label.textContent = `Showing ${visibleCount} ${type} questions`;
+                }
+            }
+        };
+    })();
 </script>
 
 @endsection

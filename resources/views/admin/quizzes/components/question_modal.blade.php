@@ -141,165 +141,505 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+
     const optionsContainer = document.getElementById('optionsContainer');
-    const addOptionBtn     = document.getElementById('addOptionBtn');
-    const saveQuestionBtn  = document.getElementById('saveQuestionBtn');
-    const saveAndAddBtn    = document.getElementById('saveAndAddBtn');
-    const questionEditor   = document.getElementById('questionEditor');
-    const typeDropdown     = document.getElementById('questionTypeDropdown');
-    const quizId           = document.getElementById('quizId').value;
-    const optionsSection   = document.getElementById('optionsSection');
-    const shortAnswerNote  = document.getElementById('shortAnswerNote');
+    const addOptionBtn = document.getElementById('addOptionBtn');
+    const saveQuestionBtn = document.getElementById('saveQuestionBtn');
+    const saveAndAddBtn = document.getElementById('saveAndAddBtn');
+    const questionEditor = document.getElementById('questionEditor');
+    const typeDropdown = document.getElementById('questionTypeDropdown');
+    const quizId = document.getElementById('quizId').value;
+    const optionsSection = document.getElementById('optionsSection');
+    const shortAnswerNote = document.getElementById('shortAnswerNote');
 
-    const letters = ['A','B','C','D','E','F','G','H'];
+    const pointsInput = document.getElementById('questionPoints');
+    const reusableCheck = document.getElementById('isReusableCheck');
 
-    function createOptionHtml(index) {
-        const label = letters[index] || (index + 1);
-        const div = document.createElement('div');
-        div.className = 'flex items-center gap-3 option-row group transition-all duration-200';
-        div.innerHTML = `
-            <div class="flex-grow flex items-center bg-slate-50 border border-slate-200 rounded-xl overflow-hidden focus-within:border-indigo-500 focus-within:bg-white transition-all shadow-sm">
-                <div class="px-3 text-slate-300"><i class="far fa-circle text-[10px]"></i></div>
-                <input type="text" class="w-full py-2.5 bg-transparent text-sm font-medium text-slate-900 outline-none placeholder:text-slate-300" placeholder="Option ${label}...">
-                <div class="px-4 border-l border-slate-200 bg-slate-50/50">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input class="correct-checkbox w-4 h-4 text-indigo-600 bg-white border-slate-300 rounded focus:ring-indigo-500" type="checkbox" style="cursor:pointer;">
-                        <span class="text-[10px] font-semibold text-slate-400 group-hover:text-emerald-600 transition-all whitespace-nowrap">Correct</span>
-                    </label>
-                </div>
-            </div>
-            <button type="button" class="w-9 h-9 rounded-xl border border-slate-200 text-slate-300 hover:text-rose-500 hover:border-rose-200 hover:bg-rose-50 transition-all flex items-center justify-center remove-option shrink-0">
-                <i class="fas fa-times text-xs"></i>
-            </button>
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+    let isSaving = false;
+
+    function showToast(message, type = "error") {
+
+        const toast = document.createElement('div');
+
+        toast.className = `
+            fixed top-5 right-5 z-[9999]
+            px-5 py-3 rounded-xl text-white
+            shadow-xl text-sm font-semibold
+            transition-all duration-500
+            ${type === 'success'
+            ? 'bg-emerald-500'
+            : 'bg-rose-500'}
         `;
-        return div;
+
+        toast.innerHTML = message;
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.classList.add(
+                'opacity-0',
+                'translate-x-10'
+            );
+        }, 2500);
+
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
+
     }
 
-    addOptionBtn.addEventListener('click', function() {
-        const count = optionsContainer.querySelectorAll('.option-row').length;
-        optionsContainer.appendChild(createOptionHtml(count));
-    });
+    function updateOptionLabels() {
 
-    optionsContainer.addEventListener('click', function(e) {
-        if (e.target.closest('.remove-option')) {
-            if (optionsContainer.querySelectorAll('.option-row').length > 2) {
-                e.target.closest('.option-row').remove();
-            } else {
-                alert('At least 2 answer options are required.');
-            }
-        }
-    });
+        document.querySelectorAll('.option-row')
+        .forEach((row, index) => {
 
-    typeDropdown.addEventListener('change', function() {
-        const isShortAnswer = this.value === 'short_answer';
-        optionsSection.style.display  = isShortAnswer ? 'none' : 'block';
-        shortAnswerNote.classList.toggle('hidden', !isShortAnswer);
+            const input =
+            row.querySelector('input[type=text]');
 
-        // True/False: auto-fill 2 options
-        if (this.value === 'true_false') {
-            optionsContainer.innerHTML = '';
-            ['True', 'False'].forEach((label, idx) => {
-                const row = createOptionHtml(idx);
-                row.querySelector('input[type="text"]').value = label;
-                optionsContainer.appendChild(row);
-            });
-            addOptionBtn.style.display = 'none';
-        } else {
-            addOptionBtn.style.display = '';
-        }
-    });
+            input.placeholder =
+            `Option ${letters[index]}...`;
 
-    function resetModal() {
-        questionEditor.value = '';
-        document.getElementById('questionPoints').value = 1;
-        document.getElementById('isReusableCheck').checked = false;
-        typeDropdown.value = 'single_choice';
-        optionsSection.style.display = 'block';
-        shortAnswerNote.classList.add('hidden');
-        addOptionBtn.style.display = '';
-        optionsContainer.innerHTML = '';
-        optionsContainer.appendChild(createOptionHtml(0));
-        optionsContainer.appendChild(createOptionHtml(1));
-    }
-
-    // Reset modal on close
-    document.getElementById('newQuestionModal').addEventListener('hidden.bs.modal', resetModal);
-
-    function saveQuestion(stayOpen = false) {
-        const questionText = questionEditor.value.trim();
-        const points       = document.getElementById('questionPoints').value;
-        const type         = typeDropdown.value;
-        const isReusable   = document.getElementById('isReusableCheck').checked;
-
-        if (!questionText) {
-            return alert('Please enter the question text.');
-        }
-
-        const options = [];
-        const correct = [];
-
-        if (type !== 'short_answer') {
-            optionsContainer.querySelectorAll('.option-row').forEach((row) => {
-                const textInput = row.querySelector('input[type="text"]');
-                const text      = textInput ? textInput.value.trim() : '';
-                const checkbox  = row.querySelector('.correct-checkbox');
-                const isCorrect = checkbox ? checkbox.checked : false;
-                if (text) {
-                    options.push(text);
-                    if (isCorrect) correct.push(options.length - 1);
-                }
-            });
-
-            if (options.length < 2) return alert('Please add at least 2 answer options.');
-            if (correct.length === 0) return alert('Please mark at least one option as correct.');
-        }
-
-        const data = {
-            quiz_id:      quizId,
-            content:      questionText,
-            points:       points,
-            type:         type,
-            is_reusable:  isReusable,
-            options:      options,
-            correct:      correct,
-            _token:       '{{ csrf_token() }}'
-        };
-
-        saveQuestionBtn.disabled = true;
-        saveAndAddBtn.disabled   = true;
-        saveQuestionBtn.innerHTML = '<i class="fas fa-spinner fa-spin text-xs mr-1.5"></i>Saving...';
-
-        fetch('{{ route("questions.store") }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': data._token
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(res => {
-            if (res.success) {
-                if (stayOpen) {
-                    resetModal();
-                } else {
-                    window.location.reload();
-                }
-            } else {
-                alert('Error: ' + res.message);
-            }
-        })
-        .catch(() => alert('A network error occurred. Please try again.'))
-        .finally(() => {
-            saveQuestionBtn.disabled = false;
-            saveAndAddBtn.disabled   = false;
-            saveQuestionBtn.innerHTML = '<i class="fas fa-check text-xs mr-1.5"></i>Save Question';
         });
+
     }
 
-    saveQuestionBtn.addEventListener('click', () => saveQuestion(false));
-    saveAndAddBtn.addEventListener('click',   () => saveQuestion(true));
+    function createOptionHtml(index,text='') {
+
+        const label = letters[index];
+
+        const div=document.createElement('div');
+
+        div.className=
+        'flex items-center gap-3 option-row group transition-all';
+
+        div.innerHTML=`
+
+        <div class="flex-grow flex items-center bg-slate-50 border border-slate-200 rounded-xl overflow-hidden focus-within:border-indigo-500 focus-within:bg-white transition-all shadow-sm">
+
+            <div class="px-3 text-slate-300">
+                <i class="far fa-circle text-[10px]"></i>
+            </div>
+
+            <input
+            value="${text}"
+            type="text"
+            class="w-full py-2.5 bg-transparent text-sm font-medium text-slate-900 outline-none placeholder:text-slate-300"
+            placeholder="Option ${label}..."
+            >
+
+            <div class="px-4 border-l border-slate-200 bg-slate-50/50">
+
+                <label class="flex items-center gap-2 cursor-pointer">
+
+                    <input
+                    class="correct-checkbox w-4 h-4 text-indigo-600 rounded"
+                    type="checkbox">
+
+                    <span class="text-[10px] font-semibold text-slate-400 group-hover:text-emerald-600">
+                    Correct
+                    </span>
+
+                </label>
+
+            </div>
+
+        </div>
+
+        <button
+        type="button"
+        class="remove-option w-9 h-9 rounded-xl border border-slate-200 text-slate-300 hover:text-rose-500 hover:border-rose-200 hover:bg-rose-50 transition-all flex items-center justify-center">
+
+        <i class="fas fa-times text-xs"></i>
+
+        </button>
+        `;
+
+        return div;
+
+    }
+
+    addOptionBtn.addEventListener('click', function () {
+
+        let count =
+        document.querySelectorAll(
+            '.option-row'
+        ).length;
+
+        if(count>=8){
+
+            return showToast(
+                'Maximum 8 options allowed'
+            );
+
+        }
+
+        optionsContainer.appendChild(
+            createOptionHtml(count)
+        );
+
+    });
+
+    optionsContainer.addEventListener(
+    'click',
+    function(e){
+
+        if(
+            e.target.closest(
+                '.remove-option'
+            )
+        ){
+
+            if(
+                typeDropdown.value
+                ==='true_false'
+            ){
+                return;
+            }
+
+            let rows=
+            document.querySelectorAll(
+                '.option-row'
+            );
+
+            if(rows.length<=2){
+
+                return showToast(
+                    'Minimum 2 options required'
+                );
+
+            }
+
+            e.target.closest(
+                '.option-row'
+            ).remove();
+
+            updateOptionLabels();
+
+        }
+
+    });
+
+    optionsContainer.addEventListener(
+    'change',
+    function(e){
+
+        if(
+            e.target.classList.contains(
+            'correct-checkbox'
+            )
+            &&
+            typeDropdown.value
+            ==='single_choice'
+        ){
+
+            document.querySelectorAll(
+            '.correct-checkbox'
+            ).forEach(cb=>{
+
+                if(cb!==e.target){
+
+                    cb.checked=false;
+
+                }
+
+            });
+
+        }
+
+    });
+
+    typeDropdown.addEventListener(
+    'change',
+    function(){
+
+        let type=this.value;
+
+        const shortAnswer=
+        type==='short_answer';
+
+        optionsSection.style.display=
+        shortAnswer
+        ?'none'
+        :'block';
+
+        shortAnswerNote.classList.toggle(
+        'hidden',
+        !shortAnswer
+        );
+
+        if(type==='true_false'){
+
+            optionsContainer.innerHTML='';
+
+            optionsContainer.append(
+                createOptionHtml(
+                    0,'True'
+                ),
+                createOptionHtml(
+                    1,'False'
+                )
+            );
+
+            addOptionBtn.style.display='none';
+
+        }
+
+        else{
+
+            addOptionBtn.style.display='';
+
+        }
+
+    });
+
+    function resetModal(){
+
+        questionEditor.value='';
+
+        pointsInput.value=1;
+
+        reusableCheck.checked=false;
+
+        typeDropdown.value=
+        'single_choice';
+
+        optionsSection.style.display=
+        'block';
+
+        shortAnswerNote.classList.add(
+        'hidden'
+        );
+
+        addOptionBtn.style.display='';
+
+        optionsContainer.innerHTML='';
+
+        optionsContainer.append(
+            createOptionHtml(0),
+            createOptionHtml(1)
+        );
+
+    }
+
+    document.getElementById(
+    'newQuestionModal'
+    ).addEventListener(
+    'hidden.bs.modal',
+    resetModal
+    );
+
+    async function saveQuestion(
+    stayOpen=false
+    ){
+
+        if(isSaving) return;
+
+        const questionText=
+        questionEditor.value.trim();
+
+        if(!questionText){
+
+            return showToast(
+            'Please enter question'
+            );
+
+        }
+
+        let options=[];
+        let correct=[];
+        let duplicate=[];
+
+        if(
+            typeDropdown.value
+            !=='short_answer'
+        ){
+
+            document.querySelectorAll(
+            '.option-row'
+            )
+            .forEach(
+            (row,index)=>{
+
+                const text=
+                row.querySelector(
+                'input[type=text]'
+                )
+                .value.trim();
+
+                const checked=
+                row.querySelector(
+                '.correct-checkbox'
+                )
+                .checked;
+
+                if(text){
+
+                    duplicate.push(
+                    text.toLowerCase()
+                    );
+
+                    options.push(text);
+
+                    if(checked){
+
+                        correct.push(index);
+
+                    }
+
+                }
+
+            });
+
+            const hasDuplicate=
+            duplicate.some(
+            (v,i)=>
+            duplicate.indexOf(v)!==i
+            );
+
+            if(hasDuplicate){
+
+                return showToast(
+                'Duplicate answers detected'
+                );
+
+            }
+
+            if(options.length<2){
+
+                return showToast(
+                'Add minimum 2 options'
+                );
+
+            }
+
+            if(correct.length===0){
+
+                return showToast(
+                'Choose a correct answer'
+                );
+
+            }
+
+        }
+
+        isSaving=true;
+
+        saveQuestionBtn.disabled=true;
+        saveAndAddBtn.disabled=true;
+
+        saveQuestionBtn.innerHTML=
+        `<i class="fas fa-spinner fa-spin mr-2"></i>Saving`;
+
+        saveAndAddBtn.innerHTML=
+        `<i class="fas fa-spinner fa-spin mr-2"></i>Saving`;
+
+        try{
+
+            let response=
+            await fetch(
+            "{{ route('questions.store') }}",
+            {
+
+                method:'POST',
+
+                headers:{
+                    'Content-Type':
+                    'application/json',
+
+                    'Accept':
+                    'application/json',
+
+                    'X-CSRF-TOKEN':
+                    '{{ csrf_token() }}'
+                },
+
+                body:JSON.stringify({
+
+                    quiz_id:quizId,
+                    content:questionText,
+                    points:pointsInput.value,
+                    type:typeDropdown.value,
+                    is_reusable:
+                    reusableCheck.checked,
+                    options,
+                    correct
+
+                })
+
+            });
+
+            let res=
+            await response.json();
+
+            if(res.success){
+
+                showToast(
+                'Question Saved',
+                'success'
+                );
+
+                if(stayOpen){
+
+                    resetModal();
+
+                }else{
+
+                    location.reload();
+
+                }
+
+            }
+
+            else{
+
+                showToast(
+                res.message ||
+                'Save failed'
+                );
+
+            }
+
+        }
+
+        catch{
+
+            showToast(
+            'Network error'
+            );
+
+        }
+
+        finally{
+
+            isSaving=false;
+
+            saveQuestionBtn.disabled=false;
+            saveAndAddBtn.disabled=false;
+
+            saveQuestionBtn.innerHTML=
+            `<i class="fas fa-check mr-1"></i>Save Question`;
+
+            saveAndAddBtn.innerHTML=
+            `<i class="fas fa-plus mr-1"></i>Save & Add Another`;
+
+        }
+
+    }
+
+    saveQuestionBtn.addEventListener(
+    'click',
+    ()=>saveQuestion(false)
+    );
+
+    saveAndAddBtn.addEventListener(
+    'click',
+    ()=>saveQuestion(true)
+    );
+
+    resetModal();
+
 });
 </script>

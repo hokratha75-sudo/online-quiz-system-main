@@ -57,47 +57,47 @@
         }
     </style>
 </head>
-<body class="font-sans min-h-screen flex items-center justify-center p-6">
+<body class="font-sans min-h-screen flex items-center justify-center p-3 sm:p-6">
 
-    <div class="w-full max-w-[450px] bg-white rounded-[24px] shadow-[0_4px_24px_0_rgba(34,41,47,0.1)] p-8 md:p-10">
+    <div class="w-full max-w-[450px] bg-white rounded-lg sm:rounded-[24px] shadow-[0_4px_24px_0_rgba(34,41,47,0.1)] p-6 sm:p-8 md:p-10">
         
-        <div class="mb-8 text-center">
-            <div class="flex items-center justify-center gap-3 mb-6">
-                <div class="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
-                    <i class="fas fa-graduation-cap text-white text-2xl"></i>
+        <div class="mb-6 sm:mb-8 text-center">
+            <div class="flex items-center justify-center gap-2 sm:gap-3 mb-4 sm:mb-6 flex-wrap">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20 flex-shrink-0">
+                    <i class="fas fa-graduation-cap text-white text-lg sm:text-2xl"></i>
                 </div>
-                <span class="text-slate-800 font-bold text-2xl tracking-tight">Quiz System</span>
+                <span class="text-slate-800 font-bold text-lg sm:text-2xl tracking-tight">Quiz System</span>
             </div>
             
         </div>
 
         @if($errors->any())
-            <div class="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl flex items-start gap-3">
-                <i class="far fa-circle-exclamation text-red-500 mt-1"></i>
-                <div class="text-sm text-red-600 font-bold">
+            <div class="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border border-red-100 rounded-lg sm:rounded-2xl flex items-start gap-2 sm:gap-3">
+                <i class="far fa-circle-exclamation text-red-500 mt-0.5 sm:mt-1 text-sm sm:text-base flex-shrink-0"></i>
+                <div class="text-xs sm:text-sm text-red-600 font-bold leading-snug">
                     {{ $errors->first() }}
                 </div>
             </div>
         @endif
 
-        <form method="POST" action="{{ route('login') }}" class="space-y-4">
+        <form method="POST" action="{{ route('login') }}" class="space-y-3 sm:space-y-4">
             @csrf
             
             <div>
-                <label for="username" class="block text-xs font-semibold text-label uppercase tracking-wider mb-2">Email or Username</label>
+                <label for="username" class="block text-xs font-semibold text-label uppercase tracking-wider mb-1.5 sm:mb-2">Email or Username</label>
                 <input type="text" id="username" name="username" required 
-                       class="w-full h-12 bg-white border border-input text-slate-800 text-sm rounded-xl px-4 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
+                       class="w-full h-10 sm:h-12 bg-white border border-input text-slate-800 text-xs sm:text-sm rounded-lg sm:rounded-xl px-3 sm:px-4 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
                        placeholder="Enter your email or username"
                        value="{{ old('username') }}">
             </div>
 
             <div x-data="{ show: false }">
-                <div class="flex justify-between items-center mb-2">
+                <div class="flex justify-between items-center mb-1.5 sm:mb-2">
                     <label for="password" class="block text-xs font-semibold text-label uppercase tracking-wider">Password</label>
                 </div>
                 <div class="relative">
                     <input :type="show ? 'text' : 'password'" id="password" name="password" required 
-                           class="w-full h-12 bg-white border border-input text-slate-800 text-sm rounded-xl px-4 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
+                           class="w-full h-10 sm:h-12 bg-white border border-input text-slate-800 text-xs sm:text-sm rounded-lg sm:rounded-xl px-3 sm:px-4 transition-all outline-none form-input placeholder:text-placeholder focus:ring-4 focus:ring-primary/10" 
                            placeholder="············">
                     <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 transition-colors">
                         <i class="far" :class="show ? 'fa-eye-slash' : 'fa-eye'"></i>

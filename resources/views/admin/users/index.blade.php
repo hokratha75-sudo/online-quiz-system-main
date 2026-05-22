@@ -13,29 +13,29 @@
 {{-- Success Toast --}}
 @if(session('success'))
 <div id="toast-success"
-     class="fixed top-6 right-6 z-[100] flex items-center w-full max-w-sm p-3.5 bg-white rounded-2xl shadow-2xl shadow-emerald-500/20 border border-emerald-100 overflow-hidden backdrop-blur-sm transition-all duration-500 ease-out">
+     class="fixed top-4 right-3 sm:top-6 sm:right-6 z-[100] flex items-center w-full max-w-xs sm:max-w-sm p-2.5 sm:p-3.5 bg-white rounded-lg sm:rounded-2xl shadow-2xl shadow-emerald-500/20 border border-emerald-100 overflow-hidden backdrop-blur-sm transition-all duration-500 ease-out">
 
     <div class="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500"></div>
 
-    <div class="inline-flex items-center justify-center shrink-0 w-10 h-10 text-emerald-600 bg-emerald-50 rounded-xl border border-emerald-100 ml-1">
-        <i class="fas fa-check-circle text-base"></i>
+    <div class="inline-flex items-center justify-center shrink-0 w-8 h-8 sm:w-10 sm:h-10 text-emerald-600 bg-emerald-50 rounded-lg sm:rounded-xl border border-emerald-100 ml-1">
+        <i class="fas fa-check-circle text-xs sm:text-base"></i>
     </div>
 
-    <div class="ml-3 flex-1">
-        <h4 class="text-[13px] font-bold text-slate-900 leading-tight">
+    <div class="ml-2 sm:ml-3 flex-1 min-w-0">
+        <h4 class="text-xs sm:text-[13px] font-bold text-slate-900 leading-tight truncate">
             Success
         </h4>
 
-        <p class="text-[11px] font-medium text-slate-500 mt-0.5">
+        <p class="text-[10px] sm:text-[11px] font-medium text-slate-500 mt-0.5 truncate">
             {{ session('success') }}
         </p>
     </div>
 
     <button type="button"
-            class="group relative w-9 h-9 rounded-full bg-emerald-100 border border-slate-200 text-emerald-600 hover:bg-emerald-200 hover:scale-110 focus:outline-none shadow-sm"
+            class="group relative w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-emerald-100 border border-slate-200 text-emerald-600 hover:bg-emerald-200 hover:scale-110 focus:outline-none shadow-sm flex-shrink-0 ml-2"
             onclick="closeToastSuccess()">
 
-        <i class="fas fa-times text-xs"></i>
+        <i class="fas fa-times text-[10px] sm:text-xs"></i>
     </button>
 </div>
 @endif
@@ -44,29 +44,29 @@
 {{-- Error Toast --}}
 @if($errors->any())
 <div id="toast-error"
-     class="fixed top-24 right-6 z-[100] flex items-center w-full max-w-sm p-3.5 bg-white rounded-2xl shadow-2xl shadow-rose-500/20 border border-rose-100 overflow-hidden backdrop-blur-sm transition-all duration-500 ease-out">
+     class="fixed top-16 sm:top-24 right-3 sm:right-6 z-[100] flex items-center w-full max-w-xs sm:max-w-sm p-2.5 sm:p-3.5 bg-white rounded-lg sm:rounded-2xl shadow-2xl shadow-rose-500/20 border border-rose-100 overflow-hidden backdrop-blur-sm transition-all duration-500 ease-out">
 
     <div class="absolute left-0 top-0 bottom-0 w-1 bg-rose-500"></div>
 
-    <div class="inline-flex items-center justify-center shrink-0 w-10 h-10 text-rose-600 bg-rose-50 rounded-xl border border-rose-100 ml-1">
-        <i class="fas fa-exclamation-triangle text-sm"></i>
+    <div class="inline-flex items-center justify-center shrink-0 w-8 h-8 sm:w-10 sm:h-10 text-rose-600 bg-rose-50 rounded-lg sm:rounded-xl border border-rose-100 ml-1">
+        <i class="fas fa-exclamation-triangle text-xs sm:text-sm"></i>
     </div>
 
-    <div class="ml-3 flex-1">
-        <h4 class="text-[13px] font-bold text-slate-900 leading-tight">
+    <div class="ml-2 sm:ml-3 flex-1 min-w-0">
+        <h4 class="text-xs sm:text-[13px] font-bold text-slate-900 leading-tight truncate">
             Action Failed
         </h4>
 
-        <p class="text-[11px] font-medium text-slate-500 mt-0.5">
+        <p class="text-[10px] sm:text-[11px] font-medium text-slate-500 mt-0.5 truncate">
             {{ $errors->first() }}
         </p>
     </div>
 
     <button type="button"
-            class="group relative w-9 h-9 rounded-full bg-rose-100 border border-slate-200 text-rose-600 hover:bg-rose-200 focus:outline-none shadow-sm"
+            class="group relative w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-rose-100 border border-slate-200 text-rose-600 hover:bg-rose-200 focus:outline-none shadow-sm flex-shrink-0 ml-2"
             onclick="closeToastError()">
 
-        <i class="fas fa-times text-xs"></i>
+        <i class="fas fa-times text-[10px] sm:text-xs"></i>
     </button>
 </div>
 @endif

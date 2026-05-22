@@ -10,26 +10,27 @@
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #4f46e5; }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
 </style>
-<div class="max-w-[1600px] py-4 px-5 md:p-8 font-sans text-slate-800 bg-gradient-to-br from-slate-50 via-white to-slate-100/50 min-h-[calc(100vh-530px)]">
+<div class="w-full max-w-none sm:max-w-[1600px] mx-auto py-3 sm:py-4 md:py-8 px-3 sm:px-5 md:px-8 font-sans text-slate-800 bg-gradient-to-br from-slate-50 via-white to-slate-100/50 min-h-[calc(100vh-530px)]">
 
     <!-- Header Section -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-2">
-        <div>
-            <h1 class="text-2xl font-bold text-slate-900 tracking-tight uppercase" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Master Data Quizzes</h1>
-            <p class="text-sm text-slate-500 mt-1">Manage and track all assessments, midterms, and final exams.</p>
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4 md:gap-6 mb-4 sm:mb-6">
+        <div class="min-w-0 flex-1">
+            <h1 class="text-lg sm:text-xl md:text-2xl font-bold text-slate-900 tracking-tight uppercase truncate" style="font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;">Master Data Quizzes</h1>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1 truncate">Manage and track all assessments, midterms, and final exams.</p>
         </div>
-        <div class="flex items-center gap-4">
-            <button onclick="window.location.reload()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm">
-                <i class="fas fa-rotate text-slate-400 text-sm"></i> 
-                <span>Refresh</span>
+        <div class="flex items-center gap-1 sm:gap-2 md:gap-4 flex-wrap justify-end sm:flex-nowrap">
+            <button onclick="window.location.reload()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg text-[9px] sm:text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-1.5 sm:gap-2 shadow-sm flex-shrink-0">
+                <i class="fas fa-rotate text-slate-400 text-xs sm:text-sm"></i> 
+                <span class="hidden sm:inline">Refresh</span>
             </button>
-            <a href="{{ route('quizzes.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm no-underline">
-                <i class="far fa-file-excel text-emerald-500 text-sm"></i> 
-                <span>Export</span>
+            <a href="{{ route('quizzes.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg text-[9px] sm:text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-1.5 sm:gap-2 shadow-sm no-underline flex-shrink-0">
+                <i class="far fa-file-excel text-emerald-500 text-xs sm:text-sm"></i> 
+                <span class="hidden sm:inline">Export</span>
             </a>
-            <a href="{{ route('quizzes.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg shadow-indigo-600/20 active:scale-[0.98] border-none no-underline">
-                <i class="far fa-plus group-hover:rotate-90 transition-transform duration-300"></i>
-                <span>Create Quiz</span>
+            <a href="{{ route('quizzes.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 sm:px-6 py-1.5 sm:py-2.5 rounded-lg text-[9px] sm:text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-1.5 sm:gap-2 shadow-lg shadow-indigo-600/20 active:scale-[0.98] border-none no-underline flex-shrink-0 whitespace-nowrap">
+                <i class="far fa-plus"></i>
+                <span class="hidden sm:inline">Create Quiz</span>
+                <span class="sm:hidden">New</span>
             </a>
         </div>
     </div>
@@ -39,45 +40,46 @@
     <!-- Quiz Table (Standard Clean Style) -->
     <div class="card-standard">
         <!-- Filter & Search Bar (Modern Style from Image) -->
-    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 m-4">
-        <div class="flex flex-col md:flex-row items-center gap-6 w-full lg:w-auto">
-            <div class="relative w-full md:w-96 group">
-                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-indigo-600 text-[10px]"></i>
-                <input type="text" id="quizSearch" placeholder="Search quizzes.." 
-                       class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium placeholder:text-slate-300 focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
-            </div>
-            
-            <div class="flex items-center gap-4 w-full md:w-auto">
-                <div class="relative w-full md:w-64">
+    <div class="flex flex-col gap-3 sm:gap-4 md:gap-6 p-3 sm:p-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-6">
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 md:gap-6 w-full md:flex-1">
+                <div class="relative w-full sm:flex-1 max-w-xs group">
+                    <i class="fas fa-search absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-indigo-600 text-[8px] sm:text-[10px]"></i>
+                    <input type="text" id="quizSearch" placeholder="Search quizzes.." 
+                           class="w-full pl-8 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-2.5 bg-slate-50 border border-slate-200 rounded-lg sm:rounded-xl text-xs font-medium placeholder:text-slate-300 focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
+                </div>
+                
+                <div class="flex items-center gap-2 sm:gap-4 w-full md:w-auto">
                     <div class="relative w-full md:w-64">
-    
-                    <!-- Selected -->
-                    <button 
-                        type="button"
-                        onclick="toggleSubjects()"
-                        class="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium placeholder:text-slate-300 focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none"
-                    >
-                        <span id="selectedSubject" class="text-xs font-semibold text-slate-700">
-                            ALL SUBJECTS
-                        </span>
+                        <div class="relative w-full">
+        
+                        <!-- Selected -->
+                        <button 
+                            type="button"
+                            onclick="toggleSubjects()"
+                            class="w-full flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 bg-white border border-slate-200 rounded-lg sm:rounded-xl text-xs font-medium placeholder:text-slate-300 focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none truncate"
+                        >
+                            <span id="selectedSubject" class="text-xs font-semibold text-slate-700 truncate">
+                                ALL SUBJECTS
+                            </span>
 
-                        <i class="fas fa-chevron-down text-xs text-slate-400"></i>
-                    </button>
+                            <i class="fas fa-chevron-down text-xs text-slate-400 flex-shrink-0 ml-2"></i>
+                        </button>
 
-                    <!-- Dropdown -->
-                    <div 
-                        id="subjectsDropdown"
-                        class="hidden absolute z-50 mt-2 w-full bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden"
-                    >
-                    <div 
-                        onclick="selectSubject('', 'ALL SUBJECTS')"
-                        class="px-4 py-3 text-xs text-slate-700 hover:bg-indigo-50 cursor-pointer transition"
-                    >
-                        ALL SUBJECTS
-                    </div>
-
-                    @foreach($subjects as $subject)
+                        <!-- Dropdown -->
                         <div 
+                            id="subjectsDropdown"
+                            class="hidden absolute z-50 mt-2 w-full bg-white border border-slate-200 rounded-lg sm:rounded-2xl shadow-xl overflow-hidden"
+                        >
+                        <div 
+                            onclick="selectSubject('', 'ALL SUBJECTS')"
+                            class="px-3 sm:px-4 py-2 sm:py-3 text-xs text-slate-700 hover:bg-indigo-50 cursor-pointer transition"
+                        >
+                            ALL SUBJECTS
+                        </div>
+
+                        @foreach($subjects as $subject)
+                            <div 
                             onclick="selectSubject('{{ $subject->id }}', '{{ strtoupper($subject->subject_name) }}')"
                             class="px-4 py-3 text-xs text-slate-700 hover:bg-indigo-50 cursor-pointer transition border-t border-slate-100"
                         >
@@ -316,211 +318,486 @@
 @section('scripts')
 <script>
 
-    // ─────────────────────────────────────────
-    // CSRF TOKEN
-    // ─────────────────────────────────────────
-    function getCsrfToken() {
-        return document
-            .querySelector('meta[name="csrf-token"]')
-            .getAttribute('content');
+document.addEventListener('DOMContentLoaded',()=>{
+
+    // ===========================
+    // ELEMENTS
+    // ===========================
+
+    const searchInput=
+    document.getElementById(
+    'quizSearch'
+    );
+
+    const subjectFilter=
+    document.getElementById(
+    'subjectInput'
+    );
+
+    const statusFilter=
+    document.getElementById(
+    'statusFilter'
+    );
+
+    const countDisplay=
+    document.getElementById(
+    'quizCount'
+    );
+
+    const tableBody=
+    document.querySelector(
+    '#quizTable tbody'
+    );
+
+    let quizRows=[
+        ...document.querySelectorAll(
+        '.quiz-row'
+        )
+    ];
+
+
+
+    // ===========================
+    // TOAST
+    // ===========================
+
+    function toast(message,type='success'){
+
+        let div=
+        document.createElement(
+        'div'
+        );
+
+        div.className=`
+        fixed top-5 right-5 z-[9999]
+        px-5 py-3 rounded-xl
+        text-white font-semibold
+        shadow-xl transition-all
+        duration-500
+        ${type==='success'
+        ?'bg-emerald-500'
+        :'bg-rose-500'}
+        `;
+
+        div.innerHTML=message;
+
+        document.body.appendChild(
+        div
+        );
+
+        setTimeout(()=>{
+
+            div.classList.add(
+            'opacity-0',
+            'translate-x-10'
+            );
+
+        },2500);
+
+        setTimeout(()=>{
+
+            div.remove();
+
+        },3000);
+
     }
 
-    // ─────────────────────────────────────────
-    // ELEMENTS
-    // ─────────────────────────────────────────
-    const searchInput   = document.getElementById('quizSearch');
 
-    // IMPORTANT
-    const subjectFilter = document.getElementById('subjectInput');
-    const statusFilter  = document.getElementById('statusFilter');
 
-    const quizRows      = document.querySelectorAll('.quiz-row');
-    const countDisplay  = document.getElementById('quizCount');
+    // ===========================
+    // SEARCH DEBOUNCE
+    // ===========================
 
-    // ─────────────────────────────────────────
-    // FILTER LOGIC
-    // ─────────────────────────────────────────
-    function applyFilters() {
+    function debounce(
+        func,
+        delay
+    ){
 
-        const searchQuery = searchInput.value.toLowerCase().trim();
-        const subjectValue = subjectFilter.value;
-        const statusValue  = statusFilter.value;
+        let timer;
 
-        let visibleCount = 0;
+        return function(){
 
-        quizRows.forEach(row => {
+            clearTimeout(timer);
 
-            const title   = row.getAttribute('data-title');
-            const subject = row.getAttribute('data-subject');
-            const status  = row.getAttribute('data-status');
+            timer=setTimeout(
+                ()=>func(),
+                delay
+            );
 
-            const matchesSearch =
-                title.includes(searchQuery);
+        };
 
-            const matchesSubject =
-                subjectValue === '' ||
-                subject === subjectValue;
+    }
 
-            const matchesStatus =
-                statusValue === '' ||
-                status === statusValue;
 
-            if (
-                matchesSearch &&
-                matchesSubject &&
-                matchesStatus
-            ) {
 
-                row.style.display = '';
+    // ===========================
+    // EMPTY ROW
+    // ===========================
+
+    function emptyState(){
+
+        let existing=
+        document.getElementById(
+        'emptyResultRow'
+        );
+
+        if(existing){
+
+            existing.remove();
+
+        }
+
+        const visible=
+        quizRows.filter(
+        row=>
+        row.style.display!==
+        'none'
+        );
+
+        if(
+            visible.length===0
+        ){
+
+            const tr=
+            document.createElement(
+            'tr'
+            );
+
+            tr.id=
+            'emptyResultRow';
+
+            tr.innerHTML=`
+
+            <td colspan="5"
+            class="py-12 text-center">
+
+            <div class="flex flex-col items-center">
+
+            <i class="fas fa-folder-open text-3xl text-slate-300 mb-3"></i>
+
+            <p class="font-semibold text-slate-500">
+            No quizzes found
+            </p>
+
+            </div>
+
+            </td>
+
+            `;
+
+            tableBody.appendChild(
+            tr
+            );
+
+        }
+
+    }
+
+
+
+    // ===========================
+    // FILTER
+    // ===========================
+
+    function applyFilters(){
+
+        const search=
+        searchInput.value
+        .toLowerCase()
+        .trim();
+
+        const subject=
+        subjectFilter.value;
+
+        const status=
+        statusFilter.value;
+
+        let visibleCount=0;
+        let rowNumber=1;
+
+        quizRows.forEach(row=>{
+
+            let title=
+            row.dataset.title||'';
+
+            let subjectId=
+            row.dataset.subject||'';
+
+            let statusData=
+            row.dataset.status||'';
+
+            let subjectText=
+            row.querySelector(
+            'span.text-\\[11px\\]'
+            )
+            ?.innerText
+            .toLowerCase()
+            ||'';
+
+            let matchSearch=
+
+            title.includes(search)
+            ||
+            subjectText.includes(
+            search
+            );
+
+            let matchSubject=
+
+            subject==='' ||
+            subject===subjectId;
+
+            let matchStatus=
+
+            status==='' ||
+            status===statusData;
+
+            if(
+            matchSearch &&
+            matchSubject &&
+            matchStatus
+            ){
+
+                row.style.display='';
+
+                row.style.opacity=1;
+
+                row.cells[0]
+                .innerText=
+                rowNumber++ +'.';
+
                 visibleCount++;
 
-            } else {
+            }
 
-                row.style.display = 'none';
+            else{
+
+                row.style.display=
+                'none';
 
             }
 
         });
 
-        countDisplay.textContent = visibleCount;
+        countDisplay.innerText=
+        visibleCount;
+
+        emptyState();
+
     }
 
-    // ─────────────────────────────────────────
-    // SEARCH EVENT
-    // ─────────────────────────────────────────
+
+
     searchInput.addEventListener(
-        'keyup',
-        applyFilters
+
+    'input',
+
+    debounce(
+    applyFilters,
+    250
+    )
+
     );
 
-    // ─────────────────────────────────────────
-    // SUBJECT DROPDOWN
-    // ─────────────────────────────────────────
-    function toggleSubjects() {
+
+
+    // ===========================
+    // SUBJECT
+    // ===========================
+
+    window.toggleSubjects=
+    ()=>{
 
         document
-            .getElementById('subjectsDropdown')
-            .classList.toggle('hidden');
-    }
+        .getElementById(
+        'subjectsDropdown'
+        )
+        .classList.toggle(
+        'hidden'
+        );
 
-    function selectSubject(id, name) {
+    };
 
-        document.getElementById(
-            'selectedSubject'
-        ).innerText = name;
 
-        document.getElementById(
-            'subjectInput'
-        ).value = id;
+    window.selectSubject=
+    (id,name)=>{
 
         document
-            .getElementById('subjectsDropdown')
-            .classList.add('hidden');
+        .getElementById(
+        'selectedSubject'
+        )
+        .innerText=name;
+
+        subjectFilter.value=id;
+
+        document
+        .getElementById(
+        'subjectsDropdown'
+        )
+        .classList.add(
+        'hidden'
+        );
 
         applyFilters();
-    }
 
-    // ─────────────────────────────────────────
-    // STATUS DROPDOWN
-    // ─────────────────────────────────────────
-    function toggleStatusDropdown() {
+    };
 
-        document
-            .getElementById('statusDropdown')
-            .classList.toggle('hidden');
-    }
 
-    function selectStatus(value, label) {
 
-        document.getElementById(
-            'statusFilter'
-        ).value = value;
+    // ===========================
+    // STATUS
+    // ===========================
 
-        document.getElementById(
-            'selectedStatus'
-        ).innerText = label;
+    window.toggleStatusDropdown=
+    ()=>{
 
         document
-            .getElementById('statusDropdown')
-            .classList.add('hidden');
+        .getElementById(
+        'statusDropdown'
+        )
+        .classList.toggle(
+        'hidden'
+        );
+
+    };
+
+
+    window.selectStatus=
+    (value,label)=>{
+
+        statusFilter.value=
+        value;
+
+        document
+        .getElementById(
+        'selectedStatus'
+        )
+        .innerText=
+        label;
+
+        document
+        .getElementById(
+        'statusDropdown'
+        )
+        .classList.add(
+        'hidden'
+        );
 
         applyFilters();
-    }
 
-    // ─────────────────────────────────────────
-    // CLOSE DROPDOWN WHEN CLICK OUTSIDE
-    // ─────────────────────────────────────────
-    document.addEventListener('click', function(e) {
+    };
 
-        const subjectDropdown =
-            document.getElementById('subjectsDropdown');
 
-        const statusDropdown =
-            document.getElementById('statusDropdown');
 
-        // SUBJECT
-        if (
-            !e.target.closest('#subjectsDropdown') &&
-            !e.target.closest('[onclick="toggleSubjects()"]')
-        ) {
-            subjectDropdown.classList.add('hidden');
+    // ===========================
+    // CLICK OUTSIDE
+    // ===========================
+
+    document.addEventListener(
+    'click',
+    e=>{
+
+        if(
+        !e.target.closest(
+        '#subjectsDropdown,#selectedSubject'
+        )
+        ){
+
+            document
+            .getElementById(
+            'subjectsDropdown'
+            )
+            .classList.add(
+            'hidden'
+            );
+
         }
 
-        // STATUS
-        if (
-            !e.target.closest('#statusDropdown') &&
-            !e.target.closest('[onclick="toggleStatusDropdown()"]')
-        ) {
-            statusDropdown.classList.add('hidden');
+        if(
+        !e.target.closest(
+        '#statusDropdown,#selectedStatus'
+        )
+        ){
+
+            document
+            .getElementById(
+            'statusDropdown'
+            )
+            .classList.add(
+            'hidden'
+            );
+
         }
 
     });
 
-    // ─────────────────────────────────────────
-    // DELETE QUIZ
-    // ─────────────────────────────────────────
-    document.addEventListener('click', function (e) {
 
-        const btn = e.target.closest('.btn-delete-quiz');
 
-        if (!btn) return;
+    // ===========================
+    // DELETE
+    // ===========================
 
-        const id    = btn.dataset.id;
-        const title = btn.dataset.title;
+    let deleting=false;
+
+    document.addEventListener(
+    'click',
+    function(e){
+
+        const btn=
+        e.target.closest(
+        '.btn-delete-quiz'
+        );
+
+        if(
+        !btn ||
+        deleting
+        ) return;
+
+        deleting=true;
+
+        const id=
+        btn.dataset.id;
+
+        const title=
+        btn.dataset.title;
 
         window.premiumConfirm(
 
-            'Permanently remove "' +
-            title +
-            '"? This will also delete all student answers and results for this quiz.',
+        `Delete "${title}"? Student attempts and results will also be removed.`,
 
-            function() {
+        function(){
 
-                const form =
-                    document.getElementById(
-                        'singleDeleteForm'
-                    );
+            const form=
+            document.getElementById(
+            'singleDeleteForm'
+            );
 
-                form.action =
-                    '{{ url("quizzes") }}/' + id;
+            form.action=
+            `{{ url('quizzes') }}/${id}`;
 
-                const tokenInput =
-                    form.querySelector(
-                        'input[name="_token"]'
-                    );
+            form.submit();
 
-                if (tokenInput) {
-                    tokenInput.value =
-                        getCsrfToken();
-                }
+        },
 
-                form.submit();
-            },
+        'Delete Quiz'
 
-            'Remove Quiz?'
         );
 
+        setTimeout(()=>{
+
+            deleting=false;
+
+        },1000);
+
     });
+
+
+
+    // initial
+
+    applyFilters();
+
+});
 
 </script>
 @endsection

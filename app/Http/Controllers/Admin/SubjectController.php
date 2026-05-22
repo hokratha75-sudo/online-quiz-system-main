@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Traits\CSVExportTrait;
 
-
 class SubjectController extends Controller
 {
     use CSVExportTrait;
@@ -103,7 +102,6 @@ class SubjectController extends Controller
     public function destroy(Subject $subject)
     {
         $subject->delete();
-
         return redirect()->route('admin.subjects.index')
             ->with('success', 'Subject deleted successfully.');
     }
@@ -112,7 +110,6 @@ class SubjectController extends Controller
     {
         $subject = Subject::withTrashed()->findOrFail($id);
         $subject->restore();
-
         return redirect()->route('admin.subjects.index')
             ->with('success', 'Subject restored successfully.');
     }
@@ -155,60 +152,126 @@ class SubjectController extends Controller
         return $this->exportCSV($headers, $data, 'subjects_data.csv');
     }
 
+    /**
+     * Display courses for the public courses page.
+     * This method handles /courses route.
+     * ONLY shows courses the student is actually enrolled in.
+     */
     public function myCourses(Request $request)
     {
         $user = Auth::user();
-        $isStudent = (int)$user->role_id === 3;
+        $userRole = $user->role_id == 1 ? 'admin' : ($user->role_id == 2 ? 'teacher' : 'student');
+        $isStudent = $userRole == 'student';
         
         $query = Subject::with(['major.department', 'classes' => function($q) {
             $q->withCount('students');
-        }]);
+        }, 'quizzes']);
             
         // Apply Search Filter
         $search = $request->get('search');
         if (!empty($search)) {
             $query->where(function ($q) use ($search) {
                 $q->where('subjects.subject_name', 'LIKE', "%{$search}%")
-                  ->orWhere('subjects.code', 'LIKE', "%{$search}%");
+                ->orWhere('subjects.code', 'LIKE', "%{$search}%");
             });
         }
 
-        // Admins see everything, students/teachers see their assigned courses only
-        if ((int)$user->role_id !== 1) {
+        // For STUDENTS: ONLY show courses they are ENROLLED IN (no department courses)
+        if ($isStudent) {
+            // Get enrolled subject IDs through class enrollment
+            $enrolledSubjectIds = ClassModel::whereHas('students', function($q) use ($user) {
+                $q->where('user_id', $user->id);
+            })->with('subjects')->get()->flatMap(function($class) {
+                return $class->subjects->pluck('id');
+            })->unique()->toArray();
+            
+            // If no enrolled subjects, return empty collection
+            if (empty($enrolledSubjectIds)) {
+                $subjects = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 12);
+            } else {
+                $query->whereIn('subjects.id', $enrolledSubjectIds);
+                $subjects = $query->latest()->paginate(12)->appends(['search' => $search]);
+            }
+            
+            $dashboardTitle = 'My Courses';
+        } 
+        // For TEACHERS: show subjects they created OR are assigned to
+        elseif ($userRole == 'teacher') {
             $query->where(function($q) use ($user) {
-                // 1. Check Class-based enrollment (pivot table)
-                $q->whereHas('classes.users', function($query) use ($user) {
+                $q->where('subjects.created_by', $user->id)
+                ->orWhereHas('classes.users', function($query) use ($user) {
                     $query->where('users.id', $user->id);
                 });
-                
-                // 2. Check Department-based enrollment (Master Enrollment feature)
-                if ($user->department_id) {
-                    $q->orWhere('subjects.department_id', $user->department_id);
-                }
             });
+            $subjects = $query->latest()->paginate(12)->appends(['search' => $search]);
+            $dashboardTitle = 'Course Management';
+        } 
+        // For ADMIN: show all subjects
+        else {
+            $subjects = $query->latest()->paginate(12)->appends(['search' => $search]);
+            $dashboardTitle = 'Course Management';
         }
-            
-        $subjects = $query->latest()->paginate(12)->appends(['search' => $search]);
-        $dashboardTitle = $isStudent ? 'My Course' : 'Manage Courses';
         
-        return view('courses.index', compact('subjects', 'dashboardTitle', 'isStudent'));
+        return view('courses.index', compact('subjects', 'dashboardTitle', 'userRole', 'isStudent'));
     }
 
+    /**
+     * Display a single course detail page.
+     * This method handles /courses/{subject} route.
+     */
     public function showCourse(Subject $subject)
     {
+        $user = Auth::user();
+        $userRole = $user->role_id == 1 ? 'admin' : ($user->role_id == 2 ? 'teacher' : 'student');
+        
+        // Load relationships
         $subject->load([
             'department',
             'major.department',
             'classes' => function ($query) {
                 $query->withCount('students')->with('major');
             },
-            'quizzes.creator',
+            'quizzes' => function($q) {
+                $q->orderBy('opened_at', 'desc');
+            },
             'materials.creator',
         ]);
+        
+        // Check if student is enrolled (FULL access)
+        $isEnrolled = false;
+        if ($userRole == 'student') {
+            $isEnrolled = ClassModel::whereHas('students', function($q) use ($user) {
+                $q->where('user_id', $user->id);
+            })->whereHas('subjects', function($q) use ($subject) {
+                $q->where('subject_id', $subject->id);
+            })->exists();
+            
+            // If not enrolled, check if it's a department course (show locked page)
+            if (!$isEnrolled && $user->department_id) {
+                $isDepartmentCourse = Subject::where('id', $subject->id)
+                    ->where('department_id', $user->department_id)
+                    ->exists();
+                    
+                if ($isDepartmentCourse) {
+                    // Show a special locked page for department courses
+                    return view('courses.locked', compact('subject', 'userRole'));
+                }
+            }
+        } else {
+            $isEnrolled = true; // Admin/Teacher always have access
+        }
 
-        $dashboardTitle = 'Course Detail';
-        $userRole = Auth::user()->role_id == 1 ? 'admin' : (Auth::user()->role_id == 2 ? 'teacher' : 'student');
+        $dashboardTitle = $subject->subject_name;
+        
+        // Get completed quizzes for enrolled students
+        $completedQuizIds = [];
+        if ($userRole == 'student' && $isEnrolled) {
+            $completedQuizIds = \App\Models\Result::where('user_id', $user->id)
+                ->whereIn('quiz_id', $subject->quizzes->pluck('id'))
+                ->pluck('quiz_id')
+                ->toArray();
+        }
 
-        return view('courses.show', compact('subject', 'dashboardTitle', 'userRole'));
+        return view('courses.show', compact('subject', 'dashboardTitle', 'userRole', 'isEnrolled', 'completedQuizIds'));
     }
 }

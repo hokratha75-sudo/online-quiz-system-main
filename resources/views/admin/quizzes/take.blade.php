@@ -29,76 +29,76 @@
 <div class="min-h-screen bg-[#fafafa] select-none font-sans" oncontextmenu="return false;">
     
     <!-- Top Header -->
-    <header class="bg-white border-b border-slate-200 z-50 shadow-sm relative">
-        <div class="max-w-[1400px] mx-auto px-6 h-[72px] flex items-center justify-between">
+    <header class="bg-white border-b border-slate-200 z-50 shadow-sm relative sticky top-0">
+        <div class="w-full max-w-none sm:max-w-[1400px] mx-auto px-3 sm:px-6 h-auto sm:h-[72px] py-3 sm:py-0 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
             <!-- Left: Icon & Info -->
-            <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-lg bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20">
-                    <i class="fas fa-book-open text-lg"></i>
+            <div class="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
+                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 flex-shrink-0">
+                    <i class="fas fa-book-open text-xs sm:text-lg"></i>
                 </div>
-                <div>
-                    <h1 class="font-heading text-slate-900 font-bold text-lg tracking-tight leading-tight">{{ $quiz->title }}</h1>
-                    <p class="text-slate-500 text-xs font-medium">{{ $quiz->subject?->subject_name ?? 'Programming' }} • {{ $quiz->questions->count() }} questions</p>
+                <div class="min-w-0">
+                    <h1 class="font-heading text-slate-900 font-bold text-sm sm:text-lg tracking-tight leading-tight truncate">{{ $quiz->title }}</h1>
+                    <p class="text-slate-500 text-[10px] sm:text-xs font-medium truncate">{{ $quiz->subject?->subject_name ?? 'Programming' }} • {{ $quiz->questions->count() }} questions</p>
                 </div>
             </div>
 
             <!-- Right: Timer -->
-            <div class="flex items-center gap-3 bg-white border border-slate-200 px-4 py-2 rounded-xl shadow-sm">
-                <i class="far fa-clock text-slate-400 text-sm"></i>
-                <div class="flex flex-col items-center">
-                    <div id="quizTimer" class="text-sm font-bold text-slate-800 tabular-nums leading-none tracking-wide mb-1">00:00</div>
-                    <div class="w-full h-1 bg-slate-100 rounded-full">
-                        <div id="timerProgress" class="h-1 bg-indigo-500 rounded-full transition-all duration-1000" style="width: 100%"></div>
+            <div class="flex items-center gap-2 sm:gap-3 bg-white border border-slate-200 px-3 sm:px-4 py-2 rounded-lg sm:rounded-xl shadow-sm flex-shrink-0 w-full sm:w-auto justify-end sm:justify-start">
+                <i class="far fa-clock text-slate-400 text-xs sm:text-sm"></i>
+                <div class="flex flex-col items-end sm:items-center">
+                    <div id="quizTimer" class="text-xs sm:text-sm font-bold text-slate-800 tabular-nums leading-none tracking-wide">00:00</div>
+                    <div class="w-16 sm:w-20 h-0.5 sm:h-1 bg-slate-100 rounded-full mt-1 hidden sm:block">
+                        <div id="timerProgress" class="h-full bg-indigo-500 rounded-full transition-all duration-1000" style="width: 100%"></div>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="max-w-[768px] mx-auto px-4 py-8 pb-32">
+    <main class="w-full max-w-none sm:max-w-[768px] mx-auto px-3 sm:px-4 py-4 sm:py-8 pb-40 sm:pb-32">
         <form id="quizForm" action="{{ auth()->user()->role_id == 3 ? route('students.quizzes.submit', $quiz->id) : route('quizzes.submit', $quiz->id) }}" method="POST">
             @csrf
             
-            <div class="mb-4 flex justify-end">
-                <button type="button" class="flex items-center gap-2 text-slate-400 hover:text-slate-600 transition-colors text-sm font-medium">
-                    <i class="far fa-flag"></i> Flag for review
+            <div class="mb-3 sm:mb-4 flex justify-end">
+                <button type="button" class="flex items-center gap-2 text-slate-400 hover:text-slate-600 transition-colors text-xs sm:text-sm font-medium">
+                    <i class="far fa-flag text-xs"></i> Flag for review
                 </button>
             </div>
 
-            <div class="mb-6">
-                <div class="flex justify-between items-end mb-3">
-                    <div class="text-slate-500 text-[13px] font-medium">
+            <div class="mb-4 sm:mb-6">
+                <div class="flex justify-between items-end mb-2 sm:mb-3">
+                    <div class="text-slate-500 text-[11px] sm:text-[13px] font-medium">
                         Question <span id="currentQText">1</span> of {{ $quiz->questions->count() }}
                     </div>
-                    <div class="text-slate-500 text-[13px] font-medium">
+                    <div class="text-slate-500 text-[11px] sm:text-[13px] font-medium">
                         <span id="percentText">0%</span> complete
                     </div>
                 </div>
-                <div class="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
+                <div class="h-1 sm:h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
                     <div id="qProgressBar" class="h-full bg-indigo-500 transition-all duration-500 ease-out" style="width: 0%"></div>
                 </div>
             </div>
 
             <div class="relative">
                 @foreach($quiz->questions as $index => $question)
-                <div class="question-pane absolute w-full transition-all duration-300 opacity-0 invisible translate-x-4 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm" data-index="{{ $index }}" id="q-{{ $index }}">
+                <div class="question-pane absolute w-full transition-all duration-300 opacity-0 invisible translate-x-4 bg-white p-3 sm:p-6 md:p-8 rounded-lg sm:rounded-2xl border border-slate-200 shadow-sm" data-index="{{ $index }}" id="q-{{ $index }}">
                     
-                    <div class="flex justify-between items-center mb-6">
-                        <div class="inline-flex items-center gap-2 bg-indigo-50 text-indigo-500 px-3 py-1.5 rounded-full text-xs font-semibold">
-                            <i class="far fa-question-circle"></i> Multiple Choice
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+                        <div class="inline-flex items-center gap-2 bg-indigo-50 text-indigo-500 px-2 sm:px-3 py-1.5 rounded-full text-xs font-semibold flex-shrink-0">
+                            <i class="far fa-question-circle text-xs"></i> <span class="hidden sm:inline">Multiple Choice</span>
                         </div>
-                        <div class="inline-flex items-center bg-teal-50 text-teal-500 px-3 py-1.5 rounded-full text-xs font-semibold">
+                        <div class="inline-flex items-center bg-teal-50 text-teal-500 px-2 sm:px-3 py-1.5 rounded-full text-xs font-semibold flex-shrink-0">
                             {{ $question->points ?? 10 }} pts
                         </div>
                     </div>
 
-                    <div class="font-heading text-[20px] font-bold text-dark-gray leading-relaxed mb-8">
+                    <div class="font-heading text-base sm:text-lg md:text-xl font-bold text-dark-gray leading-relaxed mb-4 sm:mb-8">
                         {!! $question->content !!}
                     </div>
 
-                    <div class="space-y-3 choice-group" data-question-id="{{ $question->id }}">
+                    <div class="space-y-2 sm:space-y-3 choice-group" data-question-id="{{ $question->id }}">
                         @foreach($question->answers as $ansIndex => $answer)
-                        <label class="option-card group relative flex items-center cursor-pointer w-full p-4 bg-white border border-slate-200 rounded-xl hover:border-indigo-300 transition-all">
+                        <label class="option-card group relative flex items-start sm:items-center cursor-pointer w-full p-2.5 sm:p-4 bg-white border border-slate-200 rounded-lg sm:rounded-xl hover:border-indigo-300 transition-all">
                             <input type="radio" 
                                    name="responses[{{ $question->id }}]" 
                                    value="{{ $answer->id }}" 
@@ -106,11 +106,11 @@
                                    onchange="handleAnswerChange(this)"
                                    required>
                             
-                            <div class="option-visual flex items-center gap-4 w-full">
-                                <div class="option-letter w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-[13px] font-bold text-slate-500 transition-colors uppercase">
+                            <div class="option-visual flex items-start sm:items-center gap-2 sm:gap-4 w-full">
+                                <div class="option-letter w-7 h-7 sm:w-10 sm:h-10 rounded-lg bg-slate-100 flex items-center justify-center text-[10px] sm:text-[13px] font-bold text-slate-500 transition-colors uppercase flex-shrink-0 mt-0.5 sm:mt-0">
                                     {{ chr(65 + $ansIndex) }}
                                 </div>
-                                <div class="option-text flex-grow text-[16px] font-medium text-dark-gray transition-colors">
+                                <div class="option-text flex-grow text-sm sm:text-base font-medium text-dark-gray transition-colors leading-snug">
                                     {{ $answer->answer_text }}
                                 </div>
                             </div>
@@ -122,32 +122,32 @@
             </div>
 
             <!-- Bottom Navigation Bar -->
-            <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-[100] py-4">
-                <div class="max-w-[1000px] mx-auto px-6 flex flex-col items-center">
-                    <div class="w-full flex items-center justify-between mb-2">
+            <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-[100] py-3 sm:py-4">
+                <div class="w-full max-w-none sm:max-w-[1000px] mx-auto px-3 sm:px-6 flex flex-col items-center gap-2 sm:gap-3">
+                    <div class="w-full flex items-center justify-between gap-1 sm:gap-4">
                         
-                        <button type="button" id="prevBtn" class="px-4 py-2 rounded-lg font-medium text-sm text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-all disabled:opacity-0 flex items-center gap-2 border border-slate-100">
-                             <i class="fas fa-chevron-left text-xs"></i> Previous
+                        <button type="button" id="prevBtn" class="px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg font-medium text-xs sm:text-sm text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-all disabled:opacity-0 flex items-center gap-1 sm:gap-2 border border-slate-100 flex-shrink-0">
+                             <i class="fas fa-chevron-left text-[10px] sm:text-xs"></i> <span class="hidden sm:inline">Previous</span>
                         </button>
                         
-                        <div class="flex gap-1.5">
+                        <div class="flex gap-1 overflow-x-auto px-1 py-1 max-w-[calc(100vw-120px)] sm:max-w-none">
                             @foreach($quiz->questions as $index => $question)
-                                <button type="button" class="pagination-dot w-8 h-8 rounded-full flex items-center justify-center text-[13px] font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors" data-index="{{ $index }}">
+                                <button type="button" class="pagination-dot w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[10px] sm:text-[13px] font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors flex-shrink-0" data-index="{{ $index }}">
                                     {{ $index + 1 }}
                                 </button>
                             @endforeach
                         </div>
 
-                        <div class="flex items-center gap-3">
-                            <button type="button" id="nextBtn" class="px-5 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium text-sm transition-all flex items-center gap-2 shadow-sm">
-                                Next <i class="fas fa-chevron-right text-xs"></i>
+                        <div class="flex items-center gap-1 sm:gap-3 flex-shrink-0">
+                            <button type="button" id="nextBtn" class="px-3 sm:px-5 py-1.5 sm:py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium text-xs sm:text-sm transition-all flex items-center gap-1 sm:gap-2 shadow-sm">
+                                <span class="hidden sm:inline">Next</span> <i class="fas fa-chevron-right text-[10px] sm:text-xs"></i>
                             </button>
-                            <button type="submit" id="submitBtn" class="hidden px-5 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium text-sm transition-all flex items-center gap-2 shadow-sm">
+                            <button type="submit" id="submitBtn" class="hidden px-3 sm:px-5 py-1.5 sm:py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium text-xs sm:text-sm transition-all flex items-center gap-1 sm:gap-2 shadow-sm whitespace-nowrap">
                                 Finish
                             </button>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 text-[13px] font-medium text-slate-500">
+                    <div class="flex items-center gap-2 text-[10px] sm:text-[13px] font-medium text-slate-500 w-full justify-center">
                         <i class="far fa-check-circle text-emerald-500"></i> <span id="answeredCount">0</span> / {{ $quiz->questions->count() }}
                     </div>
                 </div>

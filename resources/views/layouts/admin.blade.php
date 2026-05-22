@@ -54,14 +54,23 @@
 
         /* === Clean Standard UI System (Requested) === */
         .card-standard { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03); }
-        .card-header-standard { background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 20px 28px; }
-        .card-header-standard h3 { font-size: 16px; font-weight: 700; color: #0f172a; margin: 0; letter-spacing: -0.01em; }
+        .card-header-standard { background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 16px 16px; }
+        .card-header-standard h3 { font-size: 14px; font-weight: 700; color: #0f172a; margin: 0; letter-spacing: -0.01em; }
+        @media (min-width: 640px) {
+            .card-header-standard { padding: 20px 28px; }
+            .card-header-standard h3 { font-size: 16px; }
+        }
         
-        .table-standard { width: 100%; border-collapse: collapse; border-top: 1px solid #e2e8f0; }
-        .table-standard th { background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 14px 20px; text-align: left; font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
-        .table-standard td { border-bottom: 1px solid #f1f5f9; padding: 16px 20px; font-size: 13px; color: #334155; vertical-align: middle; }
+        .table-standard { width: 100%; border-collapse: collapse; border-top: 1px solid #e2e8f0; font-size: 12px; }
+        .table-standard th { background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 10px 12px; text-align: left; font-size: 10px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
+        .table-standard td { border-bottom: 1px solid #f1f5f9; padding: 12px; font-size: 12px; color: #334155; vertical-align: middle; }
         .table-standard tr:last-child td { border-bottom: none; }
         .table-standard tr:hover { background: #f8fafc; }
+        @media (min-width: 640px) {
+            .table-standard { font-size: 13px; }
+            .table-standard th { padding: 14px 20px; font-size: 11px; }
+            .table-standard td { padding: 16px 20px; font-size: 13px; }
+        }
 
         /* Sidebar Base */
         .sidebar-item { text-decoration: none !important; }
@@ -413,14 +422,14 @@
     
 @unless($hideTopbar ?? ($hideSidebar ?? false))
     <!-- របារផ្នែកខាងលើ (Topbar) ប្រើ Glassmorphism Style -->
-    <header class="sticky md:sticky md:top-0 top-20 z-40 flex h-16 items-center justify-between border-b border-neutral-200 bg-slate-100 px-6 py-2 md:px-10">
-        <div class="flex items-center gap-4">
-            <h2 class="text-lg font-semibold text-slate-800 tracking-tight flex items-center gap-2">
+    <header class="sticky md:sticky md:top-0 top-20 z-40 flex h-auto md:h-16 items-center justify-between border-b border-neutral-200 bg-slate-100 px-4 sm:px-6 py-2 md:py-2 md:px-10 gap-2 md:gap-6 flex-wrap md:flex-nowrap">
+        <div class="flex items-center gap-2 md:gap-4 flex-1 min-w-0">
+            <h2 class="text-sm md:text-lg font-semibold text-slate-800 tracking-tight flex items-center gap-2 truncate">
                 @yield('topbar-title', 'Dashboard')
             </h2>
         </div>
         
-        <div class="flex items-center gap-6">
+        <div class="flex items-center gap-3 md:gap-6 ml-auto">
             <!-- Notification Dropdown (Alpine + Tailwind) -->
             <div x-data="{ 
                 open: false, 
@@ -428,65 +437,65 @@
                 addNotification(notif) {
                     this.unreadCount++;
                     const toast = document.createElement('div');
-                    toast.className = 'fixed bottom-6 right-6 bg-slate-900 border border-slate-800 text-white px-5 py-4 rounded-xl shadow-2xl flex items-center gap-4 z-[9999] transform transition-all duration-300 translate-y-10 opacity-0';
-                    toast.innerHTML = `<div class='w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 shrink-0'><i class='${notif.icon || 'fas fa-bell'}'></i></div> <div><p class='text-sm font-bold tracking-tight'>${notif.title}</p><p class='text-xs text-slate-400 mt-0.5 leading-snug'>${notif.message}</p></div>`;
+                    toast.className = 'fixed bottom-6 right-6 bg-slate-900 border border-slate-800 text-white px-4 sm:px-5 py-3 sm:py-4 rounded-xl shadow-2xl flex items-center gap-3 sm:gap-4 z-[9999] transform transition-all duration-300 translate-y-10 opacity-0 max-w-[90vw] sm:max-w-none';
+                    toast.innerHTML = `<div class='w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 shrink-0'><i class='${notif.icon || 'fas fa-bell'}'></i></div> <div><p class='text-xs sm:text-sm font-bold tracking-tight'>${notif.title}</p><p class='text-[10px] sm:text-xs text-slate-400 mt-0.5 leading-snug'>${notif.message}</p></div>`;
                     document.body.appendChild(toast);
                     setTimeout(() => { toast.classList.remove('translate-y-10', 'opacity-0'); }, 10);
                     setTimeout(() => { toast.classList.add('translate-y-10', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 6000);
                 }
             }" @new-notification.window="addNotification($event.detail)" class="relative">
-                <button @click="open = !open" @click.away="open = false" class="relative w-10 h-10 border-none rounded-full  bg-slate-100/50 hover:bg-slate-200/90 text-slate-500 hover:text-slate-800 transition-colors flex items-center justify-center">
-                    <i class="fas fa-bell text-xl"></i>
-                    <span x-show="unreadCount > 0" x-cloak style="display: none;" class="absolute top-2 right-2.5 w-2 h-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+                <button @click="open = !open" @click.away="open = false" class="relative w-8 h-8 sm:w-10 sm:h-10 border-none rounded-full bg-slate-100/50 hover:bg-slate-200/90 text-slate-500 hover:text-slate-800 transition-colors flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-bell text-base sm:text-xl"></i>
+                    <span x-show="unreadCount > 0" x-cloak style="display: none;" class="absolute top-2 right-2 sm:right-2.5 w-2 h-2 rounded-full bg-red-500 ring-2 ring-white"></span>
                 </button>
 
-                <div x-show="open" x-transition.opacity.scale.95 style="display: none;" class="absolute right-0 mt-3 w-80 bg-white rounded shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden z-50">
-                    <div class="p-3 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
-                    <h3 class="text-sm font-semibold tracking-tight text-slate-800">Notifications</h3>
-                                                                        <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-600"><span x-text="unreadCount"></span> new</span>
+                <div x-show="open" x-transition.opacity.scale.95 style="display: none;" class="absolute right-0 mt-2 sm:mt-3 w-72 sm:w-80 bg-white rounded shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden z-50 max-h-[60vh] sm:max-h-auto flex flex-col">
+                    <div class="p-2 sm:p-3 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between flex-shrink-0">
+                    <h3 class="text-xs sm:text-sm font-semibold tracking-tight text-slate-800">Notifications</h3>
+                                                                        <span class="text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-600"><span x-text="unreadCount"></span> new</span>
                     </div>
                     
-                    <div class="max-h-[300px] overflow-y-auto custom-scrollbar">
+                    <div class="max-h-[300px] overflow-y-auto custom-scrollbar flex-1">
                         @if($authUser && $authUser->unreadNotifications->count() > 0)
                             @foreach($authUser->unreadNotifications->take(5) as $notification)
-                                <a href="#" onclick="event.preventDefault(); document.getElementById('notif-{{ $notification->id }}').submit();" class="block px-5 py-4 border-b border-slate-50 hover:bg-slate-50 transition-colors">
-                                    <div class="flex gap-3">
-                                        <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 {{ ($notification->data['type'] ?? '') == 'success' ? 'bg-indigo-100 text-indigo-600' : 'bg-indigo-100 text-indigo-600' }}">
-                                            <i class="fas fa-bell text-xs"></i>
+                                <a href="#" onclick="event.preventDefault(); document.getElementById('notif-{{ $notification->id }}').submit();" class="block px-4 sm:px-5 py-3 sm:py-4 border-b border-slate-50 hover:bg-slate-50 transition-colors">
+                                    <div class="flex gap-2 sm:gap-3">
+                                        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center shrink-0 {{ ($notification->data['type'] ?? '') == 'success' ? 'bg-indigo-100 text-indigo-600' : 'bg-indigo-100 text-indigo-600' }}">
+                                            <i class="fas fa-bell text-[10px] sm:text-xs"></i>
                                         </div>
-                                        <div>
-                                            <p class="text-sm font-bold text-slate-900 uppercase tracking-tight">{{ $notification->data['title'] ?? 'Alert' }}</p>
-                                            <p class="text-xs text-slate-900 font-medium uppercase mt-1 leading-snug break-words opacity-60">{{ $notification->data['message'] ?? '' }}</p>
-                                            <p class="text-[10px] font-bold text-indigo-600 mt-2 uppercase tracking-widest tabular-nums">{{ $notification->created_at->diffForHumans() }}</p>
+                                        <div class="min-w-0 flex-1">
+                                            <p class="text-xs sm:text-sm font-bold text-slate-900 uppercase tracking-tight truncate">{{ $notification->data['title'] ?? 'Alert' }}</p>
+                                            <p class="text-[11px] sm:text-xs text-slate-900 font-medium uppercase mt-0.5 sm:mt-1 leading-snug break-words opacity-60">{{ $notification->data['message'] ?? '' }}</p>
+                                            <p class="text-[9px] sm:text-[10px] font-bold text-indigo-600 mt-1 sm:mt-2 uppercase tracking-widest tabular-nums">{{ $notification->created_at->diffForHumans() }}</p>
                                         </div>
                                     </div>
                                 </a>
                                 <form id="notif-{{ $notification->id }}" action="{{ route('notifications.markAsRead', $notification->id) }}" method="POST" class="hidden">@csrf</form>
                             @endforeach
-                            <form action="{{ route('notifications.markAllRead') }}" method="POST" class="p-2 border-t border-slate-100 text-center">
+                            <form action="{{ route('notifications.markAllRead') }}" method="POST" class="p-2 border-t border-slate-100 text-center flex-shrink-0">
                                 @csrf
                                 <button type="submit" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 p-2">Mark all as read</button>
                             </form>
                         @else
-                            <div class="p-8 text-center">
-                                <i class="fas fa-bell-slash text-slate-300 text-xl mb-3"></i>
-                                                                                                <p class="text-sm text-slate-500 font-medium tracking-tight">You're caught up!</p>
+                            <div class="p-6 sm:p-8 text-center flex-shrink-0">
+                                <i class="fas fa-bell-slash text-slate-300 text-lg sm:text-xl mb-2 sm:mb-3"></i>
+                                                                                                <p class="text-xs sm:text-sm text-slate-500 font-medium tracking-tight">You're caught up!</p>
                             </div>
                         @endif
                     </div>
                 </div>
             </div>
 
-            <!-- Profile Info -->
+            <!-- Profile Info - Hidden on very small screens -->
             <button 
                 type="button" 
                 onclick="window.location='{{ route('profile.edit') }}'"
-                class="group flex items-center gap-3 border-none bg-transparent 
-                text-sm font-semibold text-gray-600 
-                hover:scale-[1.02] transition-all duration-200 ease-in-out"
+                class="hidden sm:flex group items-center gap-2 md:gap-3 border-none bg-transparent 
+                text-xs md:text-sm font-semibold text-gray-600 
+                hover:scale-[1.02] transition-all duration-200 ease-in-out flex-shrink-0"
             >
                 <!-- Icon -->
-                <div class="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-lg overflow-hidden">
+                <div class="w-5 h-5 md:w-6 md:h-6 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-lg overflow-hidden flex-shrink-0">
                     @if($authUser && $authUser->profile_photo)
                         <img src="{{ asset('storage/' . $authUser->profile_photo) }}"
                             alt="Avatar"
@@ -496,8 +505,8 @@
                     @endif
                 </div>
 
-                <!-- Username -->
-                <span>{{ $authUser->username ?? 'Profile' }}</span>
+                <!-- Username - Hidden on small screens -->
+                <span class="hidden md:inline truncate">{{ $authUser->username ?? 'Profile' }}</span>
             </button>
         </div>
     </header>
