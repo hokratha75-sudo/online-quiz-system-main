@@ -95,8 +95,9 @@ class QuizController extends Controller
             ]));
         }
 
-        $rolePrefix = auth()->user()->isAdmin() ? 'admin' : 'teacher';
-        return redirect()->route($rolePrefix . '.quizzes.edit', $quiz->id)->with('success', 'Quiz created! You can now add questions.');
+        // Admin routes use the "admin." prefix. Teachers use non-prefixed routes.
+        $rolePrefix = auth()->user()->isAdmin() ? 'admin' : '';
+        return redirect()->route(($rolePrefix ? $rolePrefix . '.' : '') . 'quizzes.edit', $quiz->id)->with('success', 'Quiz created! You can now add questions.');
     }
 
     public function edit(Quiz $quiz)
@@ -145,8 +146,8 @@ class QuizController extends Controller
             ]));
         }
 
-        $rolePrefix = auth()->user()->isAdmin() ? 'admin' : 'teacher';
-        return redirect()->route($rolePrefix . '.quizzes.index')->with('success', 'Quiz updated successfully.');
+        $rolePrefix = auth()->user()->isAdmin() ? 'admin' : '';
+        return redirect()->route(($rolePrefix ? $rolePrefix . '.' : '') . 'quizzes.index')->with('success', 'Quiz updated successfully.');
     }
 
     public function show(Quiz $quiz)
@@ -234,7 +235,7 @@ class QuizController extends Controller
             ->first();
 
         if (!$attempt) {
-            $fallback = auth()->user()->role_id == 3 ? route('students.dashboard') : (auth()->user()->isAdmin() ? route('admin.quizzes.index') : route('teacher.quizzes.index'));
+            $fallback = auth()->user()->role_id == 3 ? route('students.dashboard') : (auth()->user()->isAdmin() ? route('admin.quizzes.index') : route('quizzes.index'));
             return redirect($fallback)->with('error', 'Could not process quiz submission. No active attempt found.');
         }
 
@@ -314,13 +315,13 @@ class QuizController extends Controller
                 'title' => 'New Submission',
                 'message' => $msg,
                 'icon' => $needsManualGrading ? 'fas fa-exclamation-circle' : 'fas fa-check-circle',
-                'url' => auth()->user()->isAdmin() ? route('admin.quizzes.index') : route('teacher.quizzes.index')
+                'url' => auth()->user()->isAdmin() ? route('admin.quizzes.index') : route('quizzes.index')
             ]));
         }
 
         $resultRoute = auth()->user()->role_id == 3
             ? route('students.quizzes.result', $attempt->id)
-            : (auth()->user()->isAdmin() ? route('admin.quizzes.show', $quiz->id) : route('teacher.quizzes.show', $quiz->id));
+            : (auth()->user()->isAdmin() ? route('admin.quizzes.show', $quiz->id) : route('quizzes.show', $quiz->id));
 
         return redirect($resultRoute);
     }
@@ -798,12 +799,12 @@ class QuizController extends Controller
             $quiz->delete();
             DB::commit();
 
-            $rolePrefix = auth()->user()->isAdmin() ? 'admin' : 'teacher';
-            return redirect()->route($rolePrefix . '.quizzes.index')->with('success', 'Quiz deleted successfully.');
+            $rolePrefix = auth()->user()->isAdmin() ? 'admin' : '';
+            return redirect()->route(($rolePrefix ? $rolePrefix . '.' : '') . 'quizzes.index')->with('success', 'Quiz deleted successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
-            $rolePrefix = auth()->user()->isAdmin() ? 'admin' : 'teacher';
-            return redirect()->route($rolePrefix . '.quizzes.index')->with('error', 'Failed to delete quiz: ' . $e->getMessage());
+            $rolePrefix = auth()->user()->isAdmin() ? 'admin' : '';
+            return redirect()->route(($rolePrefix ? $rolePrefix . '.' : '') . 'quizzes.index')->with('error', 'Failed to delete quiz: ' . $e->getMessage());
         }
     }
 

@@ -81,7 +81,9 @@
 <div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 font-inter text-slate-900 custom-scrollbar">
 
     @php
-        $routePrefix = ($userRole === 'admin') ? 'admin.' : (($userRole === 'teacher') ? 'teacher.' : 'students.');
+        // Quizzes routes are not namespaced under "admin." or "teacher." —
+        // only students use the "students." prefix. Use no prefix for admin/teacher.
+        $routePrefix = ($userRole === 'student') ? 'students.' : '';
     @endphp
 
     <!-- Header Section -->

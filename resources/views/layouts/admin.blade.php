@@ -322,8 +322,8 @@
                     </div>
                     <span class="text-sm font-bold tracking-tight">Courses</span>
                 </a>
-                <a href="{{ route('admin.questions.bank') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('questions.bank') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                     <a href="{{ route('questions.bank') }}" 
+                         class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('questions.bank') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('questions.bank') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
                         <i class="fas fa-folder-open text-[16px]"></i>
                     </div>

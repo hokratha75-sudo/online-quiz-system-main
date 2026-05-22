@@ -177,6 +177,17 @@ Route::middleware(['auth'])->group(function () {
         Route::get('enrollments', [ClassEnrollmentController::class, 'index'])->name('enrollments.index');
         Route::get('enrollments/{department}/manage', [ClassEnrollmentController::class, 'manage'])->name('enrollments.manage');
         Route::put('enrollments/{department}', [ClassEnrollmentController::class, 'update'])->name('enrollments.update');
+
+        // Quizzes (admin-prefixed) - mirrors teacher/admin shared quiz routes but under /admin
+        Route::get('quizzes/export', [QuizController::class, 'export'])->name('quizzes.export');
+        Route::post('quizzes/bulk-delete', [QuizController::class, 'bulkDelete'])->name('quizzes.bulkDelete');
+        Route::get('quizzes/{attempt}/result', [QuizController::class, 'result'])->name('quizzes.result');
+        Route::post('quizzes/{attempt}/grade', [QuizController::class, 'grade'])->name('quizzes.grade');
+        Route::get('quizzes/{quiz}/take', [QuizController::class, 'take'])->name('quizzes.take');
+        Route::post('quizzes/{quiz}/submit', [QuizController::class, 'submit'])->name('quizzes.submit');
+        Route::post('quizzes/attempts/{attempt}/violation', [QuizController::class, 'recordViolation'])->name('quizzes.violation');
+        Route::resource('quizzes', QuizController::class);
+        Route::get('reports', [QuizController::class, 'reports'])->name('quizzes.reports');
     });
 
     // --- TEACHER & ADMIN (Role 1, 2) ---

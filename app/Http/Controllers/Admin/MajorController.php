@@ -22,7 +22,8 @@ class MajorController extends Controller
      */
     public function index(Request $request)
     {
-        $tab = $request->get('tab', 'departments');
+        // Default to 'majors' so the Majors page shows majors list by default
+        $tab = $request->get('tab', 'majors');
         $search = $request->get('search');
         $userRole = 'admin';
         $dashboardTitle = 'Academic Structure Management';
@@ -386,7 +387,7 @@ class MajorController extends Controller
     public function export(Request $request)
     {
         try {
-            $tab = $request->get('tab', 'departments');
+            $tab = $request->get('tab', 'majors');
             $data = [];
             $headers = [];
             $filename = "{$tab}_export_" . date('Y-m-d') . ".csv";
