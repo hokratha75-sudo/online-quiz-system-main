@@ -14,11 +14,11 @@
         </div>
         
         <div class="flex items-center gap-4">
-            <a href="{{ route('admin.enrollments.index') }}" class="h-10 px-6 bg-white border border-slate-200 text-slate-600 hover:text-indigo-600 hover:border-indigo-100 transition-all text-[10px] font-bold uppercase tracking-widest flex items-center gap-2">
-                <i class="fas fa-arrow-left text-[9px]"></i> Back
+            <a href="{{ route('admin.enrollments.index') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm focus:outline-none focus:ring-0">
+                <i class="fas fa-arrow-left text-[10px]"></i> Back
             </a>
-            <button type="button" class="h-10 px-6 bg-indigo-600 hover:bg-indigo-700 text-white transition-all text-[10px] font-bold uppercase tracking-widest flex items-center gap-2" data-bs-toggle="modal" data-bs-target="#enrolUsersModal">
-                <i class="fas fa-plus text-[9px]"></i> Manage Access
+            <button type="button" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm active:scale-[0.98] border-none focus:outline-none focus:ring-0" data-bs-toggle="modal" data-bs-target="#enrolUsersModal">
+                <i class="fas fa-plus text-[10px]"></i> Manage Access
             </button>
         </div>
     </div>

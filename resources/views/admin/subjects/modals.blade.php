@@ -6,9 +6,7 @@
                 <h5 class="text-xl font-bold text-white tracking-tight flex items-center gap-3" id="modalTitle">
                     <i class="fas fa-book text-indigo-200"></i> Add Subject
                 </h5>
-                <button type="button" class="text-indigo-200 hover:text-white transition-colors" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="fas fa-times"></i>
-                </button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             
             <form action="{{ route('admin.subjects.store') }}" method="POST" class="p-6">

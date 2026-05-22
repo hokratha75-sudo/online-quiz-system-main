@@ -71,11 +71,11 @@
                 <i class="fas fa-file-excel text-emerald-500"></i> Export
             </a>
             @if($tab == 'majors')
-                <button data-bs-toggle="modal" data-bs-target="#addMajorModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg shadow-indigo-600/20 active:scale-[0.98] border-none">
+                <button data-bs-toggle="modal" data-bs-target="#addMajorModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm active:scale-[0.98] border-none">
                     <i class="fas fa-plus text-xs text-indigo-200"></i> New Major
                 </button>
             @elseif($tab == 'classes')
-                <button data-bs-toggle="modal" data-bs-target="#addClassModal" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium tracking-wide text-white transition hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                <button data-bs-toggle="modal" data-bs-target="#addClassModal" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium tracking-wide text-white transition hover:bg-indigo-700 focus:outline-none focus:ring-0 shadow-none" style="box-shadow:none!important;outline:none!important;">
                     <i class="fas fa-plus text-xs text-indigo-200"></i> New Class
                 </button>
             @endif

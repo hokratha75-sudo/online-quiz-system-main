@@ -30,7 +30,7 @@
                     </select>
                 </div>
                 <div class="flex flex-col gap-3">
-                    <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 active:scale-[0.98] transition-all">
+                    <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-xl font-bold text-sm shadow-sm hover:bg-indigo-700 active:scale-[0.98] transition-all focus:outline-none focus:ring-0">
                         ទាញយក Score Report
                     </button>
                     <button type="submit" name="listname" value="1" class="w-full bg-white text-slate-700 border border-slate-200 py-3 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all">

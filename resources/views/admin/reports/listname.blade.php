@@ -122,12 +122,12 @@
 
         <!-- Floating Action Bar -->
         <div class="fixed bottom-10 left-1/2 -translate-x-1/2 no-print bg-white/80 backdrop-blur-2xl border border-slate-200 px-8 py-4 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] flex gap-4 items-center">
-            <button onclick="window.print()" class="bg-brand text-white px-10 py-3.5 rounded-[1.2rem] font-black text-[11px] uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center gap-3 shadow-xl shadow-brand/20 active:scale-95">
-                <i class="fas fa-print"></i> Print List
-            </button>
-            <a href="{{ request()->fullUrlWithQuery(['export' => 'excel']) }}" class="bg-emerald-500 text-white px-8 py-3.5 rounded-[1.2rem] font-black text-[11px] uppercase tracking-widest hover:bg-emerald-600 transition-all flex items-center gap-3 shadow-xl shadow-emerald-500/20 active:scale-95">
-                <i class="fas fa-file-excel"></i> Export Excel
-            </a>
+                <button onclick="window.print()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold text-[11px] uppercase tracking-widest hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-sm active:scale-95 focus:outline-none focus:ring-0" style="box-shadow: none !important; outline: none !important;">
+                    <i class="fas fa-print"></i> Print
+                </button>
+                <a href="{{ request()->fullUrlWithQuery(['export' => 'excel']) }}" class="bg-white text-slate-700 border border-slate-200 px-4 py-2 rounded-lg font-bold text-[11px] uppercase tracking-widest hover:bg-slate-50 transition-all flex items-center gap-2 shadow-sm focus:outline-none focus:ring-0" style="box-shadow: none !important; outline: none !important;">
+                    <i class="fas fa-file-excel text-emerald-500"></i> Export
+                </a>
             <button onclick="window.close()" class="bg-slate-100 text-slate-500 px-8 py-3.5 rounded-[1.2rem] font-black text-[11px] uppercase tracking-widest hover:bg-slate-200 transition-all active:scale-95">
                 Close
             </button>

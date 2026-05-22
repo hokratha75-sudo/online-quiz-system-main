@@ -102,7 +102,7 @@
                 <button onclick="window.print()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-6 py-2.5 rounded-2xl text-[11px] font-bold transition-all flex items-center gap-2 shadow-sm uppercase tracking-widest">
                     <i class="fas fa-print text-slate-400"></i> Print
                 </button>
-                <button type="button" @click="$dispatch('open-export-modal')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-2xl text-[11px] font-bold transition-all flex items-center gap-2 shadow-xl shadow-indigo-600/20 active:scale-[0.98] uppercase tracking-widest">
+                <button type="button" @click="$dispatch('open-export-modal')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-lg text-[11px] font-bold transition-all flex items-center gap-2 shadow-sm active:scale-95 uppercase tracking-widest focus:outline-none focus:ring-0" style="box-shadow:none!important;outline:none!important;">
                     <i class="fas fa-file-export"></i> Export
                 </button>
             </div>
@@ -412,7 +412,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <button type="button" @click="isOpen = false" class="px-6 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all uppercase tracking-widest">
                         Cancel
                     </button>
-                    <button type="submit" @click="isOpen = false" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shadow-lg shadow-indigo-600/20 active:scale-95 uppercase tracking-widest">
+                    <button type="submit" @click="isOpen = false" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shadow-sm active:scale-95 uppercase tracking-widest focus:outline-none focus:ring-0">
                         <i class="fas fa-file-export"></i> Download CSV
                     </button>
                 </div>

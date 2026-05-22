@@ -47,13 +47,13 @@
             <p class="text-sm font-medium text-slate-400 mt-2">Manage administrative departments and institutional faculties.</p>
         </div>
         <div class="flex items-center justify-end gap-3">
-            <button onclick="window.location.reload()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm">
+            <button onclick="window.location.reload()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm focus:outline-none focus:ring-0">
                 <i class="fas fa-sync-alt text-slate-400"></i> Refresh
             </button>
-            <a href="{{ route('admin.departments.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm no-underline">
+            <a href="{{ route('admin.departments.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm no-underline focus:outline-none focus:ring-0">
                 <i class="fas fa-file-excel text-emerald-500"></i> Export
             </a>
-            <button data-bs-toggle="modal" data-bs-target="#addDeptModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg shadow-indigo-600/20 active:scale-[0.98] border-none">
+            <button data-bs-toggle="modal" data-bs-target="#addDeptModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-none active:scale-[0.98] border-none focus:outline-none focus:ring-0" style="box-shadow:none!important;outline:none!important;">
                 <i class="fas fa-plus text-white/80"></i> New Department
             </button>
         </div>

@@ -10,11 +10,16 @@
         </div>
         
         <div class="flex items-center gap-4">
-            <a href="{{ route('admin.subjects.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-6 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-3 shadow-sm uppercase tracking-widest">
-                <i class="fas fa-file-export text-slate-400 text-sm"></i> Export
+            <button onclick="window.location.reload()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm focus:outline-none focus:ring-0">
+                <i class="fas fa-sync-alt text-slate-400"></i> Refresh
+            </button>
+
+            <a href="{{ route('admin.subjects.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-sm focus:outline-none focus:ring-0">
+                <i class="fas fa-file-excel text-emerald-500"></i> Export
             </a>
-            <button data-bs-toggle="modal" data-bs-target="#addSubjectModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-7 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-3 shadow-xl shadow-indigo-600/20 active:scale-[0.98] uppercase tracking-widest">
-                <i class="fas fa-plus"></i> New Subject
+
+            <button data-bs-toggle="modal" data-bs-target="#addSubjectModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 shadow-none active:scale-[0.98] border-none focus:outline-none focus:ring-0" style="box-shadow:none!important;outline:none!important;">
+                <i class="fas fa-plus text-white/80"></i> New Subject
             </button>
         </div>
     </div>
@@ -39,24 +44,19 @@
 
     <!-- Search & Control Bar -->
     <div class="flex flex-col md:flex-row items-center justify-between gap-8 mb-10">
-        <div class="relative w-full md:w-[480px] group">
-            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors"></i>
-            <input type="text" id="subjectSearch" placeholder="SEARCH SUBJECTS..." 
-                   class="w-full h-14 pl-14 pr-6 bg-white border border-slate-200 text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all placeholder:text-slate-300 rounded-[20px] shadow-sm uppercase tracking-widest">
+        <div class="relative w-full md:w-[480px]">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" style="width:18px;height:18px;">
+                <path d="M21 21l-4.35-4.35"></path>
+                <circle cx="11" cy="11" r="7"></circle>
+            </svg>
+            <input type="text" id="subjectSearch" placeholder="Search subjects..." 
+                   class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium placeholder:text-slate-300 focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all outline-none">
         </div>
         
         <div class="flex items-center gap-6">
             <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] px-6 py-2.5 bg-slate-100 rounded-full">
                 {{ $subjects->count() }} Total Units
             </span>
-            <div class="flex items-center gap-3">
-                <button onclick="editSelected()" class="w-11 h-11 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:border-indigo-500 transition-all shadow-sm">
-                    <i class="fas fa-pen-to-square text-lg"></i>
-                </button>
-                <button onclick="deleteSelected()" class="w-11 h-11 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-slate-400 hover:text-rose-600 hover:border-rose-500 transition-all shadow-sm">
-                    <i class="fas fa-trash-can text-lg"></i>
-                </button>
-            </div>
         </div>
     </div>
 
@@ -111,7 +111,9 @@
                             </div>
                         </td>
                         <td>
-                            <span class="label-standard label-blue">CREDITS: {{ $item->credits ?? 3 }}</span>
+                            <span class="inline-flex items-center justify-center px-3 py-1 rounded-md text-[11px] font-bold bg-blue-500 text-white tracking-widest shadow-sm">
+                                CREDITS: {{ $item->credits ?? 3 }}
+                            </span>
                         </td>
                         <td class="text-center">
                             <div class="flex items-center justify-center gap-3">

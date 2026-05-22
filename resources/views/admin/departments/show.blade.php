@@ -20,7 +20,7 @@
             <a href="{{ route('admin.departments.index') }}" class="h-10 px-6 bg-white border border-slate-200 text-slate-600 hover:text-indigo-600 hover:border-indigo-100 transition-all text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 shadow-sm rounded-2xl">
                 <i class="fas fa-arrow-left text-[9px]"></i> Directory
             </a>
-            <a href="{{ route('admin.departments.edit', $department->id) }}" class="h-10 px-6 bg-indigo-600 hover:bg-indigo-700 text-white transition-all text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-indigo-600/20 rounded-2xl">
+            <a href="{{ route('admin.departments.edit', $department->id) }}" class="h-10 px-6 bg-indigo-600 hover:bg-indigo-700 text-white transition-all text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 shadow-sm rounded-2xl focus:outline-none focus:ring-0">
                 <i class="fas fa-edit text-[9px]"></i> Edit Dept
             </a>
         </div>

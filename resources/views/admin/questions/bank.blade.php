@@ -13,7 +13,7 @@
             <a href="{{ route('admin.questions.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-6 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-3 shadow-sm uppercase tracking-widest">
                 <i class="fas fa-file-export text-slate-400 text-sm"></i> Export CSV
             </a>
-            <a href="{{ route('admin.quizzes.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-7 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-3 shadow-xl shadow-indigo-600/20 active:scale-[0.98] uppercase tracking-widest">
+            <a href="{{ route('admin.quizzes.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-7 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-3 shadow-sm active:scale-[0.98] uppercase tracking-widest focus:outline-none focus:ring-0">
                 <i class="fas fa-plus"></i> Create Question
             </a>
         </div>
