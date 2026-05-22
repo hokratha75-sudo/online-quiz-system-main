@@ -13,7 +13,7 @@
 <div class="max-w-[1600px] mx-auto p-6 md:p-10 font-inter bg-slate-50/30 min-h-screen">
     
     <!-- Stepper Navigation -->
-    <div class="flex items-center justify-center max-w-[1500px] mx-auto gap-12 mb-10 overflow-x-auto pb-4 scrollbar-hide">
+    {{-- <div class="flex items-center justify-center max-w-[1500px] mx-auto gap-12 mb-10 overflow-x-auto pb-4 scrollbar-hide">
         <div class="flex items-center gap-3 shrink-0">
             <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow-lg shadow-indigo-200">1</div>
             <span class="text-sm font-semibold text-slate-900 tracking-tight">Configuration</span>
@@ -28,7 +28,7 @@
             <div class="w-8 h-8 rounded-full bg-white border-2 border-slate-200 text-slate-400 flex items-center justify-center text-xs font-bold">3</div>
             <span class="text-sm font-semibold text-slate-500 tracking-tight">Questions</span>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Header -->
     <div class="flex items-center gap-5 mb-8">

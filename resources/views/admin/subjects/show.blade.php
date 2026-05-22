@@ -103,7 +103,7 @@
                         <span class="px-3 py-1.5 rounded-lg {{ $quiz->status === 'active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-slate-100 text-slate-400 border-slate-200' }} text-[9px] font-bold uppercase tracking-widest border shadow-sm transition-all tabular-nums">
                             {{ $quiz->status }}
                         </span>
-                        <a href="{{ route('quizzes.show', $quiz->quiz_id) }}" class="w-10 h-10 rounded-xl bg-white border border-slate-100 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all flex items-center justify-center active:scale-95 shadow-sm">
+                        <a href="{{ route('admin.quizzes.show', $quiz->quiz_id) }}" class="w-10 h-10 rounded-xl bg-white border border-slate-100 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all flex items-center justify-center active:scale-95 shadow-sm">
                             <i class="fas fa-arrow-right text-[10px]"></i>
                         </a>
                     </div>

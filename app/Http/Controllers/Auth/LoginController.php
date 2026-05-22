@@ -42,9 +42,9 @@ class LoginController extends Controller
             Auth::login($user);
 
             if ((int)$user->role_id === 1) {
-                return redirect()->route('admin.dashboard');
+                return redirect()->route('dashboard');
             } elseif ((int)$user->role_id === 3) {
-                return redirect()->route('students.dashboard');
+                return redirect()->route('dashboard');
             } else {
                 return redirect()->route('dashboard');
             }

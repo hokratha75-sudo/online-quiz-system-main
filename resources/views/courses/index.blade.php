@@ -339,6 +339,8 @@
     </div>
     @endif
 
+<div class="mt-8">
+    {{ $subjects->links() }}
 </div>
 
 <style>

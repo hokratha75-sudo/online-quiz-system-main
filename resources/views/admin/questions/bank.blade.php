@@ -163,14 +163,24 @@
         </div>
         
         <!-- Pagination Footer -->
-        <div class="px-6 py-4 border-t border-slate-200 flex items-center justify-between">
-            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
-                ITEMS {{ $questions->firstItem() }} - {{ $questions->lastItem() }} OF {{ $questions->total() }}
-            </p>
-            <div class="pagination-clean">
-                {{ $questions->links() }}
+        @if($questions->hasPages())
+        <div class="px-4 py-3 border-t border-slate-50 bg-slate-100/80 flex flex-col md:flex-row items-center justify-between gap-4">
+            <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
+                Showing: {{ $questions->firstItem() ?? 0 }} - {{ $questions->lastItem() ?? 0 }} of {{ $questions->total() }} Questions
+            </span>
+            <div class="custom-pagination flex items-center">
+                {{ $questions->links('pagination::bootstrap-5') }}
             </div>
         </div>
+        @else
+            @if($questions->total() > 0)
+            <div class="p-4 border-t border-slate-50 bg-slate-100/80 flex flex-col md:flex-row items-center justify-between gap-4">
+                <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
+                    Displaying all <span class="font-medium text-slate-700">{{ $questions->total() }}</span> questions
+                </span>
+            </div>
+            @endif
+        @endif
     </div>
 </div>
 

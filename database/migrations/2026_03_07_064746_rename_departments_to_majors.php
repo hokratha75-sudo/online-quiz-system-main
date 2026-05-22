@@ -11,52 +11,114 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Rename table
-        Schema::rename('departments', 'majors');
+        // Rename only if departments exists and majors doesn't
+        if (
+            Schema::hasTable('departments') &&
+            !Schema::hasTable('majors')
+        ) {
+            Schema::rename('departments', 'majors');
+        }
 
-        // Update majors table
-        Schema::table('majors', function (Blueprint $table) {
-            $table->string('code', 20)->after('name')->nullable();
-            $table->text('description')->after('code')->nullable();
-            $table->softDeletes();
-        });
+        // Update majors table safely
+        if (Schema::hasTable('majors')) {
+            Schema::table('majors', function (Blueprint $table) {
 
-        // Update related tables only if they exist to keep migrations idempotent
-        if (Schema::hasTable('class_models') && Schema::hasColumn('class_models', 'department_id')) {
+                if (!Schema::hasColumn('majors', 'code')) {
+                    $table->string('code', 20)
+                          ->after('name')
+                          ->nullable();
+                }
+
+                if (!Schema::hasColumn('majors', 'description')) {
+                    $table->text('description')
+                          ->after('code')
+                          ->nullable();
+                }
+
+                if (!Schema::hasColumn('majors', 'deleted_at')) {
+                    $table->softDeletes();
+                }
+            });
+        }
+
+        // Rename foreign key in class_models
+        if (
+            Schema::hasTable('class_models') &&
+            Schema::hasColumn('class_models', 'department_id') &&
+            !Schema::hasColumn('class_models', 'major_id')
+        ) {
             Schema::table('class_models', function (Blueprint $table) {
                 $table->renameColumn('department_id', 'major_id');
             });
         }
 
-        if (Schema::hasTable('subjects') && !Schema::hasColumn('subjects', 'major_id')) {
+        // Add major_id to subjects
+        if (
+            Schema::hasTable('subjects') &&
+            !Schema::hasColumn('subjects', 'major_id')
+        ) {
             Schema::table('subjects', function (Blueprint $table) {
-                $table->foreignId('major_id')->nullable()->after('id')->constrained('majors')->nullOnDelete();
+                $table->foreignId('major_id')
+                    ->nullable()
+                    ->after('id')
+                    ->constrained('majors')
+                    ->nullOnDelete();
             });
         }
     }
 
     /**
-     * Reverse the migrations.
+     * Reverse migrations.
      */
     public function down(): void
     {
-        if (Schema::hasTable('subjects') && Schema::hasColumn('subjects', 'major_id')) {
+        if (
+            Schema::hasTable('subjects') &&
+            Schema::hasColumn('subjects', 'major_id')
+        ) {
             Schema::table('subjects', function (Blueprint $table) {
-                $table->renameColumn('major_id', 'department_id');
+                $table->dropForeign(['major_id']);
+                $table->dropColumn('major_id');
             });
         }
 
-        if (Schema::hasTable('class_models') && Schema::hasColumn('class_models', 'major_id')) {
+        if (
+            Schema::hasTable('class_models') &&
+            Schema::hasColumn('class_models', 'major_id')
+        ) {
             Schema::table('class_models', function (Blueprint $table) {
                 $table->renameColumn('major_id', 'department_id');
             });
         }
 
-        Schema::table('majors', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-            $table->dropColumn(['code', 'description']);
-        });
+        if (Schema::hasTable('majors')) {
+            Schema::table('majors', function (Blueprint $table) {
 
-        Schema::rename('majors', 'departments');
+                if (Schema::hasColumn('majors', 'deleted_at')) {
+                    $table->dropSoftDeletes();
+                }
+
+                $columns = [];
+
+                if (Schema::hasColumn('majors', 'code')) {
+                    $columns[] = 'code';
+                }
+
+                if (Schema::hasColumn('majors', 'description')) {
+                    $columns[] = 'description';
+                }
+
+                if (!empty($columns)) {
+                    $table->dropColumn($columns);
+                }
+            });
+        }
+
+        if (
+            Schema::hasTable('majors') &&
+            !Schema::hasTable('departments')
+        ) {
+            Schema::rename('majors', 'departments');
+        }
     }
 };

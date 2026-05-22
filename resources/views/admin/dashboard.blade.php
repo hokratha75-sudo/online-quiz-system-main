@@ -214,7 +214,7 @@
                 <div class="space-y-3">
                     @forelse(array_slice($recentQuizzes, 0, 3) as $quiz)
                     <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer" 
-                         onclick="window.location='{{ route('quizzes.show', $quiz['id'] ?? '#') }}'">
+                         onclick="window.location='{{ route('admin.quizzes.show', $quiz['id'] ?? '#') }}'">
                         <div class="w-9 h-9 rounded-lg bg-indigo-50 flex items-center justify-center flex-shrink-0">
                             @if(!empty($quiz['thumbnail']))
                                 <img src="{{ asset('storage/' . $quiz['thumbnail']) }}" class="w-full h-full object-cover rounded-lg">

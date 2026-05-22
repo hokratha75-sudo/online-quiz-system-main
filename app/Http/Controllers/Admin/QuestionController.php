@@ -178,4 +178,86 @@ class QuestionController extends Controller
 
         return redirect()->back()->with('success', "Successfully removed $deletedCount questions from the bank.");
     }
+    public function update(StoreQuestionRequest $request, Question $question)
+{
+    // Authorization check
+    if (!auth()->user()?->isAdmin() &&
+        (int)$question->quiz->created_by !== (int)auth()->id()) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Unauthorized action.'
+        ], 403);
+    }
+
+    $validated = $request->validated();
+
+    try {
+        DB::beginTransaction();
+
+        // Sanitize content if it's JSON
+        $content = $validated['content'];
+        if (is_string($content) && str_starts_with(trim($content), '{')) {
+            $decoded = json_decode($content, true);
+            if (is_array($decoded) && isset($decoded['content'])) {
+                $content = $decoded['content'];
+            }
+        }
+
+        // Update question basic info
+        $question->update([
+            'content' => $content,
+            'type' => $validated['type'],
+            'points' => $validated['points'],
+            'is_reusable' => $validated['is_reusable'] ?? false,
+        ]);
+
+        // Handle answers based on question type
+        if ($validated['type'] !== 'short_answer') {
+            // Delete old answers first
+            $question->answers()->delete();
+            
+            // Create new answers if options exist
+            if (isset($validated['options']) && is_array($validated['options'])) {
+                foreach ($validated['options'] as $index => $optionText) {
+                    if (!empty(trim($optionText))) {
+                        $isCorrect = isset($validated['correct']) 
+                            && is_array($validated['correct'])
+                            && in_array($index, $validated['correct']);
+                        
+                        Answer::create([
+                            'question_id' => $question->id,
+                            'answer_text' => trim($optionText),
+                            'is_correct' => $isCorrect,
+                        ]);
+                    }
+                }
+            }
+        } else {
+            // For short answer questions, delete all answers
+            $question->answers()->delete();
+        }
+
+        DB::commit();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Question updated successfully.',
+            'question' => $question->fresh()->load('answers')
+        ]);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+
+        Log::error('Question update failed: ' . $e->getMessage(), [
+            'question_id' => $question->id,
+            'user_id' => auth()->id(),
+            'trace' => $e->getTraceAsString()
+        ]);
+
+        return response()->json([
+            'success' => false,
+            'message' => 'System error occurred while updating the question.'
+        ], 500);
+    }
+}
 }

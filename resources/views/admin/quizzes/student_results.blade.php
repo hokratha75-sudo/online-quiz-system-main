@@ -219,7 +219,117 @@
                 </div>
                 @endforeach
             </div>
+<<<<<<< HEAD
+=======
+            @endforeach
         </div>
+    </div>
+    @endif
+
+    <!-- History Core -->
+    <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden">
+        <div class="px-8 py-6 border-b border-slate-50 bg-slate-50/30 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-widest">Exam History</h3>
+                <p class="text-[10px] font-bold text-indigo-600 mt-1 uppercase tracking-tight">Archive of verified assessment records</p>
+            </div>
+            <a href="{{ route('students.dashboard') }}" class="h-11 px-6 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 transition-all shadow-lg shadow-indigo-600/20">
+                <i class="fas fa-plus text-[8px]"></i> New Quiz Attempt
+            </a>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-slate-50">
+                                                <th class="ps-8 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Quiz / Subject</th>
+                        <th class="px-6 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Status</th>
+                        <th class="px-6 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Score</th>
+                        <th class="px-6 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Grade</th>
+                        <th class="px-6 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Timestamp</th>
+                        <th class="pe-8 py-3 text-[10px] font-bold text-indigo-600 uppercase tracking-widest text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50">
+                    @forelse($results as $result)
+                    <tr class="hover:bg-slate-50/50 transition-all group">
+                        <td class="ps-8 py-3">
+                            <div class="text-sm font-bold text-slate-900 uppercase tracking-tight group-hover:text-indigo-600 transition-colors">{{ $result->quiz?->title ?? 'Untitled Sync' }}</div>
+                            <div class="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-widest flex items-center gap-1.5">
+                                <i class="fas fa-tag text-[8px]"></i> {{ $result->quiz?->subject?->subject_name ?? 'SYSTEM UNIT' }}
+                            </div>
+                        </td>
+                        <td class="px-6 py-3">
+                                                        @if($result->is_published === false)
+                                <span class="px-3 py-1 bg-amber-50 text-amber-600 border border-amber-100 rounded-md text-[9px] font-bold uppercase tracking-widest">PENDING REVIEW</span>
+                            @elseif($result->passed)
+                                <span class="px-3 py-1 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-md text-[9px] font-bold uppercase tracking-widest">PASSED</span>
+                            @else
+                                <span class="px-3 py-1 bg-rose-50 text-rose-600 border border-rose-100 rounded-md text-[9px] font-bold uppercase tracking-widest">FAILED</span>
+                            @endif
+                        </td>
+                        <td class="px-6 py-3">
+                            <div class="text-lg font-bold tabular-nums {{ $result->passed ? 'text-emerald-500' : 'text-rose-500' }}">
+                                {{ round($result->score) }}%
+                            </div>
+                        </td>
+                        <td class="px-6 py-3">
+                            @php
+                                $g = 'F';
+                                if($result->score >= 95) $g = 'A+';
+                                elseif($result->score >= 90) $g = 'A';
+                                elseif($result->score >= 85) $g = 'B+';
+                                elseif($result->score >= 80) $g = 'B';
+                                elseif($result->score >= 75) $g = 'C+';
+                                elseif($result->score >= 70) $g = 'C';
+                                elseif($result->score >= 60) $g = 'D';
+
+                                $currGradeColor = $gradeColors[$g] ?? '#cbd5e1';
+                            @endphp
+                            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold text-white shadow-sm uppercase" style="background: {{ $currGradeColor }}">
+                                {{ $g }}
+                            </div>
+                        </td>
+                        <td class="px-6 py-3">
+                            <div class="text-xs font-bold text-slate-900 tabular-nums uppercase">{{ $result->completed_at ? $result->completed_at->format('M d, Y') : 'N/A' }}</div>
+                            <div class="text-[10px] font-bold text-slate-400 mt-1 tabular-nums">{{ $result->completed_at ? $result->completed_at->format('h:i A') : '' }}</div>
+                        </td>
+                        <td class="pe-8 py-3 text-right">
+                            <a href="{{ route('students.quizzes.result', $result->attempt_id) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-xl border border-slate-100 text-slate-400 hover:text-indigo-600 hover:border-indigo-100 hover:bg-indigo-50 transition-all shadow-sm">
+                                <i class="fas fa-arrow-right text-[10px]"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="py-24 text-center">
+                            <div class="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100">
+                                <i class="fas fa-clipboard-list text-2xl"></i>
+                            </div>
+                                                        <h5 class="text-xs font-bold text-slate-400 uppercase tracking-widest">No Exam Records Found</h5>
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        @if($results->hasPages())
+        <div class="px-6 py-4 border-t border-slate-50 bg-slate-50/30 flex flex-col md:flex-row items-center justify-between gap-4">
+            <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
+                Showing: {{ $results->firstItem() ?? 0 }} - {{ $results->lastItem() ?? 0 }} of {{ $results->total() }} Records
+            </span>
+            <div class="custom-pagination flex items-center">
+                {{ $results->links('pagination::bootstrap-5') }}
+            </div>
+>>>>>>> 79c1a1fe496f31be9519289ef8b16203199aa300
+        </div>
+        @else
+            @if($results->total() > 0)
+            <div class="px-6 py-4 border-t border-slate-50 bg-slate-50/30 flex flex-col md:flex-row items-center justify-between gap-4">
+                <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest tabular-nums">
+                    Displaying all <span class="font-medium text-slate-700">{{ $results->total() }}</span> records
+                </span>
+            </div>
+            @endif
         @endif
 
         <!-- Assessment History Table -->

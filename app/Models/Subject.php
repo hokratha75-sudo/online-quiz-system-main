@@ -21,9 +21,18 @@ class Subject extends Model
         $this->attributes['subject_name'] = $value;
     }
 
+    // public function classes()
+    // {
+    //     return $this->belongsToMany(ClassModel::class, 'class_subject')->withTimestamps();
+    // }
     public function classes()
     {
-        return $this->belongsToMany(ClassModel::class, 'class_subject')->withTimestamps();
+        return $this->belongsToMany(
+            ClassModel::class,
+            'class_subject',
+            'subject_id',
+            'class_model_id'
+        );
     }
 
     public function department()

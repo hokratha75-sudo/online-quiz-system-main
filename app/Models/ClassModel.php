@@ -10,16 +10,24 @@ class ClassModel extends Model
 {
     use SoftDeletes;
     protected $fillable = ['code', 'name', 'major_id', 'academic_year'];
-
+    public function subjects()
+{
+    return $this->belongsToMany(
+            Subject::class,
+            'class_subject',
+            'class_model_id',
+            'subject_id'
+        );
+    }
     public function major()
     {
         return $this->belongsTo(Major::class);
     }
 
-    public function subjects()
-    {
-        return $this->belongsToMany(Subject::class, 'class_subject')->withTimestamps();
-    }
+    // public function subjects()
+    // {
+    //     return $this->belongsToMany(Subject::class, 'class_subject')->withTimestamps();
+    // }
 
     public function users()
     {
