@@ -308,7 +308,7 @@
                 <div class="h-px bg-slate-800/50 flex-grow ml-4"></div>
             </div>
             <div class="space-y-1">
-                <a href="{{ route('quizzes.index') }}" 
+                <a href="{{ route('admin.quizzes.index') }}" 
                    class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('quizzes.*') && !request()->routeIs('quizzes.reports') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('quizzes.*') && !request()->routeIs('quizzes.reports') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
                         <i class="fas fa-file-lines text-[16px]"></i>
@@ -322,16 +322,16 @@
                     </div>
                     <span class="text-sm font-bold tracking-tight">Courses</span>
                 </a>
-                <a href="{{ route('questions.bank') }}" 
+                <a href="{{ route('admin.questions.bank') }}" 
                    class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('questions.bank') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('questions.bank') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
                         <i class="fas fa-folder-open text-[16px]"></i>
                     </div>
                     <span class="text-sm font-bold tracking-tight">Question Bank</span>
                 </a>
-                <a href="{{ route('quizzes.reports') }}" 
-                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('quizzes.reports') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('quizzes.reports') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
+                <a href="{{ route('admin.quizzes.reports') }}" 
+                   class="sidebar-item group flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all {{ request()->routeIs('admin.quizzes.reports') ? 'sidebar-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 {{ request()->routeIs('admin.quizzes.reports') ? '' : 'bg-slate-800/40 group-hover:bg-indigo-500/10 group-hover:text-indigo-400' }}">
                         <i class="fas fa-chart-pie text-[16px]"></i>
                     </div>
                     <span class="text-sm font-bold tracking-tight">Reports</span>

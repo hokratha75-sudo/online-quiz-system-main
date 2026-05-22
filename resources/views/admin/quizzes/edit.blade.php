@@ -23,7 +23,7 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div class="flex items-center gap-4">
-            <a href="{{ route('quizzes.index') }}" class="w-12 h-12 rounded-xl border border-slate-200 bg-white flex items-center justify-center text-slate-400 hover:bg-slate-50 transition-all shadow-sm no-underline">
+            <a href="{{ route('admin.quizzes.index') }}" class="w-12 h-12 rounded-xl border border-slate-200 bg-white flex items-center justify-center text-slate-400 hover:bg-slate-50 transition-all shadow-sm no-underline">
                 <i class="fas fa-arrow-left text-xs"></i>
             </a>
             <div>
@@ -48,7 +48,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Configuration Settings -->
         <div class="lg:col-span-1">
-            <form action="{{ route('quizzes.update', $quiz->id) }}" method="POST" class="bg-white rounded-[20px] border border-slate-200/70 shadow-[0_2px_10px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col h-full">
+            <form action="{{ route('admin.quizzes.update', $quiz->id) }}" method="POST" class="bg-white rounded-[20px] border border-slate-200/70 shadow-[0_2px_10px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col h-full">
                 @csrf
                 @method('PUT')
                 
@@ -613,7 +613,7 @@ document.addEventListener('DOMContentLoaded', function () {
             url = `/questions/${editQuestionId}`;
             formData.append('_method', 'PUT');
         } else {
-            url = "{{ route('questions.store') }}";
+            url = "{{ route('admin.questions.store') }}";
         }
         
         formData.append('_token', CSRF);
@@ -730,7 +730,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!confirm('Delete this quiz?')) return;
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = "{{ route('quizzes.destroy', $quiz->id) }}";
+        form.action = "{{ route('admin.quizzes.destroy', $quiz->id) }}";
         form.innerHTML = '<input type="hidden" name="_token" value="{{ csrf_token() }}"><input type="hidden" name="_method" value="DELETE">';
         document.body.appendChild(form);
         form.submit();

@@ -167,7 +167,7 @@
                                     </div>
                                 </td>
                                 <td class="px-8 py-4 text-right">
-                                    <a href="{{ route('quizzes.result', $attempt->id) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-xl border border-slate-100 text-slate-400 hover:text-indigo-600 hover:border-indigo-100 hover:bg-indigo-50 transition-all shadow-sm no-underline">
+                                    <a href="{{ route('admin.quizzes.result', $attempt->id) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-xl border border-slate-100 text-slate-400 hover:text-indigo-600 hover:border-indigo-100 hover:bg-indigo-50 transition-all shadow-sm no-underline">
                                         <i class="fas fa-chevron-right text-[10px]"></i>
                                     </a>
                                 </td>
@@ -228,7 +228,7 @@
                                         </span>
                                     </td>
                                     <td class="px-7 py-4 text-right">
-                                        <a href="{{ route('quizzes.result', $attempt->id) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 text-slate-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50 transition-all">
+                                        <a href="{{ route('admin.quizzes.result', $attempt->id) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-slate-200 text-slate-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50 transition-all">
                                             <i class="fas fa-arrow-right text-xs"></i>
                                         </a>
                                     </td>
@@ -337,7 +337,7 @@
                             <h3 class="font-bold text-slate-800">Instructor Tools</h3>
                             <p class="text-xs text-slate-500 mt-1">Modify quiz parameters</p>
                         </div>
-                        <a href="{{ route('quizzes.edit', $quiz->id) }}" class="flex items-center justify-center gap-3 w-full py-4 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 rounded-xl font-bold transition-all">
+                        <a href="{{ route('admin.quizzes.edit', $quiz->id) }}" class="flex items-center justify-center gap-3 w-full py-4 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 rounded-xl font-bold transition-all">
                             <i class="fas fa-edit text-sm"></i> Edit Quiz
                         </a>
                     @endif
@@ -426,7 +426,7 @@
                         </a>
                     @else
                         <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-5 border-b border-slate-50 pb-3">Management</h3>
-                        <a href="{{ route('quizzes.edit', $quiz->id) }}" class="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold flex items-center justify-center gap-3 shadow-md transition-all text-sm">
+                        <a href="{{ route('admin.quizzes.edit', $quiz->id) }}" class="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold flex items-center justify-center gap-3 shadow-md transition-all text-sm">
                             <i class="fas fa-sliders text-xs"></i> Edit Quiz
                         </a>
                     @endif

@@ -219,12 +219,8 @@
                 </div>
                 @endforeach
             </div>
-<<<<<<< HEAD
-=======
-            @endforeach
         </div>
-    </div>
-    @endif
+        @endif
 
     <!-- History Core -->
     <div class="bg-white rounded-[32px] border border-slate-100 shadow-sm overflow-hidden">

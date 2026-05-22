@@ -23,20 +23,14 @@ class DashboardController extends Controller
         $username = $user->username;
         $dashboardTitle = ucfirst($userRole) . ' Dashboard';
 
-        // Initialize default variables
-        $totalUsers = 0; $totalTeachers = 0; $totalQuizzes = 0; $pendingReviews = 0; $totalDepartments = 0; 
+        $totalUsers = 0; $totalQuizzes = 0; $pendingReviews = 0; $totalDepartments = 0; 
         $newUsers = 0; $recentQuizzes = []; $departmentStats = []; $notifications = [];
         $myQuizzes = 0; $totalAttempts = 0; $avgScore = 0; $draftQuizzes = 0;
-        $weeklyActivity = ['labels' => [], 'quizzes' => [], 'attempts' => []];
-        $recentAttempts = []; $topQuizzes = []; $topPerformer = null;
-        $studentGenderStats = ['Male' => 0, 'Female' => 0];
-        
-        // Student specific variables
-        $availableQuizzes = [];
-        $quizHistory = [];
-        $totalPassed = 0;
-        $highestScore = 0;
-        $streak = 0;
+        $weeklyActivity = ['new_quizzes'=>0,'new_attempts'=>0]; $recentAttempts = []; $topQuizzes = []; $topPerformer = null;
+        $studentGenderStats = [];
+
+        // For Student ONLY show relevant quizzes
+        $studentQuizzes = [];
 
         $totalQuestions = 0; $totalBank = 0;
 
@@ -171,6 +165,7 @@ class DashboardController extends Controller
                     $days->put($dateKey, $item);
                 }
             }
+            $weeklyActivity = ['labels' => $days->keys(), 'attempts' => $days->pluck('attempts')];
 
             $topPerformer = \App\Models\Result::with('user')
                 ->join('attempts', 'results.attempt_id', '=', 'attempts.id')
@@ -178,111 +173,50 @@ class DashboardController extends Controller
                 ->orderBy('results.score', 'desc')->first();
 
         } elseif ($userRole === 'student') {
-            // ============================================
-            // FIXED: Separate AVAILABLE QUIZZES from HISTORY
-            // ============================================
-            
-            $studentId = $user->id;
-            
-            // 1. Get quiz IDs that the student has ALREADY completed (has a result)
-            $completedQuizIds = DB::table('results')
-                ->where('user_id', $studentId)
-                ->whereNotNull('completed_at')
-                ->pluck('quiz_id')
-                ->unique()
-                ->toArray();
-            
-            // 2. Get AVAILABLE QUIZZES (published, not completed by student)
-            $availableQuizzesQuery = \App\Models\Quiz::query()
+            $studentQuizQuery = \App\Models\Quiz::query()
                 ->where('status', 'published')
-                ->whereNotIn('id', $completedQuizIds)
-                ->with(['subject'])
+                ->with('subject')
                 ->withCount('questions');
-            
-            // Filter by department/class access
-            $availableQuizzesQuery->where(function($q) use ($user) {
-                // Department-based subjects
+
+            $studentQuizQuery->where(function($q) use ($user) {
+                // 1. Check Department-based subjects (Master Enrollment)
                 if ($user->department_id) {
                     $q->whereHas('subject', function ($sq) use ($user) {
                         $sq->where('department_id', $user->department_id);
                     });
                 }
                 
-                // Class-based enrollment
+                // 2. Check Class-based subjects (Classic Enrollment)
                 $q->orWhereHas('subject.classes.users', function($uq) use ($user) {
                     $uq->where('users.id', $user->id);
                 });
             });
+
+            $myQuizzes = (clone $studentQuizQuery)->count();
+            $studentQuizzes = $studentQuizQuery->latest('created_at')->limit(12)->get();
             
-            $availableQuizzes = $availableQuizzesQuery
-                ->orderBy('created_at', 'desc')
-                ->limit(20)
-                ->get();
-            
-            // Add attempt count for each available quiz (if retakes allowed)
-            foreach ($availableQuizzes as $quiz) {
-                $quiz->attempts_count = DB::table('attempts')
-                    ->where('quiz_id', $quiz->id)
-                    ->where('user_id', $studentId)
-                    ->count();
-            }
-            
-            // 3. Get QUIZ HISTORY (completed attempts with results)
-            $quizHistory = \App\Models\Result::where('user_id', $studentId)
-                ->whereNotNull('completed_at')
-                ->with(['quiz.subject'])
-                ->orderBy('completed_at', 'desc')
-                ->get();
-            
-            // 4. Calculate Student Statistics
-            $totalAttempts = $quizHistory->count();
-            $totalPassed = $quizHistory->where('passed', true)->count();
-            $avgScore = round($quizHistory->avg('score') ?? 0, 1);
-            $highestScore = round($quizHistory->max('score') ?? 0);
-            
-            // 5. Calculate Streak (consecutive days with quiz completions)
-            $completedDates = $quizHistory->pluck('completed_at')
-                ->filter()
-                ->map(fn($date) => \Carbon\Carbon::parse($date)->toDateString())
-                ->unique()
-                ->sortDesc()
-                ->values();
-            
-            $streak = 0;
-            $expectedDate = \Carbon\Carbon::today();
-            foreach ($completedDates as $date) {
-                if (\Carbon\Carbon::parse($date)->toDateString() === $expectedDate->toDateString()) {
-                    $streak++;
-                    $expectedDate->subDay();
-                } elseif (\Carbon\Carbon::parse($date)->toDateString() === $expectedDate->addDay()->toDateString()) {
-                    // Continue streak
-                    continue;
-                } else {
-                    break;
-                }
-            }
-            
-            // 6. Recent attempts for quick view
-            $recentAttempts = $quizHistory->take(5)->map(function($result) {
-                return [
-                    'id' => $result->id,
-                    'quiz_title' => $result->quiz?->title ?? 'Unknown',
-                    'score' => $result->score,
-                    'passed' => $result->passed,
-                    'completed_at' => $result->completed_at,
-                ];
-            })->toArray();
-            
-            // 7. My Quizzes count (total quizzes student has access to)
-            $myQuizzes = $availableQuizzesQuery->count();
-            
-            // 8. Weekly activity for Student (Their attempts)
+            // Optimized: Consolidate student stats into one query
+            $studentStats = DB::table('results')
+                ->where('user_id', $user->id)
+                ->selectRaw('AVG(score) as avg_score, COUNT(*) as total_attempts')
+                ->first();
+
+            $avgScore = round($studentStats->avg_score ?? 0, 1);
+            $totalAttempts = $studentStats->total_attempts ?? 0;
+            $recentAttempts = DB::table('results')
+                ->join('quizzes', 'results.quiz_id', '=', 'quizzes.id')
+                ->where('results.user_id', $user->id)
+                ->select('results.*', 'quizzes.title as quiz_title')
+                ->orderBy('results.completed_at', 'desc')
+                ->limit(5)
+                ->get()->map(function($r) { return (array) $r; })->toArray();
+
+            // Weekly activity for Student (Their attempts)
             $weeklyAttempts = DB::table('attempts')
-                ->where('user_id', $studentId)
+                ->where('user_id', $user->id)
                 ->where('started_at', '>=', now()->subDays(7))
                 ->select(DB::raw('DATE(started_at) as date'), DB::raw('COUNT(*) as count'))
                 ->groupBy('date')->get();
-                
             foreach($weeklyAttempts as $a) {
                 $dateKey = date('M d', strtotime($a->date));
                 if($days->has($dateKey)) {
@@ -293,7 +227,6 @@ class DashboardController extends Controller
             }
         }
 
-        // Build weekly activity array for all roles
         $weeklyActivity = [
             'labels' => $days->keys(),
             'quizzes' => $days->pluck('quizzes'),
@@ -307,8 +240,7 @@ class DashboardController extends Controller
             'totalUsers', 'totalTeachers', 'totalQuizzes', 'totalQuestions', 'totalBank', 'pendingReviews', 'totalDepartments', 'newUsers',
             'recentQuizzes', 'departmentStats', 'notifications',
             'myQuizzes', 'totalAttempts', 'avgScore', 'draftQuizzes', 'weeklyActivity', 'recentAttempts', 'topQuizzes',
-            'availableQuizzes', 'quizHistory', 'topPerformer', 'studentGenderStats',
-            'totalPassed', 'highestScore', 'streak'  // Student-specific stats
+            'studentQuizzes', 'topPerformer', 'studentGenderStats'
         ));
     }
 }

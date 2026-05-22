@@ -160,7 +160,7 @@
                                 <div class="text-[10px] text-slate-400 font-medium">{{ $result->completed_at ? $result->completed_at->format('h:i A') : '' }}</div>
                             </td>
                             <td class="text-center">
-                                <a href="{{ route('quizzes.result', $result->attempt_id) }}" class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all shadow-sm">
+                                <a href="{{ route('admin.quizzes.result', $result->attempt_id) }}" class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all shadow-sm">
                                     <i class="fas fa-chevron-right text-[10px]"></i>
                                 </a>
                             </td>

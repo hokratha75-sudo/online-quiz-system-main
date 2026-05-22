@@ -57,7 +57,8 @@ class QuizController extends Controller
 
     public function create()
     {
-        $userRole = 'teacher';
+        $user = Auth::user();
+        $userRole = $user->isAdmin() ? 'admin' : ($user->isTeacher() ? 'teacher' : 'student');
         $dashboardTitle = 'Create Quiz';
         
         $user = Auth::user();
@@ -94,7 +95,8 @@ class QuizController extends Controller
             ]));
         }
 
-        return redirect()->route('quizzes.edit', $quiz->id)->with('success', 'Quiz created! You can now add questions.');
+        $rolePrefix = auth()->user()->isAdmin() ? 'admin' : 'teacher';
+        return redirect()->route($rolePrefix . '.quizzes.edit', $quiz->id)->with('success', 'Quiz created! You can now add questions.');
     }
 
     public function edit(Quiz $quiz)
@@ -143,7 +145,8 @@ class QuizController extends Controller
             ]));
         }
 
-        return redirect()->route('quizzes.index')->with('success', 'Quiz updated successfully.');
+        $rolePrefix = auth()->user()->isAdmin() ? 'admin' : 'teacher';
+        return redirect()->route($rolePrefix . '.quizzes.index')->with('success', 'Quiz updated successfully.');
     }
 
     public function show(Quiz $quiz)
@@ -231,7 +234,7 @@ class QuizController extends Controller
             ->first();
 
         if (!$attempt) {
-            $fallback = auth()->user()->role_id == 3 ? route('students.dashboard') : route('quizzes.index');
+            $fallback = auth()->user()->role_id == 3 ? route('students.dashboard') : (auth()->user()->isAdmin() ? route('admin.quizzes.index') : route('teacher.quizzes.index'));
             return redirect($fallback)->with('error', 'Could not process quiz submission. No active attempt found.');
         }
 
@@ -311,13 +314,13 @@ class QuizController extends Controller
                 'title' => 'New Submission',
                 'message' => $msg,
                 'icon' => $needsManualGrading ? 'fas fa-exclamation-circle' : 'fas fa-check-circle',
-                'url' => route('quizzes.result', $attempt->id)
+                'url' => auth()->user()->isAdmin() ? route('admin.quizzes.index') : route('teacher.quizzes.index')
             ]));
         }
 
         $resultRoute = auth()->user()->role_id == 3
             ? route('students.quizzes.result', $attempt->id)
-            : route('quizzes.result', $attempt->id);
+            : (auth()->user()->isAdmin() ? route('admin.quizzes.show', $quiz->id) : route('teacher.quizzes.show', $quiz->id));
 
         return redirect($resultRoute);
     }
@@ -564,10 +567,11 @@ class QuizController extends Controller
                     if ($subjectId && $subject->id != $subjectId) continue;
 
                     // Get students enrolled in this subject via this specific class
-                    $studentIds = \DB::table('class_user')
-                        ->where('class_model_id', $class->id)
-                        ->where('role', 'student')
-                        ->pluck('user_id');
+                    $studentQuery = \DB::table('class_user')->where('class_model_id', $class->id);
+                    if (\Illuminate\Support\Facades\Schema::hasColumn('class_user', 'role')) {
+                        $studentQuery->where('role', '=', 'student');
+                    }
+                    $studentIds = $studentQuery->pluck('user_id');
 
                     $key = "{$subject->subject_name} ({$class->name})";
                     $rankingsBySubject[$key] = $this->getRankingsForStudents($studentIds, $subject->id, $perPage);
@@ -579,11 +583,15 @@ class QuizController extends Controller
 
         // Admins/Teachers see global or filtered rankings
         if ($subjectId) {
-            $studentIds = \DB::table('class_user')
+            $studentQuery = \DB::table('class_user')
                 ->join('class_subject', 'class_user.class_model_id', '=', 'class_subject.class_model_id')
-                ->where('class_subject.subject_id', $subjectId)
-                ->where('class_user.role', 'student')
-                ->pluck('user_id');
+                ->where('class_subject.subject_id', $subjectId);
+
+            if (\Illuminate\Support\Facades\Schema::hasColumn('class_user', 'role')) {
+                $studentQuery->where('class_user.role', '=', 'student');
+            }
+
+            $studentIds = $studentQuery->pluck('user_id');
             $rankings = $this->getRankingsForStudents($studentIds, $subjectId, $perPage);
         } else {
             $rankings = $this->getRankingsForStudents(\App\Models\User::where('role_id', 3)->pluck('id'), null, $perPage);
@@ -790,10 +798,12 @@ class QuizController extends Controller
             $quiz->delete();
             DB::commit();
 
-            return redirect()->route('quizzes.index')->with('success', 'Quiz deleted successfully.');
+            $rolePrefix = auth()->user()->isAdmin() ? 'admin' : 'teacher';
+            return redirect()->route($rolePrefix . '.quizzes.index')->with('success', 'Quiz deleted successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('quizzes.index')->with('error', 'Failed to delete quiz: ' . $e->getMessage());
+            $rolePrefix = auth()->user()->isAdmin() ? 'admin' : 'teacher';
+            return redirect()->route($rolePrefix . '.quizzes.index')->with('error', 'Failed to delete quiz: ' . $e->getMessage());
         }
     }
 

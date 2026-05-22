@@ -23,11 +23,11 @@
                 <i class="fas fa-rotate text-slate-400 text-xs sm:text-sm"></i> 
                 <span class="hidden sm:inline">Refresh</span>
             </button>
-            <a href="{{ route('quizzes.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg text-[9px] sm:text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-1.5 sm:gap-2 shadow-sm no-underline flex-shrink-0">
+            <a href="{{ route('admin.quizzes.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg text-[9px] sm:text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-1.5 sm:gap-2 shadow-sm no-underline flex-shrink-0">
                 <i class="far fa-file-excel text-emerald-500 text-xs sm:text-sm"></i> 
                 <span class="hidden sm:inline">Export</span>
             </a>
-            <a href="{{ route('quizzes.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 sm:px-6 py-1.5 sm:py-2.5 rounded-lg text-[9px] sm:text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-1.5 sm:gap-2 shadow-lg shadow-indigo-600/20 active:scale-[0.98] border-none no-underline flex-shrink-0 whitespace-nowrap">
+            <a href="{{ route('admin.quizzes.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 sm:px-6 py-1.5 sm:py-2.5 rounded-lg text-[9px] sm:text-[11px] font-bold uppercase tracking-widest transition-all flex items-center gap-1.5 sm:gap-2 shadow-lg shadow-indigo-600/20 active:scale-[0.98] border-none no-underline flex-shrink-0 whitespace-nowrap">
                 <i class="far fa-plus"></i>
                 <span class="hidden sm:inline">Create Quiz</span>
                 <span class="sm:hidden">New</span>

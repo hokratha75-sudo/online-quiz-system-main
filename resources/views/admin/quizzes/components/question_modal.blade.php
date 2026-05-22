@@ -476,7 +476,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         saveQuestionBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Saving...`;
 
-        fetch("{{ route('questions.store') }}", {
+        fetch("{{ route('admin.questions.store') }}", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -844,7 +844,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             let response=
             await fetch(
-            "{{ route('questions.store') }}",
+            "{{ route('admin.questions.store') }}",
             {
 
                 method:'POST',

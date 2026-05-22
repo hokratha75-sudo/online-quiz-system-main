@@ -80,6 +80,10 @@
 
 <div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 font-inter text-slate-900 custom-scrollbar">
 
+    @php
+        $routePrefix = ($userRole === 'admin') ? 'admin.' : (($userRole === 'teacher') ? 'teacher.' : 'students.');
+    @endphp
+
     <!-- Header Section -->
     <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
@@ -103,13 +107,13 @@
         
         @if($userRole === 'admin' || $userRole === 'teacher')
         <div class="flex items-center gap-3">
-            <a href="{{ route('quizzes.create') ?? '#' }}" 
+            <a href="{{ route($routePrefix . 'quizzes.create', [], false) }}" 
                class="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-all shadow-md hover:shadow-lg active:scale-95">
                 <i class="fas fa-plus text-xs"></i>
                 <span>Create Quiz</span>
             </a>
             @if($userRole === 'admin')
-            <a href="{{ route('admin.settings.index') }}" 
+            <a href="{{ route('admin.settings.index', [], false) }}" 
                class="w-10 h-10 flex items-center justify-center bg-white hover:bg-slate-50 text-slate-400 hover:text-indigo-600 rounded-xl border border-slate-200 transition-all">
                 <i class="fas fa-sliders-h text-sm"></i>
             </a>
@@ -125,11 +129,11 @@
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
         @php
             $adminStats = [
-                ['label' => 'Total Students', 'value' => $totalUsers, 'icon' => 'fa-user-graduate', 'color' => 'indigo'],
-                ['label' => 'Teachers', 'value' => $totalTeachers, 'icon' => 'fa-chalkboard-user', 'color' => 'emerald'],
-                ['label' => 'Quizzes', 'value' => $totalQuizzes, 'icon' => 'fa-layer-group', 'color' => 'amber'],
-                ['label' => 'Departments', 'value' => $totalDepartments, 'icon' => 'fa-building', 'color' => 'rose'],
-                ['label' => 'Questions', 'value' => $totalBank, 'icon' => 'fa-database', 'color' => 'blue'],
+                ['label' => 'Total Students', 'value' => $totalUsers ?? 0, 'icon' => 'fa-user-graduate', 'color' => 'indigo'],
+                ['label' => 'Teachers', 'value' => $totalTeachers ?? 0, 'icon' => 'fa-chalkboard-user', 'color' => 'emerald'],
+                ['label' => 'Quizzes', 'value' => $totalQuizzes ?? 0, 'icon' => 'fa-layer-group', 'color' => 'amber'],
+                ['label' => 'Departments', 'value' => $totalDepartments ?? 0, 'icon' => 'fa-building', 'color' => 'rose'],
+                ['label' => 'Questions', 'value' => $totalBank ?? 0, 'icon' => 'fa-database', 'color' => 'blue'],
             ];
         @endphp
         @foreach($adminStats as $stat)
@@ -160,8 +164,9 @@
             </div>
             <div class="h-[260px]">
                 @php
-                    $attempts = collect($weeklyActivity['attempts'] ?? []);
-                    $hasActivity = $attempts->isNotEmpty() && $attempts->sum() > 0;
+                    $weeklyLabels = isset($weeklyActivity['labels']) ? $weeklyActivity['labels'] : [];
+                    $weeklyAttempts = isset($weeklyActivity['attempts']) ? $weeklyActivity['attempts'] : [];
+                    $hasActivity = !empty($weeklyAttempts) && is_array($weeklyAttempts) && array_sum($weeklyAttempts) > 0;
                 @endphp
 
                 @if(!$hasActivity)
@@ -212,9 +217,10 @@
                     <i class="fas fa-clock text-slate-300 text-xs"></i>
                 </div>
                 <div class="space-y-3">
-                    @forelse(array_slice($recentQuizzes, 0, 3) as $quiz)
+                    @php $recentItems = isset($recentQuizzes) && is_array($recentQuizzes) ? array_slice($recentQuizzes, 0, 3) : []; @endphp
+                    @forelse($recentItems as $quiz)
                     <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer" 
-                         onclick="window.location='{{ route('admin.quizzes.show', $quiz['id'] ?? '#') }}'">
+                         onclick="window.location='{{ route($routePrefix . 'quizzes.show', $quiz['id'] ?? '#', false) }}'">
                         <div class="w-9 h-9 rounded-lg bg-indigo-50 flex items-center justify-center flex-shrink-0">
                             @if(!empty($quiz['thumbnail']))
                                 <img src="{{ asset('storage/' . $quiz['thumbnail']) }}" class="w-full h-full object-cover rounded-lg">
@@ -244,9 +250,9 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
         @php
             $teacherStats = [
-                ['label' => 'My Quizzes', 'value' => $totalQuizzes, 'icon' => 'fa-layer-group', 'color' => 'indigo'],
-                ['label' => 'Total Attempts', 'value' => $totalAttempts, 'icon' => 'fa-users', 'color' => 'emerald'],
-                ['label' => 'Avg Score', 'value' => round($avgScore, 1).'%', 'icon' => 'fa-chart-line', 'color' => 'amber'],
+                ['label' => 'My Quizzes', 'value' => $totalQuizzes ?? 0, 'icon' => 'fa-layer-group', 'color' => 'indigo'],
+                ['label' => 'Total Attempts', 'value' => $totalAttempts ?? 0, 'icon' => 'fa-users', 'color' => 'emerald'],
+                ['label' => 'Avg Score', 'value' => isset($avgScore) ? round($avgScore, 1).'%' : '0%', 'icon' => 'fa-chart-line', 'color' => 'amber'],
             ];
         @endphp
         @foreach($teacherStats as $stat)
@@ -267,8 +273,8 @@
                 <span class="text-[10px] font-bold text-indigo-200 uppercase tracking-wider">Top Performer</span>
                 <i class="fas fa-crown text-amber-300 text-sm"></i>
             </div>
-            <p class="text-base font-bold text-white mt-2 truncate">{{ $topPerformer->user?->username ?? 'N/A' }}</p>
-            <p class="text-xs text-indigo-200 mt-1">Score: {{ $topPerformer?->score ?? 0 }}%</p>
+            <p class="text-base font-bold text-white mt-2 truncate">{{ isset($topPerformer) && $topPerformer && $topPerformer->user ? $topPerformer->user->username : 'N/A' }}</p>
+            <p class="text-xs text-indigo-200 mt-1">Score: {{ isset($topPerformer) && $topPerformer ? ($topPerformer->score ?? 0) : 0 }}%</p>
         </div>
     </div>
 
@@ -290,7 +296,8 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-50">
-                    @forelse($recentAttempts as $attempt)
+                    @php $recent = isset($recentAttempts) && is_array($recentAttempts) ? $recentAttempts : []; @endphp
+                    @forelse($recent as $attempt)
                     <tr class="hover:bg-slate-50/40 transition-colors">
                         <td class="px-5 py-3">
                             <div class="flex items-center gap-2">
@@ -310,7 +317,7 @@
                             {{ !empty($attempt['completed_at']) ? \Carbon\Carbon::parse($attempt['completed_at'])->format('M d, Y') : '—' }}
                         </td>
                         <td class="px-5 py-3 text-right">
-                            <a href="{{ route('quizzes.result', $attempt['id'] ?? 0) }}" class="w-7 h-7 inline-flex items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:text-indigo-600 hover:border-indigo-200 transition-colors">
+                            <a href="{{ route($routePrefix . 'quizzes.result', $attempt['id'] ?? 0, false) }}" class="w-7 h-7 inline-flex items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:text-indigo-600 hover:border-indigo-200 transition-colors">
                                 <i class="fas fa-chevron-right text-[10px]"></i>
                             </a>
                         </td>
@@ -340,7 +347,7 @@
                     Welcome back, {{ $username ?? 'Student' }}! 👋
                 </h2>
                 <p class="text-sm text-slate-500 mt-1">
-                    Ready to continue your learning journey? You have {{ count($availableQuizzes ?? []) }} quiz{{ count($availableQuizzes ?? []) != 1 ? 'zes' : '' }} waiting for you.
+                    Ready to continue your learning journey? You have {{ isset($availableQuizzes) ? count($availableQuizzes) : 0 }} quiz{{ (isset($availableQuizzes) && count($availableQuizzes) != 1) ? 'zes' : '' }} waiting for you.
                 </p>
             </div>
             @if(($streak ?? 0) > 0)
@@ -359,10 +366,10 @@
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         @php
             $studentStats = [
-                ['label' => 'Quizzes Taken', 'value' => $totalAttempts ?? 0, 'icon' => 'fa-clipboard-list', 'color' => 'indigo', 'bg' => 'indigo-50', 'text' => 'indigo-600'],
-                ['label' => 'Passed', 'value' => $totalPassed ?? 0, 'icon' => 'fa-check-circle', 'color' => 'emerald', 'bg' => 'emerald-50', 'text' => 'emerald-600'],
-                ['label' => 'Average Score', 'value' => round($avgScore ?? 0).'%', 'icon' => 'fa-chart-simple', 'color' => 'amber', 'bg' => 'amber-50', 'text' => 'amber-600'],
-                ['label' => 'Best Score', 'value' => ($highestScore ?? 0) . '%', 'icon' => 'fa-trophy', 'color' => 'amber', 'bg' => 'amber-50', 'text' => 'amber-600'],
+                ['label' => 'Quizzes Taken', 'value' => $totalAttempts ?? 0, 'icon' => 'fa-clipboard-list', 'bg' => 'indigo-50', 'text' => 'indigo-600'],
+                ['label' => 'Passed', 'value' => $totalPassed ?? 0, 'icon' => 'fa-check-circle', 'bg' => 'emerald-50', 'text' => 'emerald-600'],
+                ['label' => 'Average Score', 'value' => isset($avgScore) ? round($avgScore).'%' : '0%', 'icon' => 'fa-chart-simple', 'bg' => 'amber-50', 'text' => 'amber-600'],
+                ['label' => 'Best Score', 'value' => ($highestScore ?? 0) . '%', 'icon' => 'fa-trophy', 'bg' => 'amber-50', 'text' => 'amber-600'],
             ];
         @endphp
         @foreach($studentStats as $stat)
@@ -412,7 +419,7 @@
                 @if(isset($availableQuizzes) && count($availableQuizzes) > 0)
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     @foreach($availableQuizzes as $quiz)
-                    <a href="{{ route('students.quizzes.take', $quiz->id) }}" 
+                    <a href="{{ route('students.quizzes.take', $quiz->id, false) }}" 
                        class="quiz-card group bg-white rounded-xl border border-slate-100 p-5 hover:shadow-md transition-all no-underline block">
                         <div class="flex items-start justify-between mb-3">
                             <div class="flex-1">
@@ -427,7 +434,7 @@
                                     @endif
                                 </div>
                                 <h4 class="text-sm font-bold text-slate-800 group-hover:text-indigo-600 transition-colors line-clamp-1">{{ $quiz->title }}</h4>
-                                <p class="text-[10px] font-medium text-slate-400 mt-1">{{ $quiz->subject?->subject_name ?? 'General' }}</p>
+                                <p class="text-[10px] font-medium text-slate-400 mt-1">{{ $quiz->subject->subject_name ?? 'General' }}</p>
                             </div>
                             <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center group-hover:bg-indigo-600 transition-colors">
                                 <i class="fas fa-arrow-right text-indigo-500 group-hover:text-white text-xs"></i>
@@ -473,7 +480,7 @@
                         <p class="text-[8px] font-medium text-slate-400 uppercase">Attempts</p>
                     </div>
                     <div class="bg-indigo-50 rounded-lg p-2 text-center">
-                        <p class="text-xs font-bold text-indigo-600">{{ round($avgScore ?? 0) }}%</p>
+                        <p class="text-xs font-bold text-indigo-600">{{ isset($avgScore) ? round($avgScore) : 0 }}%</p>
                         <p class="text-[8px] font-medium text-indigo-400 uppercase">Average</p>
                     </div>
                 </div>
@@ -492,7 +499,7 @@
                 </div>
                 @endif
                 
-                <a href="{{ route('students.results') }}" 
+                <a href="{{ route('students.results', [], false) }}" 
                    class="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-800 hover:bg-indigo-600 text-white rounded-lg text-xs font-semibold transition-all text-center">
                     <i class="fas fa-chart-line text-xs"></i>
                     View Full History
@@ -538,10 +545,10 @@
                         @foreach($quizHistory as $attempt)
                         <tr class="history-row">
                             <td class="px-5 py-3">
-                                <div class="font-semibold text-slate-800 text-sm">{{ $attempt->quiz?->title ?? 'Unknown Quiz' }}</div>
+                                <div class="font-semibold text-slate-800 text-sm">{{ $attempt->quiz->title ?? 'Unknown Quiz' }}</div>
                             </td>
                             <td class="px-5 py-3 text-xs text-slate-500">
-                                {{ $attempt->quiz?->subject?->subject_name ?? 'General' }}
+                                {{ $attempt->quiz->subject->subject_name ?? 'General' }}
                             </td>
                             <td class="px-5 py-3">
                                 <span class="inline-flex px-2 py-0.5 rounded-md text-xs font-bold {{ ($attempt->score ?? 0) >= 60 ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600' }}">
@@ -574,7 +581,7 @@
                                 <div class="text-[9px] text-slate-400">{{ $attempt->completed_at ? \Carbon\Carbon::parse($attempt->completed_at)->format('g:i A') : '' }}</div>
                             </td>
                             <td class="px-5 py-3 text-right">
-                                <a href="{{ route('students.quizzes.result', $attempt->id) }}" 
+                                <a href="{{ route('students.quizzes.result', $attempt->id, false) }}" 
                                    class="w-7 h-7 inline-flex items-center justify-center rounded-lg border border-slate-200 text-slate-400 hover:text-indigo-600 hover:border-indigo-200 transition-colors"
                                    title="View Details">
                                     <i class="fas fa-eye text-[10px]"></i>
@@ -612,7 +619,6 @@
                 historyTab.style.display = 'none';
                 tabAvailable.classList.add('active');
                 tabHistory.classList.remove('active');
-                // Update styles
                 tabAvailable.classList.add('text-indigo-600', 'font-semibold');
                 tabAvailable.classList.remove('text-slate-500', 'font-medium');
                 tabHistory.classList.remove('text-indigo-600', 'font-semibold');
@@ -622,18 +628,15 @@
                 historyTab.style.display = 'block';
                 tabHistory.classList.add('active');
                 tabAvailable.classList.remove('active');
-                // Update styles
                 tabHistory.classList.add('text-indigo-600', 'font-semibold');
                 tabHistory.classList.remove('text-slate-500', 'font-medium');
                 tabAvailable.classList.remove('text-indigo-600', 'font-semibold');
                 tabAvailable.classList.add('text-slate-500', 'font-medium');
             }
             
-            // Save preference
             localStorage.setItem('studentDashboardTab', tab);
         }
         
-        // Load saved tab preference
         document.addEventListener('DOMContentLoaded', function() {
             const savedTab = localStorage.getItem('studentDashboardTab');
             if (savedTab === 'history') {
@@ -646,28 +649,20 @@
 </div>
 
 <!-- Chart Scripts (Only load when needed) -->
-@if(
-    $userRole === 'admin' &&
-    collect($weeklyActivity['labels'] ?? [])->isNotEmpty() &&
-    collect($weeklyActivity['attempts'] ?? [])->sum() > 0
-)
-
+@if($userRole === 'admin' && isset($weeklyActivity['labels']) && !empty($weeklyActivity['labels']) && isset($weeklyActivity['attempts']) && is_array($weeklyActivity['attempts']) && array_sum($weeklyActivity['attempts']) > 0)
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-
     // Weekly Activity Chart
     const activityCtx = document.getElementById('activityChart');
-
     if (activityCtx) {
         new Chart(activityCtx, {
             type: 'line',
             data: {
-                labels: @json(collect($weeklyActivity['labels'] ?? [])),
+                labels: @json($weeklyActivity['labels']),
                 datasets: [{
                     label: 'Attempts',
-                    data: @json(collect($weeklyActivity['attempts'] ?? [])),
+                    data: @json($weeklyActivity['attempts']),
                     borderColor: '#4f46e5',
                     backgroundColor: 'rgba(79,70,229,.05)',
                     borderWidth: 2.5,
@@ -682,28 +677,10 @@ document.addEventListener('DOMContentLoaded', function() {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
-                },
+                plugins: { legend: { display: false } },
                 scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: '#f1f5f9'
-                        },
-                        ticks: {
-                            stepSize: 1,
-                            font: { size: 10 }
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            font: { size: 10 }
-                        }
-                    }
+                    y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { stepSize: 1, font: { size: 10 } } },
+                    x: { grid: { display: false }, ticks: { font: { size: 10 } } }
                 }
             }
         });
@@ -711,44 +688,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Gender Chart
     const genderCtx = document.getElementById('studentGenderChart');
-
     if (genderCtx) {
         new Chart(genderCtx, {
             type: 'doughnut',
             data: {
                 labels: ['Male', 'Female'],
                 datasets: [{
-                    data: [
-                        {{ $studentGenderStats['Male'] ?? 0 }},
-                        {{ $studentGenderStats['Female'] ?? 0 }}
-                    ],
-                    backgroundColor: [
-                        '#3b82f6',
-                        '#eab308'
-                    ],
+                    data: [{{ $studentGenderStats['Male'] ?? 0 }}, {{ $studentGenderStats['Female'] ?? 0 }}],
+                    backgroundColor: ['#3b82f6', '#eab308'],
                     borderWidth: 0,
                     cutout: '65%'
                 }]
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
+                plugins: { legend: { display: false } }
             }
         });
     }
-
 });
 </script>
-
 @endif
 
 @if($userRole === 'student')
 <script>
-// Prefetch quiz pages on hover for faster navigation
 document.querySelectorAll('a[href*="/take/"]').forEach(link => {
     link.addEventListener('mouseenter', () => {
         const prefetch = document.createElement('link');

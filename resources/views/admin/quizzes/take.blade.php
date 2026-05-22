@@ -56,7 +56,7 @@
     </header>
 
     <main class="w-full max-w-none sm:max-w-[768px] mx-auto px-3 sm:px-4 py-4 sm:py-8 pb-40 sm:pb-32">
-        <form id="quizForm" action="{{ auth()->user()->role_id == 3 ? route('students.quizzes.submit', $quiz->id) : route('quizzes.submit', $quiz->id) }}" method="POST">
+        <form id="quizForm" action="{{ auth()->user()->role_id == 3 ? route('students.quizzes.submit', $quiz->id) : (auth()->user()->isAdmin() ? route('admin.quizzes.update', $quiz->id) : route('teacher.quizzes.update', $quiz->id)) }}" method="POST">
             @csrf
             
             <div class="mb-3 sm:mb-4 flex justify-end">

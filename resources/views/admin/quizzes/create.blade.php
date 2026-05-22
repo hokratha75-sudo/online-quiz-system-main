@@ -32,7 +32,7 @@
 
     <!-- Header -->
     <div class="flex items-center gap-5 mb-8">
-        <a href="{{ route('quizzes.index') }}" class="w-12 h-12 rounded-xl border border-slate-200 bg-white flex items-center justify-center text-slate-400 hover:bg-slate-50 transition-all shadow-sm no-underline">
+        <a href="{{ route('admin.quizzes.index') }}" class="w-12 h-12 rounded-xl border border-slate-200 bg-white flex items-center justify-center text-slate-400 hover:bg-slate-50 transition-all shadow-sm no-underline">
             <i class="fas fa-arrow-left text-xs"></i>
         </a>
         <div>
@@ -41,7 +41,7 @@
         </div>
     </div>
 
-    <form action="{{ route('quizzes.store') }}" method="POST" class="max-w-[1600px] mx-auto pb-32">
+    <form action="{{ route('admin.quizzes.store') }}" method="POST" class="max-w-[1600px] mx-auto pb-32">
         @csrf
         
         <div class="space-y-6">

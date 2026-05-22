@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Schema;
 
 class User extends Authenticatable
 {
@@ -103,12 +104,17 @@ class User extends Authenticatable
 
     public function classes()
     {
-        return $this->belongsToMany(ClassModel::class, 'class_user')->withPivot('role')->withTimestamps();
+        // avoid selecting pivot 'role' column directly because some DB states lack this column
+        return $this->belongsToMany(ClassModel::class, 'class_user')->withTimestamps();
     }
 
     public function taughtSubjects()
     {
-        return $this->belongsToMany(ClassModel::class, 'class_user')->wherePivot('role', 'teacher');
+        if (Schema::hasColumn('class_user', 'role')) {
+            return $this->belongsToMany(ClassModel::class, 'class_user')->wherePivot('role', '=', 'teacher');
+        }
+
+        return $this->belongsToMany(ClassModel::class, 'class_user');
     }
 
     public function isAdmin(): bool
