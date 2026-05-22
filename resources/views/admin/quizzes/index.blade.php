@@ -186,7 +186,7 @@
                         </td>
                         <td class="text-center">
                             <div class="flex items-center justify-center gap-3">
-                                <a href="{{ route('quizzes.show', $item->id) }}" class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all shadow-sm" title="View">
+                                <a href="{{ route('quizzes.show', $item->id) }}" class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all shadow-sm no-underline" title="View">
                                     <i class="far fa-eye text-sm"></i>
                                 </a>
                                 <a href="{{ route('quizzes.edit', $item->id) }}" class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all shadow-sm" title="Edit">
@@ -200,10 +200,31 @@
                         </td>
                     </tr>
                     @empty
-                    <tr>
-                        <td colspan="5" class="py-10 text-center text-slate-400 font-medium">No quiz modules found in this directory.</td>
+                    <tr id="emptyStateRow">
+                        <td colspan="5">
+                            <div class="p-12 text-center flex flex-col items-center">
+                                <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+                                    <i class="fas fa-building text-2xl text-slate-300"></i>
+                                </div>
+                                <h3 class="text-base font-semibold text-slate-800 tracking-tight">No Quizzes Found</h3>
+                                <p class="text-sm text-slate-500 mt-1 max-w-sm">There are currently no Quizzes. Click "New Quiz" to get started.</p>
+                            </div>
+                        </td>
                     </tr>
                     @endforelse
+
+                    <!-- Hidden row shown only when search returns zero results -->
+                    <tr id="noSearchResultsRow" style="display: none;">
+                        <td colspan="7">
+                            <div class="p-12 text-center flex flex-col items-center">
+                                <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+                                    <i class="fas fa-search text-2xl text-slate-300"></i>
+                                </div>
+                                <h3 class="text-base font-semibold text-slate-800 tracking-tight">No Matching Quizzes</h3>
+                                <p class="text-sm text-slate-500 mt-1 max-w-sm">Try a different keyword or clear your search.</p>
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             </div>
@@ -268,48 +289,59 @@
     // ─────────────────────────────────────────
     function applyFilters() {
 
-        const searchQuery = searchInput.value.toLowerCase().trim();
-        const subjectValue = subjectFilter.value;
-        const statusValue  = statusFilter.value;
+    const searchQuery  = searchInput.value.toLowerCase().trim();
+    const subjectValue = subjectFilter.value;
+    const statusValue  = statusFilter.value;
 
-        let visibleCount = 0;
+    let visibleCount = 0;
 
-        quizRows.forEach(row => {
+    quizRows.forEach(row => {
 
-            const title   = row.getAttribute('data-title');
-            const subject = row.getAttribute('data-subject');
-            const status  = row.getAttribute('data-status');
+        const title   = row.getAttribute('data-title');
+        const subject = row.getAttribute('data-subject');
+        const status  = row.getAttribute('data-status');
 
-            const matchesSearch =
-                title.includes(searchQuery);
+        const matchesSearch =
+            title.includes(searchQuery);
 
-            const matchesSubject =
-                subjectValue === '' ||
-                subject === subjectValue;
+        const matchesSubject =
+            subjectValue === '' ||
+            subject === subjectValue;
 
-            const matchesStatus =
-                statusValue === '' ||
-                status === statusValue;
+        const matchesStatus =
+            statusValue === '' ||
+            status === statusValue;
 
-            if (
-                matchesSearch &&
-                matchesSubject &&
-                matchesStatus
-            ) {
+        if (
+            matchesSearch &&
+            matchesSubject &&
+            matchesStatus
+        ) {
 
-                row.style.display = '';
-                visibleCount++;
+            row.style.display = '';
+            visibleCount++;
 
-            } else {
+        } else {
 
-                row.style.display = 'none';
+            row.style.display = 'none';
 
-            }
+        }
 
-        });
+    });
 
-        countDisplay.textContent = visibleCount;
+    // UPDATE COUNT
+    countDisplay.textContent = visibleCount;
+
+    // SHOW / HIDE EMPTY SEARCH ROW
+    const noResultsRow =
+        document.getElementById('noSearchResultsRow');
+
+    if (visibleCount === 0) {
+        noResultsRow.style.display = '';
+    } else {
+        noResultsRow.style.display = 'none';
     }
+}
 
     // ─────────────────────────────────────────
     // SEARCH EVENT

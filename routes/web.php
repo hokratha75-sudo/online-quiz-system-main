@@ -195,6 +195,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/questions/export', [QuestionController::class, 'export'])->name('questions.export');
         Route::post('/questions/bulk-delete', [QuestionController::class, 'bulkDelete'])->name('questions.bulkDelete');
         Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
+       Route::put('/questions/{question}', [QuestionController::class, 'update'])->name('questions.update');
         Route::delete('/questions/{question}', [QuestionController::class, 'destroy'])->name('questions.destroy');
 
         // Student Academic Report Export
