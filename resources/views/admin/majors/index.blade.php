@@ -467,6 +467,22 @@
         }, 5000);
     }
 
+    // Auto-open Add Major modal if 'add=1' query parameter is present
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('add') === '1') {
+        const deptId = urlParams.get('department_id');
+        if (deptId) {
+            const deptSelect = document.getElementById('majorDept');
+            if (deptSelect) {
+                deptSelect.value = deptId;
+            }
+        }
+        const addMajorModal = document.getElementById('addMajorModal');
+        if (addMajorModal) {
+            new bootstrap.Modal(addMajorModal).show();
+        }
+    }
+
 });
     const currentTab = '{{ $tab }}';
 

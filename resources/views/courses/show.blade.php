@@ -957,7 +957,7 @@ document.getElementById('materialForm')?.addEventListener('submit', async functi
     const formData = new FormData(this);
     
     try {
-        const response = await fetch('{{ route("materials.store") }}', {
+        const response = await fetch('{{ route("materials.store", $subject->id) }}', {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value

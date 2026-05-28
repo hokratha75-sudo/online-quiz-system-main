@@ -290,5 +290,25 @@
             'Remove Subject Module?'
         );
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('add') === '1') {
+            const modal = document.getElementById('addSubjectModal');
+            if (modal) {
+                const bsModal = new bootstrap.Modal(modal);
+                bsModal.show();
+            }
+        } else {
+            const editId = urlParams.get('edit');
+            if (editId) {
+                const checkbox = document.querySelector(`.row-checkbox[value="${editId}"]`);
+                if (checkbox) {
+                    const data = checkbox.dataset;
+                    editRecord(editId, data.name, parseInt(data.department), data.major ? parseInt(data.major) : null, JSON.parse(data.classes));
+                }
+            }
+        }
+    });
 </script>
 @endsection

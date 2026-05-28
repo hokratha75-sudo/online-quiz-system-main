@@ -10,7 +10,7 @@
             <p class="text-sm font-medium text-slate-400 mt-2">Centralized management and reuse of student assessment questions</p>
         </div>
         <div class="flex items-center gap-4">
-            <a href="{{ route('admin.questions.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-6 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-3 shadow-sm uppercase tracking-widest">
+            <a href="{{ route('questions.export') }}" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-6 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-3 shadow-sm uppercase tracking-widest">
                 <i class="fas fa-file-export text-slate-400 text-sm"></i> Export CSV
             </a>
             <a href="{{ route('admin.quizzes.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-7 py-3 rounded-2xl text-xs font-bold transition-all flex items-center gap-3 shadow-sm active:scale-[0.98] uppercase tracking-widest focus:outline-none focus:ring-0">
@@ -53,7 +53,7 @@
     </div>
 
     <!-- Controls & Filters -->
-    <form action="{{ route('admin.questions.bank') }}" method="GET" id="filterForm">
+    <form action="{{ route('questions.bank') }}" method="GET" id="filterForm">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-8 mb-10">
             <!-- BOOTSTRAP FILTER TABS (Button Group) -->
             <div class="btn-group shadow-sm" role="group" aria-label="Question type filters">
@@ -190,7 +190,7 @@
     @method('DELETE')
 </form>
 
-<form id="bulkDeleteForm" method="POST" style="display:none;" action="{{ route('admin.questions.bulkDelete') }}">
+<form id="bulkDeleteForm" method="POST" style="display:none;" action="{{ route('questions.bulkDelete') }}">
     @csrf
 </form>
 
