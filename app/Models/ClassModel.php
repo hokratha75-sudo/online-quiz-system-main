@@ -3,46 +3,62 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Schema;
 
 class ClassModel extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['code', 'name', 'major_id', 'academic_year'];
-    public function subjects()
-{
-    return $this->belongsToMany(
-            Subject::class,
-            'class_subject',
-            'class_model_id',
-            'subject_id'
-        );
-    }
+
+    protected $table = 'class_models';
+
+    protected $fillable = [
+        'code',
+        'name',           // ← actual DB column (was 'class_name' — wrong)
+        'major_id',
+        'academic_year',
+        'show_in_enrollments',
+    ];
+
+    // ── Relationships ─────────────────────────────────────────────────────
+
     public function major()
     {
         return $this->belongsTo(Major::class);
     }
 
-    // public function subjects()
-    // {
-    //     return $this->belongsToMany(Subject::class, 'class_subject')->withTimestamps();
-    // }
-
-    public function users()
+    public function subjects()
     {
-        // avoid selecting pivot 'role' column directly because some DB states lack this column
-        return $this->belongsToMany(User::class, 'class_user')->withTimestamps();
+        return $this->belongsToMany(Subject::class, 'class_subject', 'class_model_id', 'subject_id')
+                    ->withTimestamps();
     }
 
+    // All users regardless of role
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'class_user', 'class_model_id', 'user_id')
+                    ->withPivot('role')
+                    ->withTimestamps();
+    }
+
+    // Students only
     public function students()
     {
-        // only filter by pivot 'role' if the column exists in the database
-        if (Schema::hasColumn('class_user', 'role')) {
-            return $this->belongsToMany(User::class, 'class_user')->wherePivot('role', '=', 'student')->withTimestamps();
-        }
+        return $this->belongsToMany(User::class, 'class_user', 'class_model_id', 'user_id')
+                    ->wherePivot('role', 'student')
+                    ->withTimestamps();
+    }
 
-        return $this->belongsToMany(User::class, 'class_user')->withTimestamps();
+    // Teachers only
+    public function teachers()
+    {
+        return $this->belongsToMany(User::class, 'class_user', 'class_model_id', 'user_id')
+                    ->wherePivot('role', 'teacher')
+                    ->withTimestamps();
+    }
+
+    // ── Accessor: $class->class_name still works in old blade views ───────
+    public function getClassNameAttribute(): string
+    {
+        return $this->attributes['name'] ?? '';
     }
 }

@@ -17,14 +17,14 @@
                 <div class="mt-2 flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                     @if($subject->department)
                         <i class="fas fa-building text-indigo-500"></i>
-                                                <a href="{{ route('admin.departments.show', $subject->department->id) }}" class="hover:text-indigo-600 transition-colors">{{ $subject->department->department_name }} Department</a>
+                                                <a href="{{ route('departments.show', $subject->department->id) }}" class="hover:text-indigo-600 transition-colors">{{ $subject->department->department_name }} Department</a>
                     @endif
                 </div>
             </div>
         </div>
         
         <div class="flex items-center gap-3">
-            <a href="{{ route('admin.subjects.index') }}" class="h-12 px-8 bg-white border border-slate-100 text-slate-500 hover:text-indigo-600 hover:border-indigo-100 rounded-2xl text-[10px] font-bold uppercase tracking-widest flex items-center gap-3 transition-all shadow-sm active:scale-95">
+            <a href="{{ route('subjects.index') }}" class="h-12 px-8 bg-white border border-slate-100 text-slate-500 hover:text-indigo-600 hover:border-indigo-100 rounded-2xl text-[10px] font-bold uppercase tracking-widest flex items-center gap-3 transition-all shadow-sm active:scale-95">
                 <i class="fas fa-arrow-left text-[8px]"></i> Return to Directory
             </a>
         </div>
@@ -103,7 +103,7 @@
                         <span class="px-3 py-1.5 rounded-lg {{ $quiz->status === 'active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-slate-100 text-slate-400 border-slate-200' }} text-[9px] font-bold uppercase tracking-widest border shadow-sm transition-all tabular-nums">
                             {{ $quiz->status }}
                         </span>
-                        <a href="{{ route('admin.quizzes.show', $quiz->quiz_id) }}" class="w-10 h-10 rounded-xl bg-white border border-slate-100 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all flex items-center justify-center active:scale-95 shadow-sm">
+                        <a href="{{ route('quizzes.show', $quiz->quiz_id) }}" class="w-10 h-10 rounded-xl bg-white border border-slate-100 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all flex items-center justify-center active:scale-95 shadow-sm">
                             <i class="fas fa-arrow-right text-[10px]"></i>
                         </a>
                     </div>

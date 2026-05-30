@@ -54,8 +54,9 @@ Route::get('/check-sessions', function () {
         'driver' => config('session.driver'),
     ]);
 });
-Route::delete('/admin/users/bulk-delete', [UserController::class, 'bulkDelete'])
-    ->name('admin.users.bulkDelete');
+
+Route::delete('/admin/users/bulk-delete', [UserController::class, 'bulkDelete'])->name('admin.users.bulkDelete');
+
 Route::get('cleanup-duplicates', function () {
     $results = [];
     $tables = [
@@ -173,10 +174,23 @@ Route::middleware(['auth'])->group(function () {
         Route::post('subjects/bulk-delete', [SubjectController::class, 'bulkDelete'])->name('subjects.bulkDelete');
         Route::resource('subjects', SubjectController::class)->except(['create', 'edit']);
 
-        // Enrollments
+        // ==============================================
+        // ENROLLMENT ROUTES - UPDATED WITH NEW METHODS
+        // ==============================================
         Route::get('enrollments', [ClassEnrollmentController::class, 'index'])->name('enrollments.index');
         Route::get('enrollments/{department}/manage', [ClassEnrollmentController::class, 'manage'])->name('enrollments.manage');
         Route::put('enrollments/{department}', [ClassEnrollmentController::class, 'update'])->name('enrollments.update');
+        Route::get('enrollments/{department}/export', [ClassEnrollmentController::class, 'export'])->name('enrollments.export');
+        Route::get('enrollments/{department}/import', [ClassEnrollmentController::class, 'showImport'])->name('enrollments.showImport');
+        Route::post('enrollments/{department}/import', [ClassEnrollmentController::class, 'import'])->name('enrollments.import');
+        Route::get('enrollments/{department}/statistics', [ClassEnrollmentController::class, 'statistics'])->name('enrollments.statistics');
+        Route::get('enrollments/{department}/history', [ClassEnrollmentController::class, 'history'])->name('enrollments.history');
+        Route::get('enrollments/{department}/export-history', [ClassEnrollmentController::class, 'exportHistory'])->name('enrollments.export.history');
+        
+        // AJAX endpoints for enrollment
+        Route::get('enrollments/{department}/classes', [ClassEnrollmentController::class, 'getClasses'])->name('enrollments.getClasses');
+        Route::get('enrollments/students/by-class/{classId}', [ClassEnrollmentController::class, 'getStudentsByClass'])->name('enrollments.getStudentsByClass');
+        Route::get('enrollments/teachers/by-class/{classId}', [ClassEnrollmentController::class, 'getTeachersByClass'])->name('enrollments.getTeachersByClass');
 
         // Quizzes (admin-prefixed) - mirrors teacher/admin shared quiz routes but under /admin
         Route::get('quizzes/export', [QuizController::class, 'export'])->name('quizzes.export');
@@ -206,7 +220,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/questions/export', [QuestionController::class, 'export'])->name('questions.export');
         Route::post('/questions/bulk-delete', [QuestionController::class, 'bulkDelete'])->name('questions.bulkDelete');
         Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
-       Route::put('/questions/{question}', [QuestionController::class, 'update'])->name('questions.update');
+        Route::put('/questions/{question}', [QuestionController::class, 'update'])->name('questions.update');
         Route::delete('/questions/{question}', [QuestionController::class, 'destroy'])->name('questions.destroy');
 
         // Student Academic Report Export

@@ -104,8 +104,23 @@ class User extends Authenticatable
 
     public function classes()
     {
-        // avoid selecting pivot 'role' column directly because some DB states lack this column
-        return $this->belongsToMany(ClassModel::class, 'class_user')->withTimestamps();
+        return $this->belongsToMany(ClassModel::class, 'class_user', 'user_id', 'class_model_id')
+                    ->withPivot('role')
+                    ->withTimestamps();
+    }
+ 
+    public function studentClasses()
+    {
+        return $this->belongsToMany(ClassModel::class, 'class_user', 'user_id', 'class_model_id')
+                    ->wherePivot('role', 'student')
+                    ->withTimestamps();
+    }
+    
+    public function teacherClasses()
+    {
+        return $this->belongsToMany(ClassModel::class, 'class_user', 'user_id', 'class_model_id')
+                    ->wherePivot('role', 'teacher')
+                    ->withTimestamps();
     }
 
     public function taughtSubjects()
