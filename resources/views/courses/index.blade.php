@@ -71,7 +71,7 @@
             
             <div class="filter-actions">
                 @if(Auth::user()->role_id == 1)
-                <a href="{{ route('admin.subjects.create') }}" class="action-btn primary">
+                <a href="{{ route('admin.subjects.index', ['add' => 1]) }}" class="action-btn primary">
                     <i class="fas fa-plus-circle me-2"></i>
                     Add Course
                 </a>
@@ -288,7 +288,7 @@
                     <div class="card-footer-section">
                         @if(Auth::user()->role_id == 1)
                             <div class="admin-actions">
-                                <a href="{{ route('admin.subjects.edit', $course->id) }}" class="icon-btn" title="Edit">
+                                <a href="{{ route('admin.subjects.index', ['edit' => $course->id]) }}" class="icon-btn" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <form action="{{ route('admin.subjects.destroy', $course->id) }}" method="POST" class="d-inline">
@@ -322,7 +322,7 @@
                         </a>
                     @endif
                     @if(Auth::user()->role_id == 1)
-                        <a href="{{ route('admin.subjects.create') }}" class="empty-action-btn primary mt-2">
+                        <a href="{{ route('admin.subjects.index', ['add' => 1]) }}" class="empty-action-btn primary mt-2">
                             <i class="fas fa-plus-circle me-2"></i>Add your first course
                         </a>
                     @endif

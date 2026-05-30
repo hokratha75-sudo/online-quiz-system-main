@@ -613,7 +613,7 @@ document.addEventListener('DOMContentLoaded', function () {
             url = `/questions/${editQuestionId}`;
             formData.append('_method', 'PUT');
         } else {
-            url = "{{ route('admin.questions.store') }}";
+            url = "{{ route('questions.store') }}";
         }
         
         formData.append('_token', CSRF);
